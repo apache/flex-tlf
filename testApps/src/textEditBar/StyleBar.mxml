@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="1032" height="48">
+
+	<mx:Metadata>
+	[Event(name="changeView", type="flash.events.Event")]
+	[Event(name="changeStyling", type="flash.events.Event")]
+	[Event(name="loadStyle", type="flash.events.Event")]
+	[Event(name="unloadStyle", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import flashx.textLayout.edit.IEditManager;
+			import flashx.textLayout.edit.ElementRange;
+			import flashx.textLayout.elements.ParagraphElement;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.formats.TextLayoutFormat;
+
+		static public const stylingTypeArray : Array =
+			[{label:"None",    data:"none"},
+		 	 {label:"FlexCSS", data:"flexCSS"}];
+		 	 
+			private var lastRange:ElementRange;
+			
+			public var activeFlow:TextFlow;
+		 	 
+		 	 public function setParaStyle (styleName:String):void
+		 	 {
+		 	 	var em:IEditManager = lastRange.textFlow.interactionManager as IEditManager;
+				var paraElem:ParagraphElement = lastRange.firstParagraph;
+				while (paraElem)
+				{
+					em.applyFormatToElement(paraElem,TextLayoutFormat.createTextLayoutFormat({styleName:styleName}));
+					if (paraElem == lastRange.lastParagraph)
+						break; 
+					else
+						paraElem = paraElem.getNextParagraph();			
+				}		 	 	
+		 	 }
+		 	 // only working for the first paragraph style name
+		 	 // need to walk the paragraphs in the range to show
+		 	 // mixed state
+		 	 public function update (range:ElementRange):void
+		 	 {
+				if (!range)
+				{
+					lastRange = null;
+					return;
+				}
+				var paraStyleName:String;
+				var beginPara:ParagraphElement = range.firstParagraph;
+				styleName.text = beginPara.styleName;
+				lastRange = range; 	 	
+		 	 }
+			
+		]]>
+	</mx:Script>
+
+	<mx:Button label="Change View" click="dispatchEvent(new Event('changeView'));"/>
+	<mx:ComboBox id="stylingType" selectedIndex="0" dataProvider="{stylingTypeArray}" close="dispatchEvent(new Event('changeStyling'));"/>
+	<mx:Button id="loadCSS"   label="Load CSS" click="dispatchEvent(new Event('loadStyle'));" enabled="true"/>
+	<mx:Button id="unloadCSS" label="Unload CSS" click="dispatchEvent(new Event('unloadStyle'));" enabled="false"/>
+	<mx:Button id="applyStyle" label="Set Para Style:" click="setParaStyle(styleName.text);" enabled="true"/>
+	<mx:TextInput id="styleName"/>
+</mx:HBox>

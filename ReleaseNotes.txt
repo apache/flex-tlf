@@ -1,0 +1,671 @@
+Build 232
+   * Fix 2793943, "RTE with delayUpdates on, and no controllers". Null pointer exception when delayUpdates flag is on, and the TextFlow has no controllers.
+Build 231
+   * Fix for 2792266, "RTE on mouse down & drag from one column to another, or on shift-arrow-up/down to extend selection across columns". 
+   Add better checks for null to workaround the bug.
+Build 230
+   * Fix for 2791491, "Setting the font in an empty RichEditableText fails for all but the first attempt (SDK-29143)". Clear the pointFormat
+   when applying a leaf format to a caret selection in an empty paragraph.
+   * Fix 2790764, "NeedsSoftKeyboard not set if containers are added after interactionManager".
+Build 229
+   * Fix 2785924 and 2785919, bugs in the delayUpdate feature. Make sure there is one per EditManager and check for null flowComposer in the redraw handler.
+Build 228
+   * Fix for 2783360, "Inlines are positioned incorrectly in vertical text when using the factory". There is a positioning adjustment applied to 
+   TextLines and floats in the factory, to transform them since they assume the right hand edge (the top of the text) is at 0. This positioning 
+   adjustment was incorrectly being applied to inlines, which are children of the TextLine, and the net effect was that the inlines were appearing 
+   offset to the right by the size of the container. 
+Build 225
+   * Fix 2775253, "Error returns when copying and pasting a text flow with Floats repeatedly." This turned out to be a number of separate problems. 
+   First, the error should have been an assert. Second, if the float was not loaded the first time through composition, and we had to remove it 
+   from the line and retry, and if there was a following float that had already loaded, then it was throwing. Third, when it got to the redraw phase, 
+   it was sometimes trying to add the float to the container at an illegal z-order position (past the last child location). Fourth, if the float 
+   appeared within the range of visible text, but was not itself visible, and it was after a partial compose, then all floats disappeared 
+   (were removed from the display list). Fifth, sometimes during composition the backout was failing if the line was the first line in the container, 
+   and we were composing from the start.
+Build 223
+   * Fix 2774250, "If a skew &  rotate matrix is applied to the container, the cursor scales."
+Build 220
+   * Fix 2759026, "Remove Deprecated method EditManager/IEditManager.delayedOperations". The latest version of Flex Hero no longer calls the old API, 
+   so it can be removed. If you have any problems, please pick up the latest Flex SDK.
+   * Fix for 2772554, "Inlines (not just floats) turn off vertical justification". Now checks to see if graphics are floats before disabling vertical 
+   justification. 
+Build 219
+   * Fix 2769562, "RTE adding text before stacked floats". Problem happens because the line (including the floats) isn't big enough to fit any text, 
+   but the line sits above the floats, and so when it just has floats in it with 0 height it doesn't intersect the floats. Solution is to extend the 
+   knockout for the floats to include the space from the previous line's descenders to the previous line baseline. Then the top of the knockout 
+   coincides with the top of the line of text.
+Build 216
+    * Fix 2769670, "Content bounds includes only columns that were composed". Error in content bounds generating when starting composition 
+    from the middle of the container -- the content bounds was including only the parcels (columns) that were in composed area, 
+    not all the parcels in the container. Now assume that previous parcels/columns must be full. Not an ideal solution, since it will be
+    wrong if previous columns weren't full, but should be much much cheaper computationally.
+Build 215
+    * Fix 2762393, "reported contentWidth doesn't seem correct with embedded image and float attribute". This turned into a set of issues with floats larger than the column width. 
+    It was generating incorrect content bounds, and also sometimes not displaying floats when it should.
+Build 214
+    * Fix 2768598 AutoSized ILGs with padding are incorrectly positioned on first compose
+Build 212
+    * Fix 2761685 "MouseWheelEnabled is broken for TLF TCM Text."
+    * Fix 2766823 "RTE: Inserting text next to floated inline on first line when link is applied"
+Build 211
+   * Fix 2765114, "[SDK-28671] Changing textFlow's interaction manager can result in RTE if there is a delayedUpdates redrawHandler active".
+   * Fix 2765464, Compose With no ContainerControllers loses track of pending InlineGraphicElements
+   - note: manipulating TextFlow.flowComposer and removing/adding ContainerControllers can create situations in which inlinegraphics are loaded when its not intended or not loaded when it is intended.  TLF errs on the side of keeping loaded graphics loaded but that may not always be the desired result.  For example a call to textFlow.flowComposer.removeAllControllers is ambiguous about the disposition of the ILGs.  Two tlf_internal methods can be used to resolve these situations.  TextFlow.unloadGraphics unloads all loaded graphics.  TextFlow.prepareGraphicsForLoad queues graphics so that on the next call to updateAllControllers they will be loaded.
+   * Fix 2765462 Docs only: The FlowElementMouseEvent docs and examples refers to MouseEvent strings not FlowElementMouseEvent strings
+   * tlf_internal method getEventMirror now returns an IEventDispatcher instead of an EventDispatcher.
+Build 210
+   * Fix new SpanElement().deepCopy RTE
+Build 206
+   * Fix 2761051, "Pasted plain text not picking up attributes of paragraph in flow." Flow is now automatically assuming plain text if the format 
+   imported from the clipboard is PLAIN_TEXT_FORMAT, and automatically assuming formatted text if the format is TEXT_LAYOUT_FORMAT. All other 
+   formats are considered "unknown" and we will inspect the text, as before, for attributes to determine if it is plain. Flows with ListElements, 
+   LinkElements, GroupElements, or DivElements are also considered to be formatted.
+   * Fix null pointer RTE caused by inline that has not loaded correctly.
+   * Fix 2738009 Hitting return in nested list content proliferates list elements
+   * Fix 2662563, "Can't delete nested lists from UI." Now if you select all and delete, it will delete the final terminator of a list at the end of a flow. 
+   * Fix 2761816 ReadOnly TextContainerManager Ignores Scroll Wheel
+Build 205
+   * Fix 2760281 InlineGraphicElements in Vertical Chinese Text Are Incorrectly Positioned
+   * Doc fix:  add class name before default value in TextLayoutFormat and TabStopFormat formats.
+Build 204
+   * Fix 2758147, "When inputting text to a tlf container with overflow and small leading, the container doesn't scroll smoothly as text is input." 
+   * Resolve issue: TLF 2.0 is not working with the Flex Hero 17689 and 17855 - added IEditManager.delayedOperations back in - will remove it when hero posts a new build without that API
+   * Fix 2758434, "Undo/Redo multiple levels of delete & insert not returning to correct state".
+   * Fix 2759135 (SDK-28559), turn delayUpdates on and hold down the backspace key generates an RTE. Force updates to be handled before processing key events.
+   * Fix RTE in TextLayoutFormat.removeClashing and removeMatching when userstyles where used.
+   * Fix 2758274 "SelectionManager::getCommonCharacterFormat() can return 'null' or 'undefined' value in an attribute for an insertion point where the attribute 
+   is different on either side of the insertion point". Now if you make an ElementRange for a point (absoluteStart == absoluteEnd) the startLeaf and endLeaf will 
+   always be the same. 
+    * Fix 2758165 TextContainerManager.setTextFlow when textFlow has elements with eventListeners attached uses Factory when it should switch to flowcomposer
+    - FlowLeafElements, SubParagraphGroupElements, TCYElements and LinkElements have a tlf_internal getEventMirror call.  This can be used to attach event handlers to any of these elements.  This changelist fixes various bugs with that mechanism.  Note that adding or removing an event listener is a model change and requires a call to updateAllControllers to instantiate the change.
+   * Fix 2759997, "Attributes applied to insertion point are not applied to pasted unformatted text". Added test case to OperationTest.copyPasteUndoRedo.
+   * Add a "delist" button to the ListProperty panel.  Add the ListProperty panel to TextLayoutEditor.
+Build 203
+    * Fix 2758185 Unhandled securityerror in InlineGraphicElement Loader.load call
+Build 202
+    * Fix 2732785 backgroundColor on list marker not shown
+    - to use specify the backgroundColor in the listMarkerFormat property
+    - when computing the background color rectangle height the list marker is not considered part of the text line.
+Build 201
+    * Fix unreported issue.  Changing TextFlow.flowComposer to null wasn't stopping or unloading inlinegraphicelements
+    - improve performance TextFlow now tracks how many interctiveObjects and InlineGraphicElements it has
+    - enables switching flowComposer logic to no longer scan for ILGs to shutdown or startup unless they are present
+    - enables TextContainerManager to more efficiently determine if a TextFlow can use the factory
+    - improves fix to 2754799 Textflow link element doesn't work after append to an existed textflow
+    * Made InlineGraphicElement.stop(okToUnloadGraphics:Boolean) a tlf_internal methods.  Clients can use this to stop a graphic specified by class or URI from loading and/or to drereference the graphic.  Next compose will reload it. 
+    * Added tlf_internal method FlowElement.applyFunctionToElements(func:Function).  Recursively descends calling  func on each element until func returns true.  Example calling stop on every InlineGraphicElement:
+	textFlow.applyFunctionToElements(function (elem:FlowElement):Boolean{ if (elem is InlineGraphicElement) (elem as InlineGraphicElement).stop(true); return false; });
+Build 200
+    * Fix 2754698, "Exception in Cursor Navigation". We were getting an exception when the selection was in overset text, 
+    where the overset couldn't be composed because a large image earlier in the flow could not be placed in a narrow column. 
+    previousLine and nextLine expect composed text. Instead, now we back the cursor up to the last composed position.
+    * Fixed unreported bug in treatment of inline graphics, where they were getting directly attached to the GraphicElement.
+    * Fix 2754799 Textflow link element doesn't work after append to an existed textflow
+Build 199
+    * Fix 2603455 applyLink can't remove selected text's link if selected text begins with no linkElement
+    * Enable ListItemElements to have a DivElement as the first child.  
+    - The first Paragraph in the ListItemElement can have a chain of DivElement parents before the ListItemElement.  If there is a ListElement in the chain then a Paragraph will be inserted as the first child of the ListItemElement by normalize.
+Build 198
+    * Rename static method TextConverter.initialize to TextConverter.setFormatsTodefault and make it tlf_internal
+    * Make static array TextConverter._descriptors tlf_internal
+    * getCommonParagraphFormat API now returns common locale and padding settings on paragraphs
+    - underlying change is to enable internal Property metadata objects to include multiple categories for the property.
+    * Fixes for soft keyboard.
+Build 197
+    * Fix 2714716 [Flex TLF Ingeration] - missing metadata for float attribute causing minor issues
+    * Fix 2683832 TextFlow isnt code hinting any enums in Builder
+Build 196 
+    * Fix Additional issues with 2559275 "TextFieldHTMLImporter: <textformat> tag inside <p> tag ignores leading property; TextField doesn't"
+    - The explicit paragraph and implicit paragraph cases are now inconsistent.
+    - A TextFormat as the first XML element in a paragraph formats the containing paragraph
+    * Fix 2751036 TextFieldHTMLImporter Should Set typeName when creating an element of a different type
+    - when a span is converted to <g> it is now set with typeName="span"
+    - for consistency convert all typeName strings to lower case in the TextFieldHTMLImporter
+    * Fix 2620719 SelectionManager.getCommonContainerFormat() returns only first container's format - now uses range like other getCommon APIs
+    * Fix 2750420 Fully specified legal values in ASDocs for format properties should include class name and property name only (doc changes only)
+    * ClearFormatOperation now clears user styles.
+    * Fix "CCJK IMEs: Duplicate characters is input into spark TextInput component after call setStyle method to change the font size.". IME text
+    from previous edits wasn't removed after a direct model change, and text was left underlined as if IME session still active.
+Build 195
+    * API Changes: imageSourceResolver in IHTMLImporter and ITextLayoutImporter renamed to imageSourceResolveFunction. 
+    importBodyElement in IHTMLImporter renamed to preserveBodyElement and importHTMLElement renamed to preserveHTMLElement. 
+    IHTMLImporter, ITextLayoutImporter interfaces now extend ITextImporter. IPlainTextExporter now extends ITextExporter. 
+    TextConverter decorateForClipboard renamed to useClipboardAnnotations. textFlow is now accessible as a new public property on TextScrap.
+    * API Changes: 
+    CreateListElement - remove listMarkerFormat parameter (use listFormat.listMarkerFormat), rename listparent to parent, rename listElement to newListElement
+    CreateSubParagraphGroupOperation - rename listParent to parent, reorder constructor, rename listElement to newListElement
+    CreateDivOperation - rename newparent to parent, reorder constructor, rename divElement to newDivElement
+    MoveChildrenOperation - fix documentation, add getters and setters for constructor parameters
+    SplitElementOperation - rename constructor parameter target to targetElement
+    ApplyElementTypeNameOperation - rename constructor parameter newTypeName to typeName, rename newTypeName getter/setter to typeName
+    TCYOperation - rename tcyElement to newTCYElement
+    ApplyLinkOperation - rename linkElement to newLinkElement
+    InsertInlineGraphicOperation - rename inlineGraphicElement to newInlineGraphicElement
+    IEditManager/EditManager changes
+      createDiv - reorder parameters
+      createList - reorder parameters; remove markerFormat use format.listMarkerFormat
+      createSubParagraphGroup - reorder parameters
+      applyFormatToElement - add new parameters relativeStart, relativeEnd to apply format to split the element and apply the format to a sub-range
+    * Fix 2746688, "The color of the text is incorrect, which is pasted from clipboard with PlainTextImporter". When plain text was pasted 
+    into an empty paragraph it wasn't picking up the attributes of the context it was being pasted into.
+    * Fix 2751088 bullets get incorrectly positioned after scrolling
+Build 194
+    * Fix 2748900 [SDK-19063] TCM that contains hyperlinks out of scroll view don't work when scrolled to
+Build 193
+    * Deprecate classes ApplyElementStyleNameOperation and ApplyElementUserStyleOperation - use ApplyFormatToElementOperation
+    * Deprecate IEditManager/EditManager changeStyleName - use applyFormatToElement
+Build 192
+    * Cleanup pass on Fix 2742951 Merge UserStyles into TextLayoutFormat
+	- add linkNormalFormat, linkHoverFormat, linkActiveFormat and listMarkerFormat as explicit style properties on TextLayoutFormat.
+	- add properties styles, coreStyles and userStyles to TextlayoutFormat
+	- add getStyle to ITabStopFormat and TabStopFormat.  add setStyle to TabStopFormat
+Build 191
+    * Fix for unreported recent injection in custom clipboard copy/paste, failed to continue to try importers after the first one returned null.
+    * Fix 2742951 Merge UserStyles into TextLayoutFormat
+      User styles and the styleName property are now stored in the TextLayoutFormat object attached to the FlowElement.  Previously they were assigned
+      in a separate object and not copied with the format property.  Several API changes go along with this.
+	TextLayoutFormt class - add getStyle/setStyle; add styleName as a property
+	ITextLayoutFormat interface - add getStyle and styleName property
+	FlowElement/ContainerController - get styles API added to return an object containing all styles as properties.
+    * Consolidated tlf_internal BuildInfo class into TextLayoutVersion. BuildInfo.kBuildNumber renamed TextLayoutVersion.BUILD_NUMBER, and BuildInfo.kBranch 
+	renamed to BRANCH. Client code that needs VERSION changed to call TextLayoutVersion.getVersionString(TextLayoutVersion.CURRENT_VERSION).
+Build 190
+    * Another attempt at fixing the regression that causes inlines to disappear when converted to floats. 
+    Previous fix fixed some cases, but there were still ways to trigger the bug.
+Build 189
+    * Fix regression that caused inlines that are changed from Float.NONE to another value of Float to disappear. 
+    Problem was that they would be added as a child of the container, and then immediately removed.
+Build 188
+    * Fix 2740300 AIR Only: Lines of text with underline or strikethrough style disappear when the text is scrolled.
+    * Fix 2742233, "RTE adding text after link if link is at end of textflow". Second try at this -- there were multiple 
+    ways of getting to this RTE. Normalization code updated so that a terminator in its own span at the end of a paragraph 
+    is merged with the previous span even if the previous span is a descendant of a sibling, and not an actual sibling. 
+    This latter fix was necessary because otherwise we register failure on undo of insert at the end of a paragraph after 
+    a link because the trailing span was left. However, this is equivalent to leaving the span off, and letting the terminator 
+    go in the link. With this change there is a single representation for this situation.
+    * Adjustments to how unformatted pasted text picks up the format from the surrounding text. Previous, it would always 
+    pick up the format from the previous or next sibling. Now its adjusted slightly so that a leaf element (e.g., a span) 
+    always picks up the accumulated format of the previous sibling down to the span level. This allows a span pasted next 
+    to a link to pick up the fontFamily applied to the link's last leaf. Fixes the problem where the link's span overrides 
+    the fontFamily, but this is not picked up by the span pasted next to it.
+    * API CHANGE: Renamed TLFVersion to TextLayoutVersion. getVersionString is now tlf_internal. Added constants for VERSION_1_0
+    and VERSION_1_1.
+    * 	API CHANGES: ConverterDescriptor class renamed to FormatDescriptor. TextConverter.getConverterDescriptorAt renamed 
+    to getFormatDescriptorAt. TextConverter properties moved out into new filter-specific interfaces: IPlainTextExporter, 
+    IHTMLImporter, and ITLFImporter. TextConverter.PASTE_MERGE_TO_PREVIOUS and PASTE_MERGE_TO_NEXT moved to ConverterBase 
+    class and renamed to MERGE_TO_PREVIOUS_ON_PASTE and MERGE_TO_NEXT_ON_PASTE. Removed ITextImporter and ITextExporter 
+    getProperty/setProperty functions (they're replaced by new interfaces).
+    * Fix for 2651039, "Pasting into an empty paragraph should override paragraph properties". Now TLF explicitly checks for 
+    empty paragraphs in the PasteOperation class. 
+Build 185
+    * Fix 2741297, "InsertTextOperation.doInternal changed so if the text to insert is "" there is an RTE in applyPointFormat because span=null". Now check for null span in InsertTextOperation.
+    * Fix 2600932, "Cursoring from a long line to a short line can sometimes not scroll to show cursor context". The automatic scroll to keep a range of text in view now changed so that it 
+    attempts to center the range in the logical horizontal direction.
+    * Fix 2617150 Allow user-defined tags to remain in the HTML so they can be used by the IFormatResolver
+    - This feature addition has has several pieces.
+    - FlowElement now has a public typeName get/set API.  Normally this returns the same value as the tlf_internal API defaultTypeName.  This can be set to any string.
+    - typeName (when different from defaultTypeName) is exported by TEXT_LAYOUT_FORMAT TextConverter.  It is also handled by the importer.
+    - TextFlow has a new API getElementsByTypeName.
+    - TEXT_FIELD_HTML_FORMAT will now tag elements with typeName when an unknown tag is used.  The importer pushes the typeName down to the lowest level possible and avoids 
+        creating extra elements while preserving information for roundtripping.  For example:
+        HTML --> TLFMarkup
+        <foo><p>my text</p></foo> --> <p typeName="FOO"><span>my text</span></p>
+        <foo><p>p1</p><p>p2</p></foo> --> <div typeName="FOO"><p><span>p1</span><p><p><span>p2</span><p></div>
+    - The TEXT_FIELD_HTML_FORMAT importer always convert user-defined tags to upper case
+    - The TEXT_FIELD_HTML_FORMAT importer has two new boolean properties (accessed by the IFormatImporter setProperty API).  These both default to false
+        IMPORT_HTML_TAG - sets the typeName of the imported TextFlow to HTML and imports any nested HTML elements as a user defined type
+        IMPORT_HTML_BODY_TAG - imports the body element as a user defined tag.  Otherwise it is skipped
+    * Add ApplyElementTypeNameOperation and changeTypeName to IEditmanager and EditManager
+    * Padding properties (paddingLeft, paddingTop, paddingRight, paddingBottom) categories changed from Container to Paragraph, since these can now be applied to paragraph.
+    * Fix 2742233, "RTE adding text after link if link is at end of textflow".
+    * Fix 2741416 Select-All ENTER Doesn't Create new Paragraph
+    * Fix 2546631, "Plain text does not take on selection formatting when pasted". Detect when a text scrap is unformatted, and have each element when it is 
+    pasted get the format of its (new) preceding sibling, or if there is no preceding sibling, the following sibling. I don't know yet whether this is the best 
+    approach; one alternative would be to code it specifically for leaf elements and paragraphs, and ignore other elements.
+Build 184
+    * Fix 2739866, "ContainerManager::removeInlineGrahicElement() doesn't seem to get called.". 
+    * Fix [SDK-28210] "SpanElement.normalizeRange() should not combine spans if the span is bindable". 
+    * Fix 2739996, "Flow scrolls incorrectly right after an inline moves off the end of the container".
+    * Performance improvement.  FlowLeafElement now always holds text in _text.  Removes some overrides and other tests
+    * Fix 2700108, "Changing font color shifts characters noticeably within the last linked container if it has overset text." 
+    ScrollToRange was scrolling inconsistently when the range extended both above and below the visible area. Now it no longer 
+    scrolls in that case. since the visible area is already showing the range.
+Build 183
+    * Fix 2559275 TextFieldHTMLImporter: <textformat> tag inside <p> tag ignores leading property; TextField doesn't
+    * Fix 2617284 Request: StrikeThrough Support in HTML importer, support <s> tag
+    * Fix 2730934, "Editing of Measured Container with Floats can double up lines". Bug happens when composing from the middle of the container
+    when we are measuring text that contains floats. 
+    * Fix 2562965 Preserve id and class attributes through import and export
+    - preserved on p,span,a,img,ul,ol,li elements on import.  Not for user defined tags - will be done as part of that bug fix.
+    * Fix 2733620, "Padding on intermediate elements computes incorrect bounds when measuring with the factory." Added checks to 
+    finalParcelAdjust to take padding on parent chain into consideration when generated bounds.
+Build 182
+    * Call disposeXML everywhere where XML objects are explicitly allocated, and we don't them back to the client. This should help with garbage collection. 
+    Client code that receives XML from TLF is advised to also call flash.system.System.disposeXML when it is completely done with the XML object.
+    * Behavior change when editing links. If you select and type, (thus replacing what was selected with what you typed) the inserted text will now pick up 
+    the link attributes from the start of the range being deleted if it contains a link. As you continue typing, the link will be extended to include the 
+    new characters. In order to type plain text (drop the link attributes) you have to change the selection. This can be done in any way (e.g., click somewhere 
+    else, use the arrow key, programmatically). Note that if you "change" the selection to the value it already has, it will have no effect (i.e., link 
+    attributes won't be dropped). Therefore clicking back on the same caret location won't drop the link attributes. If you select, delete, and then type, 
+    although the other attributes from the deleted text are applied to the newly inserted text, link attributes are not.
+    * Fixing bugs in the custom clipboard code to enable same clipboard format, multiple TextConverter formats. This enables multiple filters to all try and 
+    handle air:text, for example. API CHANGE for new TextConverter addFormatAt function, which now takes a String clipboardFormat in place of the previous Boolean.
+    * Normalize the flow when the interactionManager is set to non-null. This reduces the chance that users will get errors due to executing operations on 
+    un-normalized TextFlows. Fix for 2589714, "EditManager functions assert if called on a flow with no controllers". Does not fix all possible cases of this, 
+    but should address many.
+    * Fix [SDK-26295] losing fontStyle and fontWeight with TLF when importing XML into TextFlow
+    - in some cases the formatting was ignored.
+Build 181
+    * Fix 2736125, "Undo in nested list/list item situation doesn't get you back to initial state". 
+    Undo was being skipped if the textFlow was the same length after the delete as it was before, but 
+    this is wrong because it can happen even if the textFlow has changed.
+    * Fix 2630565 TLF cursor is transformed with container instead of maintaining a pixel's width
+    cursor size calculation now takes scaling of Sprite into account
+    * Rename HtmlImporter to TextFieldHtmlImporter and HtmlExporter to TextFieldHtmlExporter.  These are internal classes not exposed outside of the textLayout swc
+Build 180
+    * Fix 2699246, "Cut isn't consistent with delete when typing afterwards". Delete was setting the pointFormat differently from Cut; now they use the same code for that.
+    * Fix for 2716695, "Apply format changes immediately to empty paragraphs". When applying a leaf format to an empty paragraph (contains only a terminator) 
+    apply the leaf format to the terminator immediately. Retains previous behavior of delaying the format change to apply to next insert if the paragraph has any content.
+    * Fix 2693210 Movies as inlines continue playing (sound) after they are deleted
+    * Fix 2696786 Document the event: syntax for LinkElement
+    * Fix 2724144, "Inline graphic disappears when it would be partially obscured by the edge of the container". Inlines were disappearing if the text of the line they were 
+    in was not visible. This is obvious when you have a line with a tall graphic that is scrolled so the text of the line is scrolled off, but you should be able to see the graphic.
+    * Fix 2523634 [SDK-24957] TextContainerManager doesnt show blinky text insertion cursor or highlighted text correctly when z-index is specified
+    - second go round on this.  Revert original fix.  Issue is don't use DIFFERENCE blendMode on the SelectionFormat when setting z on the sprite.  Player acts as if the sprite has no background.
+    * Fix unreported bug Model Changes (e.g. replaceChildren) that make the selection go beyond the end of the TextFlow causes assertions when the selection is highlighted
+    * Fix unreported bug SelectionFormat with blinkRate of zero for the point selection would never draw
+Build 179
+    * Fix 2730683 SplitElement and undo errors caught in OpHammer with end-of-list (or div?) selection
+    * Fix 2721916, "A text flow that has no interactionManager doesn't support scrolling with the scroll wheel." Scrolling with the mouse wheel 
+    should now work in a TextFlow that is read-only (has a null interactionManager).
+    * User styles are now propagated through insertion and deletion. Created a new tlf_internal class for the SelectionManager pointFormat, 
+    that can (optionally) hold more information than just a TextLayoutFormat. You can set the userStyles on this new PointFormat object, and 
+    they will applied as part of the next insertion, same as if you applied bold and then inserted text. Also, if you are replacing a range of
+    text that has userStyles applied to it, the userStyles in the deleted text will be applied to the inserted text, unless the insertion overrides
+    the point format. Added same capabilities for TCY and links; this part is still under construction.
+    * Fix 2735762 Links do not work with Vertical text.
+    * Fix for Watson 2512062, styleName attribute from left-side span not propagated to inline graphic elements inserted right after the span. 
+Build 177
+    * Fix 2563434 Importers resolve relative image paths from the swf, not the HTML file
+    - add new importer property IMG_SOURCE_FILTER_FUNCTION
+    * move HtmlImporter property string defintions from HtmlImporter to TextConverter
+    - moved PARAGRAPH_SEPARATOR_PROPERTY 
+    - and  STRIP_DISCRETIONARY_HYPHENS_PROPERTY 
+    * Fix 2734227 listStylePosition of 'inside' causes RTE if listStyleType='none'
+Build 176
+   * Fix issues with "inside" list markers; positioning in measured content, content Bounds calculations.
+   * Fix 2732842 Bad line heights after turning on measure height with list content
+   - marker TextLine was recording a TextLayoutFormat that was later modified
+Build 175
+   * Fix a number of paste problems involving lists. Also fixed a bug that was causing paste attributes to leak into the TextFlow 
+   after a paste of a partial link element.
+   * Fix 2683918 [SDK-27255] Spark RichEditableText not measuring text properly when using TLF 2.0 lists
+   - list markers now included in contentbounds 
+   * Fix 2694381 TextContainerManager doesn't draw text using the initial format
+   -  the initial format from TCM configuration was ignored when drawing after a setText call
+   * Fix 2732785 backgroundColor on list marker causes RTE
+   - but backgroundColor on list marker does not display
+   * Fix 2730723, "Text insert not undone when replacing selection in list item containing more structure". 
+   * Fix 2730028, "Links added to sub-elements inside another link should throw". 
+Build 172
+   * Fix paste of plain text copied in external application and pasted into TLF.
+Build 171
+   * List markers now line up independent of the paragraph's textAlign property
+   * Fix issues vertical text and measurement
+   - containercontroller would not add lines after the first one
+   - tcm would set the clip incorrectly when not measuring in the non bp direction
+   * Raising maximum & lowering minumum limits for padding size, also updated min/max of paragraphSpaceBefore, 
+   paragraphSpaceAfter,paragraphStartIndent, paragraphEndIndent to match. 
+   * API and MARKUP change: Updating the new minimum, optimum, and maximum word spacing properties to be a single 
+   compound "wordSpacing" property. This was necessary so that checks for correctness of values can be done 
+   atomically, since the values are interdepedent. Added a new SpacingLimit property handler for new compound 
+   value.
+   * TextContainerManager.  Make _composedLines tlf_internal.  Add tlf_internal API factoryUpdateContainerChildren
+   * Fix measured text (NaN for composition dim in bp direction) and restart of editing issues with gaps on left and right and alignment
+   - floats were not accounted for,  now when measuring and there are floats recompose starts from the beginnig
+   - padding on divs/paragraphs/list/listitems is now accounted for
+   - fix mismatch between restart and normal compose on handling of the textIndent property
+   - fix issues with restart and placement of the list markers
+Build 170
+   * ITextImporter & ITextExporter getProperty and setProperty functions added back into the public API (necessary for custom clipboard formats). 
+   Also added back in PlainTextExporter string constants for stripDiscretionaryHyphens and paragraphSeparator properties.
+   * Revert selection at end of line change made earlier in this release to original behavior
+   * Add a new leading model (LeadingModel.BOX) based on the CSS inline formatting model. 
+Build 169
+   * Support for installable clipboard formats. It's now possible to programmatically install a new text conversion format that is used
+   by clipboard on copy and paste, such that the new format is posted to the clipboard on copy, and used on paste when fetching data
+   back from the clipboard. See new APIs in TextConverter class. Also now possible for a flow operation event listener to examine the
+   text being pasted -- textFlow is exposed in TextScrap class.
+   * Added new formatting properties -- minimumSpacing, optimumSpacing and maximumSpacing. minimumSpacing and maximumSpacing control how 
+   the extra space is spread out when justifying text. When textJustify is "distribute", justification space is apportioned to the spaces
+   in the line up to the maximum amount allowed by maximumSpacing, and any further spacing is distributed via letterspacing (letters are
+   spaced apart). If text is being compressed to fit into the justified space, the same principle applies; spaces will be compressed first,
+   until the minimumSpacing value is reach, and any additional compression will appear as letterspacing. optimumSpacing applies to all text
+   regardless of the textJustify value, and effectively resizes the space character by the percentage supplied. This feature requires the
+   10.1 (Argo) player or later.
+Build 168
+   * Cleanup CreateDivOperation
+   * Fix 2716535 RTE scrolling a list in a spark TextArea
+   * Fix 2622500 Can't import multi-column list with no column gap
+   - issue was with handling of situations in which composer created no parcels
+Build 167
+   * Fix 2685268 lose list items when crossing containers (list markers not appearing in some multi container cases)
+   * Fix unreported bug - "inside" list markers disappear during scrolling
+   * Fix 2676298 (again!) "Deleting a float causes another float to disappear". Improved the validation code in the deelteAtStart test to check that the 
+   deleted float is *not* in the display list, and that the other float *is* in the display list.
+Build 166
+   * Fix bug 2719488, "RTE in Float Selection Code". Block selection that contains an inline graphic with float = none that hasn't loaded yet was crashing. 
+   * Fix 2679666 list with <img> can't be displayed correctly after scroll down or up
+   * Fix 2717620, "Got 'null reference..' RTE when running importTest in VellumUnit for this particular html file". Problem was with link elements that 
+   start in the composed area and extend beyond it, it was crashing trying to generate the bounding boxes of elements that weren't fully composed. 
+   Now it generates bounding boxes only for that portion of the element that has been composed.
+   * Fix 2719286 Missing List Marker When afterContent has tabs In Player 10.0
+   - tabs set in listMarkerFormat were being ignored
+   - originally reported on forum: http://forums.adobe.com/message/3135638#3135638
+   * Fix 2629705 Documentation for ContainerController.setCompositionSize should reference NaN and describe its autosize behavior.
+Build 165
+   * Fix bug 2720860 Adornment display is lost after scrolling away and back
+   * Fix bugs in undoing applyLink and applyTCY.
+   * API Changes: TextConverter.addConverter and removeConverter renamed to addFormat and removeFormat and are now tlf_internal. 
+   Removed getProperty and setProperty functions from ITextExport claer and ITextImporter, and made them tlf_internal in ConverterBase. 
+   clear and reportError functions in ConverterBase are now tlf_internal as well.
+   * Fix 2720514 "inside" listItems incorrectly positioned next to floats
+   * API Change: Renamed IEditManager.delayedOperations to allowDelayedOperations. Renamed IEditManager.delayedUpdate to delayUpdates. 
+   Renamed IEditManager.createSPGE to createSubParagraphGroup, and reordered parameters. Renamed CreateSPGEOperation to CreateSubParagraphGroupOperation, 
+   and reordered parameters. Reordered parameters to IEditManager.createList.
+   * API Change: ISelectionManager functions getCommonCharacterFormat, getCommonParagraphFormat and getCommonContainerFormat now return a 
+   TextLayoutFormat instead of an ITextLayoutFormat. This change is backwards compatible with current code because TextLayoutFormat 
+   implements ITextLayoutFormat.
+   * API Update:  new overridable TCM methods added in 164 are now all tlf_internal.
+   * API Change: IEditManager.splitParagraph now returns the new ParagraphElement that was created. 
+   * Fix bug 2719547 where inline graphics either disappear or appear in the wrong place if you scroll away and then back.
+   * Fix unreported bug - using TextContainerManager with a TextFlow and all images already loaded and floats (it goes through the factory) would not display all the content
+   * Fix 2724129 Vertical text which has a Inline graphic with Tate Chu Yoko applied throws an RTE
+Build 164
+   * Add overridable TextContainerManager methods to override for adding objects to Container.  These are the same as the ContainerController mehods
+   - add new ContainerController method removeBackgroundShape - also in TCM
+   - these methods aren't yet connected when TCM is using the factory
+   * Flex request: Remove Configuration.listAutoPadding and add it to TextLayoutFormat.listAutoPadding.
+   * Fix a number of problems in undo of delete text range, mostly related to incorrect undo results with hierarchal text (including divs or lists).
+   * Fixed a problem where the textLength of a ContainerController was not updated correctly in response to a model change if there are more than 
+   one linked containers, and the second and subsequent containers are empty due to a previous text deletion.
+   * SpanElement.getText now handles the default parameter of relativeEnd correctly -- it was returning an empty string instead of the entire contents of the span.
+Build 162
+   * Fix 2720504 [Flex TLF 2.0 Integration] - List enter key adds new item but remains on current line
+Build 161
+   * Make TextContainerManager functions clearComposedLines and clearContainerChildren tlf_internal
+Build 160
+  * Adding new values for ClearFloats: "start" and "end". These are relative to the element's own direction setting.
+  * Initial implementation of CreateDivOperation
+Build 159
+  * API CHANGE: rename [I]Configuration.autoListElementStartPadding to listAutoPadding
+  * API CHANGE: change markup for SubPargraphGroupElement from <spge> to <g>
+Build 158
+  * API CHANGE: ContainerController addFloat/removeFloat renamed to addInlineGraphicElement/removeInlineGraphicElement, 
+  which takes a new parameter for the DisplayObject parent, and is now called for both floats and non-float graphics. Non-float
+  (regular inlines) are always parented to a TextLine. This allows the client to control when the inline graphics are added and removed.
+Build 157
+  * Fix 2695659 FlowGroupElement.replaceChildren can insert unexpected terminator
+  * Add IEditManager.createSPGE and CreateSPGEOperation for creating SubParagraphGroupElements (still in progress)
+Build 156
+  * Cleanup/debug SplitElementOperation.  This operation is the base class for SplitPargraphOperation and is also publicly available.  It has some limitations.
+    - only usable on FlowGroupElements but not on SubParagraphElements.  Issue is that they merge during normalize
+    - will delete a specified range - if the the range includes the element it will be deleted and not split.
+  * API and MARKUP CHANGE: Rename "clear" property of ITextLayoutFormat to "clearFloats". This also changes the XML "clear" property in TLF markup format to "clearFloats".
+Build 154
+  * Fix 2636875 [SDK-26472] RTE in TLF (RTE was gone - minor cleanup for containers with no lines)
+Build 153
+  * API CHANGE: BaseSubParagraphGroupElement renamed to SubParagraphGroupElementBase. Added  more comments to ListElement 
+  and ListItemElement, and added @private to tlf_internal members of ListElement.
+  * API CHANGE: Renamed protected function addFloatChild/removeFloatChild to addFloat/removeFloat.
+  * Fix 2679603 A marker should ignore the link formatting when the first span in the paragraph is in a link
+Build 152
+  * Fix 2709600 Stack overflow composing a line with two spans with backgroundColor and backgroundAlpha set
+  - fix general problem with recursive calls to getTextLine
+  * Fix 2563165 BackgroundColor should be supported by the StringTextLineFactory
+  * Fix 2689668 TLF list with decimalLeadingZero listStyleType shouldnt prefix things outside of the -9 to +9 range
+Build 144
+  * Fix a number of bugs relating to copy & paste.
+Build 142
+ * Implement SubParagraphGroupElement (<spge> tag in markup) as a valid FlowElement for grouping of elements that are children of Paragraphs.  The base class of LinkElement, TCYElement and SubParagraphGroupElement is a new class BaseSubParagraphGroupElement.  This allows grouping of FlowLeafElements and BaseSubParagraphGroupElements into a parent in the model.  For example: <p>before<spge>text<a>link</a>text</spge>after</p>. The naming of this class and the <spge> name in markup are tentative and likely to change.
+Build 140
+ * remove marginLeft, marginRight, marginTop and marginBottom properties - not implemented in 2.0
+ * add "auto" as a legal value for paddingLeft, paddingRight, paddingTop and paddingBottom
+ * add new IConfiguration/Configuration property autoListElementStartPadding.  This property is the padding used for ListElement on a lists's start side when the start side padding value is "auto".
+  * Fix unreported bug in ApplyFormatOperation.  new formats weren't applied to any containers when the selection was a point selection at position 0.
+  * Update the UI to allow setting "auto" the padding propertiesremove the margin properties.
+  * Minor performance cleanup in LocaleUtil
+  * Minor formatting fixes in TabStopFormat/TextLayoutFormat as generated by the script
+Build 139
+  * Remove TextContainerManager.delayedOperations property added earlier.  Instead clients will override createEditManager and supply their own values as needed.
+  * API CHANGE -- Fix 2449209, "EditManager creation methods should return FlowElements". IEditManager applyLink, applyTCY. createList, insertInlineGraphic now 
+  all return the FlowElement that was created. These functions were void before. In addition, the operations now each have a public getter method to return the 
+  FlowElement created.
+Build 136
+  * Fix 2610219, "TextFlow paddingLeft not working when using RTL and dynamic width".
+  * Fix unreported bug in floats where with measurement on floats should default to inlines, 
+  but were disappearing instead. Added test to FloatTest, measureWidth, to catch this error in future.
+Build 134
+  * Fix 2683689, "Need ability to override setting the mouse cursor". Added new protected function to SelectionManager that 
+  bottlenecks where the mouse cursor is set in the SelectionManager.
+  * Fix SDK-27234, RTE in empty controller (compositionWidth & height 0). 
+Build 133
+  * Fix for SDK-27304, RTE when a TextFlow that was set into one TextContainerManager is applied to another. Now make sure the new TextFlow is 
+  removed from its previous textContainerManager before applying it to the new one.
+  * Fix 2661625, "Can't scroll to show floats nearly column-width that have been pushed to a scrollable column". Two separate problems. In the first, the content bounds 
+  was not taking into account the leading float where the text is pushed below the float. In the second, the text below the float goes overset, sending the float with 
+  it, and the result is the float and the text disappear even though the container is scrollable. Added tests for both these cases.
+  * TextContainerManager.updateContainer now returns a boolean.  true if anything changed.
+  * add TextContainerManager.delayedOperations property.  This sets the value into the EditManager when TCM is editing.
+  * Fix 2647149, "Drag-selecting past the end on the last line of a paragraph should select the terminator". Hit test at the end of the line now returns the 
+  position *after* the paragraph terminator, or (if it's not the last line) including the space at the end of the line. 
+Build 132
+  * Return selection behavior back to what it was for 1.1 -- now no longer possible to select the last character. Fix 2676318.
+  * Fix bug that causes links not to click events.
+  * Fix 2679595, deleting float causes another float to disappear
+Build 129
+  * Fix 2523634 [SDK-24957] TextContainerManager doesnt show blinky text insertion cursor or highlighted text correctly when z-index is specified
+  - note: selection must be updated via refreshSelection when z-index is changed.
+  * Fix 2661617, "Text indent lost for paragraph pushed below float that is almost column width". Text indent was being treated same as left/right 
+  margin, so text was not indented from the float if the float was bigger than the indent. Now indent is from the edge of the wrapped text, 
+  not from the edge of the container.
+  * Fix bug in Configuration.clone(), where it wasn't cloning the compatibilityVersion.
+Build 128
+  * Fix 2676352 Links aren't working except in the first paragraph
+Build 127
+  * Partial Fix 2545628 RTE on selection click with certain combination of text properties (SDK-24988)
+  - FTE is returning odd values when unicode ligature code points are used.  TLF was using atomIndexes when it should have used characterIndexes.
+  - Final fix will be based on what player does to fix 2676467.  Current fix prevents the crash
+  * Fix 2607156 TCM can overwrite changes to container's contextMenu
+  - if TCM.createContextMenu override returns null TCM assumes client is managing the menu and doesn't clear it.  TCM will still attach event listener for MENU_SELECT events and handle cut/copy/paste/select all
+  * Fix 2654126 Leaks caused by TCM Globals
+  - TCM in normal operation does a better job of releasing references
+  - added new static tlf_internal API TextContainerManager.releaseReferences to release static reusable objects TCM holds on to for performance purposes.
+Build 126
+  * Fix 2632249, "Redoing inserting a paragraph return puts the cursor in the wrong paragraph". Redo of SplitParagraph was returning the original selection state, 
+  now leaves it unchanged since it is left in the correct state by notifyInsertAndDelete. Added new case to undoSplitParagraph to test for this, and added new checks 
+  to undoHelper in OperationTest to find other selection problems with undo/redo.
+  Also started changes to make copy/paste of hierarchy above paragraphs (e.g. lists & divs) work correctly.
+  * Fix 2606414 TextContainerManager doesn't initially draw text if given a configuration
+Build 125
+  * Fix unreported crashes with displaying TextFlow containing floating graphics and backgroundColor in TextContainerManager and the TextFlowTextLineFactory
+  * Fix unreported bug in estimated contentHeight when scrolling enabled and multiple columns.  Results weren't properly scaled when there were multiple columns.
+  - One column case returns the same contentBounds - >1 will return a larger value scaled by ratio of the uncomposed content length amount and the content in length the last column
+  * Minor perf. improvement in TCM - when in flowComposer state updateContainer would call compose and then updateAllControllers.  The first compose was redundant.
+  - Side effect is that fewer events are generated
+Build 124
+  * Fix unreported bug in undo of delete, apply links, and apply tcy where undo doesn't restore the format of the second paragraph in the range correctly. 
+  Added two mementos, one for deleteText, and one for operations that just want to save & restore a text range. DeleteTextOperation, ApplyLinkOperation, 
+  and ApplyTCYOperation rewritten to use the mementos. 
+  * Fix 2647227 TextContainerManager API to return total number of lines - numLines just returns composed lines.
+  - added as tlf_internal function TextContainerManager.getActualNumLines
+  * Another fix for undo of delete, to remove extra paragraph that appears on undo at the end of the TextFlow.
+  * Fix 2486027 Version of SelectionManager.getCommon*Format methods that don't require an interaction manager.  (See new methods in ElementRange class)
+  * Fix 2661645, 2655061, 2665047, all of them are the same bug that undo doesn't restore correctly to the previous state. Paste now is more careful about 
+  how it works with respect to paragraph ends, so that undo/redo and cut/paste will work better. Many cases fixed, some still remain.
+Build 122
+  * Fix 2522343 [SDK-24814] RTE in TLF FlowTextOperation constructor debug assertion
+  * Fix 2663346 Markup import fails when there is space before <listStyleType> in content = "counters(ordered,"String",<listStyleType>)"
+  * Fix 2665403 "Delete" doesn't regenerate Marker number correctly when deleting listitems
+  * Fix 2665820 Setting BackgroundColor causes an empty Shape to be added into TextLines
+Build 121
+  * Implemented "enter twice" to exit list editing mode, made list editing operations do undo/redo properly using mementos.
+  * Add import/export of lists and listitems to HTMLImporter/HTMLExporter - <ol> maps to decimal; <ul> maps to bullet
+  * Rework HTMLExporter to be a recursive descent 
+  * Change private members of HTMLExporter/HTMLImporter to be public/protected/tlf_internal
+  * Performance work in all importers/exporters to remove linear searches and replace with object lookups
+  * Cleanup all exporters so that export to string and export to XML use the same global XML settings and have the same throw behaviors
+  * Initial support for backspacing to move a paragraph higher in the model.  Canonical example is to backspace at the beginning of a list to move the first list item outside the list.
+  The feature also allows moving a paragraph out of a div by backspacing at the beginning of the div.
+  * Fix 2634350 Duplicate "find the atom" code should be refactored in NavigationUtils.as
+  * Fix 2650129, "FlowElementMouseEventManager continues to dispatch events to TextFlow no longer in container". This happens when a container is 
+  reusued across two TextFlows that have links. Fix is to stop links hittesting when the container is removed. Note: clients must call 
+  flowComposer.removeAllController to force this to happen. Also did a performance improvement on update to make the FlowElementMouseEventManager 
+  take the text range that is being updated from the ContainerController so it doesn't have to figure it out. Should help scrolling on flows with lots of links.
+  * Fix unreported bug - factory composer would recycle lines that were passed back to the callback when they weren't visible.  Factory composer now never recycles lines that it has passed back to the callback.
+Build 120
+  * Fix 2652021, "Lines are not added to a container resized from a no-line state". ContainerController.invalidateContents now always invalidates at least one character, even if the container is empty. 
+Build 119
+  * Fix unreported bug in FlowElement.compareUserStyles - wasn't comparing a TextLayoutFormat used as a userStyle.  This would give incorrect results with linkNormalFormat, linActiveFormat, linkHoverFormat settings and listMarkerFormat properties.
+  * Fix unreported bug in FlowGroupElement.replaceChildren - fixes possible exception when already parented elements were being added to the receiver 
+  * Fix unreported bug in ListItemElement optimization to rememeber current list number.  -1 was used as don't know the number but now that's a valid number.
+  * Fix unreported bug when recomposing and the "none" list type was in use.
+  * CreateListOperation - complete rewrite using a memento based strategy to capture all the sub-operations for undo and redo.  There are still some bugs to work out.  Possibly use the new memento strategy for other operations - for now its internal to CreateListOperation.
+Build 116
+  * Fixing unreported selection highlight bug with floats. If the float comes as a URL, so it is loaded on a delay, and is selected in the initial redraw 
+  before the float has been loaded, then although the float is included in the selected range it was not being highlighted. To fix this, I changed the 
+  highlight algorithm to use the (x,y) composed float position and the element width and height from the InlineGraphicElement to figure out the rectangle 
+  to highlight instead of looking directly at the DisplayObject and getting the bounds, as was done previously. This means that it will highlight correctly 
+  even before it is loaded.
+  * Fix unreported bug that cause floatrs to redraw incorrectly when a controller was removed and then added back into the IFlowComposer. It now clears the 
+  float composition data when that happens. 
+  * Fix 2651156, "preventDefault for EditHandler". EditHandler now sets preventDefault on the event after handling it. Also check isDefaultPrevented() before 
+  handling it.
+Build 115
+  * Fix 2493174 Separate BaseCompose from StandardFlowComposer
+  * Fix 2651926 listStyleTyle cjkEarthlyStem should be changed to cjkHeavenlyStem to match CSS3 names
+  * Big generalization of TextFlowEdit.deleteRange() and paragraph merge logic.  Should fix deletion across div boundaries, deletion across list items, and generally any delete across non-sibling paragraphs
+Build 114
+  * Fix 2606243 [SDK-26244] LinkElement throws TypeError when mouse hovers over changed textflow
+Build 113
+  * Fix a number of different floats bugs. A float that is wider than the container or column, and is on a line by itself, will be composed into the container 
+  instead of going overset. A float that is in scrollable container, should fit for height (was going overset as it would in a non-scrollable container if the 
+  height didn't fit). 
+  * Fix a hang in composition with floats.
+  * Fix an assert on recycling a line in use by the BackgrounMgr. Now release lines from the BackgrounMgr before recycling.
+  * HTML import for floats. align="left" on an <img> element is now interpreted as float = "left" and align="right" is interpreted as float right. All other 
+  values ignored. Note that TextField implemented HTML float, which always go below, and TLF implemented CSS floats which go at the same level if possible. 
+  Therefore it will not look the same. 
+  * Added comment to documentation of ITextLayoutFormat properties marginTop, marginLeft, marginRight, and marginBottom to reflect the fact that at the moment
+  these properties are merely placeholders and should not be used (and may be removed in future).
+  * Fixed bug in ContainerController.mouseUpHandler. Now it checks for null event before dereferencing.
+Build 109
+   * Add more list functionality by subsetting html counter functionality.  New properties in listMarkerFormat
+   - counterReset "none"|"ordered"|"ordered <integer>". Default is none
+   - counterIncrement "none"|"ordered"|"ordered <integer>". Default is "ordered 1"
+   - content "none"|"counter(ordered)"|"counter(ordered,ListStyleType)"|"counters(ordered)"|"counters(ordered,"suffix")"|"counters(ordered,"suffix",ListStyleType)". Default is "counter(ordered)"
+   * Fix Fix 2642078, red box behind IME when editing on the debug build. Byproduct of some debug code, now commented out.
+Build 108
+   * Fix 2639982, "Assert changing a float to an inline". 
+   * Added delayedOperation flag to IEditManager so clients can turn off the delayed execution of insertText.
+   * Fix 2609350, "Cursoring up to a float anchor position moves the cursor to the float graphic". Cursor is now positioned next to the anchor point. If it is a block selection, we still highlight the float. 
+Build 107
+   * Fix 2636066 where an inline earlier in the line with a float following results in assertions and missing floats. 
+   * Fix a bug where text goes overset because of padding settings, which forces text at the end to be invalid (its overset) which crashes when you nextLine to it.
+   * Fix bug in incremental composition where the top padding was added in for elements that are composed from the middle, so the space is added in twice (once on original compose, again on incremental compose).
+   * Fix 2636894 -- a number of bugs relating to use floats of in TextLineFactories.
+   * Fix 2637162, Mouse cursor not updated on switch to read-only mode. Relates to forum discussion at http://forums.adobe.com/thread/652908?tstart=0.
+   * Fix 2636122, "Text isn't aligned correctly if you change vertical alignment on text that contains a float". 
+Build 106
+   * Fix 2635111, "Floats with absolute lineHeight affect leading for the line containing them". Also fixed unreported bug with multiple containers and floats, where the float is hoisted and it is smaller than the text, so the float fits in the container but the text does not.
+Build 105
+   * fix issues with downcasting NativeMenu to ContextMenu
+Build 104
+   * Modify selection limits.  Previously block selections could not extend beyond TextFlow.textLength-1.  The cap on block selections is now TextFlow.textLength.  point selections are unchanged.
+   * Disable undo in CreateListOperation in release builds.  Still in development and prevents crashes if you do try it out.
+Build 103
+   * Change how linkNormalFormat, linkHoverFormat and linkActiveFormat are stored in the model.  They are now converted to TextLayoutFormat by setStyle
+   - fixes bugs in which setStyle will accept formats for these but not find error settings till much later.
+   - simplify getStyle of these properties so they can assume its a ITextLayoutFormat
+   * Change how listMarkerFormat is stored in model.  It is now converted to ListMarkerFormat by setStyle
+   - simplify getStyle of listMarkerFormat so callers can assume its a IListMarkerFormat
+   * fix bug in which importing <linkActiveFormat><TextLayoutFormat/></linkActiveFormat> would incorrectly throw an exception
+   * fix list marker formatting bug - the line with the number didn't take the marker lines ascent into account
+   * add static function TextLayoutFormat.createTextLayoutFormat to create a new TextLayoutFormat from an ITextLayoutFormat or a Object/Dictionary used as key-value pairs.
+   * override methods in TextLayoutFormat in ListMarkerFormat
+   * add static function ListMarkerFormat.createListMarkerFormat to create a new ListMarkerFormat from an IListMarkerFormat or a Object/Dictionary used as key-value pairs.
+   * fixes to the List UI controls
+Build 100
+   * Initial version of CreateListOperation
+   * Loosen rules so that ListElement can have children other than ListItemElement
+   * Fix 2632358. Allow mid-line floats to be "hoisted" so they appear at the same level as the line. Floats whose anchor would otherwise go out of the line are not hoisted. 
+   * redo() broadcasts a FLOW_OPERATION_COMPLETE with a pseudo event for redo, not the event about to be redone. Also skips the broadcast if we're in an IME session.
+Build 99
+   * Fix 2606420, "Vertical text does not scroll when adding empty paragraphs". ScrollToRange is now a little more aggressive about composing ahead.
+   * Add customized ScrollEvent so client code can tell how much was scrolled. The new event inherits from TextLayoutEvent, so it should be compatible for client code currently listening for scroll events as TextLayoutEvents.
+Build 98
+   * Enter key now splits the current ListItem (and not the paragraph) if in a listitem.  shift-enter splits the paragraph
+   * Write a new operation SplitElementOperation that given an element splits it
+   * SplitParagraphOperation now subclasses SplitElementOperation
+   * Fix 2629735, "Formatting not removed on undo after adding paragraph formatting to an empty paragraph". 
+Build 97
+   * create new property Category LIST and put listStyleType and listStylePosition in that category
+Build 96
+   * Roman numerals in lists now more closely match the CSS3 lists spec.  See comments for differences
+   * Fix roman numerals - suffix was being drawn twice
+   * Fix 2629730 Mouse Events Generate Two "selectionChange" events.
+   * Fix 2629731, "Display does not update deleting empty paragraphs through container boundary". Problem was that the flowComposer was not damaging back far enough to pull the text into the previous container.
+Build 93
+   * Fix for various floats bugs, especially what happens when a float gets pushed to the next container or column. 
+   * Fix for redraw bug, where consecutive incremental composes without intervening updates would result in incorrect update when it finally gets called at the end.
+   * Implement support for the remaining listStyleType values.
+   * Add a suffix property to ListMarkerFormat.  It can be "none" or "auto".  Auto gives the default html behavior of adding a ".".
+Build 91
+   * Removed whole-line optimization for selection.  The main effect of this is that the spaces at the end of each line are now generally included in the selection.  This breaks 20+ snapshots as well.
+Build 89
+   * Fix for RTE in ContainerController.validateLines() importing text in a two-container setup. Problem was that updating the first container was recycling lines that had been in the first container and were being pushed to the next. Fix is to make update never recycle lines that aren't still in the container.
+   * Extended padding attributes to work on all block level elements, and on images (either inline or as floats). Padding may now be negative. Also, as part of this, 
+   inlines are now attached to the TextLine in ContainerController.updateCompositionShapes, instead of this happening in composition inside the Player in calls to createTextLine.
+   * Changed setFocus in SelectionManager so it is possible to set the focus without having an active selection. Previously, there was an ordering dependency between calls to 
+   setFocus() and selectRange() -- calling setFocus first didn't work, and resulted in bugs that were hard to find. There is still the issue that setFocus will do nothing if the 
+   container's stage variable is not already set up; nothing we can do about that. Best workaround when using Flex is to do callLater(setFocus());
+Build 82
+    * Add first version of floats. Floats can be start, end, left or right, and there is also the clear property, which can be both, none, left, or right.
+Build 78
+    * Version 0.1 of lists.  TLF markup supports ul, ol, li tags.  Nested lists supported.  Simple formatting and numbering.
+Build 65
+    * Fix 2476646 "FormField scrolling jumps at times it does not need to", scrolling up/down between different sized lines was scrolling unnecessarily in the horizontal direction.
+    * Fix 2594609 Poor text delete performance when pasting large blocks of code, selecting all, and deleting
+Build 62
+    * Fix for 2583969. The problem is that lines are incorrectly removed from the display list when a scroll happens in updateCompositionShapes() as a result of an edit that came during a partial composition. 
+    * Fix for 2545307, "ContainerController.mouseWheelHandler() should be checking if the default behavior is prevented before it acts on the event." Now most event handlers check isDefaultPrevented() before handling the event.
+Build 61
+    * Fix SDK-25999 Specifying tabStops on a RichText component does not look correct after integration of TLF 1.1
+    * Added a delayedUpdate setting to the EditManager to allow clients to defer recomposition and redraw until the next enterFrame event. You can force immediate 
+    recomposition and container update by calling updateAllControllers().
+Build 58
+    * Eliminated use of WeakRef in TextFlowLine to reduce per-line memory allocations.
+Build 55
+    * Fix 2568628 assigned SWFContext not used on Argo in all scenarios
+    * Fix 2568438 [SDK-25693] TextLineRecycler change for Build543 increased size of Flex's Hello World app using FTE and TextLineRecycler by 250k
+    * Fix 2571205 [SDK-25734] TLF: src attribute in <img> tag converts to lower case when using TextConverter.importToFlow with TEXT_FIELD_HTML_FORMAT format
+    * Fix 2582917 Security sandbox violation in LinkElement.stageMouseMoveHandler
+    * Fix 2565658 Security sandbox violation in ContainerController.getContainerController
+    * Fix 2565639 Security sandbox violation in SelectionManager.checkForDisplayed()
+Build 54
+    * Allow removal of link either by passing the empty string, "", or by passing null. Previously the link element would be removed by passing the empty string,
+    but null would be set as the link value if you passed null. However, the document stated that null should remove the link. Fixed the code to match the 
+    documentation.
+    * More optimizations. Recycling of line is more aggressive now. While composing, recycle lines in paragraphs that are not currently in view, and not going to be in view 
+    on next update (i.e., when updating with the results of this compose). When updating the container in ContainerController.updateCompositionShapes, recycle lines in
+    paragraphs that are removed from view. In both cases, when lines are recycled, the corresponding TextBlocks are also released to allow memory to be reclaimed. 
+    Increases speed of composing and scrolling through long documents.
+Build 51
+    * Optimizations for long flows. Composition can start from the middle of a container, so it doesn't have to look at undamaged text at the start of the container. Also 
+    composition now gathers up the visible lines, and hands them off to the ContainerController. This will help in later optimizations.
+Build 38
+    * Fix 2559210, content bounds generated incorrectly (too large) via the TextLineFactory with textIndent applied.
+Build 3
+    * Fix 2525017 - added range checking to IMEClient getTextBounds to avoid exceptions caused by invalid ranges.  Returns empty rectangle in bad range case.
+Build 2
+    * Fix 2508070 Underline/strikethru cause unnecessary TextLines and 2509326 Underline/strikethru apply alpha twice.

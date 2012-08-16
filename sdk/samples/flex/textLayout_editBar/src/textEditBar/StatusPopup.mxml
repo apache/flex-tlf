@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="500" height="390" verticalScrollPolicy="off"
+	horizontalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			public var closeFunction:Function;
+			public var textFormat:String;
+			[Bindable]
+			public var importFunction:Function;
+			[Bindable]
+			public var saveFunction:Function;
+			
+			private var savedText:String;
+			private var savedDialogText:String;
+			
+			public function setDialogText(text:String):void
+			{
+				savedText = text;
+				// workaround for TextArea bug SDK-14797
+				textAreaXXX.text = text.replace(/\u000D\u000A/g, "\r"); 
+				savedDialogText = textAreaXXX.text;
+			}
+			
+			public function getDialogText():String
+			{
+				// if user changed it then have to pass back changed code - they also get the replace above but it can't be helped
+				return textAreaXXX.text == savedDialogText ? savedText : textAreaXXX.text;
+			}
+		]]>
+	</mx:Script>	
+	<mx:TextArea id="textAreaXXX" x="0" y="0" width="100%" height="100%" fontFamily="_sans">
+	</mx:TextArea>
+	<mx:ControlBar horizontalAlign="center">
+		<mx:Button label="Import" id="cmdImport" visible="{importFunction != null}" click="{if (importFunction != null) importFunction(this)}"/>
+		<mx:Button label="Save"   id="cmdSave"   visible="{saveFunction != null}" click="{if (saveFunction != null) saveFunction(this)}"/>
+		<mx:Button label="Close"  id="cmdClose"  click="closeFunction(this)"/>
+	</mx:ControlBar>
+</mx:Panel>

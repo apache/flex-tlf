@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas 
+	creationComplete="handleCreationComplete()" 
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+		
+    <mx:Script>
+		<![CDATA[
+			import flash.display.BlendMode;
+			import flash.text.engine.ElementFormat;
+			import flash.text.engine.FontDescription;
+			import flash.text.engine.LineJustification;
+			import flash.text.engine.SpaceJustifier;
+			import flash.text.engine.TextBlock;
+			import flash.text.engine.TextElement;
+			import flash.text.engine.TextLine;
+			import flash.text.engine.TextLineValidity;
+			import flash.utils.getQualifiedClassName;
+			
+			import flashx.textLayout.TextLayoutVersion;
+			import flashx.textLayout.container.ScrollPolicy;
+			import flashx.textLayout.conversion.TextConverter;
+			import flashx.textLayout.debug.Debugging;
+			import flashx.textLayout.debug.assert;
+			import flashx.textLayout.elements.Configuration;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.factory.TextFlowTextLineFactory;
+			import flashx.textLayout.formats.BlockProgression;
+			import flashx.textLayout.tlf_internal;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Text;
+			import mx.core.ByteArrayAsset;
+
+			
+		use namespace tlf_internal;
+		
+		private static var factory:TextFlowTextLineFactory = new TextFlowTextLineFactory();
+		
+		private var resultText:Text;
+		
+		// embed alice - this simplifies things - don't need to trust the swf and pass the xml around with it
+		[Embed(source="../../../test/testFiles/markup/tlf/alice.xml",mimeType="application/octet-stream")]
+        private var AliceClass : Class;
+
+		private var checkMemoryIntervalID:uint = setInterval(checkMemoryUsage,1000);
+		
+		[Bindable]
+		public var reportString:String = "";
+
+		public function checkMemoryUsage():void
+		{
+			reportString = currIteration.toString() + " " + Math.round(System.totalMemory/1000000).toString() + " " + totalTextLines.toString();
+		}
+  		
+		private function setDebugFlag():void
+		{
+			var e:Error = new Error();
+			var s:String = e.getStackTrace();
+			// trace(s);
+			var i:int = s.indexOf("setDebugFlag");
+			if (s.charAt(i + 14) == '[')
+				debugMode = true;
+		}
+		
+		public var debugMode:Boolean = false;
+
+		public function handleCreationComplete(): void
+		{
+			setDebugFlag();
+		}
+		
+  		// last parse time
+  		private var parseTime:Number;
+		
+		private function parseStringIntoFlow(source:String, format:String):TextFlow
+		{
+			var beginParseTime:Number = getTimer();
+			var tf:TextFlow = TextConverter.importToFlow(source, format);
+			parseTime = getTimer() - beginParseTime;
+  			//trace("PARSE TIME:",parseTime.toString());
+  			return tf;
+		}
+				
+		// data for the current run
+		private var textFlow:TextFlow;
+		private var numberOfIterations:int = 0;
+		
+		private var minWidthVal:Number;
+		private var maxWidthVal:Number;
+		private var widthStepVal:Number;
+		
+		private var currIteration:int = -1;
+		private var currWidthVal:Number;
+		
+		private var beginThisRender:int;
+		private var timingRendering:Boolean = false;
+		
+		// timers
+		private var beginTestTime:int;
+		public var totalCreationTime:int;
+		
+		public var totalRenderTime:int;
+		
+		private var totalTextLines:int;
+		
+		public function runTheTest():void
+		{
+			if (textFlow == null)
+			{
+				var alice:ByteArrayAsset = new AliceClass();
+				var aliceData:String = alice.readMultiByte(alice.length,"utf-8");
+				textFlow = parseStringIntoFlow(aliceData, TextConverter.TEXT_LAYOUT_FORMAT);
+			}
+			// clear the previous run
+			if (resultText)
+			{
+				lineHolder.removeChild(resultText);
+				resultText = null;
+			}
+			
+			// number of iterations to run	
+			numberOfIterations = int(iterationsInput.text);
+			
+			
+			minWidthVal = Number(minWidthInput.text);
+			maxWidthVal = Number(maxWidthInput.text);
+			widthStepVal = Number(widthStep.text);
+			
+			currWidthVal = minWidthVal;
+			
+			addEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			runButton.enabled = false;
+
+			currIteration = 0;
+			testCount++;
+			totalCreationTime = 0;
+			totalRenderTime = 0;
+			totalTextLines = 0;
+			beginTestTime = getTimer();
+		}
+		
+		private function createOneStep():void
+		{
+			while (lineHolder.rawChildren.numChildren)
+			{
+				lineHolder.rawChildren.removeChildAt(0);
+			}
+				
+			CONFIG::debug { assert(lineHolder.rawChildren.numChildren == 0,"bad test"); }		
+			
+			var begTime:int = getTimer();
+			var example:DisplayObject = buildVellumFactory(currWidthVal);
+			//var example:DisplayObject = buildVellumFactoryMeasure(currWidthVal);
+			if (example)
+			{
+				example.x += 0;
+				example.y += 5; // testNum*5;
+				lineHolder.rawChildren.addChild(example);
+			}
+
+			// increment total creation time
+			var thisIterTime:Number = getTimer()-begTime;
+			//trace("Iter:",currIteration.toString(),"LineBreakTime:",thisIterTime.toString());
+			totalCreationTime += thisIterTime;
+		}
+		
+		static private var _rslt:Sprite;
+		public function callback(tl:TextLine):void
+		{
+			// make them all visible
+			tl.y = tl.y % (this.height-5);
+			_rslt.addChild(tl); 
+		}
+		/** use the vellum factory via the callback */
+		static private var _bounds:Rectangle = new Rectangle(0,0,0,0);
+		public function buildVellumFactory(compositionWidth:Number):DisplayObject
+		{
+			_rslt = new Sprite();
+			_bounds.width = compositionWidth;
+			_bounds.height = NaN;
+			factory.compositionBounds = _bounds;
+			factory.createTextLines(callback,textFlow);
+			totalTextLines += _rslt.numChildren;
+			return _rslt;	
+		}
+		
+		/** use the vellum factory via the callback */
+		public function callback2(tl:TextLine):void
+		{
+			_rslt.addChild(tl); 
+		}
+		public function buildVellumFactoryMeasure(compositionWidth:Number):DisplayObject
+		{
+			_rslt = new Sprite();
+			
+			var b:Rectangle = new Rectangle(0,0,0,0);
+			b.width = NaN;
+			b.height = 500;
+			textFlow.blockProgression = BlockProgression.RL;
+			factory.compositionBounds = b;
+			factory.createTextLines(callback2,textFlow);
+			trace("width",b.width,"height",b.height);
+			totalTextLines += _rslt.numChildren;
+			return _rslt;	
+		}
+		
+		// count of number of tests run this session
+		private var testCount:int = 0;
+		
+		/** generate a report at the next enter frame */
+		public function handleEnterFrame(event:Event): void
+		{
+			if (timingRendering)
+			{
+				totalRenderTime += getTimer()-beginThisRender;
+				timingRendering = false;
+			}
+			
+			// report results
+			if (currIteration == numberOfIterations)
+			{
+				var totalTestTime:int = getTimer()-this.beginTestTime;
+				flash.system.System.gc();	//mark
+				flash.system.System.gc();	//sweep
+				var memoryAllocated:Number = flash.system.System.totalMemory/1024;
+
+				trace("VellumAliceTest creation time (msecs)",totalCreationTime.toString(), "render time (msec)", totalRenderTime.toString(), "total time (msecs)",totalTestTime.toString(), " mem (K)", memoryAllocated);
+
+				var testDescription:String = testCount.toString() + ") iters: " + numberOfIterations.toString();
+				
+				var playerType:String = this.debugMode ? "DEBUGGING PLAYER (not suitable for measuring performance)" : "RELEASE PLAYER "+Capabilities.version;
+				var vellumType:String = "Vellum build: " + flashx.textLayout.TextLayoutVersion.BUILD_NUMBER + "\n" + (Configuration.tlf_internal::debugCodeEnabled ? "DEBUG vellum engine (not suitable for measuring performance)" : "RELEASE vellum engine");
+
+				resultText = new Text();
+				resultText.text = "VellumAliceTest\n" +  testDescription + "\nParseTime (msec): " + parseTime.toString() + "\nLineBreakTime (msecs): " + totalCreationTime.toString() + "\nRenderTime (msec): " + totalRenderTime.toString() + "\nTotalTestTime (msec): " + totalTestTime.toString() 
+					+ " \nmem (K): " + memoryAllocated.toString() + "\ntextLines: " + totalTextLines.toString() + "\n" + playerType + "\n" + vellumType;
+				resultText.x = 80; 
+				resultText.y = 100;
+				resultText.width = 400;
+				resultText.setStyle("fontFamily", "Minion Pro");
+				resultText.setStyle("fontSize", 16);
+				resultText.opaqueBackground = 0xFFFFFFFF;
+				lineHolder.addChild(resultText);
+				currIteration = -1;	// all done
+				this.dispatchEvent(new Event(Event.COMPLETE));
+				
+				runButton.enabled = true;	// start another test?
+				removeEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			}
+			else
+			{
+				createOneStep();
+				
+				// prepare for the next iteration
+				currIteration++;
+				currWidthVal += widthStepVal;
+				if (currWidthVal > maxWidthVal)
+					currWidthVal = minWidthVal;
+					
+				// begin timing rendering
+				timingRendering = true;
+				beginThisRender = getTimer();
+			}
+  		}
+      
+       ]]>
+	</mx:Script>
+
+	<mx:VBox>
+		<mx:HBox id="controlBox" paddingLeft="4" paddingTop="4">
+			<mx:Label text="VellumAliceTest" fontWeight="bold"/>
+			<mx:Label text="Iterations:" fontWeight="bold"/>
+			<mx:TextInput id="iterationsInput" text="50" width="40"/>
+			<mx:Label text="MinWidth:" fontWeight="bold"/>
+			<mx:TextInput id="minWidthInput" text="450" width="60"/>
+			<mx:Label text="MaxWidth:" fontWeight="bold"/>
+			<mx:TextInput id="maxWidthInput" text="1000" width="60"/>
+			<mx:Label text="Step:" fontWeight="bold"/>
+			<mx:TextInput id="widthStep" text="100" width="60"/>
+			<mx:Button id="runButton" label="Run" click="runTheTest()"/>
+			<mx:Text text="{reportString}" height="20"/>
+		</mx:HBox>
+		<mx:Canvas id="lineHolder"/>
+	</mx:VBox>
+	
+</mx:Canvas>

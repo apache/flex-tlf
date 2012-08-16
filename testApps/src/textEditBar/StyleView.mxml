@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:DataGrid xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" editable="true" itemFocusOut="commitModification(event)"  dataProvider="{_textFlowDataView}">
+	<mx:Script>
+		<![CDATA[
+ 		import flashx.textLayout.edit.EditManager;
+ 		import flashx.textLayout.elements.FlowElement;
+ 		import flashx.textLayout.elements.FlowGroupElement;
+ 		import flashx.textLayout.elements.SpanElement;
+ 		import flashx.textLayout.elements.TextFlow;
+ 		import flashx.textLayout.formats.TextLayoutFormat;
+ 		import flashx.textLayout.operations.ApplyElementIDOperation;
+ 		import flashx.textLayout.operations.ApplyElementStyleNameOperation;
+ 		import flashx.textLayout.operations.ApplyFormatToElementOperation;
+ 		import flashx.textLayout.operations.FlowOperation;
+ 		import flashx.textLayout.tlf_internal;
+ 		
+ 		import mx.controls.Alert;
+ 		import mx.controls.dataGridClasses.DataGridColumn;
+ 		import mx.events.DataGridEvent;
+ 		import mx.events.StyleEvent;
+ 		
+ 		import textEditBar.StyleBar;
+ 		
+ 		private var _activeFlow:TextFlow;
+ 		
+ 		public function get activeFlow():TextFlow { return _activeFlow; }
+ 		
+ 		private var _styleBar:StyleBar;
+ 		public function get styleBar():StyleBar { return _styleBar; }
+ 		public function set styleBar(value:StyleBar):void { _styleBar = value; }
+ 
+ 		// styles loaded - invalidate the activeFlow and force recompose
+ 		private function styleEventComplete(e:StyleEvent):void
+ 		{
+ 			_styleBar.loadCSS.enabled = false;
+ 			_styleBar.unloadCSS.enabled = true;
+ 			if (_activeFlow && _activeFlow.formatResolver)
+ 			{
+				_activeFlow.invalidateAllFormats();
+				_activeFlow.flowComposer.updateAllControllers();
+ 			}
+ 		}
+ 		
+ 		private static const styleSheetToLoad:String = "flowCss.swf";
+ 		
+ 		private function styleEventError(e:StyleEvent):void
+ 		{
+ 			Alert.show("Unable to load stylesheet:" + e.errorText);
+ 		}
+ 		
+ 		public function loadStyle():void
+ 		{
+ 			// Next three lines load flowCss and set it as the style
+			var dispatcher:IEventDispatcher = styleManager.loadStyleDeclarations(styleSheetToLoad);
+			dispatcher.addEventListener(StyleEvent.COMPLETE,styleEventComplete,false,0,true);
+			dispatcher.addEventListener(StyleEvent.ERROR,styleEventError,false,0,true);
+		}
+		
+		public function unloadStyle():void
+		{
+			_styleBar.loadCSS.enabled = true;
+ 			_styleBar.unloadCSS.enabled = false;
+			styleManager.unloadStyleDeclarations(styleSheetToLoad,true);
+			if (_activeFlow && _activeFlow.formatResolver)
+ 			{
+				_activeFlow.invalidateAllFormats();
+				_activeFlow.flowComposer.updateAllControllers();
+ 			}
+		}
+	 		
+		/* Support for the dataGrid view */
+ 		static private function makeAColumn(name:String,editable:Boolean):DataGridColumn
+		{
+			var rslt:DataGridColumn = new DataGridColumn(name);
+			rslt.sortable = false;
+			rslt.editable = editable;
+			return rslt;
+		}
+
+ 		public function initDataGridView():void 
+ 		{
+			var columns:Array = new Array();
+			columns.push(makeAColumn("Element",false));
+			columns.push(makeAColumn("Id",true));
+			columns.push(makeAColumn("StyleName",true));
+			columns.push(makeAColumn("UserStyles",true));
+			columns.push(makeAColumn("Content",false));
+			this.columns = columns;
+ 		}
+ 		
+ 		[Bindable]
+		private var _textFlowDataView:Array;
+		public function commitModification(evt:DataGridEvent):void
+		{
+			var dataRow:Object = this.dataProvider[evt.rowIndex];
+			var dataCol:DataGridColumn = this.columns[evt.columnIndex];
+			//trace("commitModification: "+evt.type + " " + evt.reason+" " + evt.rowIndex + " " + evt.columnIndex);
+			var elem:FlowElement = _textFlowDataView[evt.rowIndex].rawElement;
+			
+			var scratch:String;
+			var op:FlowOperation;
+			switch(evt.columnIndex)
+			{
+				case 1:	// id
+					scratch = elem.id == null ? "" : elem.id;
+					if (scratch != dataRow.Id)
+					{
+						if (_activeFlow.interactionManager is EditManager)
+						{
+							// do a ChangeElementIdOperation
+							op = new ApplyElementIDOperation(_activeFlow.interactionManager.getSelectionState(),elem,dataRow.Id);
+							EditManager(_activeFlow.interactionManager).doOperation(op);
+						}
+						else
+							elem.id = dataRow.Id;
+					}
+					
+					break;
+				case 2: // styleName
+					scratch = elem.styleName == null ? "" : elem.styleName;
+					if (scratch != dataRow.StyleName)
+					{
+						if (_activeFlow.interactionManager is EditManager)
+						{
+							// do a ApplyElementStyleNameOperation
+							op = new ApplyElementStyleNameOperation(_activeFlow.interactionManager.getSelectionState(),elem,dataRow.StyleName);
+							EditManager(_activeFlow.interactionManager).doOperation(op);
+						}
+						else						
+							elem.styleName = dataRow.StyleName;
+					}
+					break;
+				case 3: // userStyles
+					// very simple parsing of userStyles
+					var d:Dictionary = new Dictionary();
+					var substrs:Array = dataRow.UserStyles.split(" ");
+					for each (var str:String in substrs)
+					{
+						var equalSign:int = str.indexOf("=");
+						if (equalSign != -1)
+						{
+							var key:String = str.substring(0,equalSign);
+							var value:String = str.substring(equalSign+1);
+							d[key] = value;
+						}
+					}
+					if (_activeFlow.interactionManager is EditManager)
+					{
+						// do a ApplyElementStyleNameOperation
+						var format:TextLayoutFormat = new TextLayoutFormat();
+						for (key in d)
+							format.setStyle(key,d[key]);
+						op = new ApplyFormatToElementOperation(_activeFlow.interactionManager.getSelectionState(),elem,format);
+						EditManager(_activeFlow.interactionManager).doOperation(op);
+					}
+					else
+					{
+						for (key in d)
+							elem.setStyle(key,d[key]);
+					}
+					break;
+			}
+		}
+		
+		public function hideTextDataView():void
+		{
+			if (_activeFlow)
+				_activeFlow.flowComposer.updateAllControllers();
+			_activeFlow = null;
+			this.visible = false;
+			this._textFlowDataView = [];
+		}				
+
+		static private function buildDataGrid(a:Array,elem:FlowElement,prefix:String = ""):void
+		{
+			var o:Object = new Object();
+			var s:String = flash.utils.getQualifiedClassName(elem);
+			o.Element = prefix + s.substr( s.lastIndexOf(":")+1);
+			o.Id = elem.id == null ? "" : elem.id;
+			o.StyleName = elem.styleName == null ? "" : elem.styleName;
+			o.Content = elem is SpanElement ? SpanElement(elem).text : "";
+			o.rawElement = elem;
+			s = null;
+			var userStyles:Object = elem.styles;
+			for (var val:String in userStyles)
+			{
+				if (TextLayoutFormat.tlf_internal::description[val] === undefined)
+				{
+					s = (s != null) ? s + " " : "";
+					s += val + "=" +  userStyles[val];
+				}
+			}
+			o.UserStyles = s == null ? "" : s;
+			a.push(o);
+			
+			var group:FlowGroupElement = elem as FlowGroupElement;
+			if (group)
+			{
+				for (var idx:int = 0; idx < group.numChildren; idx++)
+					buildDataGrid(a,group.getChildAt(idx),prefix+" ");
+			}
+		}
+		
+		public function showTextDataView(newActiveFlow:TextFlow):void
+		{
+			_activeFlow = newActiveFlow;
+			this.visible = true;
+			updateTextDataView();
+		}
+		
+		public function updateTextDataView():void
+		{
+			var dataGridArray:Array = new Array();
+			// recursive descent on the TextFlow adding array entries
+			if (_activeFlow)
+				buildDataGrid(dataGridArray,_activeFlow)
+			_textFlowDataView = dataGridArray;
+		}
+		
+		// disable the flexstyleresolver for now
+		private var useFlexStyleResolver:Boolean = false;
+		
+		public function updateStyleResolver(textFlow:TextFlow):void
+		{
+			if (textFlow)
+				textFlow.formatResolver = useFlexStyleResolver ? new FlexStyleResolver(this.styleManager): null;
+		}
+		
+		public function changeStyling(textFlow:TextFlow):void
+		{
+			useFlexStyleResolver = _styleBar.stylingType.selectedIndex == 1;
+			if (textFlow)
+			{
+				updateStyleResolver(textFlow);
+				textFlow.invalidateAllFormats();
+				textFlow.flowComposer.updateAllControllers();
+			}
+		}
+ 		
+		]]>
+	</mx:Script>
+
+</mx:DataGrid>

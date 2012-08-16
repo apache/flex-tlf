@@ -1,0 +1,38 @@
+<Tests>
+<TestCase functionName="basicStyleTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="styleNameInheritTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="styleInvalidateTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="styleInvalidateAllTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="basicIdTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="idInheritTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="idInvalidateTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="idInvalidateAllTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="basicUserStyleTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+</Tests>

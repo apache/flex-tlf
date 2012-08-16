@@ -1,0 +1,7 @@
+<Tests>
+	<TestCase functionName="undoRedoLinkTest">
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="posOfSelection">3</TestData>
+	</TestCase>
+
+</Tests>

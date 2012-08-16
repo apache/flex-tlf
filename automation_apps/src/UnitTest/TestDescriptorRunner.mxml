@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" 
+		 implements="flexunit.flexui.IFlexWriter" creationComplete="onCreationComplete()" xmlns:geom="flash.geom.*" currentState="StackTraceView">
+	<mx:Script>
+		<![CDATA[
+		
+		import mx.collections.ArrayCollection;
+		
+		import flexunit.framework.TestCase;
+		import flexunit.framework.Test;
+		import flexunit.framework.AssertionFailedError;
+		import flexunit.flexui.TestRunner;
+		import flexunit.flexui.IFlexWriter;
+		
+		import mx.collections.ListCollectionView;
+		
+		import flash.system.*;
+
+		public var beforeTest:Function;
+		public var afterTest:Function; 		
+		
+		public var suiteMetaData:Object;
+		
+		private static const END_OF_TEST_RUN : String = "<endOfTestRun/>";
+		private static const END_OF_TEST_ACK : String ="<endOfTestRunAck/>";
+		
+		private var _totalTests:uint = 0;
+		private var _totalErrors:uint = 0;
+		private var _totalFailures:uint = 0;
+		private var _numTestsRun:uint = 0;
+		
+		public var test:Test;
+		
+		private var reports : Object = new Object();
+		private var socket : XMLSocket;
+		private var connectionTries : int = 0;
+    	private var connectionTryMax : int = 10;
+		
+		public var reportXML : Boolean = true;
+		[Inspectable]
+		public var port : uint = 1024;		
+		[Inspectable]
+		public var server : String = "127.0.0.1";
+		
+		public function onCreationComplete():void
+		{
+			suiteMetaData = new Object();
+		}
+		
+		public function startTest():void
+		{
+		
+			flexunit.flexui.TestRunner.afterTest = afterTest;
+			flexunit.flexui.TestRunner.beforeTest = beforeTest;			
+
+			if( test != null )
+			{				
+				_totalTests = test.countTestCases();
+				
+				progressBar.minimum = 0;
+				testFailures.dataProvider = new Array();
+				allTestsList.dataProvider = new Array();
+				
+				updateLabels();
+				
+				flexunit.flexui.TestRunner.run( test, this );
+			}
+		}		
+		
+		private function updateLabels():void
+		{
+			runLabel.htmlText = "<b>Run:</b> "+_numTestsRun.toString()+"/"+_totalTests.toString();
+			errorsLabel.htmlText = "<b>Errors:</b> "+_totalErrors.toString();
+			failuresLabel.htmlText = "<b>Failures:</b> "+_totalFailures.toString();
+		}
+		
+		private function updateProgress():void
+		{
+			progressBar.setProgress( _numTestsRun, _totalTests );
+			
+			if( _totalErrors > 0 || _totalFailures > 0 )
+				progressBar.setStyle("barColor",0xFF0000);
+		}
+		
+		private function addFailureToList( test:Test, error:Error ):void
+		{
+			var t:TestCase = test as TestCase;
+			if( t != null )
+			{
+				ListCollectionView(testFailures.dataProvider).addItem( {label: t.toString(), error:error} );
+				testFailures.selectedIndex = testFailures.dataProvider.length;
+				testFailures.verticalScrollPosition = testFailures.maxVerticalScrollPosition;
+				onTestSelected();
+			}
+		}
+		
+		private function onTestSelected():void
+		{
+			var list:List = (testTabs.selectedIndex == 0) ? testFailures : allTestsList;
+			var errorString:String;
+			
+			if( list.selectedItem != null )
+				if( list.selectedItem.error != null )
+				{
+					this.currentState = "StackTraceView";
+					errorString = list.selectedItem.error.getStackTrace();
+					if (errorString == null)
+					{
+						errorString = list.selectedItem.error.message;
+					}
+					stackTrace.text = errorString;
+					testDetails.text = "Stack Trace";
+				}
+				else
+				{ 
+					this.currentState = "ResultsView";
+					//testDetails.text = "Test Details";
+					var dp_TestResults:ArrayCollection = new ArrayCollection();
+					var dp_MemUsage:ArrayCollection = new ArrayCollection();
+					resultsGrid.dataProvider = dp_TestResults;
+					rawMemGrid.dataProvider = dp_MemUsage;
+					var setUpDuration : String = list.selectedItem.setUpDuration.toFixed(3);
+					var middleDuration : String = list.selectedItem.middleDuration.toFixed(3);
+					var tearDownDuration : String = list.selectedItem.tearDownDuration.toFixed(3);
+					dp_TestResults.addItem({stage: "SetUp", duration: setUpDuration, memUsage: list.selectedItem.setUpMemFinal - list.selectedItem.setUpMemInitial});
+					dp_TestResults.addItem({stage: "Middle", duration: middleDuration, memUsage: list.selectedItem.middleMemFinal - list.selectedItem.middleMemInitial});
+					dp_TestResults.addItem({stage: "TearDown", duration: tearDownDuration, memUsage: list.selectedItem.tearDownMemFinal - list.selectedItem.tearDownMemInitial});
+					dp_MemUsage.addItem({initialMem: list.selectedItem.setUpMemInitial, finalMem: list.selectedItem.tearDownMemFinal, memDifference: (list.selectedItem.tearDownMemFinal - list.selectedItem.setUpMemInitial)});
+					dp_TestResults = null;
+					dp_MemUsage = null;
+				}	
+		}
+		
+		private function addTestToList( success:Boolean, test:Test, error:Error = null ):void
+		{
+			var t:TestCase = test as TestCase;
+			if( t != null )
+			{
+				var label:String = ( success ) ? "[PASS] " : "[FAIL] ";
+				// get mem data from test here - don't add it to the data provider
+				ListCollectionView(allTestsList.dataProvider).addItem( {label:label+t.toString(), 
+																		error:error, 
+																		setUpDuration:t.setUpDuration,
+																		middleDuration:t.middleDuration,
+																		tearDownDuration:t.tearDownDuration,
+																		setUpMemInitial:t.setUpMemInitial,
+																		setUpMemFinal:t.setUpMemFinal,
+																		middleMemInitial:t.middleMemInitial,
+																		middleMemFinal:t.middleMemFinal,
+																		tearDownMemInitial:t.tearDownMemInitial,
+																		tearDownMemFinal:t.tearDownMemFinal
+																		} );
+				allTestsList.selectedIndex = allTestsList.dataProvider.length;
+				allTestsList.verticalScrollPosition = allTestsList.maxVerticalScrollPosition;
+				onTestSelected();
+			}			
+		}
+		
+		//---------------------------------------------------------------------
+		// IFlexWriter Methods
+		//---------------------------------------------------------------------
+		
+		public function onTestStart( test:Test ) : void
+		{
+			titlePanel.title = "Test Runner (running: " + test.toString() + ")";
+			if (reportXML)
+				addMethod( test );
+		}
+		
+		public function onTestEnd( test:Test ) : void
+		{
+			//only run if reportXML is enabled
+			if (reportXML)
+			{
+				if (test is TestCase)
+				{
+					var time : Number = TestCase(test).setUpDuration + TestCase(test).middleDuration + TestCase(test).tearDownDuration;
+					
+					// Add time to the method.
+					var methodObject : Object = getMethod( test );
+					methodObject.time = time; 
+					methodObject.setuptime = TestCase(test).setUpDuration;
+					methodObject.setupmeminitial = TestCase(test).setUpMemInitial;
+					methodObject.setupmemfinal = TestCase(test).setUpMemFinal;
+					methodObject.middletime = TestCase(test).middleDuration;
+					methodObject.middlememinitial = TestCase(test).middleMemInitial;
+					methodObject.middlememfinal = TestCase(test).middleMemFinal;
+					methodObject.teardowntime = TestCase(test).tearDownDuration;
+					methodObject.teardownmeminitial = TestCase(test).tearDownMemInitial;
+					methodObject.teardownmemfinal = TestCase(test).tearDownMemFinal;
+				}
+				
+				Security.loadPolicyFile("xmlsocket:\\" + server + ":" + port);
+				// If we have finished running all the tests send the results.
+				if ( (_numTestsRun+1) == _totalTests )
+				{
+					sendResults();
+   				}
+   			}
+   			_numTestsRun++;			
+			updateLabels();
+			updateProgress();
+			titlePanel.title = "Test Runner";
+		}
+		
+		public function onAllTestsEnd() : void
+		{
+			progressBar.setProgress(100,100);
+			if( _totalErrors == 0 && _totalFailures == 0 )
+				progressBar.setStyle("barColor",0x00FF00);
+		}
+		
+		public function onSuccess( test:Test ):void
+		{
+			addTestToList( true, test );
+		}
+		
+ 	   	public function onError( test:Test, error:Error ) : void
+ 	   	{
+ 	   		_totalErrors++;
+ 	   		addFailureToList( test, error );
+ 	   		addTestToList( false, test, error );
+ 	   		
+			if (reportXML)
+ 	   			addError( test, error);
+ 	   	}
+ 	   	
+		public function onFailure( test:Test, error:AssertionFailedError ) : void
+		{
+			_totalFailures++;
+			addFailureToList( test, error );
+			addTestToList( false, test, error );
+
+			if (reportXML)
+				addFailure( test, AssertionFailedError(error));
+		}
+		
+		//---------------------------------------------------------------------
+		// JUnitRunner Methods
+		//---------------------------------------------------------------------
+		
+		/**
+		 * Add the currently executing method on a Test to the internal report
+		 * model.
+		 * @param test the Test.
+		 */
+		private function addMethod( test : Test ) : void
+		{
+			var reportObject : Object = getReport( test );
+			reportObject.tests++;
+			
+			var methodName : String = TestCase(test).toString();
+			var methodsObject : Object = reportObject.methods;
+			
+			var methodObject : Object = new Object();
+			methodsObject[ methodName ] = methodObject;
+
+			methodObject.classname = test.className;
+			methodObject.metaData = TestCase(test).metaData;
+			methodObject.name = methodName;
+			methodObject.time = 0.0;
+			methodObject.setuptime = 0.0;
+			methodObject.setupmeminitial = 0.0;
+			methodObject.setupmemfinal = 0.0;
+			methodObject.middletime = 0.0;
+			methodObject.middlememinitial = 0.0;
+			methodObject.middlememfinal = 0.0;
+			methodObject.teardowntime = 0.0;
+			methodObject.teardownmeminitial = 0.0;
+			methodObject.teardownmemfinal = 0.0;
+
+		}
+		
+		/**
+		 * Called when an error occurs.
+		 * @param test the Test that generated the error.
+		 * @param error the Error.
+		 */
+		public function addError( test : Test, error : Error ) : void
+		{
+			// Increment error count.
+			var report : Object = getReport( test );
+			report.errors++;
+			
+			// Add the error to the method.
+			var methodObject : Object = getMethod( test );
+			
+			var errorObject : Object = new Object();
+			methodObject.error = errorObject;
+
+			errorObject.type = getClassName( error );
+			errorObject.message = error.message;
+		}
+
+		/**
+		 * Called when a failure occurs.
+		 * @param test the Test that generated the failure.
+		 * @param error the failure.
+		 */
+		public function addFailure( test : Test, error : AssertionFailedError ) : void
+		{
+			// Increment failure count.
+			var report : Object = getReport( test );
+			report.failures++;
+			
+			// Add the failure to the method.
+			var methodObject : Object = getMethod( test );
+			
+			var failureObject : Object = new Object();
+			methodObject.failure = failureObject;
+
+			failureObject.type = getClassName( error );
+			failureObject.message = error.message;
+		}
+		
+		/**
+		 * Return the fully qualified class name for an Object.
+		 * @param obj the Object.
+		 * @return the class name.
+		 */
+		private function getClassName( obj : Object ) : String
+		{
+			var description : XML = describeType( obj );
+			var className : Object = description.@name;
+			
+			return className[ 0 ];
+		}
+		
+		/**
+		 * Return the method Object from the internal report model for the
+		 * currently executing method on a Test.
+		 * @param test the Test.
+		 * @return the method Object.
+		 */
+		private function getMethod( test : Test ) : Object
+		{
+			var reportObject : Object = getReport( test );
+			var methodsObject : Object = reportObject.methods;
+			
+			var methodName : String = TestCase(test).toString()
+			
+			return methodsObject[ methodName ];
+		}
+	
+		/**
+		 * Return the report Object from the internal report model for the
+		 * currently executing Test.
+		 * @param Test the test.
+		 */
+		private function getReport( test : Test ) : Object
+		{
+			var reportObject : Object;
+			var className : String = test.className;
+			
+			// Check we have a report Object for the executing Test, if not
+			// create a new one.
+			if ( reports[ className ] )
+			{
+				reportObject = reports[ className ];
+			}
+			else
+			{
+				reportObject = new Object();
+				reportObject.name = className;
+				reportObject.errors = 0;
+				reportObject.failures = 0;
+				reportObject.tests = 0;
+				reportObject.time = getTimer()/1000;
+				reportObject.methods = new Object();
+				
+				reports[ className ] = reportObject;
+			}
+			
+			return reportObject;
+		}
+		
+		/**
+		 * Sends the results. This sends the reports back to the controlling Ant
+		 * task using an XMLSocket.
+		 */
+		public function sendResults() : void
+		{
+			// Open an XML socket.
+			socket = new XMLSocket();
+			socket.addEventListener( Event.CONNECT, handleConnect );
+			socket.addEventListener( DataEvent.DATA, dataHandler );
+			socket.addEventListener( IOErrorEvent.IO_ERROR, handleIOError );
+			socket.addEventListener( SecurityErrorEvent.SECURITY_ERROR, handleSecurityError );
+			socket.connect( server, port );
+		}
+		
+		private function handleSecurityError( event : Event ) : void
+		{
+			var e:SecurityErrorEvent = event as SecurityErrorEvent;
+			throw new Error("SecurityErrorEvent on Connect-> " + e.target + ": " +
+				e.type + ". " + e.text + "."); 
+		}
+
+		private function handleIOError( event : Event ) : void
+		{
+			if(connectionTries <= connectionTryMax){
+				connectionTries++;
+				sendResults();
+			}else{
+				var e:IOErrorEvent = event as IOErrorEvent;
+				throw new Error("IOErrorEvent on Connect-> " + e.target + ": " +
+					e.type + ". " + e.text + ". " + socket.connected + " " + server + ":" + port);				
+			}
+		}
+		
+		/**
+		 * Event listener to handle data received on the socket.
+		 * @param event the DataEvent.
+		 */
+		private function dataHandler( event : DataEvent ) : void
+		{
+			var data : String = event.data;
+
+			// If we received an acknowledgement finish-up.			
+			if ( data == END_OF_TEST_ACK )
+			{
+				exit();
+			}
+   		}
+   		
+   		private function handleConnect( event : Event ) : void
+		{
+			for ( var className : String in reports )
+			{
+				// Create the XML report.
+				var xml : XML = createXMLReport( reports[ className ] );
+				
+				// Send the XML report.
+				socket.send( xml.toXMLString() );
+			}
+			
+			// Send the end of reports terminator.
+			socket.send( END_OF_TEST_RUN );
+		}
+		
+		/**
+		 * Create the XML report.
+		 * @param obj the report Object.
+		 * @return the XML report.
+		 */
+		private function createXMLReport( obj : Object ) : XML
+		{
+			// Create the test suite element.
+			var testSuite : XML = createTestSuite( obj );
+				
+			// Create the test case elements.					
+			var methodsObject : Object = obj.methods;
+			for ( var methodName : String in methodsObject )
+			{
+				var methodObject : Object = methodsObject[ methodName ];
+				var testCase : XML = createTestCase( methodObject );
+						
+				// Create the failure element.
+				if ( methodObject.failure )
+				{
+					var failureObject : Object = methodObject.failure;			
+					var failure : XML = createFailure( failureObject );
+							
+					testCase = testCase.appendChild( failure );									
+				}
+					
+				// Create the error element.
+				if ( methodObject.error )
+				{
+					var errorObject : Object = methodObject.error;
+					var error : XML = createError( errorObject );
+							
+					testCase = testCase.appendChild( error );									
+				}					
+							
+				testSuite = testSuite.appendChild( testCase );
+			}
+			
+			return testSuite;
+		}
+		
+		/**
+		 * Create the test suite XML.
+		 * @return the XML.
+		 */ 
+		private function createTestSuite( obj : Object ) : XML
+		{
+			var name : String = obj.name;
+			var errors : uint = obj.errors;
+			var failures : uint = obj.failures;
+			var tests : uint = obj.tests;
+			var time : int = getTimer()/1000 - obj.time;
+			var methods : Object = obj.methods;
+			var flashVersion : String = Capabilities.version;
+			var flashLanguage : String = Capabilities.language;
+			var flashPlayerType : String = Capabilities.playerType;
+			var flashConfig : String;
+			
+			setDebugFlag();
+			if (debugMode)
+			{
+				flashConfig = "release debugger";
+			}
+			else
+			{
+				flashConfig = "release";
+			}
+				
+			var xml : XML =
+				<testsuite
+					errors={ errors }
+					failures={ failures }
+					name={ formatQualifiedClassName( name ) }
+					tests={ tests }
+					time={ time }
+					flashversion={ flashVersion }
+					flashlanguage={ flashLanguage }
+					flashconfig={ flashConfig }
+					flashplayertype={ flashPlayerType }/>;
+			
+			// Add any other meta-data
+			for (var attrib:Object in suiteMetaData)
+			{
+				xml.@[attrib] = suiteMetaData[attrib];	
+			}
+			
+			return xml;
+		}
+		
+		/**
+		 * Create the test case XML.
+		 * @return the XML.
+		 */
+		private function createTestCase( obj : Object ) : XML
+		{
+			var classname : String = obj.classname;
+			var name : String = obj.name;
+			var time : Number = obj.time; 
+			var setuptime : Number = obj.setuptime;
+			var setupmeminitial : Number = obj.setupmeminitial;
+			var setupmemfinal : Number = obj.setupmemfinal;
+			var middletime : Number = obj.middletime;
+			var middlememinitial : Number = obj.middlememinitial;
+			var middlememfinal : Number = obj.middlememfinal;
+			var teardowntime : Number = obj.teardowntime;
+			var teardownmeminitial : Number = obj.teardownmeminitial;
+			var teardownmemfinal : Number = obj.teardownmemfinal;
+					
+			var xml : XML =
+				<testcase
+					classname={ formatQualifiedClassName( classname ) }
+					name={ name }
+					time={ time.toFixed(3) }
+					setuptime={ setuptime.toFixed(3) }
+					setupmeminitial={ setupmeminitial }
+					setupmemfinal={ setupmemfinal }
+					middletime={ middletime.toFixed(3) }
+					middlememinitial={ middlememinitial }
+					middlememfinal={ middlememfinal }
+					teardowntime={ teardowntime.toFixed(3) }
+					teardownmeminitial={ teardownmeminitial }
+					teardownmemfinal={ teardownmemfinal }/>;
+			
+			// Add any other meta-data
+			for (var attrib:Object in obj.metaData)
+			{
+				xml.@[attrib] = obj.metaData[attrib];	
+			}
+			
+			return xml;
+		}
+		
+		/**
+		 * Create the failure XML.
+		 * @return the XML.
+		 */
+		private function createFailure( obj : Object ) : XML
+		{
+			var type : String = obj.type;
+			var message : String = obj.message;
+					
+			var xml : XML =
+				<failure type={ formatQualifiedClassName( type ) }>
+					{ message }
+				</failure>;
+					
+			return xml;
+		}
+		
+		/**
+		 * Create the test error XML.
+		 * @return the XML.
+		 */
+		private function createError( obj : Object ) : XML
+		{
+			var type : String = obj.type;
+			var message : String = obj.message;
+					
+			var xml : XML =
+				<error type={ formatQualifiedClassName( type ) }>
+					{ message }
+				</error>;
+					
+			return xml;
+		}
+		
+		/**
+		 * Exit the test runner and close the player.
+		 */
+		private function exit() : void
+		{
+			// Close the socket.
+			socket.close();
+		}
+		
+		private function formatQualifiedClassName( className : String ) : String
+		{
+			var pattern : RegExp = /::/;
+			
+			return className.replace( pattern, "." );
+		}
+		
+		private function setDebugFlag(): void
+		{
+			var e:Error = new Error();
+			var s:String = e.getStackTrace();
+			try
+			{
+				var i:int = s.indexOf("setDebugFlag");
+				if (s.charAt(i + 14) == '[')
+					debugMode = true;
+			}
+			catch (err:Error)	// error is thrown in release player
+			{
+				debugMode = false;
+			}
+		}
+
+		private var debugMode : Boolean = false;
+		
+		]]>
+	</mx:Script>
+	<mx:states>
+		<mx:State name="StackTraceView" basedOn="">
+			<mx:AddChild relativeTo="{stackTrace}" position="lastChild" creationPolicy="all" />
+		</mx:State>
+		<mx:State name="ResultsView" basedOn="">
+			<mx:RemoveChild target="{stackTrace}" />
+			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
+				<mx:DataGrid id="resultsGrid" rowCount="3" width="100%" draggableColumns="false" sortableColumns="false">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Stage" dataField="stage"/>
+						<mx:DataGridColumn headerText="Duration (s)" dataField="duration"/>
+						<mx:DataGridColumn headerText="Memory Usage (MB)" dataField="memUsage"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:AddChild>
+			<mx:AddChild relativeTo="{vbox1}" position="lastChild">
+				<mx:DataGrid id="rawMemGrid" editable="false" width="100%" rowCount="1" draggableColumns="false" sortableColumns="false">
+					<mx:columns>
+						<mx:DataGridColumn headerText="Initial Memory (MB)" dataField="initialMem"/>
+						<mx:DataGridColumn headerText="Final Memory (MB)" dataField="finalMem"/>
+						<mx:DataGridColumn headerText="Total Usage (MB)" dataField="memDifference"/>
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	<mx:Canvas width="100%" height="100%">
+		<mx:Panel id="titlePanel" backgroundAlpha="0.4" title="Test Runner" paddingBottom="10" width="100%" height="100%">
+			<mx:HBox width="100%">
+				<mx:HBox width="50%" height="20" horizontalAlign="left" paddingLeft="0" paddingRight="10">
+					<mx:ProgressBar width="100%" trackHeight="12" id="progressBar" labelPlacement="left" label="Running..." mode="manual" />
+				</mx:HBox>
+				<mx:HBox width="50%" height="20" horizontalAlign="right">
+					<mx:Label id="runLabel" paddingRight="10" />
+					<mx:Label id="errorsLabel" text="Errors: 0" paddingRight="10" />
+					<mx:Label id="failuresLabel" text="Failures: 0" />					
+				</mx:HBox>
+			</mx:HBox>
+			<mx:HDividedBox width="100%" height="100%">
+				<mx:TabNavigator id="testTabs" change="onTestSelected()" width="50%" 
+					height="100%" paddingBottom="0" paddingLeft="0" paddingRight="0" 
+					paddingTop="0" creationPolicy="all" >
+					<mx:Canvas label="Failures" width="100%" height="100%">
+						<mx:List id="testFailures" width="100%" height="100%" borderStyle="none" editable="true"
+								 change="onTestSelected()" />
+					</mx:Canvas>
+					<mx:Canvas label="All Tests" width="100%" height="100%">
+						<mx:List id="allTestsList" width="100%" height="100%" borderStyle="none"
+								 change="onTestSelected()" />								
+					</mx:Canvas>
+				</mx:TabNavigator>					
+				<mx:VBox width="50%" height="100%" id="vbox1">
+					<mx:HBox width="100%" height="15" paddingBottom="0" 
+								paddingLeft="0" paddingRight="0" paddingTop="0">
+						<mx:Label id="testDetails"></mx:Label>
+					</mx:HBox>
+					<mx:TextArea id="stackTrace" width="100%" height="100%" borderStyle="none" wordWrap="false" />
+				</mx:VBox>				
+			</mx:HDividedBox>
+		</mx:Panel>
+	</mx:Canvas>
+</mx:VBox>

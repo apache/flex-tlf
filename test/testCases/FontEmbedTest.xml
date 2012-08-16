@@ -1,0 +1,8 @@
+<Tests>
+<TestCase functionName="embeddedFontsLossTest">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="embeddedFontsDisplayTest">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+</Tests>

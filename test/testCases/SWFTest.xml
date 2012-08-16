@@ -1,0 +1,54 @@
+<Tests>
+<TestCase functionName="LoadTestSWF">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">embeddedFontLoss</TestData>
+	<TestData name="swf">moduleFontLoss.swf</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+
+<TestCase functionName="LoadTestSWF">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">embeddedFontDisplay</TestData>
+	<TestData name="swf">moduleFontDisplay.swf</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+
+<TestCase functionName="LoadDCCoreOnly">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">DCCoreOnly</TestData>
+	<TestData name="swf">DCCoreOnly.swf</TestData>
+	<TestData name="newDomain">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="LoadDCCoreConversionOnly">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">DCCoreConversionOnly</TestData>
+	<TestData name="swf">DCCoreConversionOnly.swf</TestData>
+	<TestData name="newDomain">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="LoadDCCoreSelectionManagerOnly">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">DCCoreSelectionManagerOnly</TestData>
+	<TestData name="swf">DCCoreSelectionManagerOnly.swf</TestData>
+	<TestData name="newDomain">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+
+<TestCase functionName="TextLayoutFormatInspectable">
+	<TestData name="swf">TextLayoutFormatAS.swf</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="TabStopFormatInspectable">
+	<TestData name="swf">TabStopFormatAS.swf</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+
+</Tests>

@@ -1,0 +1,22 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"><? processing instruction with double-quoted ">"><? processing instruction with single-quoted '>'><? processing instruction with 
+newline><!--<html> optional start tag--><!--comment with embedded xml<p>p0</p>--><!--comment with 
+newline--><body><p>p element without end tag; closed by next p start tag<p>closes previous p element with missing end tag</p><p>break element without end tag<br>break element without combined start and end tags<br/><a href="> ' 
+			/>">dummy link 1; attribute "href" contains potentially troublesome characters</a><br/><a href='> " 
+			/>'>dummy link 2; attribute 'href' contains potentially troublesome characters</a><br><A target=_self HRef>dummy link 3; mixed case for element and attribute name; unquoted attribute value; implied attribute value</a></p><p><img height="19" width="19" src="../../test/testFiles/assets/surprised.png" align="right"><br><u>underlined text</u><br><i>italicized text</i><br><b>bold text</b><br><font size="20" face="Verdana" color="#cc0066">larger, colored text with another font</font><br><u><b><i><font size="20" face="Verdana" color="#cc0066"><span>multiple formatting elements on the same span</span></font></i></b></u><br>&lt;&gt;&amp;&quot;&apos;&#38;<!--special chars--></p>
+<font size="20"><textformat leftmargin="15" rightmargin="15" indent="50"><p align="center">this paragraph has left and right margins, indent and align set. it also has a larger font size. Does it look the way it should?</p></textformat></font><p>p element without end tag; closed by end tag of an ancestor<!--</body> optional end tag--></html>

@@ -1,0 +1,580 @@
+<Tests>
+	<TestCase functionName="HOLTR_endKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HOLTR_homeKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HOLTR_cursorUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_cursorDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_dragUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_dragDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_characterEntryEndOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_spaceEntryMiddleOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_deleteScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="HOLTR_backspaceScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>			
+	<TestCase functionName="HOLTR_pageUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_pageDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_mousewheelUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HOLTR_mousewheelUpScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HOLTR_mousewheelDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HOLTR_mousewheelDownScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORLTRAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="VOLTR_endKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VOLTR_homeKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VOLTR_cursorUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_cursorDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_dragUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_dragDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_characterEntryEndOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_spaceEntryMiddleOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_deleteScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="VOLTR_backspaceScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VOLTR_pageUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_pageDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_mousewheelUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VOLTR_mousewheelUpScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VOLTR_mousewheelDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="VOLTR_mousewheelDownScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORTL_endKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORTL_homeKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORTL_cursorUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_cursorDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_dragUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_dragDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_characterEntryEndOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_spaceEntryMiddleOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_deleteScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="HORTL_backspaceScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>			
+	<TestCase functionName="HORTL_pageUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_pageDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_mousewheelUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORTL_mousewheelUpScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORTL_mousewheelDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORTL_mousewheelDownScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">HORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_endKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORTL_homeKeyScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORTL_cursorUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_cursorDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_dragUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_dragDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_characterEntryEndOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_spaceEntryMiddleOfTextScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_deleteScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>		
+	<TestCase functionName="VORTL_backspaceScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORTL_pageUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_pageDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_mousewheelUpScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_mousewheelUpScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="VORTL_mousewheelDownScrollingTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORTL_mousewheelDownScrollingNoInteractionTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="fxgSnapshot">false</TestData>		
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>	
+		<TestData name="fileName">VORRTLAUTO.xml</TestData>
+	</TestCase>			
+
+				
+</Tests>
