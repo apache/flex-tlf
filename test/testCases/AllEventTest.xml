@@ -1,0 +1,48 @@
+<Tests>
+<TestCase functionName="selectionEventTest"/>
+<TestCase functionName="damageEventTest"/>
+<TestCase functionName="statusChangeEventTest"/>
+<TestCase functionName="FlowOperationEventTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="FlowCompositeOperationEventTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="CompositionCompleteEventTest"/>
+<TestCase functionName="UpdateCompleteEventTest"/>
+<TestCase functionName="ShortTextMouseEventTBLTRTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="fileName">ShortTextMouseEventTBLTR.xml</TestData>
+</TestCase>
+<TestCase functionName="ShortTextMouseEventTBRTLTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="fileName">ShortTextMouseEventTBRTL.xml</TestData>
+</TestCase>
+<TestCase functionName="ShortTextMouseEventRLLTRTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="fileName">ShortTextMouseEventRLLTR.xml</TestData>
+</TestCase>
+<TestCase functionName="ShortTextMouseEventRLRTLTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="fileName">ShortTextMouseEventRLRTL.xml</TestData>
+</TestCase>
+<TestCase functionName="FlowElementMouseEventTest">
+	<TestData name="id">FlowElementMouseEventTestScrollingOff</TestData>
+</TestCase>
+<TestCase functionName="scrollEventTest"/>
+<TestCase functionName="FlowElementMouseEventTest">
+    <TestData name="id">FlowElementMouseEventTestScrollingOn</TestData>
+</TestCase>
+<TestCase functionName="FlowElementMouseEventTest">
+    <TestData name="id">FlowElementMouseEventTestScrolled</TestData>
+</TestCase>
+<TestCase functionName="FlowElementMouseEventTest">
+    <TestData name="id">FlowElementMouseEventTestMeasure</TestData>
+</TestCase>
+</Tests>

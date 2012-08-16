@@ -1,0 +1,5 @@
+1. When you build TLF, firstly replace value of FLEX_HOME with the path of  flex sdk on your PC
+2. If you want to build unittest application of TLF, get flexunit.swc yourself and put it in libs folder of automation_core
+3. If "Error:PermGen space" occurs, change value of "compc.jvm.args" or run the left target by yourself. For example, if that error occurs when building automation_core, you can run "ant automation_core", "ant automation_tests" and "ant automation_apps" one by one to finish the build process. For the sequence of the targets, refer to the target "all".
+4. When the unit tests are done, you can see that there are two failures because of IO error that two SWF are not found. It's OK. We did not upload those two SWF. So remove the two cases or add your own SWF
+5. We did not upload the unit tests for TLF 1.0, and TLF 1.1

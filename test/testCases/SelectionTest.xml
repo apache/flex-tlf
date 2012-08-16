@@ -1,0 +1,343 @@
+<Tests>
+<TestCase functionName="defaultColorTest">
+	<TestData name="overrideDefaultColor">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="overrideDefaultColorTest">
+	<TestData name="overrideDefaultColor">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="overrideColorTest">
+	<TestData name="overrideDefaultColor">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="overriddenColorTest">
+	<TestData name="overrideDefaultColor">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="selectedTextRotationTest">
+	<TestData name="rotationAmount">auto</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="selectedTextRotationTest">
+	<TestData name="rotationAmount">0</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="selectedTextRotationTest">
+	<TestData name="rotationAmount">90</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="selectedTextRotationTest">
+	<TestData name="rotationAmount">180</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="selectedTextRotationTest">
+	<TestData name="rotationAmount">270</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">linkWordSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="doubleClickIndexStart">0</TestData>	
+	<TestData name="doubleClickIndexEnd">4</TestData>
+	<TestData name="selectStart">0</TestData>
+	<TestData name="selectEnd">5</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">groupWhitespaceSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">this           a test</TestData>
+	<TestData name="doubleClickIndexStart">4</TestData>	
+	<TestData name="doubleClickIndexEnd">7</TestData>
+	<TestData name="selectStart">4</TestData>
+	<TestData name="selectEnd">15</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">imageWordSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="doubleClickIndexStart">5</TestData>	
+	<TestData name="selectStart">5</TestData>
+	<TestData name="selectEnd">6</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">romanMixBidiWordSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">The إليه عامة البشر انبثاق the fire</TestData>
+	<TestData name="doubleClickIndexStart">4</TestData>	
+	<TestData name="selectStart">4</TestData>
+	<TestData name="selectEnd">8</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">bidiWordSelectionroman</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+				<TestData name="inputString">בֵּית־סֵפֶר وكان غاية ما يرنو إليه عامة البشر انبثاق عالم</TestData>
+	<!-- set the cursor at position 3, doubleclick will pick up the first word. the first word is from 0 to 5 -->
+	<TestData name="doubleClickIndexStart">2</TestData>	
+	<TestData name="selectStart">0</TestData>
+	<TestData name="selectEnd">5</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">normalGroupPunctuationSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">Hello,,,Hello</TestData>
+	<!-- set the cursor at second space position, doubleclick will pick up the whole group of comma -->
+	<TestData name="doubleClickIndexStart">5</TestData>
+	<TestData name="doubleClickIndexEnd">7</TestData>
+	<TestData name="selectStart">5</TestData>
+	<TestData name="selectEnd">8</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">normalPunctuationSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">Hello,Hello</TestData>
+	<TestData name="doubleClickIndexStart">5</TestData>
+	<TestData name="selectStart">5</TestData>
+	<TestData name="selectEnd">6</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">spaceAfterPunctuationSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">Hello, Hello</TestData>
+	<TestData name="doubleClickIndexStart">6</TestData>
+	<TestData name="selectStart">6</TestData>
+	<TestData name="selectEnd">7</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">spaceBeforePunctuationSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">Hello , Hello</TestData>
+	<!-- set the cursor at second space position -->
+	<TestData name="doubleClickIndexStart">5</TestData>
+	<TestData name="selectStart">5</TestData>
+	<TestData name="selectEnd">6</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">doublebyteWordSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">汽车 产业   和钢铁</TestData>
+	<!-- set the cursor at second space position -->
+	<TestData name="doubleClickIndexStart">5</TestData>
+	<TestData name="selectStart">5</TestData>
+	<TestData name="selectEnd">8</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">wordWithLinkSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">www.yahoo.com</TestData>
+	<!-- set the cursor at first . position -->
+	<TestData name="doubleClickIndexStart">3</TestData>
+	<TestData name="selectStart">0</TestData>
+	<TestData name="selectEnd">13</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">wordWithHyphenSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">a bunch - of works</TestData>
+	<TestData name="doubleClickIndexStart">8</TestData>
+	<TestData name="selectStart">8</TestData>
+	<TestData name="selectEnd">9</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+    <TestData name="id">endPositionSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">a bunch of works</TestData>
+	<TestData name="doubleClickIndexStart">15</TestData>
+	<TestData name="selectStart">11</TestData>
+	<TestData name="selectEnd">16</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+	<TestData name="id">firstPositionSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">a bunch of works</TestData>
+	<TestData name="doubleClickIndexStart">0</TestData>
+	<TestData name="selectStart">0</TestData>
+	<TestData name="selectEnd">1</TestData>
+</TestCase>
+<TestCase functionName="wordSelection">
+	<TestData name="id">simpleWordSelection</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">a bunch of works</TestData>
+	<TestData name="doubleClickIndexStart">3</TestData>
+	<TestData name="selectStart">2</TestData>
+	<TestData name="selectEnd">7</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickToLeftEdgeOfLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">0</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickOnLeftOfLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">0</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickToRightEdgeOfLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">14</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickOnRightOfLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">14</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickAboveFirstLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">5</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickBelowLastLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">23</TestData>
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickBetweenLinesFor2ndLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">23</TestData>	
+</TestCase>
+<TestCase functionName="clickSelection">
+	<TestData name="id">clickBetweenLinesFor1stLine</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">7</TestData>	
+</TestCase>
+<TestCase functionName="SelectLineBreakOnLastEmptyLine">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="clickSelectionOnColumn">	
+	<TestData name="id">clickCloseToLeftColumn</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">75</TestData>
+</TestCase>
+<TestCase functionName="clickSelectionOnColumn">
+	<TestData name="id">clickCloseToRightColumn</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">725</TestData>
+</TestCase>
+<TestCase functionName="clickSelectionOnColumn">
+	<TestData name="id">clickBeforeFirstColumn</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">34</TestData>
+</TestCase>
+<TestCase functionName="clickSelectionOnColumn">
+	<TestData name="id">clickAfterLastColumn</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">1534</TestData>
+</TestCase>
+<TestCase functionName="clickSelectionTest">
+	<TestData name="id">clickAtEndOfLineWithSpaces</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">14</TestData>	
+</TestCase>
+<TestCase functionName="clickSelectionTest">
+	<TestData name="id">clickEndOfLineWithSpacesAtSpace</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">This is a test</TestData>
+	<TestData name="posOfSelection">16</TestData>	
+</TestCase>
+<TestCase functionName="clickSelectionTest">
+	<TestData name="id">clickBetweenEnglishArabic</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">The test إليه عامة البشر انبثاkkkk the fire</TestData>
+	<TestData name="posOfSelection">8</TestData>	
+</TestCase>
+
+<!--
+<TestCase functionName="clickSelectionTest">
+	<TestData name="id">clickBetweenArabicEnglish</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="inputString">The test إليه عامة البشر انبثاقkkkk the fire</TestData>
+	<TestData name="posOfSelection">13</TestData>	
+</TestCase>
+-->
+<TestCase functionName="clickContainerTest">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">clickLeftToContainer</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">0</TestData>	
+</TestCase>
+<TestCase functionName="clickContainerTest">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">clickRightToContainer</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">24</TestData>	
+</TestCase>
+<TestCase functionName="clickContainerTest">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">clickTopContainer</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">0</TestData>	
+</TestCase>
+<TestCase functionName="clickContainerTest">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="id">clickBottomContainer</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">24</TestData>	
+</TestCase>
+<TestCase functionName="clickInTCY">
+	<TestData name="fileName">tcyTestBase.xml</TestData>
+	<TestData name="id">clickInTCYBeginning</TestData>
+	<TestData name="clickPoint">4</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="clickInTCY">
+	<TestData name="fileName">tcyTestBase.xml</TestData>
+	<TestData name="id">clickInTCYMiddle</TestData>
+	  <TestData name="clickPoint">5</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="clickInTCY">
+	<TestData name="fileName">tcyTestBase.xml</TestData>
+	<TestData name="id">clickInTCYMiddle2</TestData>
+	  <TestData name="clickPoint">6</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="selectInEmptyFlow">
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="clickEndOfLine">
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="FlowElement_deepCopy">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="selectRangeTest">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+
+<!--TestCase functionName="clickInTCY">
+	<TestData name="fileName">tcyTestBase.xml</TestData>
+	<TestData name="id">clickInTCYEnd</TestData>
+	  <TestData name="clickPoint">7</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase-->
+</Tests>

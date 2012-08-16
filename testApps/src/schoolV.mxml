@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<s:Application name="school"
+	explicitMinWidth="100" 
+	explicitMinHeight="100" 
+    xmlns="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:flow="library://ns.adobe.com/flashx/textLayout" 
+	xmlns:flashGeometry="flash.geom.*"
+	creationComplete="handleCreationComplete()"
+	preinitialize="preinitialize()"
+	resize="handleResize()">
+
+    <Script>
+    	<![CDATA[
+    	import flashx.textLayout.edit.EditManager;
+    	import flashx.textLayout.container.ContainerController;
+    	//import flashx.textLayout.container.WrapManager;
+ 		
+		[Bindable]
+		private var ChineseFontName:String;
+		[Bindable]
+		private var KoreanFontName:String;
+		[Bindable]
+		private var JapaneseFontName:String;
+		
+		private var schoolContainer:Sprite;
+		private var udhrContainer:Sprite;
+		
+		private const insetWidth:Number = 8;
+		private const insetHeight:Number = 8;
+
+		public function handleCreationComplete(): void
+		{
+
+			schoolContainer = new Sprite();
+			schoolContainer.x = 4;
+			var schoolController:ContainerController = new ContainerController(schoolContainer);
+			schoolFlow.flowComposer.addController(schoolController);
+		//	schoolController.wraps = new WrapManager();
+		//	schoolController.wraps.wraps = [ new Rectangle(0, 150, 144, 178)];
+			textPanel.rawChildren.addChild(schoolContainer);
+			
+			udhrContainer = new Sprite();
+			udhrFlow.flowComposer.addController(new ContainerController(udhrContainer));
+			textPanel.rawChildren.addChild(udhrContainer);
+
+			schoolFlow.interactionManager = new EditManager();
+			udhrFlow.interactionManager = new EditManager();
+
+			handleResize();
+		}
+
+		public function preinitialize(): void
+		{
+			XML.ignoreWhitespace = false;
+			
+			if (Capabilities.os.search("Mac OS") > -1)
+			{
+				ChineseFontName = "宋体";
+				KoreanFontName = "Adobe 명조 Std M";
+				JapaneseFontName = "小塚明朝 Pro L";
+			}
+			else
+			{
+				ChineseFontName = "Adobe Song Std L";
+				KoreanFontName = "Adobe Myungjo Std M";
+				JapaneseFontName = "Kozuka Mincho Pro L";
+			}
+		}
+		
+		public function handleResize(): void
+		{
+			
+			if (!schoolContainer)		// we get resize before creationComplete
+				return;
+				
+			var stageWidth:Number = textPanel.width;
+			var stageHeight:Number = textPanel.height;
+			
+			var compositionWidth:Number = (stageWidth-insetWidth)/2;
+			var compositionHeight:Number = stageHeight - insetHeight;
+			schoolFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+
+			udhrFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+			udhrContainer.x = (stageWidth-insetWidth)/2 + insetWidth;
+
+			schoolFlow.flowComposer.updateAllControllers();
+			udhrFlow.flowComposer.updateAllControllers();
+		}
+        ]]>
+    
+    </Script>
+	
+
+	<Declarations>
+		
+
+	<flow:TextFlow id="schoolFlow" blockProgression="rl" fontFamily="Minion Pro" paddingLeft="10" paddingRight="10">
+								<flow:p fontSize="36"><flow:span>“School” is written </flow:span><flow:span fontFamily="Adobe Arabic" locale="ar">مدرسة</flow:span><flow:span> in Arabic, </flow:span><flow:span fontFamily="{ChineseFontName}" locale="zh">學校</flow:span><flow:span> in Chinese, </flow:span><flow:span locale="el">σχολείο</flow:span><flow:span> in Greek, </flow:span><flow:span fontFamily="Adobe Hebrew" locale="he">בֵּית־סֵפֶר</flow:span><flow:span> in Hebrew, </flow:span><flow:span fontFamily="{JapaneseFontName}" locale="ja">学校</flow:span><flow:span> in Japanese, </flow:span><flow:span fontFamily="{KoreanFontName}" locale="ko">학교</flow:span><flow:span> in Korean, </flow:span><flow:span locale="be" fontFamily="Vrinda">স্কুল</flow:span><flow:span> in Bengali, </flow:span><flow:span locale="ru">школа</flow:span><flow:span> in Russian, and </flow:span><flow:span fontFamily="Adobe Thai" locale="th">อาศรม</flow:span><flow:span> in Thai.</flow:span></flow:p>	
+	</flow:TextFlow>
+
+	<flow:TextFlow id="udhrFlow" blockProgression="rl" fontSize="36" textAlign="right" direction="rtl" fontFamily="Adobe Arabic" locale="ar" paddingLeft="10" paddingRight="10">
+								<flow:p><flow:span>الإعلان العالمي لحقوق الإنسان</flow:span></flow:p>
+								<flow:p><flow:span>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية والعدل </flow:span><flow:span locale="en" fontFamily="Myriad Pro">English here</flow:span><flow:span>والسلام في العالم.</flow:span></flow:p>
+								<flow:p><flow:span>ولما كان تناسي حقوق الإنسان وازدراؤها قد أفضيا إلى أعمال همجية آذت الضمير الإنساني. </flow:span><flow:span fontFamily="Adobe Hebrew" locale="he" fontSize="48">בֵּית־סֵפֶר</flow:span><flow:span>وكان غاية ما يرنو إليه عامة البشر انبثاق عالم يتمتع فيه الفرد بحرية القول والعقيدة ويتحرر من الفزع والفاقة.</flow:span></flow:p>
+								<flow:p><flow:span>ولما كان من الضروري أن يتولى القانون حماية حقوق الإنسان لكيلا يضطر المرء آخر الأمر إلى التمرد على الاستبداد والظلم.</flow:span></flow:p>
+								<flow:p><flow:span>ولما كانت شعوب الأمم المتحدة قد أكدت في الميثاق من جديد إيمانها بحقوق الإنسان الأساسية وبكرامة الفرد وقدره وبما للرجال والنساء من حقوق متساوية وحزمت أمرها على أن تدفع بالرقي الاجتماعي قدمًا وأن ترفع مستوى الحياة في جو من الحرية أفسح.</flow:span></flow:p>
+	</flow:TextFlow>
+
+	</Declarations>
+
+	<mx:Canvas x="0" y="150" width="144" horizontalScrollPolicy="off" verticalScrollPolicy="off" height="178" borderStyle="solid" backgroundColor="0xFFFFFF">	
+		<mx:Image source="@Embed(source='../../test/testFiles/assets/gremlin.jpg')" height="178" width="144"/>
+	</mx:Canvas>
+	<mx:Canvas id="textPanel" percentWidth="100" percentHeight="100"/>
+	
+</s:Application>

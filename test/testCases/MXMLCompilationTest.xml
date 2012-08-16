@@ -1,0 +1,149 @@
+<Tests>
+	<TestCase functionName="HORLTRAUTO.xml">
+		<TestData name="testFile">HORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORLTRHARD.xml">
+		<TestData name="testFile">HORLTRHARD.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="HORRTLAUTO.xml">
+		<TestData name="testFile">HORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HORRTLHARD.xml">
+		<TestData name="testFile">HORRTLHARD.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HTMLEntities.xml">
+		<TestData name="testFile">HTMLEntities.xml</TestData>
+	</TestCase>
+	<TestCase functionName="HtmlTest.xml">
+		<TestData name="testFile">HtmlTest.xml</TestData>
+	</TestCase>
+	<TestCase functionName="JapaneseSampleMac.xml">
+		<TestData name="testFile">JapaneseSampleMac.xml</TestData>
+	</TestCase>
+	<TestCase functionName="JapaneseSampleWin.xml">
+		<TestData name="testFile">JapaneseSampleWin.xml</TestData>
+	</TestCase>
+	<TestCase functionName="Ligatures.xml">
+		<TestData name="testFile">Ligatures.xml</TestData>
+	</TestCase>
+	<TestCase functionName="RTLTabs.xml">
+		<TestData name="testFile">RTLTabs.xml</TestData>
+	</TestCase>
+	<TestCase functionName="TextFrameTests.xml">
+		<TestData name="testFile">TextFrameTests.xml</TestData>
+	</TestCase>
+	<TestCase functionName="Unicode.xml">
+		<TestData name="testFile">Unicode.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VA_Justify.xml">
+		<TestData name="testFile">VA_Justify.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORLTRAUTO.xml">
+		<TestData name="testFile">VORLTRAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORLTRHARD.xml">
+		<TestData name="testFile">VORLTRHARD.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORRTLAUTO.xml">
+		<TestData name="testFile">VORRTLAUTO.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VORRTLHARD.xml">
+		<TestData name="testFile">VORRTLHARD.xml</TestData>
+	</TestCase>
+	<TestCase functionName="VSAUTO.xml">
+		<TestData name="testFile">VSAUTO.xml</TestData>
+	</TestCase>	
+	<TestCase functionName="alice.xml">
+		<TestData name="testFile">alice.xml</TestData>
+	</TestCase>
+	<TestCase functionName="aliceExcerpt.xml">
+		<TestData name="testFile">aliceExcerpt.xml</TestData>
+	</TestCase>
+	<TestCase functionName="asknot.xml">
+		<TestData name="testFile">asknot.xml</TestData>
+	</TestCase>
+	<TestCase functionName="asknot_discretionaryhyphens.xml">
+		<TestData name="testFile">asknot_discretionaryhyphens.xml</TestData>
+	</TestCase>
+	<TestCase functionName="backgroundColorTest.xml">
+		<TestData name="testFile">backgroundColorTest.xml</TestData>
+	</TestCase>
+	<TestCase functionName="barnsley.xml">
+		<TestData name="testFile">barnsley.xml</TestData>
+	</TestCase>
+	<!-->TestCase functionName="digits.xml">
+		<TestData name="testFile">digits.xml</TestData>
+	</TestCase-->
+	<TestCase functionName="empty.xml">
+		<TestData name="testFile">empty.xml</TestData>
+	</TestCase>
+	<TestCase functionName="emptyElements.xml">
+		<TestData name="testFile">emptyElements.xml</TestData>
+	</TestCase>
+	<TestCase functionName="ethanBrandHyphen.xml">
+		<TestData name="testFile">ethanBrandHyphen.xml</TestData>
+	</TestCase>
+	<TestCase functionName="font_embedding.xml">
+		<TestData name="testFile">font_embedding.xml</TestData>
+	</TestCase>
+	<TestCase functionName="graphics_example.xml">
+		<TestData name="testFile">graphics_example.xml</TestData>
+	</TestCase>
+	<TestCase functionName="hypatiaLigatures.xml">
+		<TestData name="testFile">hypatiaLigatures.xml</TestData>
+	</TestCase>
+	<!-->TestCase functionName="lotsattributes.xml">
+		<TestData name="testFile">lotsattributes.xml</TestData>
+	</TestCase-->
+	<TestCase functionName="moreAttributes.xml">
+		<TestData name="testFile">moreAttributes.xml</TestData>
+	</TestCase>
+	<TestCase functionName="sampleArabic.xml">
+		<TestData name="testFile">sampleArabic.xml</TestData>
+	</TestCase>
+	<TestCase functionName="school.xml">
+		<TestData name="testFile">school.xml</TestData>
+	</TestCase>
+	<TestCase functionName="schoolV.xml">
+		<TestData name="testFile">schoolV.xml</TestData>
+	</TestCase>
+	<TestCase functionName="schoolV_mac.xml">
+		<TestData name="testFile">schoolV_mac.xml</TestData>
+	</TestCase>
+	<TestCase functionName="severalPages.xml">
+		<TestData name="testFile">severalPages.xml</TestData>
+	</TestCase>
+	<TestCase functionName="simple.xml">
+		<TestData name="testFile">simple.xml</TestData>
+	</TestCase>
+	<TestCase functionName="simpleStyle.xml">
+		<TestData name="testFile">simpleStyle.xml</TestData>
+	</TestCase>
+	<TestCase functionName="simple_colored.xml">
+		<TestData name="testFile">simple_colored.xml</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_images.xml">
+		<TestData name="testFile">simple_with_images.xml</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_links.xml">
+		<TestData name="testFile">simple_with_links.xml</TestData>
+	</TestCase>
+	<!-->TestCase functionName="tabStops.xml">
+		<TestData name="testFile">tabStops.xml</TestData>
+	</TestCase-->
+	<TestCase functionName="tahoma.xml">
+		<TestData name="testFile">tahoma.xml</TestData>
+	</TestCase>
+	<TestCase functionName="tcyTestBase.xml">
+		<TestData name="testFile">tcyTestBase.xml</TestData>
+	</TestCase>
+	<TestCase functionName="tcyTextBaseEdited.xml">
+		<TestData name="testFile">tcyTextBaseEdited.xml</TestData>
+	</TestCase>
+	<TestCase functionName="whitespace1.xml">
+		<TestData name="testFile">whitespace1.xml</TestData>
+	</TestCase>
+	<TestCase functionName="whitespace2.xml">
+		<TestData name="testFile">whitespace2.xml</TestData>
+	</TestCase>
+</Tests>

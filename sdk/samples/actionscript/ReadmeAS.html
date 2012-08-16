@@ -1,0 +1,133 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Text Layout Framework: ActionScript Samples</title>
+</head>
+
+<body>
+<h1>Text Layout Framework: ActionScript Samples</h1>
+<p>The Text Layout Framework is an ActionScript library that provides text layout functionality. It is built on the Flash text engine available in Flash Player 10. This framework provides  support for high quality, typographically rich, flowable text layout  with selection, editing, undo, copy-paste, and an XML markup language to dynamically style text. </p>
+<p>The Text Layout Framework can be used by any developer who wants to build new text components for Flash Player. It uses pure  ActionScript; you can work with it in any Flash Professional or Flex development environment. The library is implemented by the <font face="Courier New, Courier, monospace">flashx.textLayout.*</font> packages in <font face="Courier New, Courier, monospace">textLayout.swc</font>.</p>
+<h2>ActionScript examples</h2>
+<p>These examples in the <font face="Courier New, Courier, monospace">actionscript</font> folder of the Text Layout Framework SDK demonstrate techniques for working with the  API in ActionScript. </p>
+<h3>Basic TextFlow</h3>
+<table width="810" border="1">
+  <tr>
+    <td width="334"><font face="Courier New, Courier, monospace">TextLayout/HelloWorld.as</font></td>
+    <td width="460">Demonstrates creating and displaying a TextFlow.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/StaticHelloWorld.as</font></td>
+    <td>Demonstrates use of a TextLineFactory with a string to create static TextLines.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/InlineGraphic.as</font></td>
+    <td>Extends the HelloWorld example with an inline graphic loaded from a remote web site.</td>
+  </tr>
+  </table>
+  <h3>Importer</h3>
+  <table width="810" border="1">
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/ImportMarkup.as</font></td>
+    <td>Demonstrates parsing and displaying TextLayout markup.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/StaticTextFlow.as</font></td>
+    <td>Demonstrates use of a TextLineFactory  with parsing of TextLayout markup to create static TextLines.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/CustomImportMarkup.as</font></td>
+    <td>Customizes the Configuration used by the importer to create a TextFlow that manages the Tab key and has a customized default format for links.</td>
+  </tr>
+   </table>
+  <h3>Selection and editing </h3>
+<table width="810" border="1">
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/EditText.as</font></td>
+    <td>Demonstrates parsing TextLayout markup, displaying it and attaching an EditManager so that it can be edited.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/SelectText.as</font></td>
+    <td>Demonstrates parsing TextLayout markup, displaying it, and attaching a SelectionManager so that it can be selected and copied.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/ExplicitFormField.as</font></td>
+    <td>Demonstrates editable form style fields that scroll and do not break except on explicit breaks.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/MultipleColumns.as</font></td>
+    <td>Demonstrates editable multi-column text where the columns resize and adjust number as the window resizes.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/MultipleContainerColumns.as</font></td>
+    <td>Demonstrates editable multi-column text flowing through two containers where the columns resize and adjust number as the window resizes.</td>
+  </tr>
+</table>
+<h3>Additional features</h3>
+<table width="810" border="1">
+  <tr>
+  	<td><font face="Courier New, Courier, monospace">TextLayout/ParagraphBounds.as</font></td>
+    <td><p>Demonstrates computing the height of a paragraph.</p>    </td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/ParagraphBorder.as</font></td>
+    <td>Demonstrates drawing a border and background on a paragraph.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/LinkedContainers.as</font></td>
+    <td>Demonstrates linked containers.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">TextLayout/CustomEventHandler.as</font></td>
+    <td>Demonstrates how to handle custom user-interaction events in LinkElements.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">Pagination/Pagination.as</font></td>
+    <td>Demonstrates a multi chapter multi page document with fast support for window resizing and switching between pages and chapters.</td>
+  </tr>
+</table>
+<h3>Flash Text Engine (FTE) examples</h3>
+<table width="810" border="1">  
+  <tr>
+    <td><font face="Courier New, Courier, monospace">FTE/FTEHelloWorld.as</font></td>
+    <td>Implements the HelloWorld example using direct FTE APIs.</td>
+  </tr>
+  <tr>
+    <td><font face="Courier New, Courier, monospace">FTE/FTEParagraph.as</font></td>
+    <td>Demonstrates a  paragraph of text, defined with direct FTE APIs, that reflows on window resize.</td>
+  </tr>
+</table>
+<h2>Building the examples</h2>
+<p>You can build these examples with Ant and the Flex 4 SDK, or using <a href="http://labs.adobe.com/technologies/flashbuilder4/">Flash Builder 4</a>.</p>
+<h3>Building in a Flash Builder environment</h3>
+<p>These steps are for loading the examples into your Flash Builder development environment from the Text Layout Framework ZIP</p>
+<ol>
+  <li>Open <a href="http://labs.adobe.com/technologies/flashbuilder4/">Flash Builder 4.</a></li>
+  <li>Switch your workspace to the parent of the Samples folder.</li>
+  <li>Choose File &gt; Import.</li>
+  <li> In the General tab, select &quot;Existing Projects into Workspace&quot;.</li>
+  <li>Browse to  the root folder of the workspace. It is preselected.</li>
+  <li>Deselect any examples you do not want to import. Do not select &quot;Copy into workspace&quot;.</li>
+  <li>Click Finish. You can now build and run the examples from your development environment.</li>
+</ol>
+
+<hr />
+</body>
+</html>

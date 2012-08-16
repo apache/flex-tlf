@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" borderStyle="solid" title="Vellum Unit Tests" fontSize="12" backgroundColor="0xCCCCCC" layout="vertical" color="0x000000">	
+	<mx:Script>
+		<![CDATA[
+
+		import mx.managers.PopUpManager;		
+		import mx.controls.Alert;
+				
+		[Bindable]	
+		public var treeData:XMLList;
+		
+		// These are the functions for the buttons in the dialog.
+		// They are call backs to the main application.
+		public var runTestFunction:Function;
+		public var snapshotTestFunction:Function;
+		public var closeFunction:Function;
+		
+		private var selectAllState:Boolean = false;
+		
+		private function getSelectCount(xmlData:XMLList):Number
+		{
+			var curCount:Number = 0;
+			
+			for each (var f:XML in xmlData) 
+			{
+				if (f.children().length() > 0)
+				{
+					curCount += getSelectCount(f.children());
+				}
+				if ((f.@selected == true) && (f.children().length() == 0))
+					curCount += 1;		
+			}						
+			return curCount;
+		}
+		
+		private function doTestRun():void
+		{
+			if ( getSelectCount(treeData) > 0)
+			{
+				runTestFunction(chk_BeforeAndAfter.selected, int(iterations.text))				
+			}
+			else 
+			{
+				Alert.show("You must have at least one item in the list selected.","No Tests Selected")
+			}			
+		}		
+		
+		private function toggleAll():void
+		{
+			for each (var suite:XML in treeData.children()){
+				suite.parent().@selected = !selectAllState;
+				suite.@selected = !selectAllState;
+			}
+			
+			selectAllState = !selectAllState;
+			
+			tv_Tests.validateDisplayList();
+		}	
+						
+		]]>
+	</mx:Script>
+	<mx:VBox horizontalGap="0">	
+		<mx:Form width="100%" horizontalGap="0">	
+			<mx:VBox backgroundColor="#ffffff" horizontalGap="0" verticalAlign="middle" verticalGap="0">
+				<mx:Tree x="36" y="33" height="350" id="tv_Tests" fontSize="10" itemRenderer="UnitTest.TreeItemRenderer" dataProvider="{treeData}" labelField="@label" color="#000000" width="450"/>
+			</mx:VBox>
+		</mx:Form>
+		<mx:VBox verticalAlign="middle" width="100%" horizontalGap="10">
+			<mx:HBox width="100%" horizontalAlign="center" borderColor="#010101">
+				<mx:CheckBox label="Select All" fontSize="10" id="chk_CheckAll" textAlign="center" width="100" click="toggleAll()" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:CheckBox fontSize="10" label="Perform TCM Composition Comparison" id="chk_BeforeAndAfter" textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF"/>
+				<mx:TextInput fontSize="10" text="1" id="iterations" width="30"/>
+				<mx:Text fontSize="10" text="Iterations"/>
+			</mx:HBox>
+			<mx:ControlBar horizontalAlign="center" verticalAlign="middle" height="45" width="100%">
+				<mx:Button label="Run Test" fontSize="10" id="cmd_Run" textAlign="center" width="100" click="doTestRun()"/>
+				<mx:Button label="Close" fontSize="10" id="cmd_Close" textAlign="center" width="100" click="closeFunction()"/>
+			</mx:ControlBar>
+		</mx:VBox>	
+	</mx:VBox>
+	
+</mx:Panel>

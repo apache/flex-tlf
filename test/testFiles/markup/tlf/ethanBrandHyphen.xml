@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paragraphSpaceAfter="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">
+    <flow:p><flow:span>Bar­tram the lime-­burn­er, a rough, heavy-­look­ing man, be­grimed with char­coal, sat watch­ing his kiln, at night­fall, while his lit­tle son played at build­ing hous­es with the scat­tered frag­ments of mar­ble, when, on the hill-­side be­low them, they heard a roar of laugh­ter, not mirth­ful, but slow, and even sol­emn, like a wind shak­ing the boughs of the for­est.</flow:span></flow:p>
+    <flow:p><flow:span>There are many such lime-­kilns in that tract of coun­try, for the pur­pose of burn­ing the white mar­ble which com­pos­es a large part of the sub­stance of the hills. Some of them, built years ago, and long de­sert­ed, with weeds grow­ing in the va­cant round of the in­te­ri­or, which is open to the sky, and grass and wild-­flow­ers root­ing them­selves in­to the chinks of the stones, look al­ready like rel­ics of an­tiq­ui­ty, and may yet be over­spread with the li­chens of cen­tu­ries to come. Oth­ers, where the lime-­burn­er still feeds his dai­ly and night­long fire, af­ford points of in­ter­est to the wan­der­er among the hills, who seats him­self on a log of wood or a frag­ment of mar­ble, to hold a chat with the sol­i­tary man. It is a lone­some, and, when the char­ac­ter is in­clined to thought, may be an in­tense­ly thought­ful oc­cu­pa­tion; as it proved in the case of Ethan Brand, who had mused to such strange pur­pose, in days gone by, while the fire in this very kiln was burn­ing.</flow:span></flow:p>
+	<flow:p><flow:span>The man who now watched the fire was of a dif­fer­ent or­der, and trou­bled him­self with no thoughts save the very few that were req­ui­site to his busi­ness. At fre­quent in­ter­vals, he flung back the clash­ing weight of the iron door, and, turn­ing his face from the in­suf­fer­able glare, thrust in huge logs of oak, or stirred the im­mense brands with a long pole. With­in the fur­nace were seen the curl­ing and ri­ot­ous flames, and the burn­ing mar­ble, al­most mol­ten with the in­ten­si­ty of heat; while with­out, the re­flec­tion of the fire quiv­ered on the dark in­tri­ca­cy of the sur­round­ing for­est, and showed in the fore­ground a bright and rud­dy lit­tle pic­ture of the hut, the spring be­side its door, the ath­let­ic and coal-­be­grimed fig­ure of the lime-­burn­er, and the half-­fright­ened child, shrink­ing in­to the pro­tec­tion of his fa­ther's shad­ow. And when again the iron door was closed, then re­ap­peared the ten­der light of the half-­full moon, which vain­ly strove to trace out the in­dis­tinct shapes of the neigh­bor­ing moun­tains; and, in the up­per sky, there was a flit­ting con­gre­ga­tion of clouds, still faint­ly tinged with the rosy sun­set, though thus far down in­to the val­ley the sun­shine had van­ished long and long ago.</flow:span></flow:p>
+</flow:TextFlow>
+  

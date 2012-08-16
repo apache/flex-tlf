@@ -1,0 +1,76 @@
+<Tests>
+	<TestCase functionName="asknot.xml">
+		<TestData name="testFile">asknot.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="school.xml">
+		<TestData name="testFile">school.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_links.xml">
+		<TestData name="testFile">simple_with_links.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!--bug #1899675-->
+	<TestCase functionName="simple_with_floats.xml">
+		<TestData name="testFile">simple_with_floats.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="digits.xml">
+		<TestData name="testFile">digits.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!-- <TestCase functionName="tableExample.xml">
+		<TestData name="testFile">tableExample.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="requiresLayout">true</TestData>
+	</TestCase>	-->
+	<!-- <TestCase functionName="asknot.txt"> Test code can't handle non-XML import -- needs to be updated
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>	 -->
+	<TestCase functionName="whitespace1.xml">
+		<TestData name="testFile">whitespace1.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="whitespace2.xml">
+		<TestData name="testFile">whitespace2.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!-- bug #1899677-->
+	<TestCase functionName="font-embedding.xml">
+		<TestData name="testFile">font-embedding.xml</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!--  Test vertical justification in factory -->
+	<TestCase functionName="VA-Justify.xml">
+		<TestData name="testFile">VA-Justify.xml</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!--bug #2617914 -->
+	<TestCase functionName="simple_with_images.xml">
+		<TestData name="testFile">simple_with_images.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+</Tests>

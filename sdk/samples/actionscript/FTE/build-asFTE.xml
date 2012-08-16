@@ -1,0 +1,84 @@
+<project name="FTE" default="rebuild.FTE" basedir="../../../..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - FTE
+	 *  Build script for FTE Examples
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.FTE" depends="config">
+		<copy todir="${dir.dist.qe.examples}/actionscript/FTE" includeEmptyDirs="false">
+			<fileset dir="${dir.sdk.examples.as.fte}">
+				<exclude name="**/build-asFTE.xml"/>
+				<exclude name="**/*.swf"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="rebuild.FTE" description="Cleans, then rebuilds, the FTE swfs.">
+		<antcall target="perform.FTE">
+			<param name="perform" value="rebuild"/>
+		</antcall>
+	</target>
+	
+	<target name="clean.FTE" description="Cleans the FTE swfs.">
+		<antcall target="perform.FTE">
+			<param name="perform" value="clean"/>
+		</antcall>
+	</target>
+		
+	<target name="build.FTE" description="Builds the FTE swfs.">
+		<antcall target="perform.FTE">
+			<param name="perform" value="build"/>
+		</antcall>
+	</target>
+	
+	<!-- ******************** -->
+	<!-- Root Command Section -->
+	<!-- ******************** -->
+	<target name="rebuild.FTE.app" depends="clean.FTE.app,build.FTE.app" if="output"/>
+	
+	<target name="clean.FTE.app" depends="config.FTE" if="output">
+		<delete file="${dir.sdk.examples.as.fte}/${output}.swf"/>
+		<delete file="${dir.sdk.examples.as.fte}/${output}_link.xml"/>
+	</target>
+	
+	<target name="build.FTE.app" if="output">
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.as.fte}/src/${output}.as" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			output="${dir.dist.qe.examples}/bin-${config.dir}/${output}.swf">
+			<source-path path-element="${dir.sdk.examples.as.fte}/src"/>
+			<!-- <optimize/> -->
+			<default-size width="512" height="500" />
+
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<static-link-runtime-shared-libraries/>
+		</mxmlc>
+	</target>
+	
+	<!-- ************* -->
+	<!-- Batch Section -->
+	<!-- ************* -->
+	
+	<target name="perform.FTE" depends="config.FTE" if="perform">
+		<parallel threadcount="${threadcount}" threadsperprocessor="${threadsperprocessor}" failonany="true">
+			<antcall target="${perform}.FTE.app">
+				<param name="output" value="FTEHelloWorld"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.FTE.app">
+				<param name="output" value="FTEParagraph"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+		</parallel>
+	</target>
+	
+</project>

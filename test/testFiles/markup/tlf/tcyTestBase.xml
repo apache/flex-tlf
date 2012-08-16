@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+	<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="18" lineHeight="180%" fontFamily="小塚明朝 Pro L, Kozuka Mincho Pro L" textIndent="15" paragraphSpaceAfter="15" justificationRule="eastAsian" paddingTop="4" paddingLeft="4" blockProgression="rl" whiteSpaceCollapse="collapse" dominantBaseline="ideographicCenter">
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>あ</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>か</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>さ</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>た</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>何やねん！なぜEnglishがあるの？</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>春鹿はすごく美味しい酒ですよ！</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>マレーシアにヘブライ語が話せないので</flow:span><flow:span fontSize="14" locale="he" fontFamily="Adobe Hebrew">בֵּית־סֵפֶר</flow:span><flow:span>が全然分からへん。</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>や</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>ら</flow:span></flow:p>
+		<flow:p textIndent="0" paragraphSpaceAfter="inherit"><flow:span>わ</flow:span></flow:p>
+	</flow:TextFlow>

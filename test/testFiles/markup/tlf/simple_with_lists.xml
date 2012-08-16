@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<TextFlow columnCount="inherit" columnGap="inherit" columnWidth="inherit" lineBreak="inherit" paddingBottom="inherit" paddingLeft="4" paddingRight="inherit" paddingTop="4" verticalAlign="inherit" whiteSpaceCollapse="preserve" version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008"><p><span>BEFORE</span></p>
+<list listStyleType="decimal" paddingLeft="24" paddingRight="24" listStylePosition="inside">
+<li><p><span>item</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<list listStyleType="decimal" paddingLeft="0" listStylePosition="inside" tabStops="E20 S24">
+<listMarkerFormat><ListMarkerFormat fontSize="14" beforeContent="&#x9;" afterContent="&#x9;"/></listMarkerFormat>
+<li><p><span>item</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<list listStyleType="decimal" paddingLeft="24" paddingRight="24" listStylePosition="outside">
+<li><p><span>item</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<!-- next two should be the same -->
+<list paddingLeft="12"><li><p/><list paddingLeft="12"><li/></list></li></list>
+<list paddingLeft="12"><li><list paddingLeft="12"><li/></list></li></list>
+<!-- trip nesting -->
+<list paddingLeft="12"><li><list paddingLeft="12"><li><list paddingLeft="12"><li/></list></li></list></li></list>
+<p><span>AFTER</span></p><p><span></span></p></TextFlow>

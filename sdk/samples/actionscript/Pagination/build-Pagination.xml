@@ -1,0 +1,83 @@
+<project name="Pagination" default="rebuild.Pagination" basedir="../../../..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - Pagination
+	 *  Build script for Pagination Examples
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.Pagination" depends="config">
+		<copy todir="${dir.dist.qe.examples}/actionscript/Pagination" includeEmptyDirs="false">
+			<fileset dir="${dir.sdk.examples.as.pagination}">
+				<exclude name="**/build-asTLF.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="check.libs.Pagination" depends="config.Pagination">
+		<available file="${dir.libs.config}/${output.core}" property="core.available"/>
+		<fail unless="core.available" message="Required file ${dir.libs.config}/${output.core} does not exist!"/>		
+	</target>
+	
+	<target name="rebuild.Pagination" description="Cleans, then rebuilds, the Pagination swfs.">
+		<antcall target="perform.Pagination">
+			<param name="perform" value="rebuild"/>
+		</antcall>
+	</target>
+	
+	<target name="clean.Pagination" description="Cleans the Pagination swfs.">
+		<antcall target="perform.Pagination">
+			<param name="perform" value="clean"/>
+		</antcall>
+	</target>
+		
+	<target name="build.Pagination" description="Builds the Pagination swfs.">
+		<antcall target="perform.Pagination">
+			<param name="perform" value="build"/>
+		</antcall>
+	</target>
+	
+	<!-- ******************** -->
+	<!-- Root Command Section -->
+	<!-- ******************** -->
+	<target name="rebuild.Pagination.app" depends="clean.Pagination.app,build.Pagination.app" if="output"/>
+	
+	<target name="clean.Pagination.app" depends="config.Pagination" if="output">
+		<delete file="${dir.sdk.examples.as.pagination}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+	
+	<target name="build.Pagination.app" depends="check.libs.Pagination" if="output">
+		<echo message="Building ${output}" level="info"/>
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.as.pagination}/src/${output}.as" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			link-report="${dir.output.config}/${output}_link.xml"
+			output="${dir.dist.qe.examples}/bin-${config.dir}/${output}.swf">
+			<source-path path-element="${dir.sdk.examples.as.pagination}/src"/>
+			<!-- <optimize/> -->
+			<default-size width="512" height="500" />
+
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<library-path dir="${dir.libs.config}" includes="${output.core}" 		append="true"/>
+			<static-link-runtime-shared-libraries/>
+
+		</mxmlc>
+	</target>
+	
+	<!-- ************* -->
+	<!-- Batch Section -->
+	<!-- ************* -->
+	
+	<target name="perform.Pagination" depends="config.Pagination" if="perform">
+			<antcall target="${perform}.Pagination.app">
+				<param name="output" value="Pagination"/>
+				<param name="debug" value="${debug}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+	</target>
+	
+</project>

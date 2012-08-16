@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>	
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008"  paddingLeft="4" paddingRight="4" justificationRule="eastAsian" blockProgression="rl"  alignment="all_but_last" fontFamily="Times New Roman">
+	<!-- mac only font names? -->
+	<flow:p fontSize="36"><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300C;&#x5B66;&#x6821;&#x300D;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x306F;&#x3001;&#x30A2;&#x30E9;&#x30D3;&#x30A2;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="ar" fontFamily="Adobe Arabic" fontSize="48">&#x0645;&#x062f;&#x0631;&#x0633;&#x0629;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x7E41;&#x4F53;&#x5B57;&#x4E2D;&#x56FD;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="zh" fontFamily="Adobe &#x5b8b;&#x4f53; Std L">&#x5B78;&#x6821;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x30AE;&#x30EA;&#x30B7;&#x30E3;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="el" fontFamily="Minion Pro">&#x03C3;&#x03C7;&#x03BF;&#x03BB;&#x03B5;&#x03AF;&#x03BF;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x30D8;&#x30D6;&#x30E9;&#x30A4;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="he" fontFamily="Adobe Hebrew" fontSize="48">&#x05D1;&#x05BC;&#x05B5;&#x05D9;&#x05EA;&#x05BE;&#x05E1;&#x05B5;&#x05E4;&#x05B6;&#x05E8;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x82F1;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="en" fontFamily="Minion Pro">school</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x97D3;&#x56FD;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="ko" fontFamily="Adobe &#xba85;&#xc870; Std M">&#xD559;&#xAD50;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x30D9;&#x30F3;&#x30AC;&#x30EB;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="bn" fontFamily="Vrinda" fontSize="48">&#x09B8;&#x09CD;&#x0995;&#x09C1;&#x09B2;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x30ED;&#x30B7;&#x30A2;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="ru" fontFamily="Minion Pro">&#x0448;&#x043A;&#x043E;&#x043B;&#x0430;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x30BF;&#x30A4;&#x8A9E;&#x3067;&#x306F;&#x300C;</flow:span><flow:span locale="th" fontFamily="Adobe Thai" fontSize="48">&#x0E2D;&#x0E32;&#x0E28;&#x0E23;&#x0E21;</flow:span><flow:span locale="ja" fontFamily="&#x5c0f;&#x585a;&#x660e;&#x671d; Pro R">&#x300D;&#x3001;&#x3068;&#x66F8;&#x304D;&#x307E;&#x3059;&#x3002;</flow:span></flow:p>	
+</flow:TextFlow>
+
+

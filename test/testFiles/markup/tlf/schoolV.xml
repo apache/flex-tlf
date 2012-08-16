@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+	<flow:TextFlow  xmlns:flow="http://ns.adobe.com/textLayout/2008" paddingLeft="4" paddingRight="4" justificationRule="eastAsian" blockProgression="rl" textAlignLast="justify" fontFamily="Times New Roman">
+	<!-- windows only font names? -->
+	<flow:p fontSize="36"><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">「学校」</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">は、アラビア語では「</flow:span><flow:span locale="ar" fontFamily="Adobe Arabic" fontSize="48">مدرسة</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、繁体字中国語では「</flow:span><flow:span locale="zh" fontFamily="Adobe Song Std L">學校</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、ギリシャ語では「</flow:span><flow:span locale="el" fontFamily="Minion Pro">σχολείο</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、ヘブライ語では「</flow:span><flow:span fontFamily="Adobe Hebrew" fontSize="48">בֵּית־סֵפֶר</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、英語では「</flow:span><flow:span locale="en" fontFamily="Minion Pro">school</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、韓国語では「</flow:span><flow:span locale="ko" fontFamily="Adobe Myungjo Std M">학교</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、ベンガル語では「</flow:span><flow:span locale="bn" fontFamily="Vrinda" fontSize="48">স্কুল</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、ロシア語では「</flow:span><flow:span locale="ru" fontFamily="Minion Pro">школа</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、タイ語では「</flow:span><flow:span locale="th" fontFamily="Adobe Thai" fontSize="48">อาศรม</flow:span><flow:span locale="ja" fontFamily="Kozuka Mincho Pro R">」、と書きます。</flow:span></flow:p>	
+	</flow:TextFlow>

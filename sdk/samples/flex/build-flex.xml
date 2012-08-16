@@ -1,0 +1,133 @@
+<project name="flex-examples" default="rebuild.flex-examples" basedir="../../..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - flex
+	 *  Build script for flex Examples
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.flex-examples" depends="config">
+		<!-- <copy todir="${dir.dist.qe.examples}/actionscript/TextLayout" includeEmptyDirs="false">
+			<fileset dir="${dir.sdk.examples.as.textlayout}">
+				<exclude name="**/build-flex.xml"/>
+			</fileset>
+		</copy> -->
+	</target>
+	
+	<target name="check.libs.flex-examples" depends="config.flex-examples">
+		<available file="${dir.libs.config}/${output.core}" property="core.available"/>
+		<fail unless="core.available" message="Required file ${dir.libs.config}/${output.core} does not exist!"/>
+	</target>
+	
+	<target name="rebuild.flex-examples" description="Cleans, then rebuilds, the flex swfs.">
+		<antcall target="perform.flex-examples">
+			<param name="perform" value="rebuild"/>
+		</antcall>
+	</target>
+	
+	<target name="clean.flex-examples" description="Cleans the flex swfs.">
+		<antcall target="perform.flex-examples">
+			<param name="perform" value="clean"/>
+		</antcall>
+	</target>
+		
+	<target name="build.flex-examples" description="Builds the flex swfs.">
+		<antcall target="perform.flex-examples">
+			<param name="perform" value="build"/>
+		</antcall>
+	</target>
+	
+	<!-- ******************** -->
+	<!-- Root Command Section -->
+	<!-- ******************** -->
+	<target name="rebuild.flex-examples.app" depends="clean.flex-examples.app,build.flex-examples.app" if="output"/>
+	
+	<target name="clean.flex-examples.app" depends="config.flex-examples" if="output">
+		<delete file="${dir.sdk.examples.as.textlayout}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+
+	<target name="clean.flex-examples.css" depends="config.flex-examples" if="output">
+		<delete file="${dir.sdk.examples.as.textlayout}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+	
+	<target name="build.flex-examples.app" depends="check.libs.flex-examples" if="output">
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.flex}/${output}/src/${output}.mxml" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			link-report="${dir.output.config}/${output}_link.xml"
+			output="${dir.dist.qe.examples}/flex/bin-${config.dir}/${output}.swf">
+			<!-- <optimize/> -->
+			<default-size width="512" height="500" />
+
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<library-path dir="${dir.libs.config}" includes="${output.core}" 		append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework_textLayout.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/mx" includes="mx.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
+			<static-link-runtime-shared-libraries/>
+		</mxmlc>
+	</target>
+
+	<target name="build.flex-examples.css" if="output">
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.flex}/${directory}/src/${output}.css" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			link-report="${dir.output.config}/${output}_link.xml"
+			output="${dir.dist.qe.examples}/flex/bin-${config.dir}/${output}.swf">
+			<!-- We should not need these link libraries, but we're getting link errors without them. -->
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<library-path dir="${dir.libs.config}" includes="${output.core}" 		append="true"/>
+			<library-path dir="${dir.libs.config}" includes="${output.edit}" append="true"/>
+			<library-path dir="${dir.libs.config}" includes="${output.conversion}" 		append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework_textLayout.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
+			<static-link-runtime-shared-libraries/>
+		</mxmlc>
+	</target>
+	
+	<!-- ************* -->
+	<!-- Batch Section -->
+	<!-- ************* -->
+	
+	<target name="perform.flex-examples" depends="config.flex-examples" if="perform">
+			<antcall target="${perform}.flex-examples.app">
+				<param name="output" value="SimpleEditor"/>
+				<param name="debug" value="${debug}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.flex-examples.app">
+				<param name="output" value="SimpleEditorWithCSS"/>
+				<param name="debug" value="${debug}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.flex-examples.css">
+				<param name="directory" value="SimpleEditorWithCSS"/>
+				<param name="output" value="SimpleCSS"/>
+				<param name="debug" value="${debug}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+	</target>
+	
+</project>

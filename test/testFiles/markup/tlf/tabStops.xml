@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="18" fontFamily="Times New Roman">
+		<flow:p tabStops="300">
+			<flow:tab/>Implicit alignment type [300]
+		</flow:p>
+		<flow:p tabStops="s300">
+			<flow:tab/>Start [s300]
+		</flow:p>
+		<flow:p tabStops="c300">
+			<flow:tab/>Center [c300]
+		</flow:p>
+		<flow:p tabStops="e300">
+			<flow:tab/>End [e300]
+		</flow:p>
+		<flow:p tabStops="d300">
+			<flow:br/><flow:tab/>Implict alignment token . [d300]
+		</flow:p>
+		<flow:p tabStops="d300|+">
+			<flow:tab/>Explict alignment token + [d300|+]
+		</flow:p>
+		<flow:p tabStops="d300|+++">
+			<flow:tab/>Multi-char alignment token + ++ +++ [d300|+++]
+		</flow:p>
+		<flow:p tabStops="d300|\ ">
+			<flow:tab/>Space-alignment-token [d300|\ ]
+		</flow:p>
+		<flow:p tabStops="d300|\\">
+			<flow:tab/>Backslash alignment token \ [d300|\\]
+		</flow:p>
+		<flow:p tabStops="d300|\\\\\ \\">
+			<flow:tab/>Long escaped alignment token \ \\ \ [d300|\\\\\ \\]
+		</flow:p>
+		<flow:p tabStops="200 300 400">
+			<flow:br/><flow:tab/>Sorted<flow:tab/>Tab<flow:tab/>Stops [200 300 400]
+		</flow:p>
+		<flow:p tabStops="300 400 200">
+			<flow:tab/>Unsorted<flow:tab/>Tab<flow:tab/>Stops [300 400 200]
+		</flow:p>
+		<flow:p tabStops=" 200  300       400   ">
+			<flow:tab/>Arbitrary<flow:tab/>Whitespace<flow:tab/><flow:span whiteSpaceCollapse="preserve">Delimiters [ 200  300       400   ]</flow:span>
+		</flow:p>
+		<flow:p tabStops=" 100   d350|\     c200 ">
+			<flow:br/><flow:tab/>#<flow:tab/>Occupation<flow:tab/>First-Name Last-Name [s200   d350|\     c300 ]
+			<flow:br/><flow:tab/>1.<flow:tab/>Executive<flow:tab/>Nick Shay
+			<flow:br/><flow:tab/>2.<flow:tab/>Artist<flow:tab/>Klara Sax
+			<flow:br/><flow:tab/>3.<flow:tab/>Instructor<flow:tab/>Albert Bronzini
+			<flow:br/><flow:tab/>4.<flow:tab/>Retired<flow:tab/>Marvin Lundy
+		</flow:p>
+</flow:TextFlow>

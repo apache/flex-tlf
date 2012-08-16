@@ -1,0 +1,104 @@
+<project name="editor-example" default="rebuild.editor-example" basedir="../../..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - flex
+	 *  Build script for flex Examples
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.editor-example" depends="config">
+		<!-- <copy todir="${dir.dist.qe.examples}/actionscript/TextLayout" includeEmptyDirs="false">
+			<fileset dir="${dir.sdk.examples.as.textlayout}">
+				<exclude name="**/build-flex.xml"/>
+			</fileset>
+		</copy> -->
+	</target>
+	
+	<target name="check.libs.editor-example" depends="config.editor-example">
+		<available file="${dir.libs.config}/${output.core}" property="core.available"/>
+		<fail unless="core.available" message="Required file ${dir.libs.config}/${output.core} does not exist!"/>
+		
+		<available file="${dir.libs.config}/${output.ui}" property="ui.available"/>
+		<fail unless="ui.available" message="Required file ${dir.libs.config}/${output.ui} does not exist!"/>
+
+		<available file="${dir.libs.config}/${output.editbar}" property="editbar.available"/>
+		<fail unless="editbar.available" message="Required file ${dir.libs.config}/${output.editbar} does not exist!"/>
+	</target>
+	
+	<target name="rebuild.editor-example" description="Cleans, then rebuilds, the flex swfs.">
+		<antcall target="perform.editor-example">
+			<param name="perform" value="rebuild"/>
+		</antcall>
+	</target>
+	
+	<target name="clean.editor-example" description="Cleans the flex swfs.">
+		<antcall target="perform.editor-example">
+			<param name="perform" value="clean"/>
+		</antcall>
+	</target>
+		
+	<target name="build.editor-example" description="Builds the flex swfs.">
+		<antcall target="perform.editor-example">
+			<param name="perform" value="build"/>
+		</antcall>
+	</target>
+	
+	<!-- ******************** -->
+	<!-- Root Command Section -->
+	<!-- ******************** -->
+	<target name="rebuild.editor-example.app" depends="clean.editor-example.app,build.editor-example.app" if="output"/>
+	
+	<target name="clean.editor-example.app" depends="config.editor-example" if="output">
+		<delete file="${dir.sdk.examples.as.textlayout}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+
+	<target name="clean.editor-example.css" depends="config.editor-example" if="output">
+		<delete file="${dir.sdk.examples.as.textlayout}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+	
+	<target name="build.editor-example.app" depends="check.libs.editor-example" if="output">
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.flex}/${output}/src/${output}.mxml" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			link-report="${dir.output.config}/${output}_link.xml"
+			output="${dir.dist.qe.examples}/flex/bin-${config.dir}/${output}.swf">
+			<!-- <optimize/> -->
+			<default-size width="512" height="500" />
+			<jvmarg line="${jvm.args}"/>
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<library-path dir="${dir.libs.config}" includes="${output.ui}" 	append="true"/>
+			<library-path dir="${dir.libs.config}" includes="${output.editbar}" 	append="true"/>
+			<library-path dir="${dir.libs.config}" includes="${output.core}" 		append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework_textLayout.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/libs/mx" includes="mx.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
+			<static-link-runtime-shared-libraries/>
+		</mxmlc>
+	</target>
+
+	<!-- ************* -->
+	<!-- Batch Section -->
+	<!-- ************* -->
+	
+	<target name="perform.editor-example" depends="config.editor-example" if="perform">
+			<antcall target="${perform}.editor-example.app">
+				<param name="output" value="TextLayoutEditor"/>
+				<param name="debug" value="${debug}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+	</target>
+	
+</project>

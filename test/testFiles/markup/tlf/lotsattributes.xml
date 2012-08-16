@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+  <flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paragraphSpaceAfter="15" textIndent="15" paddingLeft="4" paddingTop="4" fontFamily="Times New Roman">
+    <flow:p>
+      <flow:span>This para is left aligned. This </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="oldStyle">i</flow:span>
+      <flow:span>s</flow:span>
+      <flow:span fontWeight="bold"> bold</flow:span>
+      <flow:span>. This is </flow:span>
+      <flow:span fontStyle="italic">it</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">a</flow:span>
+      <flow:span fontStyle="italic">lic</flow:span>
+      <flow:span>. This is </flow:span>
+      <flow:span textDecoration="underline">underlined</flow:span>
+      <flow:span>. This is </flow:span>
+      <flow:span lineThrough="true">strikethrough</flow:span>
+      <flow:span>. This is in Adobe G</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">a</flow:span>
+      <flow:span>r</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">a</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="oldStyle">m</flow:span>
+      <flow:span>ond Pro. This is size </flow:span>
+      <flow:span fontSize="18">18</flow:span>
+      <flow:span>. This is </flow:span>
+      <flow:span color="0x990000">red</flow:span>
+      <flow:span>. This paragraph has</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default"></flow:span>
+      <flow:span>spaceAfter 15.</flow:span>
+    </flow:p>
+    <flow:p textAlign="center" paragraphSpaceAfter="20" textAlignLast="left">
+      <flow:span>This paragraph is centered. It has spaceBefore of 20. This has leading of 200%. </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" fontStyle="italic">Testing the fishing with common ligatures. </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" ligatureLevel="exotic" fontStyle="italic">Testing the fishing with exotic ligature</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" fontStyle="italic">s. </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" ligatureLevel="none" fontStyle="italic">Te</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">s</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" ligatureLevel="none" fontStyle="italic">ting the fishing with no ligatures. </flow:span>
+      <flow:span ligatureLevel="none" fontStyle="italic"></flow:span>
+    </flow:p>
+    <flow:p textAlign="right" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro">This paragraph is right aligned. Here are some regular figures: 0123456789. Here are some old style figures: </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="oldStyle">0123456789</flow:span>
+    </flow:p>
+    <flow:p textAlign="left" paragraphSpaceAfter="0" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">0123456789 with regular spacing. No spaceAfter.</flow:span>
+    </flow:p>
+    <flow:p textAlign="left" paragraphSpaceAfter="0" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro" digitWidth="proportional" digitCase="default">0123456789</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">with proporional spacing.No spaceAfter.</flow:span>
+    </flow:p>
+    <flow:p textAlign="left" paragraphSpaceAfter="0" textAlignLast="left">
+      <flow:span></flow:span>
+    </flow:p>
+    <flow:p textAlign="justify" paragraphSpaceAfter="0" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">This paragraph is justified, all except the last line. Here is a link to </flow:span>
+      <flow:a color="0xff" textDecoration="underline" href="http://www.cnn.com">
+        <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">cnn</flow:span>
+      </flow:a>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">. Here is some more text to wrap the line.</flow:span>
+    </flow:p>
+    <flow:p paragraphEndIndent="30" textAlign="justify" paragraphSpaceAfter="0" textAlignLast="justify" paragraphStartIndent="20">
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">This paragraph is justified, including the last line. Typing some more text so you can really see what it looks like. I set the leftMargin to 20, the right margin to 30.</flow:span>
+      <flow:span></flow:span>
+    </flow:p>
+    <flow:p paragraphEndIndent="0" textAlign="left" paragraphSpaceBefore="15" paragraphSpaceAfter="0" textIndent="0" textAlignLast="left" paragraphStartIndent="0">
+      <flow:span fontFamily="Adobe Garamond Pro" lineHeight="14" digitCase="default">This paragraph is left aligned with no  indents and no margins. It has a spaceBefore of 15. I am going to keep typing so we can test out the leadings. The leading on this paragraph I'm going to set to  16, which will look a bit tight because the font size is 14. </flow:span>
+    </flow:p>
+    <flow:p textAlign="left" paragraphSpaceBefore="15" paragraphSpaceAfter="0" textIndent="0" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">Here's  another paragraph, this one I'll set leading on individual lines. This first line won't have anything set, this middle line will have a word that is set to </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" lineHeight="20" digitCase="default">20 point leading</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">s, and the next line will be normal, dslkfjf dslkjf dslkjf dslkjf sdlkj lsdkjf lksdjf lsdkjf ldksfjdslkfj sdlkjsdlkjf dlskjfldksjdslkj and the one after that will be </flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" lineHeight="120%" digitCase="default"></flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" lineHeight="130%" digitCase="default">130%</flow:span>
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">.</flow:span>
+    </flow:p>
+    <flow:p textAlign="left" paragraphSpaceBefore="15" paragraphSpaceAfter="0" textIndent="0" textAlignLast="left">
+      <flow:span fontFamily="Adobe Garamond Pro" digitCase="default">This is the last paragraph.</flow:span>
+    </flow:p>
+  </flow:TextFlow>
+

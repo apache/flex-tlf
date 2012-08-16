@@ -1,0 +1,192 @@
+<project name="TextLayout" default="rebuild.TextLayout" basedir="../../../..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - TextLayout
+	 *  Build script for TextLayout Examples
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.TextLayout" depends="config">
+		<copy todir="${dir.dist.qe.examples}/actionscript/TextLayout" includeEmptyDirs="false">
+			<fileset dir="${dir.sdk.examples.as.textlayout}">
+				<exclude name="**/build-asTLF.xml"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="check.libs.TextLayout" depends="config.TextLayout">
+		<available file="${dir.libs.config}/${output.core}" property="core.available"/>
+		<fail unless="core.available" message="Required file ${dir.libs.config}/${output.core} does not exist!"/>		
+	</target>
+	
+	<target name="rebuild.TextLayout" description="Cleans, then rebuilds, the TextLayout swfs.">
+		<antcall target="perform.TextLayout">
+			<param name="perform" value="rebuild"/>
+		</antcall>
+	</target>
+	
+	<target name="clean.TextLayout" description="Cleans the TextLayout swfs.">
+		<antcall target="perform.TextLayout">
+			<param name="perform" value="clean"/>
+		</antcall>
+	</target>
+		
+	<target name="build.TextLayout" description="Builds the TextLayout swfs.">
+		<antcall target="perform.TextLayout">
+			<param name="perform" value="build"/>
+		</antcall>
+	</target>
+	
+	<!-- ******************** -->
+	<!-- Root Command Section -->
+	<!-- ******************** -->
+	<target name="rebuild.TextLayout.app" depends="clean.TextLayout.app,build.TextLayout.app" if="output"/>
+	
+	<target name="clean.TextLayout.app" depends="config.TextLayout" if="output">
+		<delete file="${dir.sdk.examples.as.textlayout}/${output}.swf"/>
+		<delete file="${dir.output.config}/${output}_link.xml"/>
+	</target>
+	
+	<target name="build.TextLayout.app" depends="check.libs.TextLayout" if="output">
+		<echo message="Building ${output}" level="info"/>
+		<mxmlc fork="${forkValue}" 	
+			file="${dir.sdk.examples.as.textlayout}/src/${output}.as" 
+			debug="${debug}" 
+			keep-generated-actionscript="false"
+			link-report="${dir.output.config}/${output}_link.xml"
+			output="${dir.dist.qe.examples}/bin-${config.dir}/${output}.swf">
+			<source-path path-element="${dir.sdk.examples.as.textlayout}/src"/>
+			<!-- <optimize/> -->
+			<default-size width="512" height="500" />
+
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<library-path dir="${dir.libs.config}" includes="${output.core}" 		append="true"/>
+			<static-link-runtime-shared-libraries/>
+
+		</mxmlc>
+	</target>
+	
+	<!-- ************* -->
+	<!-- Batch Section -->
+	<!-- ************* -->
+	
+	<target name="perform.TextLayout" depends="config.TextLayout" if="perform">
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="CustomImportMarkup"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="CustomLinkEventHandler"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="EditText"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="ExplicitFormField"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="HelloWorld"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="ImportMarkup"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="InlineGraphic"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="LinkedContainers"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="MultipleColumns"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="MultipleContainerColumns"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="ParagraphBorder"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="ParagraphBounds"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="SelectText"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="StaticHelloWorld"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="StaticTextFlow"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="EventMirrorExample"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="LinkEventExample"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="AS3CSSSample"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+			<antcall target="${perform}.TextLayout.app">
+				<param name="output" value="Truncation"/>
+				<param name="debug" value="${debug}"/>
+				<param name="timeOperations" value="${timeOperations}"/>
+				<param name="forkValue" value="${forkValue}"/>
+			</antcall>
+	</target>
+	
+</project>

@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas 
+	creationComplete="handleCreationComplete()" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flow="library://ns.adobe.com/flashx/textLayout">
+    <mx:Script>
+		<![CDATA[
+			import flash.text.engine.ElementFormat;
+			import flash.text.engine.FontDescription;
+			import flash.text.engine.LineJustification;
+			import flash.text.engine.SpaceJustifier;
+			import flash.text.engine.TextBlock;
+			import flash.text.engine.TextElement;
+			import flash.text.engine.TextLine;
+			import flash.text.engine.TextLineValidity;
+			
+			import flashx.textLayout.TextLayoutVersion;
+			import flashx.textLayout.compose.StandardFlowComposer;
+			import flashx.textLayout.container.ContainerController;
+			import flashx.textLayout.container.TextContainerManager;
+			import flashx.textLayout.conversion.TextConverter;
+			import flashx.textLayout.edit.EditManager;
+			import flashx.textLayout.elements.Configuration;
+			import flashx.textLayout.elements.ParagraphElement;
+			import flashx.textLayout.elements.SpanElement;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.factory.StringTextLineFactory;
+			import flashx.textLayout.factory.TextFlowTextLineFactory;
+			import flashx.textLayout.formats.TextLayoutFormat;
+			import flashx.textLayout.tlf_internal;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Text;
+
+			use namespace tlf_internal;
+
+		private static var stringFactory:StringTextLineFactory = new StringTextLineFactory();
+		private static var textFlowFactory:TextFlowTextLineFactory = new TextFlowTextLineFactory();
+		
+		// data for the current run
+		private var numberOfFields:int = 0;
+		private var numberOfIterations:int = 0;
+		
+		
+		private var beginCreationTime:int;
+		private var endCreationTime:int;
+		private var beginRenderTime:int;
+		
+		// state for running tests
+		private var currIteration:int = -1;
+		
+		private var beginThisRender:int;
+		private var timingRendering:Boolean = false;
+		
+		// timers
+		private var beginTestTime:int;
+		public var totalCreationTime:int;
+		public var totalRenderTime:int;
+		
+		
+		private var resultText:Text;
+  		
+  		private var _func:String;
+  
+		static private const testTypeArray:ArrayCollection = new ArrayCollection([
+			{label:"TextField", 	 	data:"buildTextFieldExample"},
+			{label:"EditableTextField", data:"buildEditableTextFieldExample"},
+			{label:"FTE", 		 		data:"buildFTEExampleFactory"},
+			{label:"Vellum Factory", 	data:"buildVellumExampleFactoryCallback"},
+			{label:"Vellum Factory2", 	data:"buildVellumExampleFactoryCallback2"},
+			{label:"Vellum TextFlow", 	data:"buildVellumExampleTextFlow"},
+			{label:"Vellum TextFlowEdit", 	data:"buildVellumExampleTextFlowEdit"},
+			{label:"Vellum TextFlowImport", 	data:"buildVellumExampleTextFlowImport"},
+			﻿{label:"Vellum TextContainerManager", 	data:"buildVellumExampleInputManager"},
+			﻿{label:"Vellum TCM HostFormat", 	data:"buildVellumExampleInputManagerHostFormat"},
+			// {label:"Vellum Measure", 	data:"buildVellumExampleMeasureFactoryCallback"},
+			{label:"Rectangles", 		data:"buildRectangles"},
+			{label:"Nothing", 			data:"buildNothing"}																																																								
+		]);
+
+		private function setDebugFlag():void
+		{
+			var e:Error = new Error();
+			var s:String = e.getStackTrace();
+			// trace(s);
+			var i:int = s.indexOf("setDebugFlag");
+			if (s.charAt(i + 14) == '[')
+				debugMode = true;
+		}
+		
+		[Bindable]
+		public var debugMode:Boolean = false;
+
+		public function handleCreationComplete(): void
+		{
+			setDebugFlag();
+			// runTheTest();
+			return; 
+		}
+		
+		// sizes for item placement
+		public	var textWidth:Number = 30;
+		public	var textHeight:Number = 12;
+		
+		
+		
+		public function runTheTest():void
+		{
+			
+			// clear the previous run
+			if (resultText)
+			{
+				lineHolder.removeChild(resultText);
+				resultText = null;
+			}
+			
+			numberOfFields = int(numberFieldsInput.text);
+			numberOfIterations = int(numberIterationsInput.text);
+			_func = testTypeArray[testTypeCombo.selectedIndex].data;
+			
+			currIteration = 0;
+			addEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			runButton.enabled = false;
+			totalCreationTime = 0;
+			totalRenderTime = 0;
+			beginTestTime = getTimer();
+		}
+		
+		public function createOneStep():void
+		{	
+			while (lineHolder.rawChildren.numChildren)
+				lineHolder.rawChildren.removeChildAt(0);
+
+			var begTime:int = getTimer();		
+			
+			var funcCall:Function = this[_func];
+			
+			const xInit:Number = 10;
+			const yInit:Number = 10;
+			const xDelta:Number = 90;
+			const yDelta:Number = 15;
+			
+			var xpos:Number = xInit;
+			var ypos:Number = yInit;
+			
+			for (var testNum:int = 0; testNum < numberOfFields; testNum++)
+			{
+				var example:DisplayObject = funcCall();
+				if (example)
+				{
+					example.x = xpos;
+					example.y = ypos;
+					lineHolder.rawChildren.addChild(example);
+					
+					xpos += xDelta;
+					if (xpos + xDelta > this.width)
+					{
+						xpos = xInit;
+						ypos += yDelta;
+						if (ypos + 2*yDelta > (this.height-controlBox.height))
+							ypos = yInit;
+					}
+				}
+				
+			}
+			
+			totalCreationTime += getTimer()-begTime;
+		}
+	
+		/** build FTE data each time */
+		public function buildFTEExample():DisplayObject
+		{
+			var elementFormat:ElementFormat = new ElementFormat();
+			var textElement:TextElement = new TextElement(testData.text, elementFormat)
+			var textBlock:TextBlock = new TextBlock(textElement);
+			var textLine:TextLine = textBlock.createTextLine();
+			var sprite:Sprite = new Sprite();
+			sprite.addChild(textLine);
+			return sprite;	
+		}
+		
+		static private var templateTextElement:TextElement = null;
+		static private var templateTextBlock:TextBlock = null;
+		/** FTE as a factory */
+		public function buildFTEExampleFactory():DisplayObject
+		{
+			if (!templateTextElement)
+			{
+				var elementFormat:ElementFormat = new ElementFormat();
+				var fontDescription:FontDescription = new FontDescription();
+				fontDescription.fontName = "Times New Roman";
+				elementFormat.fontDescription = fontDescription;
+				templateTextElement = new TextElement();
+				templateTextElement.elementFormat = elementFormat;
+				templateTextBlock = new TextBlock(templateTextElement);	
+				templateTextBlock.textJustifier = new SpaceJustifier("en",LineJustification.UNJUSTIFIED,false);		
+			}
+			templateTextElement.text = testData.text;
+			var textLine:TextLine = templateTextBlock.createTextLine();
+			textLine.validity = TextLineValidity.STATIC;
+			return textLine;	
+		}
+		
+		/** full vellum instantiation with a SpritTextContainer */
+		public function buildVellumExample():DisplayObject
+		{
+			var textFlow:TextFlow = new TextFlow();
+			var para:ParagraphElement = new ParagraphElement();
+			var span:SpanElement = new SpanElement();
+			span.text = testData.text;
+			para.replaceChildren(0, 0, span);
+			textFlow.replaceChildren(0, 0, para);
+			
+			var textContainer:Sprite = new Sprite();
+			var sdc:StandardFlowComposer = new StandardFlowComposer();
+			//sdc.setRootElement(this);
+			//sdc.rootElement;
+			var controller:ContainerController = new ContainerController(textContainer);
+			sdc.addController(controller);
+			textFlow.flowComposer = sdc;
+			controller.setCompositionSize(300, 100);
+			
+			textFlow.flowComposer.updateAllControllers();	
+		//	trace("added container (", textContainer.x, ",", textContainer.y, ")", textContainer.numChildren, "children");
+		//	trace(displayHierarchy(textContainer));
+			return textContainer;	
+		}
+		
+
+		static private var _bounds:Rectangle = new Rectangle(0,0,300,100);
+		static private var _textLine:TextLine;
+		
+		static public function callback(tl:TextLine):void
+		{ 
+			if (_textLine == null)
+				_textLine = tl;
+			else
+				_textLine.addChild(tl); 
+		}
+		/** use the vellum factory via the callback */
+		public function buildVellumExampleFactoryCallback():DisplayObject
+		{
+			_textLine = null;
+			stringFactory.text = testData.text;
+			stringFactory.compositionBounds = _bounds;
+			stringFactory.createTextLines(callback);
+			return _textLine;	
+		}
+		
+﻿		/** use the vellum factory via the callback */
+		public function buildVellumExampleInputManager():DisplayObject
+		{
+			var s:Sprite = new Sprite();
+			// var manager:TextContainerManager = new TextContainerManager(s,_bounds);
+			var manager:TextContainerManager = new TextContainerManager(s,null);	// TODO!!!
+            manager.compositionWidth = _bounds.width;
+            manager.compositionHeight = _bounds.height;
+			manager.setText(testData.text);
+			manager.updateContainer();
+			s.x = _bounds.x;
+			s.y = _bounds.y;
+			return s;	
+		}
+		
+			private static function getRandomInteger(start:int, end:int):int
+				// Return a random number between start and end
+			{
+				var num:Number = Math.random();
+				return Math.ceil((num * (end - start)) + start);
+			}
+			
+		/** use the vellum factory via the callback */
+		public function buildVellumExampleInputManagerHostFormat():DisplayObject
+		{
+			var s:Sprite = new Sprite();
+			// var manager:TextContainerManager = new TextContainerManager(s,_bounds);
+			var manager:TextContainerManager = new TextContainerManager(s,null);	// TODO!!!
+			manager.compositionWidth = _bounds.width;
+			manager.compositionHeight = _bounds.height;
+			manager.setText(testData.text);
+			
+			var hostFormat:TextLayoutFormat = new TextLayoutFormat(TextLayoutFormat.defaultFormat);
+			hostFormat.color = getRandomInteger(0,0xFFFFFF);
+			manager.hostFormat = hostFormat;
+			
+			// force to a full TextFlow
+			manager.beginInteraction();
+			manager.endInteraction();
+			
+			manager.updateContainer();
+			s.x = _bounds.x;
+			s.y = _bounds.y;
+			return s;	
+		}
+			
+		/** use the vellum factory via the callback */
+		private var myFactory:StringTextLineFactory = new StringTextLineFactory();
+		public function buildVellumExampleFactoryCallback2():DisplayObject
+		{
+			_textLine = null;
+			stringFactory.text = testData.text;
+			stringFactory.compositionBounds = _bounds;
+			stringFactory.createTextLines(callback);
+			return _textLine;	
+		}
+				
+		/** use the vellum factory via the callback */
+		static private var _mBounds:Rectangle = new Rectangle(0,0,0,0);
+		public function buildVellumExampleMeasureFactoryCallback():DisplayObject
+		{
+			_textLine = null;
+			_mBounds.width = NaN;
+			_mBounds.height = NaN;
+			myFactory.text = testData.text;
+			myFactory.compositionBounds = _mBounds;
+			myFactory.createTextLines(callback);
+			_mBounds = myFactory.getContentBounds();
+			trace("measure",_mBounds.width,_mBounds.height);
+			return _textLine;	
+		}
+		
+		static private var _tf:TextFlow;
+		
+		/** this example generates TextLines from a single unmodified TextFlow */
+		public function buildVellumExampleFactoryFromTextFlowCallback():DisplayObject
+		{
+			if (_tf == null)
+			{
+				_tf = new TextFlow();
+				var p:ParagraphElement = new ParagraphElement();
+				_tf.replaceChildren(0,0,p);
+				var s:SpanElement = new SpanElement();
+				p.replaceChildren(0,0,s);
+				s.text = testData.text;
+			}
+			_textLine = null;
+			textFlowFactory.compositionBounds = _bounds;
+			textFlowFactory.createTextLines(callback,_tf);
+			return _textLine;	
+		}
+		
+		public function buildVellumExampleTextFlowEdit():DisplayObject
+		{
+			return buildVellumExampleTextFlow(new EditManager());
+		}
+		
+		public function buildVellumExampleTextFlow(im:EditManager = null):DisplayObject
+		{
+			var tf:TextFlow = new TextFlow();
+			var p:ParagraphElement = new ParagraphElement();
+			tf.addChild(p);
+			var s:SpanElement = new SpanElement();
+			p.addChild(s);
+			s.text = testData.text;
+			
+			tf.interactionManager = im;
+
+			var rslt:Sprite = new Sprite();
+			tf.flowComposer.addController(new ContainerController(rslt,_bounds.width,_bounds.height));
+			tf.flowComposer.updateAllControllers();
+			return rslt;	
+		}
+		
+		public function buildVellumExampleTextFlowImport():DisplayObject
+		{
+			var markup:XML = <TextFlow xmlns='http://ns.adobe.com/textLayout/2008'><p><span>{testData.text}</span></p></TextFlow>;
+			var tf:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
+
+			var rslt:Sprite = new Sprite();
+			tf.flowComposer.addController(new ContainerController(rslt,_bounds.width,_bounds.height));
+			tf.flowComposer.updateAllControllers();
+			return rslt;	
+		}
+		
+		/** build rectangles */
+		public function buildRectangles():DisplayObject
+		{
+			var s:Shape = new Shape();
+			s.graphics.beginFill(0xff0000);	// red
+			s.graphics.drawRect(0,0,textWidth/2,textHeight/2);
+			s.graphics.endFill();
+			return s;
+		}
+		
+		/** build a TextField */
+		static private var defaultTextFormat:TextFormat;
+		public function buildTextFieldExample():DisplayObject
+		{
+			if (!defaultTextFormat)
+			{
+				defaultTextFormat = new TextFormat();
+				defaultTextFormat.font = "Times New Roman";
+			}
+			var a:TextField = new TextField();
+			a.defaultTextFormat = defaultTextFormat;
+			a.text = testData.text;
+			a.width = 300;
+			a.height = 100;
+			return a;
+		}
+		
+		/** build an editable TextField */
+		public function buildEditableTextFieldExample():DisplayObject
+		{
+			if (!defaultTextFormat)
+			{
+				defaultTextFormat = new TextFormat();
+				defaultTextFormat.font = "Times New Roman";
+			}
+			var a:TextField = new TextField();
+			a.type = TextFieldType.INPUT;
+			a.defaultTextFormat = defaultTextFormat;
+			a.text = testData.text;
+			a.width = 300;
+			a.height = 100;
+			return a;
+		}
+
+		/** test that builds nothing - used to measure the overhead of the harness */
+		public function buildNothing():DisplayObject
+		{ return null; }
+		
+		// debugging code 
+		private function displayHierarchy(root:DisplayObject):String
+		{
+			var outputString:String;
+			
+			outputString = flash.utils.getQualifiedClassName(root);
+			outputString += " rect (" + root.x.toString() + "," + root.y.toString() + "," + root.width.toString() + "," + root.height.toString() + ")";
+			if (root is DisplayObjectContainer && (root as DisplayObjectContainer).numChildren > 0)
+			{
+				outputString += " {\n";
+				for (var i:int = 0; i < (root as DisplayObjectContainer).numChildren; i++)
+					outputString += displayHierarchy((root as DisplayObjectContainer).getChildAt(i));
+				outputString += "}\n";
+			}
+			return outputString;
+		}
+
+		/** generate a report at the next enter frame */
+		public function handleEnterFrame(e:Event): void
+		{
+			if (currIteration == -1)
+				return;
+			
+			if (timingRendering)
+			{
+				totalRenderTime += getTimer()-beginThisRender;
+				timingRendering = false;
+			}
+
+			if (currIteration == numberOfIterations)
+			{
+				var totalTestTime:int = getTimer()-beginTestTime;
+				
+				flash.system.System.gc();	//mark
+				flash.system.System.gc();	//sweep
+				var memoryAllocated:Number = flash.system.System.totalMemory/1024;
+				
+				trace(_func,"creation time (msecs)",totalCreationTime.toString(), "render time (msecs)",totalRenderTime.toString(), "total time (msecs)",totalTestTime.toString(), " mem (K)", memoryAllocated);
+				
+				var testDescription:String = "fields: " + numberOfFields.toString() + " iters: " + numberOfIterations.toString() + " data: " + testData.text;
+				
+				var playerType:String = this.debugMode ? "DEBUGGING PLAYER (not suitable for measuring performance)" : "RELEASE PLAYER "+Capabilities.version;
+				var vellumType:String = "Vellum build: " + flashx.textLayout.TextLayoutVersion.BUILD_NUMBER + "\n" + (Configuration.tlf_internal::debugCodeEnabled ? "DEBUG vellum engine (not suitable for measuring performance)" : "RELEASE vellum engine");
+
+				resultText = new Text();
+				resultText.text = _func + "\n" +  testDescription + "\nCreationTime (msecs): " + totalCreationTime.toString() + "\nRenderTime (msec): " + totalRenderTime.toString() + "\nTotalTime (msec): " + totalTestTime.toString() 
+					+ " \nmem (K): " + memoryAllocated.toString() + "\n" + playerType + "\n" + vellumType;
+				resultText.x = 100; 
+				resultText.y = 140;
+				resultText.width = 400;
+				resultText.setStyle("fontFamily", "Minion Pro");
+				resultText.setStyle("fontSize", 24);
+				resultText.opaqueBackground = 0xFFFFFFFF;
+				lineHolder.addChild(resultText);
+				this.dispatchEvent(new Event(Event.COMPLETE));
+				
+				currIteration = -1;
+				runButton.enabled = true;
+				removeEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			}
+			else
+			{
+				createOneStep();
+				currIteration++;
+				timingRendering = true;
+				beginThisRender = getTimer();
+			}
+  		}
+      
+       ]]>
+	</mx:Script>
+
+	<mx:VBox>
+		<mx:HBox id="controlBox" paddingLeft="4" paddingTop="4">
+		    <mx:Label text="VellumWordTest" fontWeight="bold"/>
+			<mx:ComboBox id="testTypeCombo" editable="false" closeDuration="0" openDuration="0" selectionDuration="0"
+						paddingLeft="4" paddingTop="4" selectedIndex="0"
+						dataProvider="{testTypeArray}"/>
+			<mx:Label text="NumberFields:" fontWeight="bold"/>
+			<mx:TextInput id="numberFieldsInput" text="4000" width="60"/>
+			<mx:Label text="NumberIterations:" fontWeight="bold"/>
+			<mx:TextInput id="numberIterationsInput" text="1" width="60"/>
+			<mx:Label text="TestData:" fontWeight="bold"/>
+			<mx:TextInput id="testData" text="Hello world" width="120"/>
+			<mx:Button id="runButton" label="Run" click="runTheTest()"/>
+		</mx:HBox>
+		<mx:Canvas id="lineHolder"/>
+	</mx:VBox>
+	
+</mx:Canvas>

@@ -1,0 +1,28 @@
+<Tests>
+<TestCase functionName="measureAlignment">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">simple.xml</TestData>
+</TestCase>
+<TestCase functionName="measureFloats">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">simple.xml</TestData>
+</TestCase>
+<TestCase functionName="listNegativeMarkers">
+	<TestData name="flash">false</TestData>
+	<TestData name="measure">false</TestData>
+	<TestData name="fileName">listMarkerAlignmentZeroPad.xml</TestData>
+	<TestData name="testFile">listMarkerAlignmentZeroPad.xml</TestData>
+</TestCase>
+<TestCase functionName="listNegativeMarkersMeasure">
+	<TestData name="flash">false</TestData>
+	<TestData name="measure">true</TestData>
+	<TestData name="fileName">listMarkerAlignmentZeroPad.xml</TestData>
+	<TestData name="testFile">listMarkerAlignmentZeroPad.xml</TestData>
+</TestCase>
+<TestCase functionName="listInsideAlignmentMeasure">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">listInsideAlignmentZeroPad.xml</TestData>
+	<TestData name="testFile">listInsideAlignmentZeroPad.xml</TestData>
+</TestCase>
+</Tests>
+
