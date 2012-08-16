@@ -1,0 +1,8 @@
+#Mon Jun 14 14:15:13 PDT 2010
+flashplayer.latest.good.lnx=584
+flashplayer.latest.good.win=309
+buildType=Published
+version=1.1
+flashplayer.latest.good.mac=307
+build=606
+flashplayer.version=10.1.50.302

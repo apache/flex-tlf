@@ -1,0 +1,131 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<project name="tlf" default="main" basedir=".">
+	<property name="FLEX_HOME" value="D:\flex_sdk_4.5.0.19786"/>
+	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
+	<property name="flex.locale" value="en_US"/>
+
+	<property name="output.dir" value="bin"/>
+	<property name="output.docs" value="${FLEX_HOME}/tempDoc"/>
+	<property name="flexTasks.location" value="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+	<property name="project.uri" value="library://ns.adobe.com/flashx/textLayout"/>
+	<property name="compc.jvm.args" value="-Xmx384m" />
+	<property name="textLayout.namespace" value="flashx.textLayout"/>
+	
+	<property name="textLayout_core.dir" value="${basedir}/textLayout_core"/>
+	<property name="textLayout_layout.dir" value="${basedir}/textLayout_layout"/>
+	<property name="textLayout_conversion.dir" value="${basedir}/textLayout_conversion"/>
+	<property name="textLayout_edit.dir" value="${basedir}/textLayout_edit"/>
+	<property name="test.dir" value="${basedir}/test"/>
+
+        <!-- We use abbreviated token names here as, the 'release' 
+             and 'debug' tokens conflict with those specified in 
+             build.properties -->
+	<property name="dbg" value="false"/>
+	<property name="rel" value="true"/>
+
+	<condition property="digest" value="false" else="true">
+		<istrue value="${debug}"/>
+	</condition>
+
+	<taskdef resource="flexTasks.tasks" classpath="${flexTasks.location}"/>
+
+	<target name="main" depends="clean,textLayout_core, textLayout_conversion, textLayout_layout, textLayout_edit"/>
+
+	<target name="clean" description="Cleans all SWCs and SWFs">
+		<delete failonerror="false">
+			<fileset dir="${output.dir}">
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="textLayout_core" description="Compiles textLayout_core.swc">
+   		<compc fork="true"
+			   output="${output.dir}/textLayout_core.swc"
+			   compute-digest="true"
+			   include-classes="flashx.textLayout.CoreClasses">
+			<jvmarg line="${compc.jvm.args}"/>
+			<include-namespaces uri="${project.uri}"/>
+			<namespace uri="${project.uri}" manifest="${textLayout_core.dir}/manifest.xml"/>
+			<source-path path-element="${textLayout_core.dir}/src"/>
+			<library-path/>
+			<include-file name="manifest.xml" path="${textLayout_core.dir}/manifest.xml"/>
+			<external-library-path dir="${flex.sdk.frameworks}/libs/player/10.0" includes="playerglobal.swc" 	append="false"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+		 
+	 <target name="textLayout_conversion" description="Compiles textLayout_conversion.swc">
+   		<compc fork="true"
+			   output="${output.dir}/textLayout_conversion.swc"
+			   compute-digest="true"
+			   include-classes="flashx.textLayout.ConversionClasses">
+			<jvmarg line="${compc.jvm.args}"/>
+			
+			<source-path path-element="${textLayout_conversion.dir}/src"/>
+			<library-path/>
+			
+			<external-library-path dir="${flex.sdk.frameworks}/libs/player/10.0" includes="playerglobal.swc" 	append="false"/>
+			<external-library-path dir="${output.dir}" includes="textLayout_core.swc" 	append="true"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+	
+	<target name="textLayout_layout" description="Compiles textLayout_layout.swc">
+   		<compc fork="true"
+			   output="${output.dir}/textLayout_layout.swc"
+			   compute-digest="true"
+			   include-classes="flashx.textLayout.LayoutClasses">
+			<jvmarg line="${compc.jvm.args}"/>
+			
+			<source-path path-element="${textLayout_layout.dir}/src"/>
+			<library-path/>
+			
+			<external-library-path dir="${flex.sdk.frameworks}/libs/player/10.0" includes="playerglobal.swc" 	append="false"/>
+			<external-library-path dir="${output.dir}" includes="textLayout_core.swc" 	append="true"/>
+			<external-library-path dir="${output.dir}" includes="textLayout_conversion.swc" 		append="true"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+	 
+	 <target name="textLayout_edit" description="Compiles textLayout_edit.swc">
+   		<compc fork="true"
+			   output="${output.dir}/textLayout_edit.swc"
+			   compute-digest="true"
+			   include-classes="flashx.textLayout.EditClasses">
+			<jvmarg line="${compc.jvm.args}"/>
+
+			<source-path path-element="${textLayout_edit.dir}/src"/>
+			<library-path/>
+			
+			<external-library-path dir="${flex.sdk.frameworks}/libs/player/10.0" includes="playerglobal.swc" 	append="false"/>
+			<external-library-path dir="${output.dir}" includes="textLayout_core.swc" 	append="true"/>
+			<external-library-path dir="${output.dir}" includes="textLayout_conversion.swc" 		append="true"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+
+</project>
