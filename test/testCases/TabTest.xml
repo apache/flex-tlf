@@ -1,0 +1,27 @@
+<Tests>
+<TestCase functionName="StartTabStopString"/>
+<TestCase functionName="CenterTabStopString"/>
+<TestCase functionName="EndTabStopString"/>
+<TestCase functionName="DecimalTabStopString"/>
+<TestCase functionName="SamePositionTabStops"/>
+<TestCase functionName="UniqueNumberTabStops"/>
+<TestCase functionName="AlignmentToken"/>
+<TestCase functionName="copyMethod"/>
+<TestCase functionName="copyNullObject"/>
+<TestCase functionName="concatMethod"/>
+<TestCase functionName="concatInheritOnlyMethod"/>
+<TestCase functionName="twoSameObjects"/>
+<TestCase functionName="twoDifferentObjects"/>
+<TestCase functionName="removeClashing"/>
+<TestCase functionName="removeMatching"/>
+<TestCase functionName="endTabLongStringTest">
+<TestData name="fileName">empty.xml</TestData>
+<TestData name="tb_rtl">false</TestData>
+<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="TabStopFormatTest">
+<TestData name="fileName">empty.xml</TestData>
+<TestData name="tb_rtl">false</TestData>
+<TestData name="rl_ltr">false</TestData>
+</TestCase>
+</Tests>

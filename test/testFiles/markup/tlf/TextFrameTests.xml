@@ -1,0 +1,41 @@
+<TestCases>
+	<Test>
+		<TestFunctionClass>TestCode</TestFunctionClass>
+		<TestFunction>sampleTextFrameTest3</TestFunction>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from included class</Description>
+	</Test>
+	<Test>
+		<TestFunction>sampleTestFunction</TestFunction>
+		<TestParameter>1</TestParameter>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from base class</Description>
+	</Test>
+	<Test>
+		<TestFunction>sampleTextFrameTest</TestFunction>
+		<TestParameter>1</TestParameter>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from TextFrameSuite</Description>
+	</Test>
+	<Test>
+		<TestFunction>sampleTextFrameTest2</TestFunction>
+		<TestParameter>1</TestParameter>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from TextFrameSuite</Description>
+	</Test>
+	<Test>
+		<TestFunction>testWithParameters</TestFunction>
+		<TestParameter>1</TestParameter>
+		<TestParameter>2</TestParameter>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from TextFrameSuite</Description>
+	</Test>
+	<Test>
+		<TestFunctionClass>TestCode</TestFunctionClass>
+		<TestFunction>testWithParameters2</TestFunction>
+		<TestParameter>3</TestParameter>
+		<TestParameter>4</TestParameter>
+		<ExpectedResult>1</ExpectedResult>
+		<Description>Test Function from TextFrameSuite</Description>
+	</Test>
+</TestCases>

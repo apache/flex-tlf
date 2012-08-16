@@ -1,0 +1,170 @@
+<Tests>
+<TestCase functionName="basicTCMTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="hostFormatTCMTest"/>
+<TestCase functionName="lineBreakTCMTest"/>
+<TestCase functionName="textflowTCMTest"/>
+<TestCase functionName="twoParagraphTCMTest"/>
+<TestCase functionName="aliceTCMTest"/>
+<TestCase functionName="activationTCMTest"/>
+<TestCase functionName="basicBackgroundColorTest"/>
+<TestCase functionName="recomposeBackgroundColorRecomposeTest"/>
+<TestCase functionName="multiParagraphBackgroundColorTest"/>
+<TestCase functionName="editingModeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="hitTest"/>
+<TestCase functionName="scrollPolicyTCMTest"/>
+<TestCase functionName="scrollPositionTCMTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="damageEventTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="setTextDamageTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="customEventTCMTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="tcmSelectionTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="focusInHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseOverHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="activateHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="scrollMaxValueTest"/>
+<TestCase functionName="scrollToRangeTest"/>
+<TestCase functionName="scrollToRangeExplicitMeasureTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="deactivateHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!-- <TestCase functionName="editHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase> -->
+<TestCase functionName="focusChangeHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!--<TestCase functionName="focusOutHandlerTest">
+    <TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="keyDownHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="keyUpHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="menuSelectHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase> -->
+<TestCase functionName="mouseDoubleClickHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseDownHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!-- <TestCase functionName="mouseMoveHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseUpHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase> -->
+<TestCase functionName="mouseOutHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseWheelHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="textInputHandlerTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="changeTextLineCreatorTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="hostFormatTabsTCMTestString">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="hostFormatTabsTCMTestTextFlow">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="floatAndBackgroundColorTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="floatAndBackgroundColorTestThenReset">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="ZOrderHighlightingTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">true</TestData>
+</TestCase>
+<TestCase functionName="reuseTextFlow">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">false</TestData>
+</TestCase>
+<TestCase functionName="emptyTCM">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">false</TestData>
+</TestCase>
+<TestCase functionName="getLineAtTest"/>
+<TestCase functionName="zeroWidthTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">false</TestData>
+</TestCase>
+<TestCase functionName="linkAdditionTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">false</TestData>
+</TestCase>
+<TestCase functionName="graphicAdditionTest">
+    <TestData name="tb_rtl">false</TestData>
+    <TestData name="rl_ltr">false</TestData>
+    <TestData name="bitmapSnapshot">false</TestData>
+</TestCase>
+</Tests>

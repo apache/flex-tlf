@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontFamily="小塚明朝 Pro L" blockProgression="tb" fontSize="14" textIndent="15" paragraphSpaceAfter="15" paddingTop="4" paddingLeft="4">
+        <flow:p><flow:span>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</flow:span></flow:p>
+		<flow:p><flow:span>OpenType日本語Proフォントに含まれる15,000超のグリフのほぼ半分には、文字コードが割り当てられていません。というのは、Unicodeや他の一般的なコード体系を用いてコードを割り当てる方法が存在しないためです。これは、Proフォントが膨大な数の異体字を含んでいることに起因します。OpenType日本語Standardフォントにもかなりの数の文字コードが割り当てられないグリフが含まれます。これらの文字コードが割り当てられないグリフににアクセスする方法として、グリフ置換による方法と字形パレットを用いる方法とがあります。</flow:span></flow:p>
+		<flow:p><flow:span>InDesign CSやIllustrator CSのようなアプリケーションが多くの高度なタイポグラフィ機能、特にグリフ置換機能をサポートすることによって、文字コードが割り当てられていないグリフにアクセスすることが可能となりました。これらには、JIS78 (JIS C 6226-1978) の異体字（漢字）、JIS83 (JIS X 0208-1983）の異体字（漢字）、その他の異体字（漢字）、修飾付き数字等のグリフ（中丸数字等）、純正の欧文イタリック体、およびその他記号類などが含まれます。このグリフアクセス法は、アプリケーションがOpenTypeのグリフ置換機能をサポートしていることが前提となります。</flow:span></flow:p>
+</flow:TextFlow>

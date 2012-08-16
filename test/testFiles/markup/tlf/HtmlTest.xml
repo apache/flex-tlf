@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<TextFlow fontSize="14" paragraphSpaceAfter="15" textIndent="15" paddingLeft="4" paddingTop="4" whiteSpaceCollapse="preserve" xmlns="http://ns.adobe.com/textLayout/2008" fontFamily="Times New Roman"><p paragraphEndIndent="40"><span fontSize="12">There are many </span><span fontStyle="italic" fontSize="12" fontWeight="bold">such</span><span fontSize="12"> lime-kilns in </span><span textDecoration="underline" fontSize="12">that</span><span fontSize="12"> tract of country, for the purpose of burning the </span><span fontSize="18">white marble</span><span fontSize="12"> which composes a large part of the substance of the hills. </span></p><p textAlign="end" textIndent="0"><span fontSize="12">The man who now watched the </span><span color="0xcc0000" fontSize="12">fire</span><span fontSize="12"> was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. </span></p></TextFlow>

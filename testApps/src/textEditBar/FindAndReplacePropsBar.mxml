@@ -1,0 +1,2270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:textEditBar="textEditBar.*" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="100%"
+	addedToStage="onAddedToStage()">
+	
+	<mx:Array id="findTypeArray"> 
+		<mx:String>Text</mx:String>
+		<mx:String>Font</mx:String>
+		<mx:String>Color</mx:String>
+	</mx:Array>
+	
+	<mx:Script>
+		<![CDATA[
+			import flashx.textLayout.formats.FormatValue;
+			import flashx.textLayout.formats.LineBreak;
+			import flashx.textLayout.formats.BlockProgression;
+			import flash.text.engine.JustificationStyle;
+			import flashx.textLayout.formats.Direction;
+			import flash.text.engine.TextRotation;
+			import flash.text.engine.RenderingMode;
+			import flash.text.engine.LigatureLevel;
+			import flash.text.engine.Kerning;
+			import flash.text.engine.FontLookup;
+			import flash.text.engine.DigitWidth;
+			import flash.text.engine.TextBaseline;
+			import flashx.textLayout.edit.TextSearchCharacteristics;
+			import flashx.textLayout.edit.IMatcher;
+			import flashx.textLayout.edit.IReplacer;
+			import flashx.textLayout.edit.SearchManager;
+			import flash.text.engine.FontPosture;		
+			import flash.text.engine.FontWeight;
+			import flashx.textLayout.edit.IEditManager;
+			import flashx.textLayout.edit.ISelectionManager;
+			import flashx.textLayout.edit.IReplacer;
+			import flashx.textLayout.edit.IMatcher;
+			import flashx.textLayout.edit.TextAndFormatMatcher;
+			import flashx.textLayout.edit.TextAndFormatReplacer;
+			import flashx.textLayout.edit.ElementRange;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.formats.TextLayoutFormat;
+			import flashx.textLayout.formats.TextDecoration;
+			
+			import flashx.textLayout.tlf_internal;
+			use namespace tlf_internal;	
+			
+			import mx.collections.ArrayCollection;
+
+			
+			public var _activeFlow:TextFlow = null;
+			
+			private var beenAddedToStage:Boolean = false;
+			
+			// Character Attribute Property Names
+			static private const alignmentBaselinePropertyName:String = TextLayoutFormat.alignmentBaselineProperty.name;
+	[Bindable]
+	public var alignmentBaselinePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Roman", data:flash.text.engine.TextBaseline.ROMAN},
+		{label:"Ascent", data:flash.text.engine.TextBaseline.ASCENT},
+		{label:"Descent", data:flash.text.engine.TextBaseline.DESCENT},
+		{label:"Ideographic Top", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_TOP},
+		{label:"Ideographic Center", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_CENTER},
+		{label:"Ideographic Bottom", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_BOTTOM},
+		{label:"Dominant Baseline", data:flash.text.engine.TextBaseline.USE_DOMINANT_BASELINE}
+		]);
+			
+			static private const alphaPropertyName:String = TextLayoutFormat.textAlphaProperty.name;
+		//Number property - minimum and maximum
+		
+			static private const breakOpportunityPropertyName:String = TextLayoutFormat.breakOpportunityProperty.name;
+	[Bindable]			
+	public var breakOpportunityPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"All", data:flash.text.engine.BreakOpportunity.ALL},
+		{label:"Any", data:flash.text.engine.BreakOpportunity.ANY},
+		{label:"Auto", data:flash.text.engine.BreakOpportunity.AUTO},
+		{label:"None", data:flash.text.engine.BreakOpportunity.NONE}
+		]);
+			
+			static private const cffHintingPropertyName:String = TextLayoutFormat.cffHintingProperty.name;
+	[Bindable]			
+	public var cffHintingPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Horizontal Stem", data:flash.text.engine.CFFHinting.HORIZONTAL_STEM},
+		{label:"None", data:flash.text.engine.CFFHinting.NONE}
+		]);
+							
+			static private const colorPropertyName:String = TextLayoutFormat.colorProperty.name;
+		//should be checkbox followed by the color control
+		
+			static private const digitCasePropertyName:String = TextLayoutFormat.digitCaseProperty.name;
+	[Bindable]			
+	public var digitCasePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Default", data:flash.text.engine.DigitCase.DEFAULT},
+		{label:"Lining", data:flash.text.engine.DigitCase.LINING},
+		{label:"Old Style", data:flash.text.engine.DigitCase.OLD_STYLE}
+		]);
+			
+			static private const digitWidthPropertyName:String = TextLayoutFormat.digitWidthProperty.name;
+	[Bindable]			
+	public var digitWidthPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Default", data:flash.text.engine.DigitWidth.DEFAULT},
+		{label:"Proportional", data:flash.text.engine.DigitWidth.PROPORTIONAL},
+		{label:"Tabular", data:flash.text.engine.DigitWidth.TABULAR}
+		]);
+			
+			static private const dominantBaselinePropertyName:String = TextLayoutFormat.dominantBaselineProperty.name;
+	[Bindable]			
+	public var dominantBaselinePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Auto", data:flashx.textLayout.formats.FormatValue.AUTO},
+		{label:"Ascent", data:flash.text.engine.TextBaseline.ASCENT},
+		{label:"Descent", data:flash.text.engine.TextBaseline.DESCENT},
+		{label:"IdeoBottom", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_BOTTOM},
+		{label:"IdeoCenter", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_CENTER},
+		{label:"IdeoTop", data:flash.text.engine.TextBaseline.IDEOGRAPHIC_TOP},
+		{label:"Roman", data:flash.text.engine.TextBaseline.ROMAN},
+		{label:"Dom.Baseline", data:flash.text.engine.TextBaseline.USE_DOMINANT_BASELINE}
+		]);
+			
+			static private const fontFamilyPropertyName:String = TextLayoutFormat.fontFamilyProperty.name;
+		//should be just string property
+		
+			static private const fontLookupPropertyName:String = TextLayoutFormat.fontLookupProperty.name;
+	[Bindable]						
+	public var fontLookupPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Device", data:flash.text.engine.FontLookup.DEVICE},
+		{label:"EmbeddedCFF", data:flash.text.engine.FontLookup.EMBEDDED_CFF}
+		]);
+			
+			static private const fontSizePropertyName:String = TextLayoutFormat.fontSizeProperty.name;
+		//Number property - Minimum and Maximum
+		
+			static private const fontStylePropertyName:String = TextLayoutFormat.fontStyleProperty.name;
+	[Bindable]						
+	public var fontStylePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Italic", data:flash.text.engine.FontPosture.ITALIC},
+		{label:"Normal", data:flash.text.engine.FontPosture.NORMAL}
+		]);
+			
+			static private const fontWeightPropertyName:String = TextLayoutFormat.fontWeightProperty.name;
+	[Bindable]						
+	public var fontWeightPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Bold", data:flash.text.engine.FontWeight.BOLD},
+		{label:"Normal", data:flash.text.engine.FontWeight.NORMAL}
+		]);
+			
+			static private const kerningPropertyName:String = TextLayoutFormat.kerningProperty.name;
+	[Bindable]						
+	public var kerningPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Auto", data:flash.text.engine.Kerning.AUTO},
+		{label:"Off", data:flash.text.engine.Kerning.OFF},
+		{label:"Normal", data:flash.text.engine.Kerning.ON}
+		]);
+			
+			static private const ligatureLevelPropertyName:String = TextLayoutFormat.ligatureLevelProperty.name;
+	[Bindable]						
+	public var ligatureLevelPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Common", data:flash.text.engine.LigatureLevel.COMMON},
+		{label:"Exotic", data:flash.text.engine.LigatureLevel.EXOTIC},
+		{label:"Minimum", data:flash.text.engine.LigatureLevel.MINIMUM},
+		{label:"Uncommon", data:flash.text.engine.LigatureLevel.UNCOMMON}
+		]);			
+			
+			static private const lineThroughPropertyName:String = TextLayoutFormat.lineThroughProperty.name;
+	[Bindable]						
+	public var lineThroughPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"True", data:true},
+		{label:"False", data:false}
+		]);						
+							
+			static private const localePropertyName:String = TextLayoutFormat.localeProperty.name;
+		//string property
+		
+			static private const renderingModePropertyName:String = TextLayoutFormat.renderingModeProperty.name;
+	[Bindable]						
+	public var renderingModePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"CFF", data:flash.text.engine.RenderingMode.CFF},
+		{label:"Normal", data:flash.text.engine.RenderingMode.NORMAL}
+		]);						
+			
+			static private const textDecorationPropertyName:String = TextLayoutFormat.textDecorationProperty.name;
+	[Bindable]						
+	public var textDecorationPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"None", data:flashx.textLayout.formats.TextDecoration.NONE},
+		{label:"Underline", data:flashx.textLayout.formats.TextDecoration.UNDERLINE}
+		]);						
+			
+			static private const textRotationPropertyName:String = TextLayoutFormat.textRotationProperty.name;
+	[Bindable]						
+	public var textRotationPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Auto", data:flash.text.engine.TextRotation.AUTO},
+		{label:"0", data:flash.text.engine.TextRotation.ROTATE_0},
+		{label:"180", data:flash.text.engine.TextRotation.ROTATE_180},
+		{label:"270", data:flash.text.engine.TextRotation.ROTATE_270},
+		{label:"90", data:flash.text.engine.TextRotation.ROTATE_90}
+		]);									
+			
+			static private const typographicCasePropertyName:String = TextLayoutFormat.typographicCaseProperty.name;
+	[Bindable]									
+	public var typographicCasePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Lowecase to Small Caps", data:flashx.textLayout.formats.TLFTypographicCase.LOWERCASE_TO_SMALL_CAPS},
+		{label:"Default", data:flashx.textLayout.formats.TLFTypographicCase.DEFAULT},
+		{label:"Lowercase", data:flashx.textLayout.formats.TLFTypographicCase.LOWERCASE},
+		{label:"Caps to Small Caps", data:flashx.textLayout.formats.TLFTypographicCase.CAPS_TO_SMALL_CAPS},
+		{label:"Uppercase", data:flashx.textLayout.formats.TLFTypographicCase.UPPERCASE}
+		]);									
+			
+			static private const whiteSpaceCollapsePropertyName:String = TextLayoutFormat.whiteSpaceCollapseProperty.name;
+	[Bindable]									
+	public var whiteSpaceCollapsePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Collapse", data:flashx.textLayout.formats.WhiteSpaceCollapse.COLLAPSE},
+		{label:"Preserve", data:flashx.textLayout.formats.WhiteSpaceCollapse.PRESERVE}
+		]);												
+			
+			//Paragraph Attribute Property Names
+			static private const directionPropertyName:String = TextLayoutFormat.directionProperty.name;
+	[Bindable]									
+	public var directionPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"LTR", data:flashx.textLayout.formats.Direction.LTR},
+		{label:"RTL", data:flashx.textLayout.formats.Direction.RTL}
+		]);												
+			
+			static private const justificationStylePropertyName:String = TextLayoutFormat.justificationStyleProperty.name;
+	[Bindable]									
+	public var justificationStylePropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Auto", data:flashx.textLayout.formats.FormatValue.AUTO},
+		{label:"Least Adjustment", data:flash.text.engine.JustificationStyle.PRIORITIZE_LEAST_ADJUSTMENT},
+		{label:"Push In", data:flash.text.engine.JustificationStyle.PUSH_IN_KINSOKU},
+		{label:"Push Out", data:flash.text.engine.JustificationStyle.PUSH_OUT_ONLY}
+		]);																						
+					
+			static private const leadingModelPropertyName:String = TextLayoutFormat.leadingModelProperty.name;
+	[Bindable]									
+	public var leadingModelPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Ascent", data:flashx.textLayout.formats.LeadingModel.AUTO},
+		{label:"RomanUp", data:flashx.textLayout.formats.LeadingModel.ROMAN_UP},
+		{label:"IdeoTopUp", data:flashx.textLayout.formats.LeadingModel.IDEOGRAPHIC_TOP_UP},
+		{label:"IdeoCenterUp", data:flashx.textLayout.formats.LeadingModel.IDEOGRAPHIC_CENTER_UP},
+		{label:"IdeoTopDown", data:flashx.textLayout.formats.LeadingModel.IDEOGRAPHIC_TOP_DOWN},
+		{label:"IdeoCenterDown", data:flashx.textLayout.formats.LeadingModel.IDEOGRAPHIC_CENTER_DOWN}
+		]);												
+			
+			static private const paragraphSpaceAfterPropertyName:String = TextLayoutFormat.paragraphSpaceAfterProperty.name;
+		//Number property - needs minimum and maximum
+					
+			static private const paragraphStartIndentPropertyName:String = TextLayoutFormat.paragraphStartIndentProperty.name;
+		//Number property - needs minimum and maximum
+		
+			static private const paragraphEndIndentPropertyName:String = TextLayoutFormat.paragraphEndIndentProperty.name;
+		//Number property - needs minimum and maximum
+			static private const paragraphSpaceBeforePropertyName:String = TextLayoutFormat.paragraphSpaceBeforeProperty.name;
+		//Number property - needs minimum and maximum
+					
+			static private const textAlignPropertyName:String = TextLayoutFormat.textAlignProperty.name;
+	[Bindable]									
+	public var textAlignPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Center", data:flashx.textLayout.formats.TextAlign.CENTER},
+		{label:"End", data:flashx.textLayout.formats.TextAlign.END},
+		{label:"Justify", data:flashx.textLayout.formats.TextAlign.JUSTIFY},
+		{label:"Left", data:flashx.textLayout.formats.TextAlign.LEFT},
+		{label:"Right", data:flashx.textLayout.formats.TextAlign.RIGHT},
+		{label:"Start", data:flashx.textLayout.formats.TextAlign.START}
+		]);												
+			
+			static private const textAlignLastPropertyName:String = TextLayoutFormat.textAlignLastProperty.name;
+	[Bindable]									
+	public var textAlignLastPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Center", data:flashx.textLayout.formats.TextAlign.CENTER},
+		{label:"End", data:flashx.textLayout.formats.TextAlign.END},
+		{label:"Justify", data:flashx.textLayout.formats.TextAlign.JUSTIFY},
+		{label:"Left", data:flashx.textLayout.formats.TextAlign.LEFT},
+		{label:"Right", data:flashx.textLayout.formats.TextAlign.RIGHT},
+		{label:"Start", data:flashx.textLayout.formats.TextAlign.START}
+		]);												
+			
+			static private const textIndentPropertyName:String = TextLayoutFormat.textIndentProperty.name;
+		//Number property - needs min and max
+		
+			static private const textJustifyPropertyName:String = TextLayoutFormat.textJustifyProperty.name;
+	[Bindable]									
+	public var textJustifyPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Distribute", data:flashx.textLayout.formats.TextJustify.DISTRIBUTE},
+		{label:"Interword", data:flashx.textLayout.formats.TextJustify.INTER_WORD}
+		]);															
+			
+			//Container Attribute Property Name
+			static private const blockProgressionPropertyName:String = TextLayoutFormat.blockProgressionProperty.name;
+	[Bindable]									
+	public var blockProgressionPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"RL", data:flashx.textLayout.formats.BlockProgression.RL},
+		{label:"TB", data:flashx.textLayout.formats.BlockProgression.TB}
+		]);															
+			
+			static private const columnGapPropertyName:String = TextLayoutFormat.columnGapProperty.name;
+		//Number property - needs min and max													
+			
+			static private const lineBreakPropertyName:String = TextLayoutFormat.lineBreakProperty.name;
+	[Bindable]									
+	public var lineBreakPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Explicit", data:flashx.textLayout.formats.LineBreak.EXPLICIT},
+		{label:"ToFit", data:flashx.textLayout.formats.LineBreak.TO_FIT}
+		]);															
+			
+			static private const paddingBottomPropertyName:String = TextLayoutFormat.paddingBottomProperty.name;
+		//Number property - needs min and max
+		
+			static private const paddingLeftPropertyName:String = TextLayoutFormat.paddingLeftProperty.name;
+		//Number property - needs min and max
+		
+			static private const paddingRightPropertyName:String = TextLayoutFormat.paddingRightProperty.name;
+		//Number property - needs min and max
+		
+			static private const paddingTopPropertyName:String = TextLayoutFormat.paddingTopProperty.name;
+		//Number property - needs min and max
+		
+			static private const verticalAlignPropertyName:String = TextLayoutFormat.verticalAlignProperty.name;
+	[Bindable]									
+	public var verticalAlignPropertyArray:ArrayCollection = new ArrayCollection([
+		{label:"", data:""},
+		{label:"Bottom", data:flashx.textLayout.formats.VerticalAlign.BOTTOM},
+		{label:"Justify", data:flashx.textLayout.formats.VerticalAlign.JUSTIFY},
+		{label:"Middle", data:flashx.textLayout.formats.VerticalAlign.MIDDLE},
+		{label:"Top", data:flashx.textLayout.formats.VerticalAlign.TOP}
+		]);															
+			
+	[Bindable]
+	public var propertyArray:ArrayCollection = new ArrayCollection([
+		{label:"Text", data:"Text"},
+		{label:alignmentBaselinePropertyName, data:alignmentBaselinePropertyName},
+		{label:alphaPropertyName, data:alphaPropertyName},
+		{label:breakOpportunityPropertyName, data:breakOpportunityPropertyName},
+		{label:cffHintingPropertyName, data:cffHintingPropertyName},
+		{label:colorPropertyName, data:colorPropertyName},
+		{label:digitCasePropertyName, data:digitCasePropertyName},
+		{label:digitWidthPropertyName, data:digitWidthPropertyName},
+		{label:dominantBaselinePropertyName, data:dominantBaselinePropertyName},
+		{label:fontFamilyPropertyName, data:fontFamilyPropertyName},
+		{label:fontLookupPropertyName, data:fontLookupPropertyName},
+		{label:fontSizePropertyName, data:fontSizePropertyName},
+		{label:fontStylePropertyName, data:fontStylePropertyName},
+		{label:fontWeightPropertyName, data:fontWeightPropertyName},
+		{label:kerningPropertyName, data:kerningPropertyName},
+		{label:ligatureLevelPropertyName, data:ligatureLevelPropertyName},
+		{label:lineThroughPropertyName, data:lineThroughPropertyName},
+		{label:localePropertyName, data:localePropertyName},
+		{label:renderingModePropertyName, data:renderingModePropertyName},
+		{label:textDecorationPropertyName, data:textDecorationPropertyName},
+		{label:textRotationPropertyName, data:textRotationPropertyName},
+		{label:typographicCasePropertyName, data:typographicCasePropertyName},
+		{label:whiteSpaceCollapsePropertyName, data:whiteSpaceCollapsePropertyName},
+		{label:directionPropertyName, data:directionPropertyName},
+		{label:justificationStylePropertyName, data:justificationStylePropertyName},
+		{label:leadingModelPropertyName, data:leadingModelPropertyName},
+		{label:paragraphSpaceAfterPropertyName, data:paragraphSpaceAfterPropertyName},
+		{label:paragraphStartIndentPropertyName, data:paragraphStartIndentPropertyName},
+		{label:paragraphEndIndentPropertyName, data:paragraphEndIndentPropertyName},
+		{label:paragraphSpaceBeforePropertyName, data:paragraphSpaceBeforePropertyName},
+		{label:textAlignPropertyName, data:textAlignPropertyName},
+		{label:textAlignLastPropertyName, data:textAlignLastPropertyName},
+		{label:textIndentPropertyName, data:textIndentPropertyName},
+		{label:textJustifyPropertyName, data:textJustifyPropertyName},
+		{label:blockProgressionPropertyName, data:blockProgressionPropertyName},
+		{label:columnGapPropertyName, data:columnGapPropertyName},
+		{label:lineBreakPropertyName, data:lineBreakPropertyName},
+		{label:paddingBottomPropertyName, data:paddingBottomPropertyName},
+		{label:paddingLeftPropertyName, data:paddingLeftPropertyName},
+		{label:paddingRightPropertyName, data:paddingRightPropertyName},
+		{label:paddingTopPropertyName, data:paddingTopPropertyName},
+		{label:verticalAlignPropertyName, data:verticalAlignPropertyName}
+		]);
+		
+			private var findCharAttrs:TextLayoutFormat;
+			private var findParaAttrs:TextLayoutFormat;
+			private var findContainerAttrs:TextLayoutFormat;
+			
+			private var rangeCharAttrs:TextLayoutFormat;
+			private var rangeParaAttrs:TextLayoutFormat;
+			private var rangeContainerAttrs:TextLayoutFormat;
+			
+			private var replaceCharAttrs:TextLayoutFormat;
+			private var replaceParaAttrs:TextLayoutFormat;
+			private var replaceContainerAttrs:TextLayoutFormat;
+			
+			private var textSearchCharacteristics:TextSearchCharacteristics;
+			private var replaceTextStr:String;
+			
+			private var _searchManager:SearchManager;
+			
+			public function update(range:ElementRange):void
+			{
+				
+			}
+			
+			private function resetValues():void
+			{
+				findTextInput.text = "";
+				caseSensitive.selected = false;
+				wholeWords.selected = false;
+				replaceTextInput.text = "";
+				fontName.text = "";
+				replaceFontName.text = "";
+				lowerFontSize.text = "";
+				upperFontSize.text = "";
+				replaceFontSize.text = "";
+				alignBaselineCombo.selectedIndex = 0;
+				replaceAlignBaselineCombo.selectedIndex = 0;
+				lowerAlphaSize.text = "";
+				upperAlphaSize.text = "";
+				replaceAlphaSize.text = "";
+				breakOpportunityCombo.selectedIndex = 0;
+				replaceBreakOpportunityCombo.selectedIndex = 0;
+				cffHintingCombo.selectedIndex = 0;
+				replaceCffHintingCombo.selectedIndex = 0;
+				colorFind.selected = false;	
+				replaceColorFind.selected = false;
+				digitCaseCombo.selectedIndex = 0;
+				digitWidthCombo.selectedIndex = 0;
+				dominantBaselineCombo.selectedIndex = 0;
+				fontLookupCombo.selectedIndex = 0;
+				fontStyleCombo.selectedIndex = 0;
+				fontWeightCombo.selectedIndex = 0;
+				kerningCombo.selectedIndex = 0;
+				ligatureLevelCombo.selectedIndex = 0;
+				replaceDigitCaseCombo.selectedIndex = 0;
+				replaceDigitWidthCombo.selectedIndex = 0;
+				replaceDominantBaselineCombo.selectedIndex = 0;
+				replaceFontLookupCombo.selectedIndex = 0;
+				replaceFontStyleCombo.selectedIndex = 0;
+				replaceFontWeightCombo.selectedIndex = 0;
+				replaceKerningCombo.selectedIndex = 0;
+				replaceLigatureLevelCombo.selectedIndex = 0;
+				lineThroughCombo.selectedIndex = 0;
+				replaceLineThroughCombo.selectedIndex = 0;
+				locale.text = "";
+				replaceLocale.text = "";
+				renderingModeCombo.selectedIndex = 0;
+				replaceRenderingModeCombo.selectedIndex = 0;
+				textDecorationCombo.selectedIndex = 0;
+				replaceTextDecorationCombo.selectedIndex = 0;
+				textRotationCombo.selectedIndex = 0;
+				replaceTextRotationCombo.selectedIndex = 0;
+				typographicCaseCombo.selectedIndex = 0;
+				replaceTypographicCaseCombo.selectedIndex = 0;
+				whiteSpaceCollapseCombo.selectedIndex = 0;
+				replaceWhiteSpaceCollapseCombo.selectedIndex = 0;
+				directionPropertyCombo.selectedIndex = 0;
+				replaceDirectionPropertyCombo.selectedIndex = 0;
+				justificationStylePropertyCombo.selectedIndex = 0;
+				replaceJustificationStylePropertyCombo.selectedIndex = 0;
+				leadingModelPropertyCombo.selectedIndex = 0;
+				replaceLeadingModelPropertyCombo.selectedIndex = 0;
+				lowerParagraphSpaceAfterSize.text = "";
+				upperParagraphSpaceAfterSize.text = "";
+				lowerParagraphStartIndentSize.text = "";
+				upperParagraphStartIndentSize.text = "";
+				lowerParagraphEndIndentSize.text = "";
+				upperParagraphEndIndentSize.text = "";
+				lowerParagraphSpaceBeforeSize.text = "";
+				upperParagraphSpaceBeforeSize.text = "";
+				replaceParagraphSpaceAfterSize.text = "";
+				replaceParagraphStartIndentSize.text = "";
+				replaceParagraphEndIndentSize.text = "";
+				replaceParagraphSpaceBeforeSize.text = "";
+				textAlignPropertyCombo.selectedIndex = 0;
+				replaceTextAlignPropertyCombo.selectedIndex = 0;
+				textAlignLastPropertyCombo.selectedIndex = 0;
+				replaceTextAlignLastPropertyCombo.selectedIndex = 0;
+				lowerTextIndentSize.text = "";
+				upperTextIndentSize.text = "";
+				replaceTextIndentSize.text = "";
+				textJustifyCombo.selectedIndex = 0;
+				replaceTextJustifyCombo.selectedIndex = 0;
+				blockProgressionCombo.selectedIndex = 0;
+				replaceBlockProgressionCombo.selectedIndex = 0;	
+				lowerColumnGapSize.text = "";
+				upperColumnGapSize.text = "";
+				replaceColumnGapSize.text = "";
+				lineBreakCombo.selectedIndex = 0;
+				replaceLineBreakCombo.selectedIndex = 0;
+				lowerPaddingBottomSize.text = "";
+				upperPaddingBottomSize.text = "";
+				lowerPaddingLeftSize.text = "";
+				upperPaddingLeftSize.text = "";
+				lowerPaddingRightSize.text = "";
+				upperPaddingRightSize.text = "";
+				lowerPaddingTopSize.text = "";
+				upperPaddingTopSize.text = "";
+				replacePaddingBottomSize.text = "";
+				replacePaddingLeftSize.text = "";
+				replacePaddingRightSize.text = "";
+				replacePaddingTopSize.text = "";
+				verticalAlignCombo.selectedIndex = 0;
+				replaceVerticalAlignCombo.selectedIndex = 0;
+				
+				propertyCombo.selectedIndex = 0;
+				replacePropertyCombo.selectedIndex = 0;
+				
+				clearFindLayout();
+				clearReplaceLayout();
+				changeFindType();
+				changeReplaceType();			
+				
+				findCharAttrs = new TextLayoutFormat();
+				findParaAttrs = new TextLayoutFormat();
+				findContainerAttrs = new TextLayoutFormat();
+			
+				rangeCharAttrs = new TextLayoutFormat();
+				rangeParaAttrs = new TextLayoutFormat();
+				rangeContainerAttrs = new TextLayoutFormat();
+			
+				replaceCharAttrs = new TextLayoutFormat();
+				replaceParaAttrs = new TextLayoutFormat();
+				replaceContainerAttrs = new TextLayoutFormat();
+				
+				textSearchCharacteristics = null;
+				replaceTextStr = "";
+				updateMatcher();
+				updateReplacer();				
+			}
+			
+			private function clearFindLayout():void
+			{
+				findTextInput.includeInLayout = false;
+				findTextInput.visible = false;
+				caseSensitive.includeInLayout = false;
+				caseSensitive.visible = false;
+				wholeWords.includeInLayout = false;
+				wholeWords.visible = false;
+				fontName.includeInLayout = false;
+				fontName.visible = false;
+				lowerFontSizeLabel.includeInLayout = false;
+				lowerFontSizeLabel.visible = false;
+				lowerFontSize.includeInLayout = false;
+				lowerFontSize.visible = false;			
+				upperFontSizeLabel.includeInLayout = false;
+				upperFontSizeLabel.visible = false;			
+				upperFontSize.includeInLayout = false;
+				upperFontSize.visible = false;
+				alignBaselineCombo.includeInLayout = false;
+				alignBaselineCombo.visible = false;
+				lowerAlphaSizeLabel.includeInLayout = false;
+				lowerAlphaSizeLabel.visible = false;
+				lowerAlphaSize.includeInLayout = false;
+				lowerAlphaSize.visible = false;			
+				upperAlphaSizeLabel.includeInLayout = false;
+				upperAlphaSizeLabel.visible = false;			
+				upperAlphaSize.includeInLayout = false;
+				upperAlphaSize.visible = false;
+				breakOpportunityCombo.includeInLayout = false;
+				breakOpportunityCombo.visible = false;
+				cffHintingCombo.includeInLayout = false;
+				cffHintingCombo.visible = false;
+				colorFind.includeInLayout = false;
+				colorFind.visible = false;
+				colorPicker.includeInLayout = false;
+				colorPicker.visible = false;
+				digitCaseCombo.includeInLayout = false;
+				digitCaseCombo.visible = false;
+				digitWidthCombo.includeInLayout = false;
+				digitWidthCombo.visible = false;
+				dominantBaselineCombo.includeInLayout = false;
+				dominantBaselineCombo.visible = false;
+				fontLookupCombo.includeInLayout = false;
+				fontLookupCombo.visible = false;
+				fontStyleCombo.includeInLayout = false;
+				fontStyleCombo.visible = false;
+				fontWeightCombo.includeInLayout = false;
+				fontWeightCombo.visible = false;
+				kerningCombo.includeInLayout = false;
+				kerningCombo.visible = false;
+				ligatureLevelCombo.includeInLayout = false;
+				ligatureLevelCombo.visible = false;
+				lineThroughCombo.includeInLayout = false;
+				lineThroughCombo.visible = false;
+				locale.includeInLayout = false;
+				locale.visible = false;	
+				renderingModeCombo.includeInLayout = false;
+				renderingModeCombo.visible = false;
+				textDecorationCombo.includeInLayout = false;
+				textDecorationCombo.visible = false;
+				textRotationCombo.includeInLayout = false;
+				textRotationCombo.visible = false;
+				typographicCaseCombo.includeInLayout = false;
+				typographicCaseCombo.visible = false;
+				whiteSpaceCollapseCombo.includeInLayout = false;
+				whiteSpaceCollapseCombo.visible = false;
+				directionPropertyCombo.includeInLayout = false;
+				directionPropertyCombo.visible = false;
+				justificationStylePropertyCombo.includeInLayout = false;
+				justificationStylePropertyCombo.visible = false;
+				leadingModelPropertyCombo.includeInLayout = false;
+				leadingModelPropertyCombo.visible = false;
+				lowerParagraphSpaceAfterSizeLabel.includeInLayout = false;
+				lowerParagraphSpaceAfterSizeLabel.visible = false;
+				lowerParagraphSpaceAfterSize.includeInLayout = false;
+				lowerParagraphSpaceAfterSize.visible = false;
+				upperParagraphSpaceAfterSizeLabel.includeInLayout = false;
+				upperParagraphSpaceAfterSizeLabel.visible = false;
+				upperParagraphSpaceAfterSize.includeInLayout = false;
+				upperParagraphSpaceAfterSize.visible = false;
+				lowerParagraphStartIndentSizeLabel.includeInLayout = false;
+				lowerParagraphStartIndentSizeLabel.visible = false;
+				lowerParagraphStartIndentSize.includeInLayout = false;
+				lowerParagraphStartIndentSize.visible = false;
+				upperParagraphStartIndentSizeLabel.includeInLayout = false;
+				upperParagraphStartIndentSizeLabel.visible = false;
+				upperParagraphStartIndentSize.includeInLayout = false;
+				upperParagraphStartIndentSize.visible = false;
+				lowerParagraphEndIndentSizeLabel.includeInLayout = false;
+				lowerParagraphEndIndentSizeLabel.visible = false;
+				lowerParagraphEndIndentSize.includeInLayout = false;
+				lowerParagraphEndIndentSize.visible = false;
+				upperParagraphEndIndentSizeLabel.includeInLayout = false;
+				upperParagraphEndIndentSizeLabel.visible = false;
+				upperParagraphEndIndentSize.includeInLayout = false;
+				upperParagraphEndIndentSize.visible = false;
+				lowerParagraphSpaceBeforeSizeLabel.includeInLayout = false;
+				lowerParagraphSpaceBeforeSizeLabel.visible = false;
+				lowerParagraphSpaceBeforeSize.includeInLayout = false;
+				lowerParagraphSpaceBeforeSize.visible = false;
+				upperParagraphSpaceBeforeSizeLabel.includeInLayout = false;
+				upperParagraphSpaceBeforeSizeLabel.visible = false;
+				upperParagraphSpaceBeforeSize.includeInLayout = false;
+				upperParagraphSpaceBeforeSize.visible = false;
+				textAlignPropertyCombo.includeInLayout = false;
+				textAlignPropertyCombo.visible = false;
+				textAlignLastPropertyCombo.includeInLayout = false;
+				textAlignLastPropertyCombo.visible = false;
+				lowerTextIndentSizeLabel.includeInLayout = false;
+				lowerTextIndentSizeLabel.visible = false;
+				lowerTextIndentSize.includeInLayout = false;
+				lowerTextIndentSize.visible = false;
+				upperTextIndentSizeLabel.includeInLayout = false;
+				upperTextIndentSizeLabel.visible = false;
+				upperTextIndentSize.includeInLayout = false;
+				upperTextIndentSize.visible = false;
+				textJustifyCombo.includeInLayout = false;
+				textJustifyCombo.visible = false;
+				blockProgressionCombo.includeInLayout = false;
+				blockProgressionCombo.visible = false;
+				lowerColumnGapSizeLabel.includeInLayout = false;
+				lowerColumnGapSizeLabel.visible = false;
+				lowerColumnGapSize.includeInLayout = false;
+				lowerColumnGapSize.visible = false;
+				upperColumnGapSizeLabel.includeInLayout = false;
+				upperColumnGapSizeLabel.visible = false;
+				upperColumnGapSize.includeInLayout = false;
+				upperColumnGapSize.visible = false;
+				lineBreakCombo.includeInLayout = false;
+				lineBreakCombo.visible = false;
+				
+				lowerPaddingBottomSizeLabel.includeInLayout = false;
+				lowerPaddingBottomSizeLabel.visible = false;
+				lowerPaddingBottomSize.includeInLayout = false;
+				lowerPaddingBottomSize.visible = false;
+				upperPaddingBottomSizeLabel.includeInLayout = false;
+				upperPaddingBottomSizeLabel.visible = false;
+				upperPaddingBottomSize.includeInLayout = false;
+				upperPaddingBottomSize.visible = false;
+
+				lowerPaddingLeftSizeLabel.includeInLayout = false;
+				lowerPaddingLeftSizeLabel.visible = false;
+				lowerPaddingLeftSize.includeInLayout = false;
+				lowerPaddingLeftSize.visible = false;
+				upperPaddingLeftSizeLabel.includeInLayout = false;
+				upperPaddingLeftSizeLabel.visible = false;
+				upperPaddingLeftSize.includeInLayout = false;
+				upperPaddingLeftSize.visible = false;
+				
+				lowerPaddingRightSizeLabel.includeInLayout = false;
+				lowerPaddingRightSizeLabel.visible = false;
+				lowerPaddingRightSize.includeInLayout = false;
+				lowerPaddingRightSize.visible = false;
+				upperPaddingRightSizeLabel.includeInLayout = false;
+				upperPaddingRightSizeLabel.visible = false;
+				upperPaddingRightSize.includeInLayout = false;
+				upperPaddingRightSize.visible = false;
+
+				lowerPaddingTopSizeLabel.includeInLayout = false;
+				lowerPaddingTopSizeLabel.visible = false;
+				lowerPaddingTopSize.includeInLayout = false;
+				lowerPaddingTopSize.visible = false;
+				upperPaddingTopSizeLabel.includeInLayout = false;
+				upperPaddingTopSizeLabel.visible = false;
+				upperPaddingTopSize.includeInLayout = false;
+				upperPaddingTopSize.visible = false;
+				
+				verticalAlignCombo.includeInLayout = false;
+				verticalAlignCombo.visible = false;
+			}
+			
+			private function clearReplaceLayout():void
+			{
+				replaceTextInput.includeInLayout = false;
+				replaceTextInput.visible = false;
+				replaceFontName.includeInLayout = false;
+				replaceFontName.visible = false;
+				replaceFontSize.includeInLayout = false;
+				replaceFontSize.visible = false;
+				replaceAlignBaselineCombo.includeInLayout = false;
+				replaceAlignBaselineCombo.visible = false;
+				replaceAlphaSize.includeInLayout = false;
+				replaceAlphaSize.visible = false;
+				replaceBreakOpportunityCombo.includeInLayout = false;
+				replaceBreakOpportunityCombo.visible = false;
+				replaceCffHintingCombo.includeInLayout = false;
+				replaceCffHintingCombo.visible = false;
+				replaceColorFind.includeInLayout = false;
+				replaceColorFind.visible = false;
+				replaceColorPicker.includeInLayout = false;
+				replaceColorPicker.visible = false;
+				replaceDigitCaseCombo.includeInLayout = false;
+				replaceDigitCaseCombo.visible = false;
+				replaceDigitWidthCombo.includeInLayout = false;
+				replaceDigitWidthCombo.visible = false;
+				replaceDominantBaselineCombo.includeInLayout = false;
+				replaceDominantBaselineCombo.visible = false;
+				replaceFontLookupCombo.includeInLayout = false;
+				replaceFontLookupCombo.visible = false;
+				replaceFontStyleCombo.includeInLayout = false;
+				replaceFontStyleCombo.visible = false;
+				replaceFontWeightCombo.includeInLayout = false;
+				replaceFontWeightCombo.visible = false;
+				replaceKerningCombo.includeInLayout = false;
+				replaceKerningCombo.visible = false;
+				replaceLigatureLevelCombo.includeInLayout = false;
+				replaceLigatureLevelCombo.visible = false;
+				replaceLineThroughCombo.includeInLayout = false;
+				replaceLineThroughCombo.visible = false;
+				replaceLocale.includeInLayout = false;
+				replaceLocale.visible = false;
+				replaceRenderingModeCombo.includeInLayout = false;
+				replaceRenderingModeCombo.visible = false;
+				replaceTextDecorationCombo.includeInLayout = false;
+				replaceTextDecorationCombo.visible = false;
+				replaceTextRotationCombo.includeInLayout = false;
+				replaceTextRotationCombo.visible = false;
+				replaceTypographicCaseCombo.includeInLayout = false;
+				replaceTypographicCaseCombo.visible = false;
+				replaceWhiteSpaceCollapseCombo.includeInLayout = false;
+				replaceWhiteSpaceCollapseCombo.visible = false;
+				replaceDirectionPropertyCombo.includeInLayout = false;
+				replaceDirectionPropertyCombo.visible = false;
+				replaceJustificationStylePropertyCombo.includeInLayout = false;
+				replaceJustificationStylePropertyCombo.visible = false;
+				replaceLeadingModelPropertyCombo.includeInLayout = false;
+				replaceLeadingModelPropertyCombo.visible = false;
+				replaceParagraphSpaceAfterSize.includeInLayout = false;
+				replaceParagraphSpaceAfterSize.visible = false;
+				replaceParagraphStartIndentSize.includeInLayout = false;
+				replaceParagraphStartIndentSize.visible = false;
+				replaceParagraphEndIndentSize.includeInLayout = false;
+				replaceParagraphEndIndentSize.visible = false;
+				replaceParagraphSpaceBeforeSize.includeInLayout = false;
+				replaceParagraphSpaceBeforeSize.visible = false;
+				replaceTextAlignPropertyCombo.includeInLayout = false;
+				replaceTextAlignPropertyCombo.visible = false;
+				replaceTextAlignLastPropertyCombo.includeInLayout = false;
+				replaceTextAlignLastPropertyCombo.visible = false;
+				replaceTextIndentSize.includeInLayout = false;
+				replaceTextIndentSize.visible = false;
+				replaceTextJustifyCombo.includeInLayout = false;
+				replaceTextJustifyCombo.visible = false;
+				replaceBlockProgressionCombo.includeInLayout = false;
+				replaceBlockProgressionCombo.visible = false;
+				replaceColumnGapSize.includeInLayout = false;
+				replaceColumnGapSize.visible = false;
+				replaceLineBreakCombo.includeInLayout = false;
+				replaceLineBreakCombo.visible = false;
+				replacePaddingBottomSize.includeInLayout = false;
+				replacePaddingBottomSize.visible = false;
+				replacePaddingLeftSize.includeInLayout = false;
+				replacePaddingLeftSize.visible = false;
+				replacePaddingRightSize.includeInLayout = false;
+				replacePaddingRightSize.visible = false;
+				replacePaddingTopSize.includeInLayout = false;
+				replacePaddingTopSize.visible = false;
+				replaceVerticalAlignCombo.includeInLayout = false;
+				replaceVerticalAlignCombo.visible = false;																																																																																																																																																																																																																																							
+			}
+						
+			private function onAddedToStage():void
+			{
+				if (beenAddedToStage) return;
+				beenAddedToStage = true;
+				
+				findCharAttrs = new TextLayoutFormat();
+				findParaAttrs = new TextLayoutFormat();
+				findContainerAttrs = new TextLayoutFormat();
+			
+				rangeCharAttrs = new TextLayoutFormat();
+				rangeParaAttrs = new TextLayoutFormat();
+				rangeContainerAttrs = new TextLayoutFormat();
+			
+				replaceCharAttrs = new TextLayoutFormat();
+				replaceParaAttrs = new TextLayoutFormat();
+				replaceContainerAttrs = new TextLayoutFormat();
+				
+				textSearchCharacteristics = null;
+				
+				clearFindLayout();
+				clearReplaceLayout();
+				findTextInput.includeInLayout = true;
+				findTextInput.visible = true;
+				caseSensitive.includeInLayout = true;
+				caseSensitive.visible = true;
+				wholeWords.includeInLayout = true;
+				wholeWords.visible = true;
+				replaceTextInput.includeInLayout = true;
+				replaceTextInput.visible = true;																	
+			}
+			
+			public function changeFindType():void
+			{
+				clearFindLayout();
+				if (propertyArray[propertyCombo.selectedIndex].data == "Text")
+				{
+					findTextInput.includeInLayout = true;
+					findTextInput.visible = true;
+					caseSensitive.includeInLayout = true;
+					caseSensitive.visible = true;
+					wholeWords.includeInLayout = true;
+					wholeWords.visible = true;													
+				} else if (propertyArray[propertyCombo.selectedIndex].data == fontFamilyPropertyName)
+				{
+					fontName.includeInLayout = true;
+					fontName.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == fontSizePropertyName)
+				{
+					lowerFontSizeLabel.includeInLayout = true;
+					lowerFontSizeLabel.visible = true;
+					lowerFontSize.includeInLayout = true;
+					lowerFontSize.visible = true;
+					upperFontSizeLabel.includeInLayout = true;
+					upperFontSizeLabel.visible = true;
+					upperFontSize.includeInLayout = true;
+					upperFontSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == alignmentBaselinePropertyName)
+				{
+					alignBaselineCombo.includeInLayout = true;
+					alignBaselineCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == alphaPropertyName)
+				{
+					lowerAlphaSizeLabel.includeInLayout = true;
+					lowerAlphaSizeLabel.visible = true;
+					lowerAlphaSize.includeInLayout = true;
+					lowerAlphaSize.visible = true;
+					upperAlphaSizeLabel.includeInLayout = true;
+					upperAlphaSizeLabel.visible = true;
+					upperAlphaSize.includeInLayout = true;
+					upperAlphaSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == breakOpportunityPropertyName)
+				{
+					breakOpportunityCombo.includeInLayout = true;
+					breakOpportunityCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == cffHintingPropertyName)
+				{
+					cffHintingCombo.includeInLayout = true;
+					cffHintingCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == colorPropertyName)
+				{
+					colorFind.includeInLayout = true;
+					colorFind.visible = true;
+					colorPicker.includeInLayout = true;
+					colorPicker.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == digitCasePropertyName)
+				{				
+					digitCaseCombo.includeInLayout = true;
+					digitCaseCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == digitWidthPropertyName)
+				{				
+					digitWidthCombo.includeInLayout = true;
+					digitWidthCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == dominantBaselinePropertyName)
+				{									
+					dominantBaselineCombo.includeInLayout = true;
+					dominantBaselineCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == fontLookupPropertyName)
+				{														
+					fontLookupCombo.includeInLayout = true;
+					fontLookupCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == fontStylePropertyName)
+				{																			
+					fontStyleCombo.includeInLayout = true;
+					fontStyleCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == fontWeightPropertyName)
+				{																							
+					fontWeightCombo.includeInLayout = true;
+					fontWeightCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == kerningPropertyName)
+				{																												
+					kerningCombo.includeInLayout = true;
+					kerningCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == ligatureLevelPropertyName)
+				{																																	
+					ligatureLevelCombo.includeInLayout = true;
+					ligatureLevelCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == lineThroughPropertyName)
+				{																																	
+					lineThroughCombo.includeInLayout = true;
+					lineThroughCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == localePropertyName)
+				{																																	
+					locale.includeInLayout = true;
+					locale.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == renderingModePropertyName)
+				{																																	
+					renderingModeCombo.includeInLayout = true;
+					renderingModeCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textDecorationPropertyName)
+				{																																	
+					textDecorationCombo.includeInLayout = true;
+					textDecorationCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textRotationPropertyName)
+				{																																	
+					textRotationCombo.includeInLayout = true;
+					textRotationCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == typographicCasePropertyName)
+				{																																	
+					typographicCaseCombo.includeInLayout = true;
+					typographicCaseCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == whiteSpaceCollapsePropertyName)
+				{																																	
+					whiteSpaceCollapseCombo.includeInLayout = true;
+					whiteSpaceCollapseCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == directionPropertyName)
+				{																																	
+					directionPropertyCombo.includeInLayout = true;
+					directionPropertyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == justificationStylePropertyName)
+				{																																	
+					justificationStylePropertyCombo.includeInLayout = true;
+					justificationStylePropertyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == leadingModelPropertyName)
+				{																																	
+					leadingModelPropertyCombo.includeInLayout = true;
+					leadingModelPropertyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paragraphSpaceAfterPropertyName)
+				{
+					lowerParagraphSpaceAfterSizeLabel.includeInLayout = true;
+					lowerParagraphSpaceAfterSizeLabel.visible = true;
+					upperParagraphSpaceAfterSizeLabel.includeInLayout = true;
+					upperParagraphSpaceAfterSizeLabel.visible = true;
+					lowerParagraphSpaceAfterSize.includeInLayout = true;
+					lowerParagraphSpaceAfterSize.visible = true;
+					upperParagraphSpaceAfterSize.includeInLayout = true;
+					upperParagraphSpaceAfterSize.visible = true;																																						
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paragraphStartIndentPropertyName)
+				{
+					lowerParagraphStartIndentSizeLabel.includeInLayout = true;
+					lowerParagraphStartIndentSizeLabel.visible = true;
+					upperParagraphStartIndentSizeLabel.includeInLayout = true;
+					upperParagraphStartIndentSizeLabel.visible = true;
+					lowerParagraphStartIndentSize.includeInLayout = true;
+					lowerParagraphStartIndentSize.visible = true;
+					upperParagraphStartIndentSize.includeInLayout = true;
+					upperParagraphStartIndentSize.visible = true;																																						
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paragraphEndIndentPropertyName)
+				{
+					lowerParagraphEndIndentSizeLabel.includeInLayout = true;
+					lowerParagraphEndIndentSizeLabel.visible = true;
+					upperParagraphEndIndentSizeLabel.includeInLayout = true;
+					upperParagraphEndIndentSizeLabel.visible = true;
+					lowerParagraphEndIndentSize.includeInLayout = true;
+					lowerParagraphEndIndentSize.visible = true;
+					upperParagraphEndIndentSize.includeInLayout = true;
+					upperParagraphEndIndentSize.visible = true;																																						
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paragraphSpaceBeforePropertyName)
+				{
+					lowerParagraphSpaceBeforeSizeLabel.includeInLayout = true;
+					lowerParagraphSpaceBeforeSizeLabel.visible = true;
+					upperParagraphSpaceBeforeSizeLabel.includeInLayout = true;
+					upperParagraphSpaceBeforeSizeLabel.visible = true;
+					lowerParagraphSpaceBeforeSize.includeInLayout = true;
+					lowerParagraphSpaceBeforeSize.visible = true;
+					upperParagraphSpaceBeforeSize.includeInLayout = true;
+					upperParagraphSpaceBeforeSize.visible = true;																																						
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textAlignPropertyName)
+				{
+					textAlignPropertyCombo.includeInLayout = true;
+					textAlignPropertyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textAlignLastPropertyName)
+				{
+					textAlignLastPropertyCombo.includeInLayout = true;
+					textAlignLastPropertyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textIndentPropertyName)
+				{				
+					lowerTextIndentSizeLabel.includeInLayout = true;
+					lowerTextIndentSizeLabel.visible = true;
+					lowerTextIndentSize.includeInLayout = true;
+					lowerTextIndentSize.visible = true;
+					upperTextIndentSizeLabel.includeInLayout = true;
+					upperTextIndentSizeLabel.visible = true;
+					upperTextIndentSize.includeInLayout = true;
+					upperTextIndentSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == textJustifyPropertyName)
+				{				
+					textJustifyCombo.includeInLayout = true;
+					textJustifyCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == blockProgressionPropertyName)
+				{				
+					blockProgressionCombo.includeInLayout = true;
+					blockProgressionCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == columnGapPropertyName)
+				{								
+					lowerColumnGapSizeLabel.includeInLayout = true;
+					lowerColumnGapSizeLabel.visible = true;
+					lowerColumnGapSize.includeInLayout = true;
+					lowerColumnGapSize.visible = true;
+					upperColumnGapSizeLabel.includeInLayout = true;
+					upperColumnGapSizeLabel.visible = true;
+					upperColumnGapSize.includeInLayout = true;
+					upperColumnGapSize.visible = true;
+				}  else if (propertyArray[propertyCombo.selectedIndex].data == lineBreakPropertyName)
+				{
+					lineBreakCombo.includeInLayout = true;
+					lineBreakCombo.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paddingBottomPropertyName)
+				{
+					lowerPaddingBottomSizeLabel.includeInLayout = true;
+					lowerPaddingBottomSizeLabel.visible = true;
+					lowerPaddingBottomSize.includeInLayout = true;
+					lowerPaddingBottomSize.visible = true;
+					upperPaddingBottomSizeLabel.includeInLayout = true;
+					upperPaddingBottomSizeLabel.visible = true;
+					upperPaddingBottomSize.includeInLayout = true;
+					upperPaddingBottomSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paddingLeftPropertyName)
+				{
+					lowerPaddingLeftSizeLabel.includeInLayout = true;
+					lowerPaddingLeftSizeLabel.visible = true;
+					lowerPaddingLeftSize.includeInLayout = true;
+					lowerPaddingLeftSize.visible = true;
+					upperPaddingLeftSizeLabel.includeInLayout = true;
+					upperPaddingLeftSizeLabel.visible = true;
+					upperPaddingLeftSize.includeInLayout = true;
+					upperPaddingLeftSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paddingRightPropertyName)
+				{				
+					lowerPaddingRightSizeLabel.includeInLayout = true;
+					lowerPaddingRightSizeLabel.visible = true;
+					lowerPaddingRightSize.includeInLayout = true;
+					lowerPaddingRightSize.visible = true;
+					upperPaddingRightSizeLabel.includeInLayout = true;
+					upperPaddingRightSizeLabel.visible = true;
+					upperPaddingRightSize.includeInLayout = true;
+					upperPaddingRightSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == paddingTopPropertyName)
+				{				
+					lowerPaddingTopSizeLabel.includeInLayout = true;
+					lowerPaddingTopSizeLabel.visible = true;
+					lowerPaddingTopSize.includeInLayout = true;
+					lowerPaddingTopSize.visible = true;
+					upperPaddingTopSizeLabel.includeInLayout = true;
+					upperPaddingTopSizeLabel.visible = true;
+					upperPaddingTopSize.includeInLayout = true;
+					upperPaddingTopSize.visible = true;
+				} else if (propertyArray[propertyCombo.selectedIndex].data == verticalAlignPropertyName)
+				{
+					verticalAlignCombo.includeInLayout = true;
+					verticalAlignCombo.visible = true;
+				}
+			}
+			
+			public function changeReplaceType():void
+			{
+				clearReplaceLayout();
+				if (propertyArray[replacePropertyCombo.selectedIndex].data == "Text")
+				{
+					replaceTextInput.includeInLayout = true;
+					replaceTextInput.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == fontFamilyPropertyName)
+				{
+					replaceFontName.includeInLayout = true;
+					replaceFontName.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == fontSizePropertyName)
+				{
+					replaceFontSize.includeInLayout = true;
+					replaceFontSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == alignmentBaselinePropertyName)
+				{
+					replaceAlignBaselineCombo.includeInLayout = true;
+					replaceAlignBaselineCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == alphaPropertyName)
+				{
+					replaceAlphaSize.includeInLayout = true;
+					replaceAlphaSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == breakOpportunityPropertyName)
+				{
+					replaceBreakOpportunityCombo.includeInLayout = true;
+					replaceBreakOpportunityCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == cffHintingPropertyName)
+				{
+					replaceCffHintingCombo.includeInLayout = true;
+					replaceCffHintingCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == colorPropertyName)
+				{
+					replaceColorFind.includeInLayout = true;
+					replaceColorFind.visible = true;
+					replaceColorPicker.includeInLayout = true;
+					replaceColorPicker.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == digitCasePropertyName)
+				{				
+					replaceDigitCaseCombo.includeInLayout = true;
+					replaceDigitCaseCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == digitWidthPropertyName)
+				{				
+					replaceDigitWidthCombo.includeInLayout = true;
+					replaceDigitWidthCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == dominantBaselinePropertyName)
+				{									
+					replaceDominantBaselineCombo.includeInLayout = true;
+					replaceDominantBaselineCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == fontLookupPropertyName)
+				{														
+					replaceFontLookupCombo.includeInLayout = true;
+					replaceFontLookupCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == fontStylePropertyName)
+				{																			
+					replaceFontStyleCombo.includeInLayout = true;
+					replaceFontStyleCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == fontWeightPropertyName)
+				{																							
+					replaceFontWeightCombo.includeInLayout = true;
+					replaceFontWeightCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == kerningPropertyName)
+				{																												
+					replaceKerningCombo.includeInLayout = true;
+					replaceKerningCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == ligatureLevelPropertyName)
+				{																																	
+					replaceLigatureLevelCombo.includeInLayout = true;
+					replaceLigatureLevelCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == lineThroughPropertyName)
+				{																																	
+					replaceLineThroughCombo.includeInLayout = true;
+					replaceLineThroughCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == localePropertyName)
+				{																																	
+					replaceLocale.includeInLayout = true;
+					replaceLocale.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == renderingModePropertyName)
+				{																																	
+					replaceRenderingModeCombo.includeInLayout = true;
+					replaceRenderingModeCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textDecorationPropertyName)
+				{																																	
+					replaceTextDecorationCombo.includeInLayout = true;
+					replaceTextDecorationCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textRotationPropertyName)
+				{																																	
+					replaceTextRotationCombo.includeInLayout = true;
+					replaceTextRotationCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == typographicCasePropertyName)
+				{																																	
+					replaceTypographicCaseCombo.includeInLayout = true;
+					replaceTypographicCaseCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == whiteSpaceCollapsePropertyName)
+				{																																	
+					replaceWhiteSpaceCollapseCombo.includeInLayout = true;
+					replaceWhiteSpaceCollapseCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == directionPropertyName)
+				{																																	
+					replaceDirectionPropertyCombo.includeInLayout = true;
+					replaceDirectionPropertyCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == justificationStylePropertyName)
+				{																																	
+					replaceJustificationStylePropertyCombo.includeInLayout = true;
+					replaceJustificationStylePropertyCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == leadingModelPropertyName)
+				{																																	
+					replaceLeadingModelPropertyCombo.includeInLayout = true;
+					replaceLeadingModelPropertyCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paragraphSpaceAfterPropertyName)
+				{
+					replaceParagraphSpaceAfterSize.includeInLayout = true;
+					replaceParagraphSpaceAfterSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paragraphStartIndentPropertyName)
+				{
+					replaceParagraphStartIndentSize.includeInLayout = true;
+					replaceParagraphStartIndentSize.visible = true;																																						
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paragraphEndIndentPropertyName)
+				{
+					replaceParagraphEndIndentSize.includeInLayout = true;
+					replaceParagraphEndIndentSize.visible = true;																																						
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paragraphSpaceBeforePropertyName)
+				{
+					replaceParagraphSpaceBeforeSize.includeInLayout = true;
+					replaceParagraphSpaceBeforeSize.visible = true;																																						
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textAlignPropertyName)
+				{
+					replaceTextAlignPropertyCombo.includeInLayout = true;
+					replaceTextAlignPropertyCombo.visible = true;																																						
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textAlignLastPropertyName)
+				{
+					replaceTextAlignLastPropertyCombo.includeInLayout = true;
+					replaceTextAlignLastPropertyCombo.visible = true;																																						
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textIndentPropertyName)
+				{
+					replaceTextIndentSize.includeInLayout = true;
+					replaceTextIndentSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == textJustifyPropertyName)
+				{				
+					replaceTextJustifyCombo.includeInLayout = true;
+					replaceTextJustifyCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == blockProgressionPropertyName)
+				{				
+					replaceBlockProgressionCombo.includeInLayout = true;
+					replaceBlockProgressionCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == columnGapPropertyName)
+				{
+					replaceColumnGapSize.includeInLayout = true;
+					replaceColumnGapSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == lineBreakPropertyName)
+				{
+					replaceLineBreakCombo.includeInLayout = true;
+					replaceLineBreakCombo.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paddingBottomPropertyName)
+				{
+					replacePaddingBottomSize.includeInLayout = true;
+					replacePaddingBottomSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paddingLeftPropertyName)
+				{
+					replacePaddingLeftSize.includeInLayout = true;
+					replacePaddingLeftSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paddingRightPropertyName)
+				{				
+					replacePaddingRightSize.includeInLayout = true;
+					replacePaddingRightSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == paddingTopPropertyName)
+				{				
+					replacePaddingTopSize.includeInLayout = true;
+					replacePaddingTopSize.visible = true;
+				} else if (propertyArray[replacePropertyCombo.selectedIndex].data == verticalAlignPropertyName)
+				{
+					replaceVerticalAlignCombo.includeInLayout = true;
+					replaceVerticalAlignCombo.visible = true;
+				}
+			}
+			
+			private var myMatcher:TextAndFormatMatcher = new TextAndFormatMatcher();
+			private var myReplacer:TextAndFormatReplacer = new TextAndFormatReplacer();	
+			
+			private function performFind():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager)
+				{
+					var myEditManager:ISelectionManager = _activeFlow.interactionManager;
+					_searchManager.findNext();
+					myEditManager.setFocus();
+				}
+			}
+			
+			private function performReplace():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager && (_activeFlow.interactionManager is IEditManager))
+				{
+					var myEditManager:IEditManager = _activeFlow.interactionManager as IEditManager;
+					_searchManager.replace();
+					myEditManager.setFocus();
+				}
+			}
+			
+			private function performReplaceAndFind():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager && (_activeFlow.interactionManager is IEditManager))
+				{
+					var myEditManager:IEditManager = _activeFlow.interactionManager as IEditManager;
+					_searchManager.replaceAndFindNext();
+					myEditManager.setFocus();
+				}				
+			}			
+			
+			private function performReplaceAll():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager && (_activeFlow.interactionManager is IEditManager))
+				{
+					var myEditManager:IEditManager = _activeFlow.interactionManager as IEditManager;
+					_searchManager.replace(true);
+					myEditManager.setFocus();
+				}								 
+			}
+			
+			public function get activeFlow():TextFlow
+			{
+				return _activeFlow;
+			}
+			
+			public function set activeFlow(tFlow:TextFlow):void
+			{
+				_activeFlow = tFlow;
+				if (_activeFlow)
+					_searchManager = new SearchManager(_activeFlow);
+				else
+					_searchManager = null;
+			}
+			
+			public function updateMatcher():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager)
+				{
+					var myEditManager:ISelectionManager = _activeFlow.interactionManager;
+					
+					myMatcher = new TextAndFormatMatcher(textSearchCharacteristics, findCharAttrs, findParaAttrs, findContainerAttrs, rangeCharAttrs, rangeParaAttrs, rangeContainerAttrs);  					
+					_searchManager.matcher = myMatcher;
+				}				
+			}
+			
+			public function updateReplacer():void
+			{
+				if (_activeFlow && _activeFlow.interactionManager)
+				{
+					var myEditManager:ISelectionManager = _activeFlow.interactionManager;
+					myReplacer = new TextAndFormatReplacer(replaceTextStr, replaceCharAttrs, replaceParaAttrs, replaceContainerAttrs);					  																					
+					_searchManager.replacer = myReplacer;
+				}							
+			}
+						
+			public function handleFindText():void
+			{
+				textSearchCharacteristics = null;
+				if (findTextInput.text != "")
+				{
+					textSearchCharacteristics = new TextSearchCharacteristics(findTextInput.text, wholeWords.selected, caseSensitive.selected);
+				}
+				updateMatcher();
+			}
+			
+			public function handleReplaceText():void
+			{
+				replaceTextStr = null;
+				if (replaceTextInput.text != "")
+				{
+					replaceTextStr = replaceTextInput.text;
+				}
+				updateReplacer();
+			}
+			
+			public function handleFindCharAttrString(s:String):void
+			{
+				if (s != "")
+					findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = s;
+				else
+					findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleReplaceCharAttrString(s:String):void
+			{
+				if (s != "")
+					replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+				else
+					replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();
+			}
+			
+			public function handleFindCharAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleRangeCharAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						rangeCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						rangeCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					rangeCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}			
+			
+			public function handleReplaceCharAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))					
+						replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+					else
+						replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+					
+				}
+				else
+					replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();
+			}
+			
+			public function handleFindParaAttrString(s:String):void
+			{
+				if (s != "")
+					findParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = s;
+				else
+					findParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleReplaceParaAttrString(s:String):void
+			{
+				if (s != "")
+					replaceParaAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+				else
+					replaceParaAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();
+			}
+			
+			public function handleFindParaAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						findParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						findParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					findParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleRangeParaAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						rangeParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						rangeParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					rangeParaAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}			
+			
+			public function handleReplaceParaAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))					
+						replaceParaAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+					else
+						replaceParaAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				}
+				else
+					replaceParaAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();
+			}
+			
+			public function handleFindContainerAttrString(s:String):void
+			{
+				if (s != "")
+					findContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = s;
+				else
+					findContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleReplaceContainerAttrString(s:String):void
+			{
+				if (s != "")
+					replaceContainerAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+				else
+					replaceContainerAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();
+			}
+			
+			public function handleFindContainerAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						findContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						findContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					findContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleRangeContainerAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))
+						rangeContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = myNumber;
+					else
+						rangeContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;					
+				}
+				else
+					rangeContainerAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}			
+			
+			public function handleReplaceContainerAttrNumber(s:String):void
+			{
+				if (s != "")
+				{
+					var myNumber:Number = new Number(s);
+					if (!isNaN(myNumber))					
+						replaceContainerAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = s;
+					else
+						replaceContainerAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+					
+				}
+				else
+					replaceContainerAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}									
+			
+			public function handleFindColor():void
+			{
+				if (colorFind.selected)
+				{
+					findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = colorPicker.selectedColor;
+				}
+				else
+					findCharAttrs[propertyArray[propertyCombo.selectedIndex].data] = null;
+				updateMatcher();
+			}
+			
+			public function handleReplaceColor():void
+			{
+				if (replaceColorFind.selected)
+					replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = replaceColorPicker.selectedColor;
+				else
+					replaceCharAttrs[propertyArray[replacePropertyCombo.selectedIndex].data] = null;
+				updateReplacer();																				
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:Button label="Reset" click="resetValues();" />
+	<mx:Label id="findLabel" text="Find:" fontWeight="bold"/>	
+	<mx:ComboBox id="propertyCombo" width="150" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{propertyArray}"
+		focusOut="changeFindType()"
+		close="changeFindType();"
+		change="changeFindType();"
+		keyFocusChange="changeFindType();"
+		enter="changeFindType();"/>	
+
+	<mx:TextInput id="findTextInput" width="100"
+		focusOut="handleFindText()"
+		keyFocusChange="handleFindText();"
+		enter="handleFindText();"/>	
+	
+	<mx:CheckBox id = "caseSensitive" label="Case"
+		click="handleFindText();"/>
+		
+	<mx:CheckBox id = "wholeWords" label="Whole"
+		click="handleFindText();"/>
+		
+	<mx:TextInput id="fontName" width="100"
+		focusOut="handleFindCharAttrString(String(fontName.text))"
+		keyFocusChange="handleFindCharAttrString(String(fontName.text));"
+		enter="handleFindCharAttrString(String(fontName.text));"/>
+		
+	<mx:Label id="lowerFontSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerFontSize" width="50"
+		focusOut="handleFindCharAttrNumber(String(lowerFontSize.text))"
+		keyFocusChange="handleFindCharAttrNumber(String(lowerFontSize.text));"
+		enter="handleFindCharAttrNumber(String(lowerFontSize.text));"/>
+	<mx:Label id="upperFontSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperFontSize" width="50"
+		focusOut="handleRangeCharAttrNumber(String(upperFontSize.text))"
+		keyFocusChange="handleRangeCharAttrNumber(String(upperFontSize.text));"
+		enter="handleRangeCharAttrNumber(String(upperFontSize.text));"/>
+		
+	<mx:ComboBox id="alignBaselineCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{alignmentBaselinePropertyArray}"
+		focusOut="handleFindCharAttrString(String(alignmentBaselinePropertyArray[alignBaselineCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(alignmentBaselinePropertyArray[alignBaselineCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(alignmentBaselinePropertyArray[alignBaselineCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(alignmentBaselinePropertyArray[alignBaselineCombo.selectedIndex].data));"/>
+		
+	<mx:Label id="lowerAlphaSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerAlphaSize" width="50"
+		focusOut="handleFindCharAttrNumber(String(lowerAlphaSize.text))"
+		keyFocusChange="handleFindCharAttrNumber(String(lowerAlphaSize.text));"
+		enter="handleFindCharAttrNumber(String(lowerAlphaSize.text));"/>
+	<mx:Label id="upperAlphaSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperAlphaSize" width="50"
+		focusOut="handleRangeCharAttrNumber(String(upperAlphaSize.text))"
+		keyFocusChange="handleRangeCharAttrNumber(String(upperAlphaSize.text));"
+		enter="handleRangeCharAttrNumber(String(upperAlphaSize.text));"/>
+	<mx:ComboBox id="breakOpportunityCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{breakOpportunityPropertyArray}"
+		focusOut="handleFindCharAttrString(String(breakOpportunityPropertyArray[breakOpportunityCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(breakOpportunityPropertyArray[breakOpportunityCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(breakOpportunityPropertyArray[breakOpportunityCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(breakOpportunityPropertyArray[breakOpportunityCombo.selectedIndex].data));"/>
+	<mx:ComboBox id="cffHintingCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{cffHintingPropertyArray}"
+		focusOut="handleFindCharAttrString(String(cffHintingPropertyArray[cffHintingCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(cffHintingPropertyArray[cffHintingCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(cffHintingPropertyArray[cffHintingCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(cffHintingPropertyArray[cffHintingCombo.selectedIndex].data));"/>
+		
+	<mx:CheckBox id = "colorFind" label="Use Color"
+		click="handleFindColor();"/>
+		
+	<mx:ColorPicker id="colorPicker" width="22" height="22"
+		close="handleFindColor();"/>
+		
+	<mx:ComboBox id="digitCaseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{digitCasePropertyArray}"
+		focusOut="handleFindCharAttrString(String(digitCasePropertyArray[digitCaseCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(digitCasePropertyArray[digitCaseCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(digitCasePropertyArray[digitCaseCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(digitCasePropertyArray[digitCaseCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="digitWidthCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{digitWidthPropertyArray}"
+		focusOut="handleFindCharAttrString(String(digitWidthPropertyArray[digitWidthCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(digitWidthPropertyArray[digitWidthCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(digitWidthPropertyArray[digitWidthCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(digitWidthPropertyArray[digitWidthCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="dominantBaselineCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{dominantBaselinePropertyArray}"
+		focusOut="handleFindCharAttrString(String(dominantBaselinePropertyArray[dominantBaselineCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(dominantBaselinePropertyArray[dominantBaselineCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(dominantBaselinePropertyArray[dominantBaselineCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(dominantBaselinePropertyArray[dominantBaselineCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="fontLookupCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontLookupPropertyArray}"
+		focusOut="handleFindCharAttrString(String(fontLookupPropertyArray[fontLookupCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(fontLookupPropertyArray[fontLookupCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(fontLookupPropertyArray[fontLookupCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(fontLookupPropertyArray[fontLookupCombo.selectedIndex].data));"/>						
+
+	<mx:ComboBox id="fontStyleCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontStylePropertyArray}"
+		focusOut="handleFindCharAttrString(String(fontStylePropertyArray[fontStyleCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(fontStylePropertyArray[fontStyleCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(fontStylePropertyArray[fontStyleCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(fontStylePropertyArray[fontStyleCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="fontWeightCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontWeightPropertyArray}"
+		focusOut="handleFindCharAttrString(String(fontWeightPropertyArray[fontWeightCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(fontWeightPropertyArray[fontWeightCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(fontWeightPropertyArray[fontWeightCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(fontWeightPropertyArray[fontWeightCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="kerningCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{kerningPropertyArray}"
+		focusOut="handleFindCharAttrString(String(kerningPropertyArray[kerningCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(kerningPropertyArray[kerningCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(kerningPropertyArray[kerningCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(kerningPropertyArray[kerningCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="ligatureLevelCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{ligatureLevelPropertyArray}"
+		focusOut="handleFindCharAttrString(String(ligatureLevelPropertyArray[ligatureLevelCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(ligatureLevelPropertyArray[ligatureLevelCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(ligatureLevelPropertyArray[ligatureLevelCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(ligatureLevelPropertyArray[ligatureLevelCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="lineThroughCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{lineThroughPropertyArray}"
+		focusOut="handleFindCharAttrString(String(lineThroughPropertyArray[lineThroughCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(lineThroughPropertyArray[lineThroughCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(lineThroughPropertyArray[lineThroughCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(lineThroughPropertyArray[lineThroughCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="locale" width="50"
+		focusOut="handleFindCharAttrString(String(locale.text))"
+		keyFocusChange="handleFindCharAttrString(String(locale.text));"
+		enter="handleFindCharAttrString(String(locale.text));"/>
+		
+	<mx:ComboBox id="renderingModeCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{renderingModePropertyArray}"
+		focusOut="handleFindCharAttrString(String(renderingModePropertyArray[renderingModeCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(renderingModePropertyArray[renderingModeCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(renderingModePropertyArray[renderingModeCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(renderingModePropertyArray[renderingModeCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="textDecorationCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textDecorationPropertyArray}"
+		focusOut="handleFindCharAttrString(String(textDecorationPropertyArray[textDecorationCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(textDecorationPropertyArray[textDecorationCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(textDecorationPropertyArray[textDecorationCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(textDecorationPropertyArray[textDecorationCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="textRotationCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textRotationPropertyArray}"
+		focusOut="handleFindCharAttrString(String(textRotationPropertyArray[textRotationCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(textRotationPropertyArray[textRotationCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(textRotationPropertyArray[textRotationCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(textRotationPropertyArray[textRotationCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																		
+
+	<mx:ComboBox id="typographicCaseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{typographicCasePropertyArray}"
+		focusOut="handleFindCharAttrString(String(typographicCasePropertyArray[typographicCaseCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(typographicCasePropertyArray[typographicCaseCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(typographicCasePropertyArray[typographicCaseCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(typographicCasePropertyArray[typographicCaseCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="whiteSpaceCollapseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{whiteSpaceCollapsePropertyArray}"
+		focusOut="handleFindCharAttrString(String(whiteSpaceCollapsePropertyArray[whiteSpaceCollapseCombo.selectedIndex].data));"
+		close="handleFindCharAttrString(String(whiteSpaceCollapsePropertyArray[whiteSpaceCollapseCombo.selectedIndex].data));"
+		keyFocusChange="handleFindCharAttrString(String(whiteSpaceCollapsePropertyArray[whiteSpaceCollapseCombo.selectedIndex].data));"
+		enter="handleFindCharAttrString(String(whiteSpaceCollapsePropertyArray[whiteSpaceCollapseCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="directionPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{directionPropertyArray}"
+		focusOut="handleFindParaAttrString(String(directionPropertyArray[directionPropertyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(directionPropertyArray[directionPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(directionPropertyArray[directionPropertyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(directionPropertyArray[directionPropertyCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
+
+	<mx:ComboBox id="justificationStylePropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{justificationStylePropertyArray}"
+		focusOut="handleFindParaAttrString(String(justificationStylePropertyArray[justificationStylePropertyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(justificationStylePropertyArray[justificationStylePropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(justificationStylePropertyArray[justificationStylePropertyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(justificationStylePropertyArray[justificationStylePropertyCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																												
+
+	<mx:ComboBox id="leadingModelPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{leadingModelPropertyArray}"
+		focusOut="handleFindParaAttrString(String(leadingModelPropertyArray[leadingModelPropertyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(leadingModelPropertyArray[leadingModelPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(leadingModelPropertyArray[leadingModelPropertyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(leadingModelPropertyArray[leadingModelPropertyCombo.selectedIndex].data));"/>
+		
+	<mx:Label id="lowerParagraphSpaceAfterSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerParagraphSpaceAfterSize" width="50"
+		focusOut="handleFindParaAttrNumber(String(lowerParagraphSpaceAfterSize.text))"
+		keyFocusChange="handleFindParaAttrNumber(String(lowerParagraphSpaceAfterSize.text));"
+		enter="handleFindParaAttrNumber(String(lowerParagraphSpaceAfterSize.text));"/>
+	<mx:Label id="upperParagraphSpaceAfterSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperParagraphSpaceAfterSize" width="50"
+		focusOut="handleRangeParaAttrNumber(String(upperParagraphSpaceAfterSize.text))"
+		keyFocusChange="handleRangeParaAttrNumber(String(upperParagraphSpaceAfterSize.text));"
+		enter="handleRangeParaAttrNumber(String(upperParagraphSpaceAfterSize.text));"/>
+		
+	<mx:Label id="lowerParagraphStartIndentSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerParagraphStartIndentSize" width="50"
+		focusOut="handleFindParaAttrNumber(String(lowerParagraphStartIndentSize.text))"
+		keyFocusChange="handleFindParaAttrNumber(String(lowerParagraphStartIndentSize.text));"
+		enter="handleFindParaAttrNumber(String(lowerParagraphStartIndentSize.text));"/>
+	<mx:Label id="upperParagraphStartIndentSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperParagraphStartIndentSize" width="50"
+		focusOut="handleRangeParaAttrNumber(String(upperParagraphStartIndentSize.text))"
+		keyFocusChange="handleRangeParaAttrNumber(String(upperParagraphStartIndentSize.text));"
+		enter="handleRangeParaAttrNumber(String(upperParagraphStartIndentSize.text));"/>
+		
+	<mx:Label id="lowerParagraphEndIndentSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerParagraphEndIndentSize" width="50"
+		focusOut="handleFindParaAttrNumber(String(lowerParagraphEndIndentSize.text))"
+		keyFocusChange="handleFindParaAttrNumber(String(lowerParagraphEndIndentSize.text));"
+		enter="handleFindParaAttrNumber(String(lowerParagraphEndIndentSize.text));"/>
+	<mx:Label id="upperParagraphEndIndentSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperParagraphEndIndentSize" width="50"
+		focusOut="handleRangeParaAttrNumber(String(upperParagraphEndIndentSize.text))"
+		keyFocusChange="handleRangeParaAttrNumber(String(upperParagraphEndIndentSize.text));"
+		enter="handleRangeParaAttrNumber(String(upperParagraphEndIndentSize.text));"/>
+
+	<mx:Label id="lowerParagraphSpaceBeforeSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerParagraphSpaceBeforeSize" width="50"
+		focusOut="handleFindParaAttrNumber(String(lowerParagraphSpaceBeforeSize.text))"
+		keyFocusChange="handleFindParaAttrNumber(String(lowerParagraphSpaceBeforeSize.text));"
+		enter="handleFindParaAttrNumber(String(lowerParagraphSpaceBeforeSize.text));"/>
+	<mx:Label id="upperParagraphSpaceBeforeSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperParagraphSpaceBeforeSize" width="50"
+		focusOut="handleRangeParaAttrNumber(String(upperParagraphSpaceBeforeSize.text))"
+		keyFocusChange="handleRangeParaAttrNumber(String(upperParagraphSpaceBeforeSize.text));"
+		enter="handleRangeParaAttrNumber(String(upperParagraphSpaceBeforeSize.text));"/>
+		
+	<mx:ComboBox id="textAlignPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textAlignPropertyArray}"
+		focusOut="handleFindParaAttrString(String(textAlignPropertyArray[textAlignPropertyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(textAlignPropertyArray[textAlignPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(textAlignPropertyArray[textAlignPropertyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(textAlignPropertyArray[textAlignPropertyCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="textAlignLastPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textAlignLastPropertyArray}"
+		focusOut="handleFindParaAttrString(String(textAlignLastPropertyArray[textAlignLastPropertyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(textAlignLastPropertyArray[textAlignLastPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(textAlignLastPropertyArray[textAlignLastPropertyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(textAlignLastPropertyArray[textAlignLastPropertyCombo.selectedIndex].data));"/>
+		
+	<mx:Label id="lowerTextIndentSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerTextIndentSize" width="50"
+		focusOut="handleFindParaAttrNumber(String(lowerTextIndentSize.text))"
+		keyFocusChange="handleFindParaAttrNumber(String(lowerTextIndentSize.text));"
+		enter="handleFindParaAttrNumber(String(lowerTextIndentSize.text));"/>
+	<mx:Label id="upperTextIndentSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperTextIndentSize" width="50"
+		focusOut="handleRangeParaAttrNumber(String(upperTextIndentSize.text))"
+		keyFocusChange="handleRangeParaAttrNumber(String(upperTextIndentSize.text));"
+		enter="handleRangeParaAttrNumber(String(upperTextIndentSize.text));"/>
+
+	<mx:ComboBox id="textJustifyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textJustifyPropertyArray}"
+		focusOut="handleFindParaAttrString(String(textJustifyPropertyArray[textJustifyCombo.selectedIndex].data));"
+		close="handleFindParaAttrString(String(textJustifyPropertyArray[textJustifyCombo.selectedIndex].data));"
+		keyFocusChange="handleFindParaAttrString(String(textJustifyPropertyArray[textJustifyCombo.selectedIndex].data));"
+		enter="handleFindParaAttrString(String(textJustifyPropertyArray[textJustifyCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="blockProgressionCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{blockProgressionPropertyArray}"
+		focusOut="handleFindContainerAttrString(String(blockProgressionPropertyArray[blockProgressionCombo.selectedIndex].data));"
+		close="handleFindContainerAttrString(String(blockProgressionPropertyArray[blockProgressionCombo.selectedIndex].data));"
+		keyFocusChange="handleFindContainerAttrString(String(blockProgressionPropertyArray[blockProgressionCombo.selectedIndex].data));"
+		enter="handleFindContainerAttrString(String(blockProgressionPropertyArray[blockProgressionCombo.selectedIndex].data));"/>
+		
+	<mx:Label id="lowerColumnGapSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerColumnGapSize" width="50"
+		focusOut="handleFindContainerAttrNumber(String(lowerColumnGapSize.text))"
+		keyFocusChange="handleFindContainerAttrNumber(String(lowerColumnGapSize.text));"
+		enter="handleFindContainerAttrNumber(String(lowerColumnGapSize.text));"/>
+	<mx:Label id="upperColumnGapSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperColumnGapSize" width="50"
+		focusOut="handleRangeContainerAttrNumber(String(upperColumnGapSize.text))"
+		keyFocusChange="handleRangeContainerAttrNumber(String(upperColumnGapSize.text));"
+		enter="handleRangeContainerAttrNumber(String(upperColumnGapSize.text));"/>
+
+	<mx:ComboBox id="lineBreakCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{lineBreakPropertyArray}"
+		focusOut="handleFindContainerAttrString(String(lineBreakPropertyArray[lineBreakCombo.selectedIndex].data));"
+		close="handleFindContainerAttrString(String(lineBreakPropertyArray[lineBreakCombo.selectedIndex].data));"
+		keyFocusChange="handleFindContainerAttrString(String(lineBreakPropertyArray[lineBreakCombo.selectedIndex].data));"
+		enter="handleFindContainerAttrString(String(lineBreakPropertyArray[lineBreakCombo.selectedIndex].data));"/>
+		
+	<mx:Label id="lowerPaddingBottomSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerPaddingBottomSize" width="50"
+		focusOut="handleFindContainerAttrNumber(String(lowerPaddingBottomSize.text))"
+		keyFocusChange="handleFindContainerAttrNumber(String(lowerPaddingBottomSize.text));"
+		enter="handleFindContainerAttrNumber(String(lowerPaddingBottomSize.text));"/>
+	<mx:Label id="upperPaddingBottomSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperPaddingBottomSize" width="50"
+		focusOut="handleRangeContainerAttrNumber(String(upperPaddingBottomSize.text))"
+		keyFocusChange="handleRangeContainerAttrNumber(String(upperPaddingBottomSize.text));"
+		enter="handleRangeContainerAttrNumber(String(upperPaddingBottomSize.text));"/>
+		
+	<mx:Label id="lowerPaddingLeftSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerPaddingLeftSize" width="50"
+		focusOut="handleFindContainerAttrNumber(String(lowerPaddingLeftSize.text))"
+		keyFocusChange="handleFindContainerAttrNumber(String(lowerPaddingLeftSize.text));"
+		enter="handleFindContainerAttrNumber(String(lowerPaddingLeftSize.text));"/>
+	<mx:Label id="upperPaddingLeftSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperPaddingLeftSize" width="50"
+		focusOut="handleRangeContainerAttrNumber(String(upperPaddingLeftSize.text))"
+		keyFocusChange="handleRangeContainerAttrNumber(String(upperPaddingLeftSize.text));"
+		enter="handleRangeContainerAttrNumber(String(upperPaddingLeftSize.text));"/>
+		
+	<mx:Label id="lowerPaddingRightSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerPaddingRightSize" width="50"
+		focusOut="handleFindContainerAttrNumber(String(lowerPaddingRightSize.text))"
+		keyFocusChange="handleFindContainerAttrNumber(String(lowerPaddingRightSize.text));"
+		enter="handleFindContainerAttrNumber(String(lowerPaddingRightSize.text));"/>
+	<mx:Label id="upperPaddingRightSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperPaddingRightSize" width="50"
+		focusOut="handleRangeContainerAttrNumber(String(upperPaddingRightSize.text))"
+		keyFocusChange="handleRangeContainerAttrNumber(String(upperPaddingRightSize.text));"
+		enter="handleRangeContainerAttrNumber(String(upperPaddingRightSize.text));"/>
+
+	<mx:Label id="lowerPaddingTopSizeLabel" text="LS:" fontWeight="bold"/>			
+	<mx:TextInput id="lowerPaddingTopSize" width="50"
+		focusOut="handleFindContainerAttrNumber(String(lowerPaddingTopSize.text))"
+		keyFocusChange="handleFindContainerAttrNumber(String(lowerPaddingTopSize.text));"
+		enter="handleFindContainerAttrNumber(String(lowerPaddingTopSize.text));"/>
+	<mx:Label id="upperPaddingTopSizeLabel" text="US:" fontWeight="bold"/>			
+	<mx:TextInput id="upperPaddingTopSize" width="50"
+		focusOut="handleRangeContainerAttrNumber(String(upperPaddingTopSize.text))"
+		keyFocusChange="handleRangeContainerAttrNumber(String(upperPaddingTopSize.text));"
+		enter="handleRangeContainerAttrNumber(String(upperPaddingTopSize.text));"/>
+
+	<mx:ComboBox id="verticalAlignCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{verticalAlignPropertyArray}"
+		focusOut="handleFindContainerAttrString(String(verticalAlignPropertyArray[verticalAlignCombo.selectedIndex].data));"
+		close="handleFindContainerAttrString(String(verticalAlignPropertyArray[verticalAlignCombo.selectedIndex].data));"
+		keyFocusChange="handleFindContainerAttrString(String(verticalAlignPropertyArray[verticalAlignCombo.selectedIndex].data));"
+		enter="handleFindContainerAttrString(String(verticalAlignPropertyArray[verticalAlignCombo.selectedIndex].data));"/>
+										
+	<mx:Button label="Find" click="performFind();" />
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													
+	<mx:Label id="replaceLabel" text="Replace:" fontWeight="bold"/>
+	<mx:ComboBox id="replacePropertyCombo" width="150" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{propertyArray}"
+		focusOut="changeReplaceType()"
+		change="changeReplaceType();"		
+		close="changeReplaceType();"
+		keyFocusChange="changeReplaceType();"
+		enter="changeReplaceType();"/>	
+		
+	<mx:TextInput id="replaceTextInput" width="100"
+		focusOut="handleReplaceText()"
+		keyFocusChange="handleReplaceText();"
+		enter="handleReplaceText();"/>
+		
+	<mx:TextInput id="replaceFontName" width="100"
+		focusOut="handleReplaceCharAttrString(String(replaceFontName.text))"
+		keyFocusChange="handleReplaceCharAttrString(String(replaceFontName.text));"
+		enter="handleReplaceCharAttrString(String(replaceFontName.text));"/>
+		
+	<mx:TextInput id="replaceFontSize" width="50"
+		focusOut="handleReplaceCharAttrNumber(String(replaceFontSize.text))"
+		keyFocusChange="handleReplaceCharAttrNumber(String(replaceFontSize.text));"
+		enter="handleReplaceCharAttrNumber(String(replaceFontSize.text));"/>
+		
+	<mx:ComboBox id="replaceAlignBaselineCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{alignmentBaselinePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(alignmentBaselinePropertyArray[replaceAlignBaselineCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(alignmentBaselinePropertyArray[replaceAlignBaselineCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(alignmentBaselinePropertyArray[replaceAlignBaselineCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(alignmentBaselinePropertyArray[replaceAlignBaselineCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replaceAlphaSize" width="50"
+		focusOut="handleReplaceCharAttrNumber(String(replaceAlphaSize.text))"
+		keyFocusChange="handleReplaceCharAttrNumber(String(replaceAlphaSize.text));"
+		enter="handleReplaceCharAttrNumber(String(replaceAlphaSize.text));"/>
+		
+	<mx:ComboBox id="replaceBreakOpportunityCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{breakOpportunityPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(breakOpportunityPropertyArray[replaceBreakOpportunityCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(breakOpportunityPropertyArray[replaceBreakOpportunityCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(breakOpportunityPropertyArray[replaceBreakOpportunityCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(breakOpportunityPropertyArray[replaceBreakOpportunityCombo.selectedIndex].data));"/>
+	<mx:ComboBox id="replaceCffHintingCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{cffHintingPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(cffHintingPropertyArray[replaceCffHintingCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(cffHintingPropertyArray[replaceCffHintingCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(cffHintingPropertyArray[replaceCffHintingCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(cffHintingPropertyArray[replaceCffHintingCombo.selectedIndex].data));"/>
+	<mx:CheckBox id = "replaceColorFind" label="Use Color"
+		click="handleReplaceColor();"/>		
+	<mx:ColorPicker id="replaceColorPicker" width="22" height="22"
+		close="handleReplaceColor();"/>
+		
+	<mx:ComboBox id="replaceDigitCaseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{digitCasePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(digitCasePropertyArray[replaceDigitCaseCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(digitCasePropertyArray[replaceDigitCaseCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(digitCasePropertyArray[replaceDigitCaseCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(digitCasePropertyArray[replaceDigitCaseCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="replaceDigitWidthCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{digitWidthPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(digitWidthPropertyArray[replaceDigitWidthCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(digitWidthPropertyArray[replaceDigitWidthCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(digitWidthPropertyArray[replaceDigitWidthCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(digitWidthPropertyArray[replaceDigitWidthCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceDominantBaselineCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{dominantBaselinePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(dominantBaselinePropertyArray[replaceDominantBaselineCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(dominantBaselinePropertyArray[replaceDominantBaselineCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(dominantBaselinePropertyArray[replaceDominantBaselineCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(dominantBaselinePropertyArray[replaceDominantBaselineCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceFontLookupCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontLookupPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(fontLookupPropertyArray[replaceFontLookupCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(fontLookupPropertyArray[replaceFontLookupCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(fontLookupPropertyArray[replaceFontLookupCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(fontLookupPropertyArray[replaceFontLookupCombo.selectedIndex].data));"/>						
+
+	<mx:ComboBox id="replaceFontStyleCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontStylePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(fontStylePropertyArray[replaceFontStyleCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(fontStylePropertyArray[replaceFontStyleCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(fontStylePropertyArray[replaceFontStyleCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(fontStylePropertyArray[replaceFontStyleCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceFontWeightCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{fontWeightPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(fontWeightPropertyArray[replaceFontWeightCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(fontWeightPropertyArray[replaceFontWeightCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(fontWeightPropertyArray[replaceFontWeightCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(fontWeightPropertyArray[replaceFontWeightCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceKerningCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{kerningPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(kerningPropertyArray[replaceKerningCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(kerningPropertyArray[replaceKerningCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(kerningPropertyArray[replaceKerningCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(kerningPropertyArray[replaceKerningCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceLigatureLevelCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{ligatureLevelPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(ligatureLevelPropertyArray[replaceLigatureLevelCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(ligatureLevelPropertyArray[replaceLigatureLevelCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(ligatureLevelPropertyArray[replaceLigatureLevelCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(ligatureLevelPropertyArray[replaceLigatureLevelCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceLineThroughCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{lineThroughPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(lineThroughPropertyArray[replaceLineThroughCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(lineThroughPropertyArray[replaceLineThroughCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(lineThroughPropertyArray[replaceLineThroughCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(lineThroughPropertyArray[replaceLineThroughCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replaceLocale" width="50"
+		focusOut="handleReplaceCharAttrString(String(replaceLocale.text))"
+		keyFocusChange="handleReplaceCharAttrString(String(replaceLocale.text));"
+		enter="handleReplaceCharAttrString(String(replaceLocale.text));"/>
+		
+	<mx:ComboBox id="replaceRenderingModeCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{renderingModePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(renderingModePropertyArray[replaceRenderingModeCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(renderingModePropertyArray[replaceRenderingModeCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(renderingModePropertyArray[replaceRenderingModeCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(renderingModePropertyArray[replaceRenderingModeCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="replaceTextDecorationCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textDecorationPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(textDecorationPropertyArray[replaceTextDecorationCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(textDecorationPropertyArray[replaceTextDecorationCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(textDecorationPropertyArray[replaceTextDecorationCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(textDecorationPropertyArray[replaceTextDecorationCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="replaceTextRotationCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textRotationPropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(textRotationPropertyArray[replaceTextRotationCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(textRotationPropertyArray[replaceTextRotationCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(textRotationPropertyArray[replaceTextRotationCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(textRotationPropertyArray[replaceTextRotationCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																		
+
+	<mx:ComboBox id="replaceTypographicCaseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{typographicCasePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(typographicCasePropertyArray[replaceTypographicCaseCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(typographicCasePropertyArray[replaceTypographicCaseCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(typographicCasePropertyArray[replaceTypographicCaseCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(typographicCasePropertyArray[replaceTypographicCaseCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceWhiteSpaceCollapseCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{whiteSpaceCollapsePropertyArray}"
+		focusOut="handleReplaceCharAttrString(String(whiteSpaceCollapsePropertyArray[replaceWhiteSpaceCollapseCombo.selectedIndex].data));"
+		close="handleReplaceCharAttrString(String(whiteSpaceCollapsePropertyArray[replaceWhiteSpaceCollapseCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceCharAttrString(String(whiteSpaceCollapsePropertyArray[replaceWhiteSpaceCollapseCombo.selectedIndex].data));"
+		enter="handleReplaceCharAttrString(String(whiteSpaceCollapsePropertyArray[replaceWhiteSpaceCollapseCombo.selectedIndex].data));"/>
+		
+	<mx:ComboBox id="replaceDirectionPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{directionPropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(directionPropertyArray[replaceDirectionPropertyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(directionPropertyArray[replaceDirectionPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(directionPropertyArray[replaceDirectionPropertyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(directionPropertyArray[replaceDirectionPropertyCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
+
+	<mx:ComboBox id="replaceJustificationStylePropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{justificationStylePropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(justificationStylePropertyArray[replaceJustificationStylePropertyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(justificationStylePropertyArray[replaceJustificationStylePropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(justificationStylePropertyArray[replaceJustificationStylePropertyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(justificationStylePropertyArray[replaceJustificationStylePropertyCombo.selectedIndex].data));"/>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
+
+	<mx:ComboBox id="replaceLeadingModelPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{leadingModelPropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(leadingModelPropertyArray[replaceLeadingModelPropertyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(leadingModelPropertyArray[replaceLeadingModelPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(leadingModelPropertyArray[replaceLeadingModelPropertyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(leadingModelPropertyArray[replaceLeadingModelPropertyCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replaceParagraphSpaceAfterSize" width="50"
+		focusOut="handleReplaceParaAttrNumber(String(replaceParagraphSpaceAfterSize.text))"
+		keyFocusChange="handleReplaceParaAttrNumber(String(replaceParagraphSpaceAfterSize.text));"
+		enter="handleReplaceParaAttrNumber(String(replaceParagraphSpaceAfterSize.text));"/>
+
+	<mx:TextInput id="replaceParagraphStartIndentSize" width="50"
+		focusOut="handleReplaceParaAttrNumber(String(replaceParagraphStartIndentSize.text))"
+		keyFocusChange="handleReplaceParaAttrNumber(String(replaceParagraphStartIndentSize.text));"
+		enter="handleReplaceParaAttrNumber(String(replaceParagraphStartIndentSize.text));"/>
+
+	<mx:TextInput id="replaceParagraphEndIndentSize" width="50"
+		focusOut="handleReplaceParaAttrNumber(String(replaceParagraphEndIndentSize.text))"
+		keyFocusChange="handleReplaceParaAttrNumber(String(replaceParagraphEndIndentSize.text));"
+		enter="handleReplaceParaAttrNumber(String(replaceParagraphEndIndentSize.text));"/>
+
+	<mx:TextInput id="replaceParagraphSpaceBeforeSize" width="50"
+		focusOut="handleReplaceParaAttrNumber(String(replaceParagraphSpaceBeforeSize.text))"
+		keyFocusChange="handleReplaceParaAttrNumber(String(replaceParagraphSpaceBeforeSize.text));"
+		enter="handleReplaceParaAttrNumber(String(replaceParagraphSpaceBeforeSize.text));"/>
+		
+	<mx:ComboBox id="replaceTextAlignPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textAlignPropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(textAlignPropertyArray[replaceTextAlignPropertyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(textAlignPropertyArray[replaceTextAlignPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(textAlignPropertyArray[replaceTextAlignPropertyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(textAlignPropertyArray[replaceTextAlignPropertyCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="replaceTextAlignLastPropertyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textAlignLastPropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(textAlignLastPropertyArray[replaceTextAlignLastPropertyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(textAlignLastPropertyArray[replaceTextAlignLastPropertyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(textAlignLastPropertyArray[replaceTextAlignLastPropertyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(textAlignLastPropertyArray[replaceTextAlignLastPropertyCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replaceTextIndentSize" width="50"
+		focusOut="handleReplaceParaAttrNumber(String(replaceTextIndentSize.text))"
+		keyFocusChange="handleReplaceParaAttrNumber(String(replaceTextIndentSize.text));"
+		enter="handleReplaceParaAttrNumber(String(replaceTextIndentSize.text));"/>
+		
+	<mx:ComboBox id="replaceTextJustifyCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{textJustifyPropertyArray}"
+		focusOut="handleReplaceParaAttrString(String(textJustifyPropertyArray[replaceTextJustifyCombo.selectedIndex].data));"
+		close="handleReplaceParaAttrString(String(textJustifyPropertyArray[replaceTextJustifyCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceParaAttrString(String(textJustifyPropertyArray[replaceTextJustifyCombo.selectedIndex].data));"
+		enter="handleReplaceParaAttrString(String(textJustifyPropertyArray[replaceTextJustifyCombo.selectedIndex].data));"/>
+
+	<mx:ComboBox id="replaceBlockProgressionCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{blockProgressionPropertyArray}"
+		focusOut="handleReplaceContainerAttrString(String(blockProgressionPropertyArray[replaceBlockProgressionCombo.selectedIndex].data));"
+		close="handleReplaceContainerAttrString(String(blockProgressionPropertyArray[replaceBlockProgressionCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceContainerAttrString(String(blockProgressionPropertyArray[replaceBlockProgressionCombo.selectedIndex].data));"
+		enter="handleReplaceContainerAttrString(String(blockProgressionPropertyArray[replaceBlockProgressionCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replaceColumnGapSize" width="50"
+		focusOut="handleReplaceContainerAttrNumber(String(replaceColumnGapSize.text))"
+		keyFocusChange="handleReplaceContainerAttrNumber(String(replaceColumnGapSize.text));"
+		enter="handleReplaceContainerAttrNumber(String(replaceColumnGapSize.text));"/>
+
+	<mx:ComboBox id="replaceLineBreakCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{lineBreakPropertyArray}"
+		focusOut="handleReplaceContainerAttrString(String(lineBreakPropertyArray[replaceLineBreakCombo.selectedIndex].data));"
+		close="handleReplaceContainerAttrString(String(lineBreakPropertyArray[replaceLineBreakCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceContainerAttrString(String(lineBreakPropertyArray[replaceLineBreakCombo.selectedIndex].data));"
+		enter="handleReplaceContainerAttrString(String(lineBreakPropertyArray[replaceLineBreakCombo.selectedIndex].data));"/>
+		
+	<mx:TextInput id="replacePaddingBottomSize" width="50"
+		focusOut="handleReplaceContainerAttrNumber(String(replacePaddingBottomSize.text))"
+		keyFocusChange="handleReplaceContainerAttrNumber(String(replacePaddingBottomSize.text));"
+		enter="handleReplaceContainerAttrNumber(String(replacePaddingBottomSize.text));"/>
+		
+	<mx:TextInput id="replacePaddingLeftSize" width="50"
+		focusOut="handleReplaceContainerAttrNumber(String(replacePaddingLeftSize.text))"
+		keyFocusChange="handleReplaceContainerAttrNumber(String(replacePaddingLeftSize.text));"
+		enter="handleReplaceContainerAttrNumber(String(replacePaddingLeftSize.text));"/>
+		
+	<mx:TextInput id="replacePaddingRightSize" width="50"
+		focusOut="handleReplaceContainerAttrNumber(String(replacePaddingRightSize.text))"
+		keyFocusChange="handleReplaceContainerAttrNumber(String(replacePaddingRightSize.text));"
+		enter="handleReplaceContainerAttrNumber(String(replacePaddingRightSize.text));"/>
+
+	<mx:TextInput id="replacePaddingTopSize" width="50"
+		focusOut="handleReplaceContainerAttrNumber(String(replacePaddingTopSize.text))"
+		keyFocusChange="handleReplaceContainerAttrNumber(String(replacePaddingTopSize.text));"
+		enter="handleReplaceContainerAttrNumber(String(replacePaddingTopSize.text));"/>
+		
+	<mx:ComboBox id="replaceVerticalAlignCombo" width="200" editable="false"
+		paddingLeft="2" selectedIndex="0"
+		dataProvider = "{verticalAlignPropertyArray}"
+		focusOut="handleReplaceContainerAttrString(String(verticalAlignPropertyArray[replaceVerticalAlignCombo.selectedIndex].data));"
+		close="handleReplaceContainerAttrString(String(verticalAlignPropertyArray[replaceVerticalAlignCombo.selectedIndex].data));"
+		keyFocusChange="handleReplaceContainerAttrString(String(verticalAlignPropertyArray[replaceVerticalAlignCombo.selectedIndex].data));"
+		enter="handleReplaceContainerAttrString(String(verticalAlignPropertyArray[replaceVerticalAlignCombo.selectedIndex].data));"/>
+		
+	<mx:Button label="Re" click="performReplace();" />
+	<mx:Button label="Re/Fd" click="performReplaceAndFind();" />
+	<mx:Button label="Re All" click="performReplaceAll();" />					
+						
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																									
+</mx:HBox>

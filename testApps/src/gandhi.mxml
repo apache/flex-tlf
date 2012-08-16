@@ -1,0 +1,122 @@
+﻿<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<s:Application name="gandhi"
+        xmlns="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:flow="library://ns.adobe.com/flashx/textLayout" 
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        viewSourceURL="srcview/index.html">
+
+  <Script><![CDATA[
+	import flashx.textLayout.events.FlowElementMouseEvent;   
+    import mx.controls.Alert;
+
+[Bindable]
+	private var boundText:String;
+	  
+	private const laf:Object = makeit();
+	private function makeit():Object
+	{ var rslt:Object = new Object(); rslt["color"] =  0xff00; return rslt; }
+
+     private function myEventHandler(evt:FlowElementMouseEvent):void {
+        Alert.show("This is a history of Gandhi");
+        evt.preventDefault();
+     }
+
+	public function updateText(): void
+	{
+		//box.width=20;
+		TestMe.text="Story of Gandhi";
+		TestMe.getTextFlow().flowComposer.updateAllControllers();
+		boundText = "This span is bound for glory";
+	}
+  ]]></Script>
+
+	<mx:VBox
+        	width="100%"
+            height="100%"
+           	paddingLeft="10"
+            paddingRight="10"
+            paddingTop="10"
+            paddingBottom="10">
+		<mx:Button label="Update" click="updateText()"/>
+		
+	<mx:Image source="@Embed(source='../../test/testFiles/assets/gandhi.jpg')" height="178" width="144"/>
+
+   <mx:HBox id="box"
+            width="100%"
+            height="100%"
+            paddingLeft="10"
+            paddingRight="10"
+            paddingTop="10"
+            paddingBottom="10">
+ 
+        <s:TextArea verticalScrollPolicy="off"
+                textAlign="justify"
+                width="30%"
+                height="100%">
+         <s:content>       
+         <s:div fontFamily="Minion Pro" fontSize="14" paddingLeft="10" paddingRight="10">
+				<s:linkNormalFormat>
+					<s:TextLayoutFormat color="0xff0000" fontSize="24"/>
+				</s:linkNormalFormat>
+				<s:linkActiveFormat>
+					<s:TextLayoutFormat color="0x00ff00" fontSize="48"/>
+				</s:linkActiveFormat>
+				<s:linkHoverFormat>
+					<s:TextLayoutFormat color="0x0000ff" fontSize="16"/>
+				</s:linkHoverFormat>
+			 <s:p><s:span>{boundText}</s:span> <s:a click="myEventHandler(event);"><s:span id="TestMe">This text should not appear after update</s:span></s:a></s:p>  
+			<s:p><s:a href="http://en.wikipedia.org/wiki/Gandhi" click="trace('activated');" linkActiveFormat="{laf}"><s:linkNormalFormat>
+				<Object color="0xff0000"/>
+			</s:linkNormalFormat><s:span>Mohandas Karamchand Gandhi (Gujarati: </s:span> </s:a><s:span fontFamily="Shruti">મોહનદાસ કરમચંદ ગાંધી, </s:span><s:span tracking="-1%">, October 2, 1869–January 30, 1948) was a major political and spiritual leader of India and the Indian independence movement. He was the pioneer of Satyagraha—resistance to tyranny through mass civil disobedience, firmly founded upon ahimsa or total non-violence—which led India to independence and inspired movements for civil rights and freedom across the world. Gandhi is commonly known in India and across the world as Mahatma Gandhi (Sanskrit:</s:span><s:span fontFamily="mangal">महात्मा </s:span><s:span>mahātmā — “Great Soul”) and as Bapu (Gujarati: </s:span><s:span fontFamily="Shruti">બાપુ </s:span><s:span>bāpu—“Father”). In India, he is officially accorded the honour of Father of the Nation and October 2, his birthday, is commemorated each year as Gandhi Jayanti, a national holiday. On 15 June 2007, the United Nations General Assembly unanimously adopted a resolution declaring October 2 to be the “International Day of Non-Violence.”</s:span></s:p>
+        </s:div>
+		</s:content>
+        </s:TextArea>
+ 
+        <s:TextArea  verticalScrollPolicy="off"
+                textAlign="justify"
+                width="30%"
+                height="100%">
+         <s:content>       
+	     <flow:div fontFamily="Adobe Hebrew" fontSize="14" textAlign="right" direction="rtl" paddingLeft="10" paddingRight="10" locale="he">
+											<flow:p><flow:span>מוהנדס קרמצ׳נד גאנדי</flow:span></flow:p>
+											<flow:p><flow:span>מוֹהַנְדַּס קַרַמְצַ׳נְד גַּאנְדִי (גוג׳ראטית: </flow:span><flow:span fontFamily="Shruti">મોહનદાસ કરમચંદ ગાંધી </flow:span><flow:span>נולד: 2 באוקטובר 1869, נרצח: 30 בינואר 1948) היה מנהיג, משפטן, הוגה וכתב פוליטי הודי, שנודע בזכות שיטות המאבק היחודיות במאבקו כנגד שלטון האימפריה הבריטית בארצו. גנדי נחשב לאבי האומה ההודית, ולסמל ההתנגדות הלא אלימה. הוא גם אחת הדמויות המוערכות ביותר מכל מנהיגי המאה ה-20.</flow:span></flow:p>
+											<flow:p><flow:span>גאנדי כונה בשם “מהטמה”, שפירושו בסנסקריט “הנפש הגדולה”. הוא ידוע בעולם בכינוי זה, כ״מהטמה גאנדי”.</flow:span></flow:p>
+											<flow:p><flow:span>ב-30 ינואר 1948, נרצח גנדי על ידי מתנקש הינדי , שהתנגד להסכמתו לשלם פיצויים, בסכומים ניכרים, לפקיסטאן, כפי שהבריטים המליצו, בטענה שהדבר יחליש את הההינדים. גופתו נשרפה ופוזרה בין נהרות העולם. במדינת קליפורניה נקבר חלק מהאפר והוקמה מצבה</flow:span></flow:p>
+	    </flow:div>
+ 		</s:content>
+        </s:TextArea>
+
+        <s:TextArea  verticalScrollPolicy="off"
+                textAlign="justify"
+                width="30%"
+                height="100%">
+         <s:content>       
+			<flow:div fontFamily="DTP Naskh OT" fontSize="14" textAlign="right" direction="rtl" paddingLeft="10" paddingRight="10">
+														<flow:p><flow:span>ماهاتما گاندی</flow:span></flow:p>
+				          <flow:p><flow:span>ماهاتما گاندیمهانداس کارامچاند گاندی (دوانگاری</flow:span><flow:span fontFamily="mangal">मोहनदास करमचन्द गांधी</flow:span><flow:span>گجراتی</flow:span><!--<flow:span font="mangal"> મોહનદાસ કરમચંદ ગાંધી</flow:span>--><flow:span>؛  رهبر سیاسی و معنوی هندی‌ها بود که ملت هند را در راه آزادی از استعمار امپراتوری بریتانیا رهبری کرد. در طول زندگیش استفاده از هر نوع ترور و خشونت برای رسیدن به مقاصد را رد می‌کرد. فلسفهٔ ضدخشونت گاندی که خود نام ساتیاگراها (در سانسکریت به معنای تلاش و کوشش برای رسیدن به حقیقت؛ تحت‌اللفظی: محکم گرفتن حقیقت) روی بسیاری از جنبش‌های مقاومت ضدخشونت در سراسر جهان و تا امروز تأثیر گذارده است.</flow:span></flow:p>
+				          <flow:p><flow:span>از زمانی که وی مسئولیت رهبری نبرد برای آزادی و کنگره ملی هند در سال(۱۲۹۶) را به عهده گرفت، به عنوان نمادی ملی شناخته شد و میلیون‌ها نفر از مردم او را با لقب ماهاتما یا روح بزرگ یاد می‌کردند. هر چند که او از القاب افتخارآمیز بیزار بود ولی امروز هم همگی او را با نام ماهاتما گاندی می‌شناسند. سوای اینکه بسیاری او را به عنوان یکی از بزرگ‌ترین رهبران تاریخ تلقی می‌کنند، مردم هند از او با عنوان «پدر ملت» یا باپو (در هندی به معنای پدر) یاد می‌کنند. زادروز وی در هند به عنوان یک روز تعطیل ملی است و گاندی جایانتی نام دارد.</flow:span></flow:p>
+				          <flow:p><flow:span>گاندی توانست با استفاده از شیوهٔ ضدخشونت نافرمانی مدنی استقلال هند را از بریتانیا بگیرد و در نهایت دست امپراتوری بریتانیا را از هند کوتاه کند. شیوهٔ مقاومت آرام وی به مستعمرات دیگر هم نفوذ کرده و آنها را در راه استقلال میهن خود تشویق می‌کرد. اصل ساتیاگراهای گاندی روی بسیاری از فعالان آزادیخواه نظیر دکتر مارتین لوترکینگ، دالایی لاما، لچ والسا، استفان بیکو، آنگ سان سو کی و نلسون ماندلا تأثیر گذاشت. البته همهٔ این رهبران نتوانستند کاملاً به اصل سخت ضدخشونت و ضدمقاومت وی وفادار بمانند.</flow:span></flow:p>
+				          <flow:p><flow:span>گاندی همیشه می‌گفت که اصول او ساده هستند و از باورهای سنتی هندو به نام‌های ساتیا</flow:span></flow:p>
+        	</flow:div>
+ 		</s:content>
+        </s:TextArea>
+    </mx:HBox>
+	</mx:VBox>
+
+</s:Application>

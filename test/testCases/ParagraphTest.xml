@@ -1,0 +1,41 @@
+<Tests>
+<TestCase functionName="alignLeftTest"/>
+<TestCase functionName="alignCenterTest"/>
+<TestCase functionName="alignRightTest"/>
+<TestCase functionName="alignAllRightTest"/>
+<TestCase functionName="alignStartTest"/>
+<TestCase functionName="alignEndTest"/>
+<TestCase functionName="alignJustifyAllTest"/>
+<TestCase functionName="alignJustifyAllButLastTest"/>
+<TestCase functionName="justifyWithLastLineStart"/>
+<TestCase functionName="justifyWithLastlineEnd"/>
+<TestCase functionName="justifyWithLastlineLeft"/>
+<TestCase functionName="justifyWithLastlineCenter"/>
+<TestCase functionName="justifyWithLastlineRight"/>
+<TestCase functionName="OnlyLastlineSet"/>
+<TestCase functionName="setIndentPositiveTest"/>
+<TestCase functionName="setIndentNegativeTest"/>
+<TestCase functionName="setLeftMarginPositiveTest"/>
+<TestCase functionName="setLeftMarginNegativeTest"/>
+<TestCase functionName="setRightMarginPositiveTest"/>
+<TestCase functionName="setRightMarginNegativeTest"/>
+<TestCase functionName="setSpaceBeforePositiveTest"/>
+<TestCase functionName="setSpaceBeforeNegativeTest"/>
+<TestCase functionName="joinParagraphsTest"/>
+<TestCase functionName="paragraphAttributeRetentionTest"/>
+<TestCase functionName="paragraphAttributeRemovalTest"/>
+<TestCase functionName="autoLeadingTest"/>
+<TestCase functionName="characterAttributeRetentionTest"/>
+<TestCase functionName="justifyInterWordTest"/>
+<TestCase functionName="justifyDistributeTest"/>
+<TestCase functionName="justifyLetterSpacingFirstLine"/>
+<TestCase functionName="justifyLetterSpacingLastLineJustify"/>
+<TestCase functionName="justifyLetterSpacingLastLineNoJustify"/>
+<TestCase functionName="tabStopsStringFormTest"/>
+<TestCase functionName="backgroundcolorchangeTest">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="FinalEmptyParaTest">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+</Tests>

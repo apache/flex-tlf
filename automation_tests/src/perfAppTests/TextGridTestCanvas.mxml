@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas xmlns="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 width="1024" height="768" frameRate="200" 
+    		 styleName="plain" backgroundColor="0xEEEEEE"
+    		 enterFrame="enterFrameHandler()">
+    
+	<Script><![CDATA[
+            
+	    import flash.text.engine.ElementFormat;
+	    import flash.text.engine.FontDescription;
+	    import flash.text.engine.LineJustification;
+	    import flash.text.engine.SpaceJustifier;
+	    import flash.text.engine.TextBlock;
+	    import flash.text.engine.TextElement;
+	    import flash.text.engine.TextLine;
+	    import flash.text.engine.TextLineValidity;
+	    import flash.geom.Rectangle;
+	    import flash.utils.getQualifiedClassName;
+	    
+	    import flashx.textLayout.TextLayoutVersion;
+	    import flashx.textLayout.compose.FlowComposerBase;
+	    import flashx.textLayout.container.ContainerController;
+	    import flashx.textLayout.container.ScrollPolicy;
+	    import flashx.textLayout.container.TextContainerManager;
+	    import flashx.textLayout.conversion.TextConverter;
+	    import flashx.textLayout.debug.assert;
+	    import flashx.textLayout.elements.Configuration;
+	    import flashx.textLayout.elements.ParagraphElement;
+	    import flashx.textLayout.elements.SpanElement;
+	    import flashx.textLayout.elements.TextFlow;
+	    import flashx.textLayout.formats.BlockProgression;
+	    import flashx.textLayout.formats.TextLayoutFormat;
+	    import flashx.textLayout.tlf_internal;
+	   
+	    import mx.collections.ArrayCollection;
+	    //import mx.components.TextBox2;
+	  //  import mx.controls.Label;
+	    import mx.controls.Text;
+	    import mx.core.UIComponent;
+	    import mx.core.UITextField;
+	//    import mx.core.UIFTETextField;
+	  //  import spark.components.Label;
+	    import spark.components.RichText;
+	    import spark.components.RichEditableText;
+
+		use namespace tlf_internal;
+
+        static private const testTypeArray:ArrayCollection = new ArrayCollection( 
+        [
+            { label: "Shape",			buildFunc: "buildShape",			refreshFunc: "refreshShape", 			state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "Sprite",			buildFunc: "buildSprite",			refreshFunc: "refreshSprite",			state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "UIComponent",		buildFunc: "buildUIComponent",		refreshFunc: "refreshUIComponent",		state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "TextField",		buildFunc: "buildTextField", 		refreshFunc: "refreshTextField",		state: "ui_component" },
+            { label: "FTE",				buildFunc: "buildFTEField", 		refreshFunc: "refreshFTEField",			state: "ui_component" },
+            { label: "UITextField",		buildFunc: "buildUITextField", 		refreshFunc: "refreshUITextField",		state: "ui_component" },
+            { label: "TextFlow",		buildFunc: "buildTextFlow",		refreshFunc: "refreshTextFlow",	state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "TextContainerManager",	buildFunc: "buildInputManager",		refreshFunc: "refreshInputManager",	state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "mx.controls.Label",			buildFunc: "buildLabel",			refreshFunc: "refreshLabel",			state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "Text",			buildFunc: "buildText",				refreshFunc: "refreshText",				state: "ui_component" },                                                                                                                                                                                                                           
+            { label: "Label",			buildFunc: "buildSimpleText",			refreshFunc: "refreshSimpleText",			state: "group" },                                                                                                                                                                                                                          
+            { label: "RichText",		buildFunc: "buildRichText",		refreshFunc: "refreshRichText",		state: "group" },                                                                                                                                                                                                                          
+            { label: "RichEditableText",		buildFunc: "buildRichEditableText",			refreshFunc: "refreshRichEditableText",			state: "group" }                                                                                                                                                                                                                         
+            //{ label: "TextBox2",		buildFunc: "buildTextBox2",			refreshFunc: "refreshTextBox2",			state: "ui_component" },                                                                                                                                                                                                                            
+        ]);
+        
+        static private const grays:Array =
+        [
+        	0x333333, 0x444444, 0x555555, 0x666666, 0x777777,
+        	0x888888, 0x999999, 0xAAAAAA, 0xBBBBBB, 0xCCCCCC
+        ];
+
+		static private var defaultTextLayoutFormat:TextLayoutFormat;
+        static private var defaultTextFormat:TextFormat;
+                
+        static private var templateTextElement:TextElement;
+        static private var templateTextBlock:TextBlock;
+        
+        public var initialTotalMemory:Number;
+        
+        // data for the current run
+        private var cellHolder:Object;
+        private var sampleText:String = "";
+        private var buildFunc:Function;
+        private var refreshFunc:Function;
+        private var numberOfIterations:int = 0;
+        
+        private var dataLengthVal:Number;
+        
+        private var minWidthVal:Number;
+        private var maxWidthVal:Number;
+        private var widthStepVal:Number;
+        
+        private var currIteration:int = -1;
+        private var currWidthVal:Number;
+        
+        private var beginThisRender:int;
+        private var timingRendering:Boolean = false;
+        
+        // timers
+        private var beginTestTime:int;
+        public var totalCreationTime:int;
+        public var totalRenderTime:int;
+        
+        private var cols:int = 15;
+        private var rows:int = 45;
+        
+        private var testType:String = "";
+        
+        private var desiredColSize:Number;
+        
+        private var resultText:Text;
+        
+        public function runCreateTest():void
+        {
+            testType = "create";
+            cols = 15;
+            rows = 45;
+            sampleText = "";
+            totalCreationTime = 0;
+            totalRenderTime = 0;
+            numberOfIterations = int(iterationsInput.text);
+            
+            initNewTest()
+            
+            createTest.enabled = false;  
+            updateTest.enabled = false; 
+                
+            currIteration = 0;
+        }
+  
+        public function runUpdateTest():void
+        {
+            testType = "update";
+            cols = 15;
+            rows = 45;
+            totalCreationTime = 0;
+            totalRenderTime = 0;
+            numberOfIterations = int(iterationsInput.text);
+            
+            initNewTest();
+            
+            createTest.enabled = false;  
+            updateTest.enabled = false; 
+                
+            currIteration = 0;
+            createGrid();
+        }
+        
+        private function sizingDemo():void
+        {
+            cols = 13;
+            initNewTest(); 
+            desiredColSize = cellHolder.width / cols;
+            slider.value = Number(desiredColSize);    
+            slider.visible = true;
+            sampleText = 'word1 word2'; 
+            createGrid();
+        }
+  
+        private function initNewTest():void
+        {
+            // clear the previous run
+            if (resultText)
+            {
+                if (cellHolder is Group)
+                	cellHolder.removeElement(resultText);
+                else
+                	cellHolder.removeChild(resultText);
+                resultText = null;
+            }
+            
+            // Zap previous cells.
+            removeAll();
+            
+            var test:Object = testTypeArray[testTypeCombo.selectedIndex];
+            buildFunc = this[test.buildFunc];
+            refreshFunc = this[test.refreshFunc];
+            
+            if (cellHolder)
+            	cellHolder.visible = false;
+            cellHolder = test.state == "ui_component" ? cellHolder0 : cellHolder1;
+            cellHolder.visible = true;
+            
+            slider.visible = false;
+        }
+        
+        private function removeAll():void
+        {
+            if (!cellHolder)
+            	return;
+                        
+            var n:int;
+            if (cellHolder is Group)
+            {
+            	n = cellHolder.numElements;
+            	while (n--)
+            	{
+            		cellHolder.removeElementAt(0);
+            	}
+            }
+            else
+            {
+	            n = cellHolder.numChildren;
+	            while (n--)
+	            {
+	                cellHolder.removeChildAt(0);
+	            }
+            }
+        }
+        
+        private function Step():void
+        {
+            if (testType == "create")
+            {
+                removeAll();
+                var t1:Number = getTimer();
+                createGrid();
+                totalCreationTime = totalCreationTime + (getTimer() - t1);
+            } 
+            else if (testType == "update")
+            {
+                t1 = getTimer();
+                sampleText = "update_" + currIteration;
+                refreshGrid();
+                totalCreationTime = totalCreationTime + (getTimer() - t1);
+            }
+        }
+        
+        private function refreshGrid():void
+        {
+            var test:Object = testTypeArray[testTypeCombo.selectedIndex];
+            buildFunc = this[test.buildFunc];
+            refreshFunc = this[test.refreshFunc];
+
+            if (cellHolder)
+            	cellHolder.visible = false;
+            cellHolder = test.state == "ui_component" ? cellHolder0 : cellHolder1;
+            cellHolder.visible = true;
+            
+            updateGrid();  
+        }
+
+        // FTE factory
+        
+        private function buildFTEField(text:String, width:Number, height:Number, holder:Sprite=null):DisplayObject
+        {
+            if (!templateTextElement)
+            {
+                var elementFormat:ElementFormat = new ElementFormat();
+                var fontDescription:FontDescription = new FontDescription();
+                fontDescription.fontName = "Verdana";
+                elementFormat.fontSize = 10;
+                elementFormat.fontDescription = fontDescription;
+                templateTextElement = new TextElement();
+                templateTextElement.elementFormat = elementFormat;
+                templateTextBlock = new TextBlock(templateTextElement); 
+                templateTextBlock.textJustifier = new SpaceJustifier("en", LineJustification.UNJUSTIFIED, false);         
+            }
+            
+            if (text)
+                templateTextElement.text = text;
+            
+            var rslt:Sprite = holder ? holder : new Sprite();
+            
+            var textLine:TextLine = null;
+            while (textLine = templateTextBlock.createTextLine(textLine, width, 0, true))
+            {
+                textLine.x = 2;
+                textLine.y = 2 + textLine.ascent;
+                rslt.addChild(textLine);
+            }       
+            
+            var n:int = rslt.numChildren;
+            for (var i:int = 0; i < n; i++)
+            {
+                TextLine(rslt.getChildAt(i)).validity = TextLineValidity.STATIC;
+            }
+
+            return rslt;    
+        }
+        
+        private function refreshFTEField(a:Sprite, text:String, width:Number, height:Number):DisplayObject
+        {
+            var n:int = a.numChildren;
+            while (n--)
+            {
+                a.removeChildAt(0);
+           	}
+            
+            return buildFTEField(text, width, height, a);
+        }
+        
+        // Shape factory 
+        
+        private function buildShape(text:String, width:Number, height:Number):Shape
+        {
+            var a:Shape = new Shape();
+            var g:Graphics = a.graphics;
+            g.lineStyle(0);
+            g.beginFill(0xCCCCCC); 
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        private function refreshShape(a:Shape, text:String, width:Number, height:Number):Shape
+        {
+            var g:Graphics = a.graphics;
+            g.clear();
+            g.lineStyle(0);
+            g.beginFill(grays[int(grays.length * Math.random())]); 
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        // Sprite factory 
+        
+        private function buildSprite(text:String, width:Number, height:Number):Sprite
+        {
+            var a:Sprite = new Sprite();
+            var g:Graphics = a.graphics;
+            g.lineStyle(0);
+            g.beginFill(0xCCCCCC); 
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        private function refreshSprite(a:Sprite, text:String, width:Number, height:Number):Sprite
+        {
+            var g:Graphics = a.graphics;
+            g.clear();
+            g.lineStyle(0);
+            g.beginFill(grays[int(grays.length * Math.random())]);  
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        // TextField factory
+        
+        private function buildTextField(text:String, width:Number, hieght:Number):TextField
+        {
+            if (!defaultTextFormat)
+            {
+                defaultTextFormat = new TextFormat();
+                defaultTextFormat.font = "Verdana";
+                defaultTextFormat.size = 10;
+            }
+            
+            var a:TextField = new TextField();
+            a.defaultTextFormat = defaultTextFormat;
+            a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        private function refreshTextField(a:TextField, text:String, width:Number, height:Number):TextField
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // UITextField Factory 
+        
+        private function buildUITextField(text:String, width:Number, hieght:Number):UITextField
+        {
+            if (!defaultTextFormat)
+            {
+                defaultTextFormat = new TextFormat();
+                defaultTextFormat.font = "Verdana";
+                defaultTextFormat.size = 10;
+            }
+            
+            var a:UITextField = new UITextField();
+            a.defaultTextFormat = defaultTextFormat;
+            a.text = text;
+            a.width = width;
+            a.height = height;            
+            return a;
+        }
+        
+        private function refreshUITextField(a:UITextField, text:String, width:Number, height:Number):UITextField
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+
+         // TextContainerManager factory 
+        
+        private function buildTextFlow(text:String, width:Number, height:Number):TextFlowTestSprite
+        {
+            if (!defaultTextLayoutFormat)
+            {
+                defaultTextLayoutFormat = new TextLayoutFormat();
+                defaultTextLayoutFormat.fontFamily = "Verdana";
+                defaultTextLayoutFormat.fontSize = 10;
+            }
+            
+            var textFlow:TextFlow = new TextFlow();
+            var para:ParagraphElement = new ParagraphElement();
+            var span:SpanElement = new SpanElement();
+            textFlow.addChild(para);
+            para.addChild(span);
+            span.text = text;
+            
+            var s:TextFlowTestSprite = new TextFlowTestSprite(textFlow);
+            textFlow.flowComposer.addController(new ContainerController(s,width,height));
+            
+            textFlow.hostFormat = defaultTextLayoutFormat;
+            textFlow.flowComposer.updateAllControllers();
+            return s;
+        }
+        
+        private function refreshTextFlow(a:TextFlowTestSprite, text:String, width:Number, height:Number):TextFlowTestSprite 
+        {
+        	var tf:TextFlow = a.textFlow;
+            if (text)
+                SpanElement(tf.getFirstLeaf()).text = text;
+            tf.flowComposer.getControllerAt(0).setCompositionSize(width,height);
+            tf.flowComposer.updateAllControllers();
+            return a;
+        }
+        
+        // TextContainerManager factory 
+        
+        private function buildInputManager(text:String, width:Number, height:Number):InputManagerTestSprite
+        {
+            if (!defaultTextLayoutFormat)
+            {
+                defaultTextLayoutFormat = new TextLayoutFormat();
+                defaultTextLayoutFormat.fontFamily = "Verdana";
+                defaultTextLayoutFormat.fontSize = 10;
+            }
+            
+            var s:InputManagerTestSprite = new InputManagerTestSprite();
+            var a:TextContainerManager = new TextContainerManager(s);
+            s.inputManager = a;
+            
+            a.hostFormat = defaultTextLayoutFormat;
+            a.setText(text);
+            a.compositionWidth = width;
+            a.compositionHeight = height;
+            a.updateContainer();
+            return s;
+        }
+        
+        private function refreshInputManager(a:InputManagerTestSprite, text:String, width:Number, height:Number):InputManagerTestSprite 
+        {
+        	var im:TextContainerManager = a.inputManager;
+            if (text)
+                im.setText(text);
+            im.compositionWidth = width;
+            im.compositionHeight = height;
+            im.updateContainer();
+            return a;
+        }
+               
+        // UIComponent factory 
+        
+        private function buildUIComponent(text:String, width:Number, height:Number):UIComponent
+        {
+            var a:UIComponent = new UIComponent();
+            var g:Graphics = a.graphics;
+            g.lineStyle(0);
+            g.beginFill(0xCCCCCC); 
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        private function refreshUIComponent(a:UIComponent, text:String, width:Number, height:Number):UIComponent
+        {
+            var g:Graphics = a.graphics;
+            g.clear();
+            g.lineStyle(0);
+            g.beginFill(grays[int(grays.length * Math.random())]);  
+            g.drawRect(1, 1, width - 2, height - 2);
+            g.endFill();
+            return a;
+        }
+        
+        // Label Factory 
+        
+        private function buildLabel(text:String, width:Number, height:Number):mx.controls.Label
+        {
+            var a:Label = new Label();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+            a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        private function refreshLabel(a:Label, text:String, width:Number, height:Number):mx.controls.Label
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // Text factory 
+        
+        private function buildText(text:String, width:Number, height:Number):Text
+        {
+            var a:Text = new Text();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+            a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        private function refreshText(a:Text, text:String, width:Number, height:Number):Text
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // SimpleText factory
+        
+        private function buildSimpleText(text:String, width:Number, height:Number):spark.components.Label
+        {
+        	var a:spark.components.Label = new spark.components.Label();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+        	a.text = text;
+        	a.width = width;
+        	a.height = height;
+           	return a;
+        }
+        
+        private function refreshSimpleText(a:spark.components.Label, text:String, width:Number, height:Number):spark.components.Label
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // RichText factory
+        
+        private function buildRichText(text:String, width:Number, height:Number):RichText
+        {
+        	var a:RichText = new RichText();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+        	a.text = text;
+        	a.width = width;
+        	a.height = height;
+           	return a;
+        }
+        
+        private function refreshRichText(a:RichText, text:String, width:Number, height:Number):RichText
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // RichEditableText factory
+        
+        private function buildRichEditableText(text:String, width:Number, height:Number):RichEditableText
+        {
+        	var a:RichEditableText = new RichEditableText();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+        	a.text = text;
+        	a.width = width;
+        	a.height = height;
+           	return a;
+        }
+        
+        private function refreshRichEditableText(a:RichEditableText, text:String, width:Number, height:Number):RichEditableText
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        // TextBox2 factory
+        
+        /*
+        
+        private function buildTextBox2(text:String, width:Number, height:Number):TextBox2
+        {
+        	var a:TextBox2 = new TextBox2();
+        	a.setStyle("fontFamily", "Verdana");
+        	a.setStyle("fontSize", 10);
+        	a.text = text;
+        	a.width = width;
+        	a.height = 16;
+          	return a;
+        }
+        
+        private function refreshTextBox2(a:TextBox2, text:String, width:Number, height:Number):TextBox2
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.height = height;
+            return a;
+        }
+        
+        */
+        
+        // count of number of tests run this session
+        private var testCount:int = 0;
+        private var queueResults:Boolean = false;
+        
+        /** generate a report at the next enter frame */
+        private function enterFrameHandler(): void
+        {
+            if (currIteration == -1)
+                return;
+                
+            if (timingRendering)
+            {
+                totalRenderTime += getTimer() - beginThisRender;
+                timingRendering = false;
+            }
+            
+            // report results if appropriate
+            if (currIteration < numberOfIterations)
+            {
+                Step();
+                
+                // prepare for the next iteration
+                currIteration++;
+                    
+                // begin timing rendering
+                timingRendering = true;
+                beginThisRender = getTimer();
+            }
+            else
+            { 
+                try {
+                     new LocalConnection().connect('dummy');
+                     new LocalConnection().connect('dummy');
+                } catch (e:*) {}
+
+
+                queueResults = true;
+                createTest.enabled = true;  
+                updateTest.enabled = true;  
+                currIteration = -1;
+            }
+            
+            if (queueResults)
+            {
+                reportResults();
+                queueResults = false;
+            }
+        }
+      
+        // Grid generator.
+        private function createGrid():void
+        {
+            var t1:Number = getTimer();
+            
+            cellHolder.validateNow();
+            var cellWidth:Number = cellHolder.width / cols;
+            var cellHeight:Number = cellHolder.height / rows;
+                                    
+            var curY:Number = 0;
+            for (var r:int = 0; r < rows; r++)
+            {
+                var curX:Number = 0;
+                for (var c:int = 0; c < cols; c++)
+                {
+                    var st:String = sampleText != "" ? sampleText : "Cell " + (c+1) + "," + (r+1);
+                    var cell:Object = buildFunc(st, cellWidth, cellHeight);
+                    if (cellHolder is Group)
+                    	cellHolder.addElementAt(cell, 0);
+                    else
+                    	cellHolder.addChildAt(cell, 0);
+                    cell.x = curX;
+                    cell.y = curY;
+                    curX += cellWidth;
+                }
+                curY += cellHeight;
+            }
+            
+            var t2:Number = getTimer() - t1;
+        }
+        
+        // Grid Updater
+        private function updateGrid():void
+        {
+            cellHolder.validateNow();
+            var cellWidth:Number = cellHolder.width / cols;
+            var cellHeight:Number = cellHolder.height / rows;
+
+            var n:Number = cellHolder.numChildren;
+            for (var i:int = 0; i < n; i++)
+            {
+                var cell:Object = cellHolder is Group ?
+                				  cellHolder.getElementAt(i) :
+                				  cellHolder.getChildAt(i);
+                				  
+                cell = refreshFunc(cell, sampleText, cellWidth, cellHeight);
+            }
+        }
+        
+        // Column Resizer
+        private function resizeColumn():void
+        {
+            /*
+            var secondaryColSize:int = (cellHolder.width - desiredColSize) / (cols-1);
+            var delta:Number = cellHolder.width - ((secondaryColSize * (cols - 1)) + desiredColSize);
+            var isFTE:Boolean = testTypeCombo.selectedLabel == "FTE";
+            
+            var count:Number = cellHolder.numElements;
+            var curColumn:int = 0;
+            var curX:int = 0;
+            var curY:int = 0;
+            var maxHeight:int = 0;
+            for (var i:int=0; i < count; i++)
+            {
+                var cellWidth:Number = (curColumn == 0) ? desiredColSize + delta : secondaryColSize;
+                var cell:IVisualElement = cellHolder.getElementAt(i);
+                cell = refreshFunc(cell, null, cellWidth);
+                curColumn = curColumn + 1;
+                cell.x = curX;
+                cell.y = curY;
+                curX += cellWidth;
+                maxHeight = maxHeight < cell.height ? cell.height : maxHeight;
+                if (curColumn == cols)
+                {
+                    curColumn = 0;
+                    curX = 0;
+                    curY += isFTE ? maxHeight + 7: maxHeight;
+                    maxHeight = 0;
+                }
+            }
+            */
+        }
+        
+        private function sliderChange():void
+        {
+            desiredColSize = slider.value;
+            resizeColumn();
+        }
+        
+        private function reportResults():void
+        {
+            var totalTestTime:int = totalRenderTime + totalCreationTime;
+			flash.system.System.gc();	//mark
+			flash.system.System.gc();	//sweep
+            var memoryAllocated:Number = (System.totalMemory - initialTotalMemory) / 1024;
+                
+            var vellumType:String = "Vellum Build: " + TextLayoutVersion.BUILD_NUMBER + "\n";
+            
+            // var recreateResults:String = "CreateTextLine: " + FlowComposerBase.numCreateTextLine + " RecreateTextLine: " + FlowComposerBase.numRecreateTextLine + "\n";
+
+            resultText = new Text();
+            resultText.text = "CreationTime (msecs): " + totalCreationTime.toString() + "\nRenderTime (msec): " + totalRenderTime.toString() + "\nTotalTime (msec): " + totalTestTime.toString() 
+                  + " \nmem (K): " + memoryAllocated.toString() + "\n" + vellumType; //  + recreateResults;
+            resultText.x = 0; 
+            resultText.y = 0;
+            resultText.width = 400;
+            resultText.height = 200;
+            resultText.setStyle("fontFamily", "Verdana");
+            resultText.setStyle("fontSize", 18);
+            resultText.opaqueBackground = 0xFFFFFFFF;
+            if (cellHolder is Group)
+            	cellHolder.addElement(resultText); 
+            else
+            	cellHolder.addChild(resultText);   
+            this.dispatchEvent(new Event(Event.COMPLETE));
+        }
+                
+       ]]>
+    </Script>
+
+    <mx:HBox width="100%" height="48" paddingLeft="4" paddingTop="4">
+        <mx:Label text="TextGridTest" fontWeight="bold"/>
+        <mx:ComboBox id="testTypeCombo" editable="false" closeDuration="0" openDuration="0" selectionDuration="0" rowCount="20"
+                  paddingLeft="4" paddingTop="4" selectedIndex="0"
+                  dataProvider="{testTypeArray}"/>
+        <mx:Label text="Iterations:" fontWeight="bold"/>
+        <mx:TextInput id="iterationsInput" text="100" width="40"/>
+        <mx:Button id="createTest" label="Run Create Test" click="runCreateTest()"/>
+        <mx:Button id="updateTest" label="Run Update Test" click="runUpdateTest()"/>
+        <!-- <Button id="sizeTest" label="Live Size" click="sizingDemo();"/> -->
+        <mx:HSlider id="slider" width="200" maximum="500" minimum="55" liveDragging="true" change="sliderChange();" visible="false"/>
+    </mx:HBox>
+    <mx:UIComponent id="cellHolder0" y="48" width="100%" height="100%"/>
+    <s:Group id="cellHolder1" y="48" width="100%" height="100%"/>
+   
+</mx:Canvas>

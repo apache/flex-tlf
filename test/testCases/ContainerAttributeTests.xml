@@ -1,0 +1,320 @@
+<Tests>
+<!-- <TestCase functionName="checkColumnCountOnWidthChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase> -->
+<!-- <TestCase functionName="checkColumnCountOnGapChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase> -->
+<TestCase functionName="checkColumnWidthOnGapChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="checkColumnWidthOnCountChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="checkColumnGapOnWidthChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="checkColumnGapOnCountChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="topPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="bottomPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="leftPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="rightPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<TestCase functionName="writingModeBreakTest"> 
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+</TestCase>
+<!-- <TestCase functionName="checkColumnCountOnWidthChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase> -->
+<!-- <TestCase functionName="checkColumnCountOnGapChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase> -->
+<TestCase functionName="checkColumnWidthOnGapChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="checkColumnWidthOnCountChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="checkColumnGapOnWidthChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase> 
+<TestCase functionName="checkColumnGapOnCountChangeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase> 
+<TestCase functionName="checkfirstBaselineOffset">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="topPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="bottomPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="leftPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="rightPaddingSqueezeTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="writingModeBreakTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignJustifyTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignJustifyTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignTopTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">true</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignTopTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignBottomTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignBottomTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignMiddleTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignMiddleTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignJustifyTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignJustifyTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignTopTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">true</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignTopTest">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignBottomTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignBottomTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignMiddleTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="checkVerticalAlignMiddleTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="insertPos0CheckColumnWidthTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="insertPos0CheckColumnWidthTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkColumnCountEmptyFlowInsertTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="checkColumnCountEmptyFlowInsertTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="insertAtEndOfFlowCheckColumnGapTest">
+	<TestData name="testContainer">false</TestData>
+	<TestData name="minimal">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="insertAtEndOfFlowCheckColumnGapTest">
+	<TestData name="testContainer">true</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnBreakTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="containerBreakTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnContainerBreakTest0">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnContainerBreakTest1000">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnContainerBreakTest2000">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnContainerBreakTest3000">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="columnContainerBreakTest4000">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="ContentBoundsWithWhitespaces">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+<TestCase functionName="TextSelectAllTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+<TestCase functionName="ContentBoundsWithPaddingTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+<TestCase functionName="colorPropetyTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+<TestCase functionName="HBeamCursorTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="paddingBottomTest">
+	<TestData name="bitmapSnapshot">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+<TestCase functionName="scrollRectTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="rl_ltr">true</TestData>
+	<TestData name="tb_rtl">true</TestData>
+</TestCase>
+</Tests>

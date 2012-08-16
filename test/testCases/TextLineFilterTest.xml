@@ -1,0 +1,44 @@
+<Tests>
+	<TestCase functionName="textlineAndSelectionFilterTest">
+		<TestData name="bitmapSnapshot">true</TestData>
+	</TestCase>
+	<TestCase functionName="textlinesFilterTest">
+		<TestData name="bitmapSnapshot">true</TestData>
+	</TestCase>
+	<TestCase functionName="selectionFilterTest">
+		<TestData name="bitmapSnapshot">true</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByFlowComposer">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByFlowFactory">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByStringFactory">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByCustomLineCreatorTextFlow">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByTCM">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByCustomLineCreatorFlowFactory">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByCustomLineCreatorStringFactory">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineByCustomLineCreatorTCM">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="recycleLineInSuite">
+		<TestData name="10,0">false</TestData>
+	</TestCase>
+	<TestCase functionName="stringFactoryBackgroundColor">
+		<TestData name="bitmapSnapshot">true</TestData>
+	</TestCase>
+	<TestCase functionName="embeddedInlineGraphics">
+		<TestData name="bitmapSnapshot">true</TestData>
+	</TestCase>
+</Tests>

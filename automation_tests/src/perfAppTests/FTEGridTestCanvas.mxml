@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas
+	width="1024" height="768"
+    enterFrame="handleEnterFrame()" 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:flow="library://ns.adobe.com/flashx/textLayout">
+    <mx:Script>
+        <![CDATA[
+            
+    import flash.geom.Rectangle;
+    import flash.text.engine.ElementFormat;
+    import flash.text.engine.FontDescription;
+    import flash.text.engine.LineJustification;
+    import flash.text.engine.SpaceJustifier;
+    import flash.text.engine.TextBlock;
+    import flash.text.engine.TextElement;
+    import flash.text.engine.TextLine;
+    import flash.text.engine.TextLineValidity;
+    import flash.utils.getQualifiedClassName;
+    
+    import flashx.textLayout.TextLayoutVersion;
+    import flashx.textLayout.container.ContainerController;
+    import flashx.textLayout.container.ScrollPolicy;
+    import flashx.textLayout.conversion.TextConverter;
+    import flashx.textLayout.debug.assert;
+    import flashx.textLayout.elements.Configuration;
+    import flashx.textLayout.elements.ParagraphElement;
+    import flashx.textLayout.elements.SpanElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.tlf_internal;
+    
+    import mx.collections.ArrayCollection;
+    import mx.controls.Text;
+
+	use namespace tlf_internal;
+        
+    private var resultText:Text;
+        
+        static private const testTypeArray:ArrayCollection = new ArrayCollection([
+            {label:"TextField",         data:"buildTextField", refreshData:"refreshTextField" },
+            {label:"FTE",               data:"buildFTEField" , refreshData:"refreshFTEField"},
+            {label:"Rectangles",        data:"buildRectangle" , refreshData:"refreshRectangle"}                                                                                                                                                                                                                            
+        ]);
+
+        // data for the current run
+        private var sampleText:String="";
+        private var _func:String;
+        private var _refreshFunc:String;
+        private var numberOfIterations:int = 0;
+        
+        private var dataLengthVal:Number;
+        
+        private var minWidthVal:Number;
+        private var maxWidthVal:Number;
+        private var widthStepVal:Number;
+        
+        private var currIteration:int = -1;
+        private var currWidthVal:Number;
+        
+        private var beginThisRender:int;
+        private var timingRendering:Boolean = false;
+        
+        // timers
+        private var beginTestTime:int;
+        public var totalCreationTime:int;
+        public var totalRenderTime:int;
+        
+        private var cols:int = 15;
+        
+        private var testType:String = "";
+        
+        private var desiredColSize:Number;
+        
+        public function runCreateTest():void
+        {
+            testType = "create";
+            cols = 15;
+            sampleText="";
+            totalCreationTime = 0;
+            totalRenderTime = 0;
+            numberOfIterations = int(iterationsInput.text);
+            
+            initNewTest()
+            
+            createTest.enabled = false;  
+            updateTest.enabled = false; 
+                
+            currIteration = 0;
+        }
+  
+        public function runUpdateTest():void
+        {
+            testType = "update";
+            cols = 15;
+            totalCreationTime = 0;
+            totalRenderTime = 0;
+            numberOfIterations = int(iterationsInput.text);
+            
+            initNewTest();
+            
+            createTest.enabled = false;  
+            updateTest.enabled = false; 
+                
+            currIteration = 0;
+            createGrid();
+        }
+        
+        public function sizingDemo():void
+        {
+            cols = 13;
+            initNewTest(); 
+            desiredColSize =  lineHolder.width / cols;
+            slider.value = Number(desiredColSize);    
+            slider.visible = true;
+            sampleText = 'word1 word2'; 
+            createGrid();
+        }
+  
+        private function initNewTest():void
+        {
+            // clear the previous run
+            if (resultText)
+            {
+                lineHolder.removeChild(resultText);
+                resultText = null;
+            }
+            
+            // Zap previous cells.
+            while (lineHolder.rawChildren.numChildren)
+            {
+                lineHolder.rawChildren.removeChildAt(0);
+            }
+            
+            _func = testTypeArray[testTypeCombo.selectedIndex].data;
+            _refreshFunc = testTypeArray[testTypeCombo.selectedIndex].refreshData;
+            
+            slider.visible = false;
+        }
+        
+        private function Step():void
+        {
+            if (testType == "create")
+            {
+                while (lineHolder.rawChildren.numChildren)
+                    lineHolder.rawChildren.removeChildAt(0);
+                
+                var t1:Number = getTimer();
+                createGrid();
+                totalCreationTime = totalCreationTime + (getTimer() - t1);
+            } 
+            else if (testType == "update")
+            {
+                t1 = getTimer();
+                sampleText = "update_" + currIteration;
+                refreshGrid();
+                totalCreationTime = totalCreationTime + (getTimer() - t1);
+            }
+        }
+        
+        private function refreshGrid():void
+        {
+            _func = testTypeArray[testTypeCombo.selectedIndex].data;
+            _refreshFunc = testTypeArray[testTypeCombo.selectedIndex].refreshData; 
+            updateGrid();  
+        }
+
+
+        // FTE factory 
+        static private var templateTextElement:TextElement = null;
+        static private var templateTextBlock:TextBlock = null;
+        public function buildFTEField(text:String, width:Number, holder:Sprite=null):DisplayObject
+        {
+            if (!templateTextElement)
+            {
+                var elementFormat:ElementFormat = new ElementFormat();
+                var fontDescription:FontDescription = new FontDescription();
+                fontDescription.fontName = "Verdana";
+                elementFormat.fontSize = 10;
+                elementFormat.fontDescription = fontDescription;
+                templateTextElement = new TextElement();
+                templateTextElement.elementFormat = elementFormat;
+                templateTextBlock = new TextBlock(templateTextElement); 
+                templateTextBlock.textJustifier = new SpaceJustifier("en",LineJustification.UNJUSTIFIED,false);         
+            }
+            
+            if (text)
+                templateTextElement.text = text;
+            
+            var rslt:Sprite = holder ? holder : new Sprite();
+            var textLine:TextLine = null;
+            var y:Number = 10.5;
+            
+            while (textLine = templateTextBlock.createTextLine(textLine,width,0,true))
+            {
+                textLine.x = 2;
+                textLine.y = y;
+                y += 12.2;
+                rslt.addChild(textLine);
+            }       
+            
+            for (var i:int = 0; i < rslt.numChildren; i++)
+                TextLine(rslt.getChildAt(i)).validity = TextLineValidity.STATIC;
+
+            return rslt;    
+        }
+        
+        public function refreshFTEField(a:Sprite, text:String, width:Number):DisplayObject
+        {
+            while (a.numChildren)
+                a.removeChildAt(0);
+            
+            return buildFTEField(text, width, a);
+        }
+        
+        // Rectangle Factory 
+        public function buildRectangle(text:String, width:Number):DisplayObject
+        {
+            var s:Shape = new Shape();
+            s.graphics.beginFill(0xcccccc); 
+            s.graphics.lineStyle(1, 0xFFFFFF);
+            s.graphics.drawRect(0,0,width,15);
+            s.graphics.endFill();
+            return s;
+        }
+        
+        public function refreshRectangle(a:DisplayObject, text:String, width:Number):DisplayObject
+        {
+            var s:Shape = a as Shape;
+            s.graphics.clear();
+            s.graphics.beginFill(0xcccccc); 
+            s.graphics.lineStyle(1, 0xFFFFFF);
+            s.graphics.drawRect(0,0,width,15);
+            s.graphics.endFill();
+            return s;
+        }
+        
+        // TextField Factory 
+        static private var defaultTextFormat:TextFormat;
+        
+        private var lastTextField:TextField;
+        public function buildTextField(text:String, width:Number):DisplayObject
+        {
+            if (!defaultTextFormat)
+            {
+                defaultTextFormat = new TextFormat();
+                defaultTextFormat.font = "Verdana";
+                defaultTextFormat.size = 10;
+            }
+            
+            var a:TextField = new TextField();
+            a.defaultTextFormat = defaultTextFormat;
+            a.text = text;
+            a.width = width;
+            a.autoSize = "left";
+            a.multiline = true;
+            a.wordWrap = true;
+            
+            lastTextField = a;
+            return a;
+        }
+        
+        public function refreshTextField(a:TextField, text:String, width:Number):DisplayObject
+        {
+            if (text)
+                a.text = text;
+            a.width = width;
+            a.autoSize = "left";
+            a.multiline = true;
+            a.wordWrap = true;
+            return a;
+        }
+        
+        // count of number of tests run this session
+        private var testCount:int = 0;
+        private var queueResults:Boolean = false;
+        
+        /** generate a report at the next enter frame */
+        public function handleEnterFrame(): void
+        {
+            if (currIteration == -1)
+                return;
+                
+            if (timingRendering)
+            {
+                totalRenderTime += getTimer() - beginThisRender;
+                timingRendering = false;
+            }
+            
+            // report results if appropriate
+            if (currIteration < numberOfIterations)
+            {
+                Step();
+                
+                // prepare for the next iteration
+                currIteration++;
+                    
+                // begin timing rendering
+                timingRendering = true;
+                beginThisRender = getTimer();
+            }
+            else
+            { 
+                try {
+                     new LocalConnection().connect('dummy');
+                     new LocalConnection().connect('dummy');
+                } catch (e:*) {}
+
+
+                queueResults = true;
+                createTest.enabled = true;  
+                updateTest.enabled = true;  
+                currIteration = -1;
+            }
+            
+            if (queueResults)
+            {
+                reportResults();
+                queueResults = false;
+            }
+        }
+      
+		public const gridDeltaY:Number = 9.75;
+        // Grid generator.
+        private function createGrid():void
+        {
+            var t1:Number = getTimer();
+            var cellWidth:Number = lineHolder.width / cols;
+            var curY:int = 0;
+            var cell:DisplayObject;
+            var rowCount:Number = 0;
+            
+            while (curY < lineHolder.height)
+            {
+                var curX:int = 0;
+                for (var c:int = 0; c < cols; c++)
+                {
+                    var st:String = sampleText != "" ? sampleText : "Cell " + int(c+1) + "," + int(rowCount+1);
+                    cell = this[_func](st, cellWidth);
+                    lineHolder.rawChildren.addChild(cell);
+                    cell.x = curX;
+                    cell.y = curY;
+                    curX += cellWidth;
+                }
+                rowCount = rowCount + 1;
+                curY += gridDeltaY;
+                
+                if ((curY + gridDeltaY) >= lineHolder.height)
+                    break;
+            }
+            
+            var t2:Number = getTimer() - t1;
+        }
+        
+        // Grid Updater
+        private function updateGrid():void
+        {
+            var count:Number = lineHolder.rawChildren.numChildren;
+            var cellWidth:Number = lineHolder.width / cols;
+            for (var i:int=0; i < count; i++)
+            {
+                var cell:DisplayObject = lineHolder.rawChildren.getChildAt(i);
+                cell = this[_refreshFunc](cell, sampleText, cellWidth);
+            }
+        }
+        
+        // Column Resizer
+        private function resizeColumn():void
+        {
+            var secondaryColSize:int = (lineHolder.width - desiredColSize) / (cols-1);
+            var delta:Number = lineHolder.width - ((secondaryColSize * (cols - 1)) + desiredColSize);
+            var isFTE:Boolean = testTypeCombo.selectedLabel == "FTE";
+            
+            var count:Number = lineHolder.rawChildren.numChildren;
+            var curColumn:int = 0;
+            var curX:int = 0;
+            var curY:int = 0;
+            var maxHeight:int = 0;
+            for (var i:int=0; i < count; i++)
+            {
+                var cellWidth:Number = (curColumn == 0) ? desiredColSize + delta : secondaryColSize;
+                var cell:DisplayObject = lineHolder.rawChildren.getChildAt(i);
+                cell = this[_refreshFunc](cell, null, cellWidth);
+                curColumn = curColumn + 1;
+                cell.x = curX;
+                cell.y = curY;
+                curX += cellWidth;
+                maxHeight = maxHeight < cell.height ? cell.height : maxHeight;
+                if (curColumn == cols)
+                {
+                    curColumn = 0;
+                    curX = 0;
+                    curY += isFTE ? maxHeight + 7: maxHeight;
+                    maxHeight = 0;
+                }
+            }
+        }
+        
+        private function sliderChange():void
+        {
+            desiredColSize = slider.value;
+            resizeColumn();
+        }
+        
+        private function reportResults():void
+        {
+            var totalTestTime:int = totalRenderTime + totalCreationTime;
+            flash.system.System.gc();	//mark
+			flash.system.System.gc();	//sweep
+            var memoryAllocated:Number = flash.system.System.totalMemory/1024;
+                
+            var vellumType:String = "Vellum Build: " + flashx.textLayout.TextLayoutVersion.BUILD_NUMBER + "\n";
+
+            resultText = new Text();
+            resultText.text = "CreationTime (msecs): " + totalCreationTime.toString() + "\nRenderTime (msec): " + totalRenderTime.toString() + "\nTotalTime (msec): " + totalTestTime.toString() 
+                  + " \nmem (K): " + memoryAllocated.toString() + "\n" + vellumType;
+            resultText.x = 80; 
+            resultText.y = 140;
+            resultText.width = 400;
+            resultText.setStyle("fontFamily", "Verdana");
+            resultText.setStyle("fontSize", 18);
+            resultText.opaqueBackground = 0xFFFFFFFF;
+            lineHolder.addChild(resultText);    
+            this.dispatchEvent(new Event(Event.COMPLETE));
+        }
+        
+       ]]>
+    </mx:Script>
+
+    <mx:VBox height="100%" width="100%">
+        <mx:HBox id="controlBox" paddingLeft="4" paddingTop="4">
+            <mx:Label text="FTEGridTest" fontWeight="bold"/>
+            <mx:ComboBox id="testTypeCombo" editable="false" closeDuration="0" openDuration="0" selectionDuration="0"
+                        paddingLeft="4" paddingTop="4" selectedIndex="0"
+                        dataProvider="{testTypeArray}"/>
+            <mx:Label text="Iterations:" fontWeight="bold"/>
+            <mx:TextInput id="iterationsInput" text="100" width="40"/>
+            <mx:Button id="createTest" label="Run Create Test" click="runCreateTest()"/>
+            <mx:Button id="updateTest" label="Run Update Test" click="runUpdateTest()"/>
+            <mx:Button id="sizeTest" label="Live Size" click="sizingDemo();"/>
+            <mx:HSlider id="slider" width="200" maximum="500" minimum="55" liveDragging="true" change="sliderChange();" visible="false"/>
+        </mx:HBox>
+        <mx:Canvas id="lineHolder" width="100%" height="100%" keyDown="trace('ddd');"/>
+    </mx:VBox>
+    
+</mx:Canvas>

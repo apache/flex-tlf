@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<TextFlow version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008" leadingModel="box" fontSize="14">
+	<p paragraphSpaceBefore="20">
+		<span>CSS Leading model. firstBaselineOffset is ignored; paragraphSpaceBefore of 20 on first para isn't.</span>
+	</p>
+	<p>
+		<span fontSize="36">fontSize 36 followed by...</span>
+	</p>
+	<p>
+		<span fontSize="10">fontSize 10</span>
+	</p>
+	<p>
+		<span>100px tall inline 400% line height (latter ignored)</span>
+		<img height="100" width="30" lineHeight="400%" source="../../test/testFiles/assets/surprised.png" float="none"/>
+	</p>
+	<p>
+		<span baselineShift="superscript">superscript </span>
+		<span baselineShift="0">and</span>
+		<span baselineShift="subscript">subscript</span>
+	</p>
+	<p>
+		<span>Baseline shifts of </span>
+		<span baselineShift="20">+20</span>
+		<span> and </span>
+		<span baselineShift="-20">-20</span>
+	</p>
+	<p>
+		<span fontSize="20">Align </span>
+		<span alignmentBaseline="ideographicTop" dominantBaseline="ideographicBottom">[dom:bottom, align:top]</span>
+		<span alignmentBaseline="ideographicBottom" dominantBaseline="ideographicTop">[dom:top, align:bottom]</span>
+	</p>
+	<p>
+		<span lineHeight="400%">400% lineHeight followed by a float on its own line</span>
+	</p>
+	<p>
+		<img height="auto" width="auto" source="../../test/testFiles/assets/surprised.png" float="left"/>
+	</p>
+	<list listStyleType="decimal" paddingLeft="0" listStylePosition="inside" tabStops="E20 S24">
+		<listMarkerFormat><ListMarkerFormat fontSize="36" lineHeight="200%" beforeContent="&#x9;" afterContent="&#x9;"/></listMarkerFormat>
+		<li>
+			<p>
+				<span>list item with fontSize 14, but list marker with fontSize 36</span>
+			</p>
+		</li>
+	</list>
+</TextFlow>

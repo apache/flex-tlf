@@ -1,0 +1,107 @@
+<Tests>
+<TestCase functionName="makeLTR_TCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="makeRTL_TCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="makeJ_TCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="headOfLineTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="endOfLineTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="linkCrossingTCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="linkInsideTCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="inlineInsideTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="paragraphCrossingTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="overwriteTextLeftOfTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="overwriteTextRightOfTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="overwriteFirstCharOfTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="overwriteLastCharOfTCYTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="makeAllIntoTCY">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcySplittingTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyMouseDownEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyMouseUpEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyMouseMoveEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyRollOverEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyRollOutEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyAllMouseEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="tcyMouseClickEventMirrorTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="addDivInTcyTest">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+
+<!-- <TestCase functionName="undoOverlappingTCYTest">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>-->
+</Tests>

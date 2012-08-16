@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+
+
+<s:Application 
+    xmlns="http://ns.adobe.com/mxml/2009"
+ 	xmlns:s="library://ns.adobe.com/flex/spark"
+ 	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:flow="library://ns.adobe.com/flashx/textLayout"
+	xmlns:textEditBar="textEditBar.*"
+	xmlns:txui="flashx.textLayout.ui.*"
+	xmlns:txrulers="flashx.textLayout.ui.rulers.*"
+	xmlns:txinsp="flashx.textLayout.ui.inspectors.*"
+	explicitMinWidth="300" 
+	explicitMinHeight="200"
+	creationComplete="handleCreationComplete()"
+	resize="handleResize()">
+	
+		
+    <Script><![CDATA[
+		import flashx.textLayout.TextLayoutVersion;
+		import flashx.textLayout.compose.StandardFlowComposer;
+		import flashx.textLayout.container.ContainerController;
+		import flashx.textLayout.debug.Debugging;
+		import flashx.textLayout.debug.assert;
+		import flashx.textLayout.edit.EditManager;
+		import flashx.textLayout.edit.EditingMode;
+		import flashx.textLayout.edit.ElementRange;
+		import flashx.textLayout.edit.ISelectionManager;
+		import flashx.textLayout.edit.SelectionFormat;
+		import flashx.textLayout.edit.SelectionManager;
+		import flashx.textLayout.edit.SelectionState;
+		import flashx.textLayout.elements.Configuration;
+		import flashx.textLayout.elements.FlowElement;
+		import flashx.textLayout.elements.FlowLeafElement;
+		import flashx.textLayout.elements.GlobalSettings;
+		import flashx.textLayout.elements.InlineGraphicElement;
+		import flashx.textLayout.elements.InlineGraphicElementStatus;
+		import flashx.textLayout.elements.TextFlow;
+		import flashx.textLayout.events.CompositionCompleteEvent;
+		import flashx.textLayout.events.DamageEvent;
+		import flashx.textLayout.events.SelectionEvent;
+		import flashx.textLayout.events.StatusChangeEvent;
+		import flashx.textLayout.events.UpdateCompleteEvent;
+		import flashx.textLayout.formats.BlockProgression;
+		import flashx.textLayout.formats.Float;
+		import flashx.textLayout.tlf_internal;
+		import flashx.textLayout.ui.inspectors.TextInspectorController;
+		import flashx.undo.IUndoManager;
+		import flashx.undo.UndoManager;
+		
+		import mx.controls.TextArea;
+		use namespace tlf_internal;
+		
+		import mx.containers.Panel;
+		import mx.core.UIComponent;
+		import mx.events.IndexChangedEvent;
+		import mx.events.ScrollEvent;
+		import mx.events.ScrollEventDetail;
+		import mx.events.ScrollEventDirection;
+		import mx.managers.CursorManager;
+		import textEditBar.MultiContainerChangeEvent;
+		import textEditBar.FeatureSetChangeEvent;
+		import textEditBar.GraphicChangeEvent;
+		import textEditBar.GraphicBar;
+		import textEditBar.LinkBar;
+		import textEditBar.LinkChangeEvent;
+		import textEditBar.MultiContainerBar;
+		import textEditBar.ScrollBar;
+		import textEditBar.SelectionColorPropsBar;
+		import textEditBar.StatusBar;
+		import textEditBar.StatusPopup;
+		import textEditBar.StyleBar;
+		import textEditBar.StyleChangeEvent;
+		import textEditBar.FileIOHelper;
+		
+		// import AND instantiate MarshallingSupport.  Enables being loaded as a sub-swf and loading a sub-swf with marshall plan features
+		import mx.managers.systemClasses.MarshallingSupport; MarshallingSupport;		
+		
+		private var containerShapeObj:Shape = new Shape();
+		private var doDrawContainerBounds:Boolean = false;
+		
+		private var resizeOK:Boolean;
+		public var activeFlow:TextFlow;
+
+
+		[Bindable]
+		public var buildLabel:String = "Build: " + TextLayoutVersion.BUILD_NUMBER;
+		
+		// undo/redo manager
+		private var undoManager:IUndoManager;
+		
+		private var bottomPanels:Array = [];		
+		
+		private function showCapabilities():void {
+            trace("avHardwareDisable: " + Capabilities.avHardwareDisable);
+            trace("hasAccessibility: " + Capabilities.hasAccessibility);
+            trace("hasAudio: " + Capabilities.hasAudio);
+            trace("hasAudioEncoder: " + Capabilities.hasAudioEncoder);
+            trace("hasEmbeddedVideo: " + Capabilities.hasEmbeddedVideo);
+            trace("hasMP3: " + Capabilities.hasMP3);
+            trace("hasPrinting: " + Capabilities.hasPrinting);
+            trace("hasScreenBroadcast: " + Capabilities.hasScreenBroadcast);
+            trace("hasScreenPlayback: " + Capabilities.hasScreenPlayback);
+            trace("hasStreamingAudio: " + Capabilities.hasStreamingAudio);
+            trace("hasVideoEncoder: " + Capabilities.hasVideoEncoder);
+            trace("isDebugger: " + Capabilities.isDebugger);
+            trace("language: " + Capabilities.language);
+            trace("localFileReadDisable: " + Capabilities.localFileReadDisable);
+            trace("manufacturer: " + Capabilities.manufacturer);
+            trace("os: " + Capabilities.os);
+            trace("pixelAspectRatio: " + Capabilities.pixelAspectRatio);
+            trace("playerType: " + Capabilities.playerType);
+            trace("screenColor: " + Capabilities.screenColor);
+            trace("screenDPI: " + Capabilities.screenDPI);
+            trace("screenResolutionX: " + Capabilities.screenResolutionX);
+            trace("screenResolutionY: " + Capabilities.screenResolutionY);
+            trace("serverString: " + Capabilities.serverString);
+            trace("version: " + Capabilities.version);
+        }
+
+ 	
+		public function handleCreationComplete(): void
+		{
+			CONFIG::debug { 
+				if (this.hasOwnProperty("debugWindow"))
+					Debugging.setTraceChanged(traceChanged); 
+			}
+			
+			GlobalSettings.enableDefaultTabStops = true;
+			
+			initializeConfiguration();
+			FileIOHelper.parentWindow = this;
+			FileIOHelper.changeContent = changeContent;
+			
+			// The next two will enable a dump of the flow hierarchy at various interesting times
+			// CONFIG::debug { Debugging.debugCheckTextFlow = true; }
+			// CONFIG::debug { Debugging.verbose = true; }
+			
+			CONFIG::debug { Debugging.generateDebugTrace = false; }
+			// turn on containerLineValidation
+			CONFIG::debug { Debugging.containerLineValidation = true; }
+			// turn on throw on assert 
+		//	CONFIG::debug { Debugging.throwOnAssert = true; }
+			            
+            textDataView.initDataGridView();
+  
+ // Commented out for now.  Prevents Context menu events from being sent to Vellum - HBS           
+//           	fscommand("trapallkeys", "true");		// insure that we get all keys, including control-arrow keys
+           			
+			// showCapabilities();
+			
+			resizeOK = true;
+			handleResize();
+ 			 			
+			// connect the editbar to the flow
+			statusBar.addEventListener("editingMode",myEditingModeChangeListener,false,0,true);
+			statusBar.addEventListener("targetElement",myTargetElementChangeListener,false,0,true);
+	 		scrollBar.addEventListener(ScrollEvent.SCROLL,myScrollListener,false,0,true);
+			multiContainerBar.addEventListener(MultiContainerChangeEvent.CONTAINER_PROPS_CHANGE, myTextFlowContainerPropsListener, false,0,true);
+			multiContainerBar.addEventListener(MultiContainerChangeEvent.CONTAINER_PROPS_CHANGE, drawContentBounds, false,0,true);
+			multiContainerBar.addEventListener(MultiContainerChangeEvent.CONTAINER_DRAW_BOUNDS_CHANGE, updateContentBoundsDrawing, false,0,true);
+			
+			TextInspectorController.Instance().addEventListener("measureWidthToggle",  measureWidthToggle);
+			TextInspectorController.Instance().addEventListener("measureHeightToggle", measureHeightToggle);
+			
+ 			// initialize with defaults
+ 			multiContainerBar.updateControllerProps(textPanel.numContainers,textPanel.arrangement, textPanel.visibleContainer);
+ 			
+ 			undoManager = new UndoManager();
+
+			// To test with no undo manager, set it to null here. Some things, like IME, go through a slightly different code path in this case.
+			//	undoManager = null;
+  			 			
+			hruler.creationComplete();
+ 			vruler.creationComplete();
+ 			
+ 			var numPanels:int = bottomTabs.numChildren;
+ 			for (var i:int = 0; i < numPanels; ++i)
+ 			{
+ 				var panel:Canvas = bottomTabs.getChildAt(i) as Canvas;
+ 				bottomPanels.push(panel.getChildAt(0));
+ 				if (i > 0)
+ 					panel.removeAllChildren();
+ 			}
+  			bottomTabs.addEventListener(IndexChangedEvent.CHANGE, onBottomTabChanged);
+  			
+  			this.addEventListener(Event.ACTIVATE, onFocus);  	
+  			
+  			// Load the initial displayed file
+			changeContent(new TextFlow());
+			callLater(doFocus);		// we have to call later because the container's stage must be non-null for it to work, and it won't get set until later
+		}
+		
+		private function measureWidthToggle(e:Event):void
+		{
+			textPanel.measureWidth = !textPanel.measureWidth;
+			textPanel.resizeContainers();
+		}
+		
+		private function measureHeightToggle(e:Event):void
+		{
+			textPanel.measureHeight = !textPanel.measureHeight;
+			textPanel.resizeContainers();
+		}
+ 		
+		private function doFocus():void
+		{
+			if (activeFlow)
+			{
+				var selMgr:ISelectionManager = activeFlow.interactionManager;
+				if (selMgr && textPanel.visible)
+					selMgr.setFocus();
+			}
+		}	
+		
+ 		private function initializeConfiguration():void
+ 		{
+ 			var config:Configuration = TextFlow.defaultConfiguration;
+			config.unfocusedSelectionFormat = new SelectionFormat(0xffffff, 1.0, BlendMode.DIFFERENCE, 0xffffff, 1.0, BlendMode.DIFFERENCE, 0);
+			config.inactiveSelectionFormat = new SelectionFormat(0xffffff, 1.0, BlendMode.DIFFERENCE, 0xffffff, 1.0, BlendMode.DIFFERENCE, 0);
+			config.manageTabKey = true;
+		}
+ 		
+ 		private function onFocus(event:Event):void
+ 		{
+ 			if (activeFlow)
+ 			{
+	 			var selMgr:ISelectionManager = activeFlow.interactionManager;
+	 			if(selMgr)
+	 				selMgr.setFocus();
+	 		}
+ 			
+ 		}
+ 		private function onBottomTabChanged(evt:IndexChangedEvent):void
+ 		{
+ 			var panel:Canvas = bottomTabs.getChildAt(evt.oldIndex) as Canvas;
+ 			panel.removeAllChildren();
+ 			panel = bottomTabs.getChildAt(evt.newIndex) as Canvas;
+ 			panel.addChild(bottomPanels[evt.newIndex]);
+ 		}
+ 		
+  		private function myScrollListener(e:ScrollEvent):void
+ 		{
+ 			if (!activeFlow || !activeFlow.flowComposer || activeFlow.flowComposer.numControllers == 0)
+ 				return;
+ 			
+ 			var controller:ContainerController = activeFlow.flowComposer.getControllerAt(activeFlow.flowComposer.numControllers - 1);
+ 			
+ 			if (!isNaN(e.delta))
+ 			{
+ 				
+ 				if (e.detail == ScrollEventDetail.LINE_UP || e.detail == ScrollEventDetail.LINE_DOWN)
+ 				{
+	 				if (activeFlow.computedFormat.blockProgression == BlockProgression.RL)
+	 					controller.horizontalScrollPosition += controller.getScrollDelta(e.delta);
+	 				else
+	 					controller.verticalScrollPosition += controller.getScrollDelta(e.delta);
+ 				}
+	 			else switch (e.direction)
+	 			{
+	 				case ScrollEventDirection.HORIZONTAL:	controller.horizontalScrollPosition += e.delta;
+	 														break;
+	 				case ScrollEventDirection.VERTICAL:		controller.verticalScrollPosition += e.delta;
+	 														break;
+	 			}
+	 		}
+	 		else if (!isNaN(e.position))
+	 			switch (e.direction)
+	 			{
+	 				case ScrollEventDirection.HORIZONTAL:	controller.horizontalScrollPosition = e.position;
+	 														break;
+	 				case ScrollEventDirection.VERTICAL:		controller.verticalScrollPosition = e.position;
+	 														break;
+	 			}
+ 		}
+ 
+ 		private var editingMode:String = EditingMode.READ_WRITE;
+ 		
+ 		private function myTargetElementChangeListener(e:StyleChangeEvent):void
+ 		{
+			TextInspectorController.Instance().targetElement = e.attrs as FlowElement;
+ 		} 
+		
+		private function myEditingModeChangeListener(e:StyleChangeEvent):void
+		{
+			setInteractionManager(String(e.attrs));
+		} 
+		
+		private function keyListener(event:KeyboardEvent):void
+ 		{
+			if (event.keyCode == Keyboard.ESCAPE)
+				activeFlow.interactionManager.selectRange(-1,-1);
+ 		}
+ 		
+ 		private function updateEscapeKeyListener():void
+ 		{
+ 			for (var i:int = 0; i < activeFlow.flowComposer.numControllers; i++)
+ 			{
+ 				var controller:ContainerController = activeFlow.flowComposer.getControllerAt(i);
+ 				var container:DisplayObject = controller.container as DisplayObject;
+ 				if (activeFlow.interactionManager)
+ 					container.addEventListener(KeyboardEvent.KEY_DOWN, keyListener,false,0,true);
+ 				else 
+ 					container.removeEventListener(KeyboardEvent.KEY_DOWN, keyListener);
+ 			}
+ 		}		
+
+		public function setActiveFlow(newActiveFlow:TextFlow):void
+		{
+			TextInspectorController.Instance().activeFlow = newActiveFlow;
+			for (var i:int = bottomPanels.length - 1; i >= 0; --i)
+				bottomPanels[i].activeFlow = newActiveFlow;
+		}
+		
+ 		public function setInteractionManager(selectType:String):void
+ 		{
+			editingMode = selectType;
+
+ 			if (activeFlow)	
+ 			{
+	 			switch (selectType)
+	 			{
+	 				case EditingMode.READ_ONLY:
+						if (activeFlow.interactionManager)
+							activeFlow.interactionManager = null;
+						break;
+					case EditingMode.READ_WRITE:
+						// either direction should work.
+						new EditManager(undoManager).textFlow = activeFlow;
+						//activeFlow.interactionManager = new EditManager(undoManager);
+						
+						activeFlow.addEventListener(SelectionEvent.SELECTION_CHANGE,mySelectionChangeListener,false,0,true);
+						break;
+					case EditingMode.READ_SELECT:
+						activeFlow.interactionManager = new SelectionManager();
+						activeFlow.addEventListener(SelectionEvent.SELECTION_CHANGE,mySelectionChangeListener,false,0,true);
+						break;
+				}
+				setActiveFlow(activeFlow);
+				if (activeFlow.interactionManager)
+					activeFlow.interactionManager.selectRange(0, 0);
+				updateEscapeKeyListener();
+				updateForSelectedElementRange(new SelectionState( activeFlow, 0, 0));
+ 			}
+		}
+		
+ 		// the root panel for other applications to take snapshts from.... for now
+ 		public var rootPanel:Canvas = null;
+ 		
+ 		private function myTextFlowContainerPropsListener(e:MultiContainerChangeEvent):void
+ 		{
+			if (containerShapeObj.parent)
+				containerShapeObj.parent.removeChild(containerShapeObj);
+			
+ 			textPanel.changeContainerSetup(activeFlow, e.arrangement,e.visibleContainer,e.numContainers);
+ 			// delay update the multiContainerBar
+ 			multiContainerBar.callLater(multiContainerBar.updateControllerProps,[textPanel.numContainers,textPanel.arrangement,textPanel.visibleContainer]);
+ 		 	vruler.RedrawRuler();
+	 		hruler.RedrawRuler();		
+		}
+ 		
+		// This function is here so tests can change the number of containers
+		public function changeContainerSetup(arrangement:String, visibleContainer:int, numContainers:int):void
+		{
+			textPanel.changeContainerSetup(activeFlow, arrangement, visibleContainer, numContainers);
+
+			// delay update the multiContainerBar
+			multiContainerBar.callLater(multiContainerBar.updateControllerProps,[textPanel.numContainers,textPanel.arrangement,textPanel.visibleContainer]);
+			vruler.RedrawRuler();
+			hruler.RedrawRuler();		
+		}
+		
+		private function mySelectionChangeListener(e:SelectionEvent):void
+ 		{
+  			updateForSelectedElementRange(e ? e.selectionState : null);
+ 		}
+ 		/**
+ 		* Update the GUI for a particular selection range.
+ 		* @private
+ 		* @param range may be null
+ 		*/
+ 		private function updateForSelectedElementRange(selectionState:SelectionState):void
+ 		{
+ 			var range:ElementRange = selectionState ? ElementRange.createElementRange(selectionState.textFlow, selectionState.absoluteStart, selectionState.absoluteEnd) : null;
+ 			var selMgr:ISelectionManager = activeFlow.interactionManager;
+ 			
+			for (var i:int = bottomPanels.length - 1; i >= 0; --i)
+				bottomPanels[i].update(range); 			
+ 			
+ 			multiContainerBar.updateControllerProps(textPanel.numContainers,textPanel.arrangement,textPanel.visibleContainer);
+ 			
+			if (selMgr && textPanel.visible)
+				selMgr.setFocus();
+ 		}
+ 		
+ 		// width and height to be subdivided among all the textframe's in the chain
+ 		private var lastNewFrameWidth:int;
+ 		private var lastNewFrameHeight:int; 
+ 		
+		/** handleResize - resize the child containers
+ 		  * @param alwaysResize - do the recalucation no matter if the size didn't change 
+ 		  */
+ 		public function handleResize():void
+		{
+			if (resizeOK)
+			{
+		//		if (activeFlow)
+		//			resizeContainers(textPanel.width, textPanel.height);
+				textDataView.explicitWidth  = textPanel.width;
+				textDataView.explicitHeight = textPanel.height;
+				textDataView.x = textPanel.x;
+				textDataView.y = textPanel.y;
+				
+				drawContentBounds(null);
+				rootPanel = textPanel.numChildren > 0 ? textPanel.getChildAt(0) as Canvas : null;	//for vellumunit etc.
+				
+			}
+		}
+		
+		private function updateContentBoundsDrawing(event:DataEvent):void
+		{
+			doDrawContainerBounds = event.data == "true";
+			drawContentBounds(null);
+		}
+		
+		public function detachActiveFlow(deleteTheComposer:Boolean):void
+		{
+			if (activeFlow && activeFlow.flowComposer != null)
+			{
+				for (var idx:int = 0; idx < activeFlow.flowComposer.numControllers; idx++)
+				{
+					var cont:ContainerController = activeFlow.flowComposer.getControllerAt(idx);
+					// Detach from the parent
+					var oldContainer:DisplayObject = cont.container as DisplayObject;
+					if (oldContainer && oldContainer.parent)
+					{
+						CONFIG::debug { assert(oldContainer.parent is Canvas,"bad container parent"); }
+						Canvas(oldContainer.parent).rawChildren.removeChild(oldContainer);
+					}
+				}
+				activeFlow.flowComposer.removeAllControllers();
+				
+				// also shuts down inline graphics - need another API if we want to do this another way
+				if (deleteTheComposer)
+					activeFlow.flowComposer = null;
+			}		
+		}
+		
+		private static function recomposeOnLoadComplete(e:StatusChangeEvent):void {
+			if (e.status == InlineGraphicElementStatus.SIZE_PENDING)
+				e.element.getTextFlow().flowComposer.updateAllControllers();
+		}
+		
+		private function keyHandler(evt:KeyboardEvent):void
+		{
+			if (evt.keyCode == Keyboard.INSERT) //insert
+			{
+				if (activeFlow && activeFlow.interactionManager)
+				{
+					if (activeFlow.interactionManager is EditManager)
+					{
+						if (EditManager.overwriteMode) statusBar.updateOverwriteText("Overwrite Mode");
+						else statusBar.updateOverwriteText("Insert Mode"); 
+					}
+				} else {
+					statusBar.updateOverwriteText("");
+				}
+			}
+		}
+		
+		private function damageListener(evt:DamageEvent):void
+		{
+			CONFIG::debug { assert(evt.textFlow == activeFlow,"bad modelChangeEvent") };
+		}
+		
+		public function changeContent(newFlow:TextFlow):void
+		{
+
+			// Remove old containers from the display list
+			if (undoManager != null) 
+				undoManager.clearAll();
+			if (activeFlow)
+			{
+				detachActiveFlow(true);
+				activeFlow.removeEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,recomposeOnLoadComplete);
+				activeFlow.removeEventListener(UpdateCompleteEvent.UPDATE_COMPLETE, drawContentBounds);
+				activeFlow.removeEventListener(ScrollEvent.SCROLL,drawContentBounds);
+			}
+			
+			if (containerShapeObj.parent)
+				containerShapeObj.parent.removeChild(containerShapeObj);
+						
+			// set activeFlow (note: this variable is used in the mxml code below.)
+			activeFlow = newFlow;			
+			if (!activeFlow)
+				return;
+							
+			if (activeFlow.flowComposer == null)
+				activeFlow.flowComposer = new StandardFlowComposer;
+			
+			// This line sets a FlexStyleResolver in - ignore globals for now
+			textDataView.updateStyleResolver(activeFlow);
+
+			activeFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,recomposeOnLoadComplete,false,0,true);
+			activeFlow.addEventListener(CompositionCompleteEvent.COMPOSITION_COMPLETE, drawContentBounds, false,0,true);
+			activeFlow.addEventListener(ScrollEvent.SCROLL,drawContentBounds,false,0,true);
+			
+			// re-iniitialize the containerChain to exactly one container
+			//changeContainerSetup(MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE,0,1);	
+			textPanel.changeContainerSetup(activeFlow, textPanel.arrangement,textPanel.visibleContainer,textPanel.numContainers);
+			
+			setInteractionManager(editingMode);
+
+			if (undoManager)
+ 				statusBar.updateUndoItemsMax(undoManager.undoAndRedoItemLimit);
+  			selectionColorPropsBar.updateSelectionSettings(activeFlow);
+   			
+ 			vruler.RedrawRuler();
+ 			hruler.RedrawRuler();
+ 			
+ 			// only works for one container!!
+   			activeFlow.flowComposer.getControllerAt(0).container.addEventListener(KeyboardEvent.KEY_UP, keyHandler, false, 0, true);
+   			if (textDataView.visible)
+   				textDataView.updateTextDataView();   			 
+
+			rootPanel = textPanel.numChildren > 0 ? textPanel.getChildAt(0) as Canvas : null;	//for vellumunit etc.
+ 		}
+ 		
+         private function drawContentBounds(event:Event):void
+         {
+             if(activeFlow)
+             {
+                containerShapeObj.graphics.clear();
+                if(!doDrawContainerBounds)
+                {
+                	if (containerShapeObj.parent)
+                		containerShapeObj.parent.removeChild(containerShapeObj);
+                }
+                else
+                {
+                     var numControllers:int = activeFlow.flowComposer.numControllers;
+                     while(numControllers)
+                     {
+                     	// _visibleContainer is 1 based
+                         if(textPanel.arrangement == MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE || textPanel.visibleContainer == numControllers)
+                         {
+							 var controller:ContainerController = activeFlow.flowComposer.getControllerAt(--numControllers);
+							 
+							 if (containerShapeObj.parent == null && controller.container.parent)
+							 {
+								 // its a UIComponent but it shouldn't do anything
+								 // containerShapeObj.mouseEnabled = false;
+								 // containerShapeObj.focusEnabled = false;
+								 // containerShapeObj.mouseFocusEnabled = false;
+								 // containerShapeObj.mouseChildren = false;
+								 // containerShapeObj.tabEnabled = false;
+								 (controller.container.parent as Canvas).rawChildren.addChild(containerShapeObj);
+							 }
+							 
+                             var bounds:Rectangle = controller.getContentBounds();
+                            
+                            // composition bounds in black
+                            // contentBounds in red
+                            var g:Graphics = containerShapeObj.graphics;
+                            //bounds.x += controller.container.x;
+                            //bounds.y += controller.container.y;
+                            trace("BOUNDS:",bounds.toString());
+                            
+                            if (controller.hasScrollRect)
+                            {
+                                bounds.x -= controller.container.scrollRect.x;
+                                bounds.y -= controller.container.scrollRect.y;
+                            }
+                            
+                            /*var tempPoint:Point = bounds.topLeft;
+                            tempPoint = controller.container.localToGlobal(tempPoint);
+                            tempPoint = controller.container.parent.globalToLocal(tempPoint);
+                            bounds.x = tempPoint.x;
+                            bounds.y = tempPoint.y;*/
+                            bounds.x += controller.container.x;
+                            bounds.y += controller.container.y;
+                            
+                            strokeRect(g, 1, 0xFF0000, bounds.x, bounds.y, bounds.width, bounds.height);
+                        }
+                        else
+                            --numControllers;
+                    }
+                }
+            }
+         }
+ 		
+ 		private function strokeRect(g:Graphics, stroke:Number, color:int, x:Number, y:Number, width:Number, height:Number):void
+		{
+			if (width <= 0 || height <= 0)
+				return;
+			g.lineStyle(stroke, color);
+			g.beginFill(0,0);
+			g.drawRect(x,y,width,height);
+			g.endFill();
+		}
+		private function containsFloats(textFlow:TextFlow):Boolean
+ 		{
+ 			if (textFlow)
+ 				for (var leaf:FlowLeafElement = textFlow.getFirstLeaf(); leaf != null; leaf = leaf.getNextLeaf())
+ 					if (leaf is InlineGraphicElement && InlineGraphicElement(leaf).float != Float.NONE)
+ 						return true;
+ 			return false;
+		}
+
+ 		/** visiblePanels is an array of the labels of the right-side property panels that are opened.
+		 * if you set it, the panels specified will be opened and all others will be closed.
+		 */
+		public function set visiblePanels(inPanelNames:Array):void
+		{
+			var panels:Array = inspectorBox.getChildren();
+			for each(var panel:DisplayObject in panels)
+			{
+				if (panel is MultiPanel)
+				{
+					var mp:MultiPanel = panel as MultiPanel;
+					mp.opened = (inPanelNames.indexOf(mp.label) != -1);
+				}
+			}
+		}
+		
+		public function get visiblePanels():Array
+		{
+			var result:Array = [];
+			var panels:Array = inspectorBox.getChildren();
+			for each(var panel:DisplayObject in panels)
+			{
+				if (panel is MultiPanel)
+				{
+					var mp:MultiPanel = panel as MultiPanel;
+					if (mp.opened)
+						result.push(mp.label);
+				}
+			}
+			return result;
+		}
+		
+		public function set rulerVisible(inVisible:Boolean):void
+		{
+			hruler.active = inVisible;
+			vruler.active = inVisible;
+		}
+		
+		public function get rulerVisible():Boolean
+		{
+			return hruler.active;
+		}	
+
+		private function changeViewForStyle():void 
+		{
+			if (textDataView.visible)
+			{
+				textDataView.hideTextDataView();	
+				textPanel.visible = true;
+			}
+			else
+			{
+				textPanel.visible = false;
+				textDataView.showTextDataView(activeFlow);
+			}				
+		}
+		
+		CONFIG::debug private function traceChanged(traceContent:String):void
+		{
+			var debugWindow:TextArea = this["debugWindow"] as TextArea;
+			if (debugWindow)
+			{
+				debugWindow.text = traceContent;
+				// need a way to force the window to scroll to the end
+			//	debugWindow.verticalScrollPosition = 3000;
+			//	debugWindow.selectionBeginIndex = debugWindow.selectionEndIndex = traceContent.length;
+			}
+		}
+		
+       ]]>
+    </Script>
+	
+	
+	<Declarations>
+
+	</Declarations>
+
+ 	<Style source="../../sdk/samples/flex/textLayout_ui/src/flashx/textLayout/ui/VellumGUIStyles.css"/>
+
+	<mx:VBox
+		width="100%"
+		height="100%" 
+		verticalGap="2"
+		backgroundColor="0x607D8A"
+		fontFamily="Myriad Pro"
+		fontWeight="bold">
+		<mx:HBox
+			width="100%"
+			height="100%"
+			horizontalGap="4">
+			<txui:PanelWithEdgeBars
+				id="panelWithScrollBars"
+				width="100%"
+				height="100%"
+				edgeInset="18"
+				gap="1"
+				mainPanel="{textPanel}"
+				topBar="{horizontalRulerBar}"
+				rightBar="{verticalRulerBar}">
+				
+				<!-- these are the two mutually exclusive data views -->
+				<textEditBar:MultiContainerView id="textPanel" resize="handleResize()"/>
+				<textEditBar:StyleView id="textDataView" visible="false" styleBar="{styleBar}"/>
+			
+				<mx:Canvas
+					id="verticalRulerBar"
+					verticalScrollPolicy="off"
+					horizontalScrollPolicy="off">
+					<txrulers:RulerBar
+						id="vruler"
+						orientation="vertical"
+						syncToPanel="{textPanel}"
+						tabPropertyEditor="{tabPropEditor}"
+						tabPanelActive="{tabPanel.opened}">
+					</txrulers:RulerBar>
+				</mx:Canvas>
+				<mx:Canvas
+					id="horizontalRulerBar"
+					verticalScrollPolicy="off"
+					horizontalScrollPolicy="off">
+					<txrulers:RulerBar
+						id="hruler"
+						syncToPanel="{textPanel}"
+						tabPropertyEditor="{tabPropEditor}"
+						tabPanelActive="{tabPanel.opened}">
+					</txrulers:RulerBar>
+				</mx:Canvas>
+			</txui:PanelWithEdgeBars>
+			<mx:Canvas
+				width="270"
+				height="100%"
+				horizontalScrollPolicy="off"
+				backgroundColor="#D9D9D9"
+				verticalScrollBarStyleName="scrollbarStyle">
+				<mx:VBox id="inspectorBox" verticalGap="1" width="100%" backgroundColor="#D9D9D9">
+				    <txui:MultiPanel id="charPanel" styleName="multiPanel" label="CHARACTER" width="100%">
+				    	<txinsp:CharacterPropertyEditor active="{charPanel.opened}"/>
+				    </txui:MultiPanel>	
+				    <txui:MultiPanel id="parPanel" styleName="multiPanel" label="PARAGRAPH" width="100%" opened="false">
+				    	<txinsp:ParagraphPropertyEditor active="{parPanel.opened}"/>
+				    </txui:MultiPanel>
+				    <txui:MultiPanel id="linkPanel" styleName="multiPanel" label="LINKS" width="100%" opened="false">
+				    	<txinsp:LinkPropertyEditor active="{linkPanel.opened}"/>
+				    </txui:MultiPanel>
+		            <txui:MultiPanel id="listPanel" styleName="multiPanel" label="LISTS" width="100%" opened="false">
+		              <txinsp:ListPropertyEditor active="{listPanel.opened}"/>
+		            </txui:MultiPanel>
+		            <txui:MultiPanel id="tabPanel" styleName="multiPanel" label="TAB" width="100%" opened="false">
+				    	<txinsp:TabPropertyEditor id="tabPropEditor"/>
+				    </txui:MultiPanel>
+				    <txui:MultiPanel id="advancedPanel" styleName="multiPanel" label="ADVANCED CHARACTER" width="100%" opened="false">
+				    	<txinsp:AdvancedTextPropertyEditor active="{advancedPanel.opened}"/>
+				    </txui:MultiPanel>
+				    <txui:MultiPanel id="antialiasPanel" styleName="multiPanel" label="ANTIALIAS" width="100%" opened="false">
+				    	<txinsp:AntiAliasPropertyEditor active="{antialiasPanel.opened}"/>
+				    </txui:MultiPanel>
+				    <txui:MultiPanel id="containerPanel" styleName="multiPanel" label="CONTAINER" width="100%" opened="false">
+				    	<txinsp:TextContainerPropertyEditor active="{containerPanel.opened}"/>
+				    </txui:MultiPanel>
+				    <txui:MultiPanel id="flowPanel" styleName="multiPanel" label="FLOW" width="100%" opened="false">
+				    	<txinsp:TextFlowPropertyEditor active="{flowPanel.opened}"/>
+				    </txui:MultiPanel>
+				</mx:VBox>
+			</mx:Canvas>
+		</mx:HBox>
+		<mx:TabNavigator id="bottomTabs" width="100%" creationPolicy="all" paddingLeft="8" backgroundColor="#D9D9D9" color="#202020">
+			<mx:Canvas label="SOURCE" width="100%" height="28">
+	 			<textEditBar:FileServices id="fileWidget" fileChoose="FileIOHelper.fileChoose(event.fileName)" textLayoutExport="FileIOHelper.textLayoutExport(activeFlow)" htmlExport="FileIOHelper.htmlExport(activeFlow)" includeInLayout="false" width="100%"/> 
+			</mx:Canvas>
+			<mx:Canvas label="LINKS" width="100%" height="100%">
+   				<textEditBar:LinkBar id="linkElementProps" creationPolicy="all" includeInLayout="false"/>  	
+			</mx:Canvas>
+			<mx:Canvas label="GRAPHICS" width="100%" height="100%">
+				<textEditBar:AdvGraphicBar id="foreignElementProps" creationPolicy="all" includeInLayout="false"/>
+			</mx:Canvas>
+			<mx:Canvas label="CONTAINERS" width="100%" height="100%">
+	  			<textEditBar:MultiContainerBar id="multiContainerBar" includeInLayout="false"/>	  		
+			</mx:Canvas>
+			<mx:Canvas label="SELECTION" width="100%" height="100%">
+	  			<textEditBar:SelectionColorPropsBar id="selectionColorPropsBar" includeInLayout="false"/>	  		
+			</mx:Canvas>
+			<mx:Canvas label="SCROLL" width="100%" height="100%">
+	  			<textEditBar:ScrollBar id="scrollBar" includeInLayout="false"/>	  		
+			</mx:Canvas>
+			<mx:Canvas label="STATUS" width="100%" height="100%">
+	  			<textEditBar:StatusBar id="statusBar" includeInLayout="false"/>	  		
+			</mx:Canvas>
+			<mx:Canvas label="STYLE" width="100%" height="100%">
+				<textEditBar:StyleBar id="styleBar" includeInLayout="false" changeView="changeViewForStyle()" changeStyling="textDataView.changeStyling(activeFlow)" loadStyle="textDataView.loadStyle()" unloadStyle="textDataView.unloadStyle()"/>					
+			</mx:Canvas>
+			
+		</mx:TabNavigator>
+	</mx:VBox>
+
+</s:Application>

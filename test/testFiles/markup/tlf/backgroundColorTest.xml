@@ -1,0 +1,8 @@
+<!-- Test for whether TextLayoutFormat objects with ids can be reused as shorthand in the spans -->
+<!-- windows only font names? -->
+
+<TextFlow  xmlns="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">
+	<p paragraphSpaceAfter="15" ><span>This is some text which is </span><span backgroundColor="0x00FF00" lineThrough="true">supposed</span><span> to use the default font</span></p>
+
+	<p paragraphSpaceAfter="15" ><span locale="en" fontFamily="Minion Pro">This text is supposed to be in </span><span backgroundColor="0xFFFF00">Minion Pro</span><span> via a fontFamily attribute</span></p>
+</TextFlow>

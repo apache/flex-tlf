@@ -1,0 +1,179 @@
+<Tests>
+	<TestCase functionName="singleTextLine">
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="tenTextLines">
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="oneHundredTextLines">
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="singleTextLineStatic">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="tenTextLinesStatic">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="oneHundredTextLinesStatic">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="clickLinkedContainerTest">
+		<TestData name="id">clickLeftToLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">65</TestData>	
+	</TestCase>
+	<TestCase functionName="clickLinkedContainerTest">
+		<TestData name="id">clickRightToLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">93</TestData>	
+	</TestCase>
+	<TestCase functionName="clickLinkedContainerTest">
+		<TestData name="id">clickTopLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">5</TestData>	
+	</TestCase>
+	<TestCase functionName="clickLinkedContainerTest">
+		<TestData name="id">clickBottomLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">400</TestData>	
+	</TestCase>
+	<TestCase functionName="SelectionChangeFocusTest">
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="posOfSelection1">2</TestData>
+		<TestData name="posOfSelection2">10</TestData>
+	</TestCase>
+	<TestCase functionName="clickMultiLinkedContainerTest">
+		<TestData name="id">clickLeftToMultiLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">0</TestData>	
+	</TestCase>
+	<TestCase functionName="clickMultiLinkedContainerTest">
+		<TestData name="id">clickRightToMultiLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	<TestData name="posOfSelection">33</TestData>	
+	</TestCase>
+	<TestCase functionName="clickMultiLinkedContainerTest">
+		<TestData name="id">clickTopMultiLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">5</TestData>	
+	</TestCase>
+	<TestCase functionName="clickMultiLinkedContainerTest">
+		<TestData name="id">clickBottomMultiLinkedContainer</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection">315</TestData>	
+	</TestCase>
+	<!--TestCase functionName="draggingSelectioinMultiFlows">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase-->	
+	<TestCase functionName="DraggingSelectionOneFlowToAnotherTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="posOfSelection1">3</TestData>	
+		<TestData name="posOfSelection2">10</TestData>
+	</TestCase>
+	<TestCase functionName="addRemoveMulitiLinkedContainerTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<!-- this test failed for me with the TestDescriptor change.
+		not sure why.
+	<TestCase functionName="containerRecomposeAndConsistenceTest">
+		<TestData name="id">recomposeContainerTest</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	-->
+	<TestCase functionName="containerRecomposeAndConsistenceTest">
+	    <TestData name="id">containerConsistenceTest</TestData>
+		<TestData name="posOfSelection">130</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="autoAndDragScrollingTest">
+		<TestData name="id">dragScrollingTest</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="autoAndDragScrollingTest">
+		<TestData name="id">autoScrollingTest</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="navigateByLineTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="id">navigateByPreviousLine</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="navigateByLineTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="id">navigateByNextLine</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="defaultContextMenuOnTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="contextMenuOffTest">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="overrideContextMenuTestAll">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="overrideContextMenuTestNull">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="contextMenuReadOnly">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="contextMenuReadSelect">
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+	<TestCase functionName="checkContainerAttributesAfterTextInsertion">
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="id">insertionEndOf1stContainer</TestData>
+	</TestCase>
+	<TestCase functionName="checkContainerAttributesAfterTextInsertion">
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="fileName">empty.xml</TestData>
+		<TestData name="id">insertionBeginOf2ndContainer</TestData>
+	</TestCase>
+
+</Tests>

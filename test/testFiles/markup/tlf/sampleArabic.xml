@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+	<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="18" textIndent="15" paragraphSpaceAfter="15" paddingTop="4" paddingLeft="4" columnCount="2" textAlign="right" blockProgression="tb" direction="rtl" fontFamily="Adobe Arabic" locale="ar">
+          <flow:p>
+            <flow:span>الإعلان العالمي لحقوق الإنسان</flow:span>
+          </flow:p>
+          <flow:p>
+            <flow:span>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية والعدل </flow:span>
+            <flow:span locale="en" fontFamily="Myriad Pro">English here</flow:span>
+            <flow:span>والسلام في العالم.</flow:span>
+          </flow:p>
+          <flow:p>
+            <flow:span>ولما كان تناسي حقوق الإنسان وازدراؤها قد أفضيا إلى أعمال همجية آذت الضمير الإنساني. </flow:span>
+            <flow:span fontFamily="Adobe Hebrew" locale="he" fontSize="48">בֵּית־סֵפֶר</flow:span>
+            <flow:span>وكان غاية ما يرنو إليه عامة البشر انبثاق عالم يتمتع فيه الفرد بحرية القول والعقيدة ويتحرر من الفزع والفاقة.</flow:span>
+          </flow:p>
+          <flow:p>
+            <flow:span>ولما كان من الضروري أن يتولى القانون حماية حقوق الإنسان لكيلا يضطر المرء آخر الأمر إلى التمرد على الاستبداد والظلم.</flow:span>
+          </flow:p>
+          <flow:p>
+            <flow:span>ولما كانت شعوب الأمم المتحدة قد أكدت في الميثاق من جديد إيمانها بحقوق الإنسان الأساسية وبكرامة الفرد وقدره وبما للرجال والنساء من حقوق متساوية وحزمت أمرها على أن تدفع بالرقي الاجتماعي قدمًا وأن ترفع مستوى الحياة في جو من الحرية أفسح.</flow:span>
+          </flow:p>
+	</flow:TextFlow>

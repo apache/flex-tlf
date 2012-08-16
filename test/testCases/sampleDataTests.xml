@@ -1,0 +1,19 @@
+<Tests>
+<TestCase id="SampleDoubleThis 2-4" functionName="SampleDoubleThis">
+	<TestData name="number">2</TestData>
+	<TestData name="result">4</TestData>
+</TestCase>
+<TestCase id="SampleDoubleThis 3-6" functionName="SampleDoubleThis">
+	<TestData name="number">3</TestData>
+	<TestData name="result">6</TestData>
+</TestCase>
+<TestCase id="SampleDoubleThis 3-5 error" functionName="SampleDoubleThis">
+	<TestData name="number">3</TestData>
+	<TestData name="result">5</TestData>
+</TestCase>
+<TestCase id="SampleDivideThese 12/3=4" functionName="SampleDivideThese">
+	<TestData name="numerator">12</TestData>
+	<TestData name="divisor">3</TestData>
+	<TestData name="result">4</TestData>
+</TestCase>
+</Tests>

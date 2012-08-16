@@ -1,0 +1,30 @@
+<TestSuites>
+<TestSuite suiteName="SampleDataTest" fileName="testcases/sampleDataTests.xml"/>
+<TestSuite suiteName="WritingModeTest" fileName="testcases/WritingModeTests.xml"/>
+<TestSuite suiteName="ContainerAttributeTest" fileName="testcases/ContainerAttributeTests.xml"/>
+<TestSuite suiteName="ContainerTypeTest" fileName="testcases/ContainerTypeTests.xml"/>
+<TestSuite suiteName="FactoryImportTest" fileName="testcases/FactoryImportTests.xml"/>
+<TestSuite suiteName="ImportTest" fileName="testcases/ImportTests.xml"/>
+<TestSuite suiteName="FETest" fileName="testcases/FETests.xml"/>
+<TestSuite suiteName="TCYTests" fileName="testcases/TCYTests.xml"/>
+<TestSuite suiteName="LocaleTests" fileName="testcases/LocaleTests.xml"/>
+<TestSuite suiteName="MeasurementTest" fileName="testcases/MeasurementTest.xml"/>
+<TestSuite suiteName="OperationTest" fileName="testcases/OperationTest.xml"/>
+<TestSuite suiteName="ParagraphTest" fileName="testcases/ParagraphTest.xml"/>
+<TestSuite suiteName="ScrollingTest" fileName="testcases/ScrollingTest.xml"/>
+<TestSuite suiteName="ScrollToRangeTest" fileName="testcases/ScrollToRangeTest.xml"/>
+<TestSuite suiteName="SelectionTest" fileName="testcases/SelectionTest.xml"/>
+<TestSuite suiteName="StyleTest" fileName="testcases/StyleTests.xml"/>
+<TestSuite suiteName="EventOverrideTest" fileName="testcases/EventOverrideTest.xml"/>
+<TestSuite suiteName="KeyboardGestureTest" fileName="testcases/KeyboardGestureTest.xml"/>
+<TestSuite suiteName="HorizontalScrollingTest" fileName="testcases/HorizontalScrollingTests.xml"/>
+<TestSuite suiteName="VerticalScrollingTest" fileName="testcases/VerticalScrollingTests.xml"/>
+<TestSuite suiteName="TabTest" fileName="testcases/TabTest.xml"/>
+<TestSuite suiteName="AllEventTest" fileName="testcases/AllEventTest.xml"/>
+<TestSuite suiteName="TextContainerManagerTest" fileName="testcases/TextContainerManagerTest.xml"/>
+<TestSuite suiteName="SWFTest" fileName="testcases/SWFTest.xml"/>
+<TestSuite suiteName="ImpliedParagraphTest" fileName="testcases/ImpliedParagraphTest.xml"/>
+<TestSuite suiteName="TextFlowTextLineFactoryTest" fileName="testcases/TextFlowTextLineFactoryTest.xml"/>
+<TestSuite suiteName="TextLineFilterTest" fileName="testcases/TextLineFilterTest.xml"/>
+<TestSuite suiteName="UndoRedoTest" fileName="testcases/UndoRedoTest.xml"/>
+</TestSuites>

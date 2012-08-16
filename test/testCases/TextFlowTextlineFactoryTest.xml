@@ -1,0 +1,8 @@
+<Tests>
+<TestCase functionName="checkParagraphShufflingTest"/>
+<TestCase functionName="partialCompositionTest"/>
+<TestCase functionName="releasedLineTest"/>
+<TestCase functionName="composeOneScreen"/>
+<TestCase functionName="truncationTest"/>
+<TestCase functionName="compositionCompletionEventTest"/>
+</Tests>

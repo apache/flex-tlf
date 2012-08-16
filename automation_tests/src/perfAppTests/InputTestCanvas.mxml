@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas 
+	width="1024" height="768"
+    enterFrame="handleEnterFrame()"
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:flow="library://ns.adobe.com/flashx/textLayout">
+    <mx:Script>
+        <![CDATA[
+            
+    import flashx.textLayout.container.ContainerController;    
+    import flash.text.engine.ElementFormat;
+    import flash.text.engine.FontDescription;
+    import flash.text.engine.LineJustification;
+    import flash.text.engine.SpaceJustifier;
+    import flash.text.engine.TextBlock;
+    import flash.text.engine.TextElement;
+    import flash.text.engine.TextLine;
+    import flash.text.engine.TextLineValidity;
+    import flash.utils.getQualifiedClassName;
+    
+    import flashx.textLayout.TextLayoutVersion;
+    import flashx.textLayout.container.ScrollPolicy;
+    import flashx.textLayout.conversion.TextConverter;
+    import flashx.textLayout.debug.assert;
+    import flashx.textLayout.elements.Configuration;
+    import flashx.textLayout.elements.ParagraphElement;
+    import flashx.textLayout.elements.SpanElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.tlf_internal;
+    import flashx.textLayout.compose.IFlowComposer;
+    import flashx.textLayout.compose.StandardFlowComposer;
+     import flashx.textLayout.edit.EditManager;
+
+    
+    import flash.geom.Rectangle;
+    
+    import mx.collections.ArrayCollection;
+    import mx.controls.Text;
+    
+    import perfAppTests.InputTestTextContainerManager;
+    import flashx.textLayout.container.TextContainerManager;
+    import flashx.textLayout.formats.TextLayoutFormat;
+
+			use namespace tlf_internal;
+       
+        private var resultText:Text;
+        
+        static private const testTypeArray:ArrayCollection = new ArrayCollection([
+            {label:"TextField",         data:"buildTextField" },
+            {label:"TLF",               data:"buildTLFField" } ,
+            {label:"TextContainerManager",      data:"buildInputManager" } ,
+            {label:"Rectangles",		data:"buildRectangles" }                                                                                                                                                                                                                    
+        ]);
+
+        // data for the current run
+        private var sampleText:String="1880 West Springfield Blvd.";
+        private var _func:String;
+        private var _refreshFunc:String;
+        private var numberOfIterations:int = 0;
+        
+        private var dataLengthVal:Number;
+        
+        private var minWidthVal:Number;
+        private var maxWidthVal:Number;
+        private var widthStepVal:Number;
+        
+        private var currIteration:int = -1;
+        private var currWidthVal:Number;
+        
+        private var beginThisRender:int;
+        private var timingRendering:Boolean = false;
+        
+        // timers
+        private var beginTestTime:int;
+        public var totalCreationTime:int;
+        public var totalRenderTime:int;
+        
+        public function runTest():void
+        {
+
+            initNewTest()
+            
+            createTest.enabled = false;  
+                
+            currIteration = 0;
+        }
+  
+
+        
+        public function runLiveTest():void
+        {
+
+        }
+  
+        private function initNewTest():void
+        {
+            totalCreationTime = 0;
+            totalRenderTime = 0;
+            numberOfIterations = int(iterationsInput.text);
+            
+            // clear the previous run
+            if (resultText)
+            {
+                lineHolder.removeChild(resultText);
+                resultText = null;
+            }
+            
+            // Zap previous cells.
+            while (lineHolder.rawChildren.numChildren)
+            {
+                lineHolder.rawChildren.removeChildAt(0);
+            }
+            
+            _func = testTypeArray[testTypeCombo.selectedIndex].data;
+
+        }
+        
+        private function Step():void
+        {
+
+                while (lineHolder.rawChildren.numChildren)
+                    lineHolder.rawChildren.removeChildAt(0);
+                
+                var t1:Number = getTimer();
+                createInputs();
+                totalCreationTime = totalCreationTime + (getTimer() - t1);
+
+        }
+        
+        // FTE factory 
+
+        public function buildTLFField(text:String):DisplayObject
+        {
+            var bg:Sprite = new Sprite();
+            var sprite:Sprite = new Sprite();
+            sprite.y = 2;
+			bg.addChild(sprite);
+            bg.graphics.beginFill(0xFFFFFF); 
+            bg.graphics.lineStyle(1, 0x000000);
+            bg.graphics.drawRect(0,0,200,20);
+            bg.graphics.endFill();
+            
+		    // var markup:String = '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"><span>' + text + '</span></TextFlow>';
+		    // var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
+		    
+		    // var textFlow:TextFlow = TextConverter.importToFlow(text, TextConverter.PLAIN_TEXT_FORMAT);
+		    
+		    // fastest possible impl
+		    var textFlow:TextFlow = new TextFlow();
+		    textFlow.fontFamily = "Verdana";
+		    textFlow.fontSize = 10;
+		    var p:ParagraphElement = new ParagraphElement();
+		    var s:SpanElement = new SpanElement();
+		    s.text = text;
+		    p.addChild(s);
+		    textFlow.addChild(p);
+		    
+		    textFlow.interactionManager = new EditManager();
+		
+		    var controller:ContainerController = new ContainerController(sprite);
+		   	controller.setCompositionSize(200, 20);
+		    textFlow.flowComposer.addController(controller);
+            textFlow.flowComposer.updateAllControllers(); 
+            return bg;
+        }
+        
+
+        static private var format:TextLayoutFormat;
+        
+        public function buildInputManager(text:String):DisplayObject
+        {
+        	var bg:Sprite = new Sprite();
+            
+            // not till we have rectangles as compositionBounds input to DOCC
+            var tm:TextContainerManager = new InputTestTextContainerManager(bg);
+            tm.compositionWidth = 200;
+            tm.compositionHeight = 20;
+            
+            if (format == null)
+            {
+            	format = new TextLayoutFormat();
+            	format.fontFamily = "Verdana";
+            	format.fontSize = 10;
+            }
+
+		    tm.hostFormat = format;
+		    tm.setText(text);
+            tm.updateContainer();
+            
+            return bg;
+
+        }
+        
+        public function buildRectangles(text:String):DisplayObject
+        {
+        	var bg:Sprite = new Sprite();
+
+            bg.graphics.beginFill(0xFFFFFF); 
+            bg.graphics.lineStyle(1, 0x000000);
+            bg.graphics.drawRect(0,0,200,20);
+            bg.graphics.endFill();
+            
+            return bg;
+        }
+        
+        
+        // TextField Factory 
+        static private var defaultTextFormat:TextFormat;
+        
+        public function buildTextField(text:String):DisplayObject
+        {
+            if (!defaultTextFormat)
+            {
+                defaultTextFormat = new TextFormat();
+                defaultTextFormat.font = "Verdana";
+                defaultTextFormat.size = 10;
+            }
+            
+            var a:TextField = new TextField();
+            a.type = "input"
+            a.defaultTextFormat = defaultTextFormat;
+            a.text = text;
+            a.width = 200;
+            a.height = 20;
+            a.backgroundColor = 0xFFFFFF;
+            a.background = true;
+            a.border = true;
+            a.borderColor = 0x000000;
+            
+
+            return a;
+        }
+        
+        
+        // count of number of tests run this session
+        private var testCount:int = 0;
+        private var queueResults:Boolean = false;
+        
+        /** generate a report at the next enter frame */
+        public function handleEnterFrame(): void
+        {
+            if (currIteration == -1)
+                return;
+                
+            if (timingRendering)
+            {
+                totalRenderTime += getTimer() - beginThisRender;
+                timingRendering = false;
+            }
+            
+            // report results if appropriate
+            if (currIteration < numberOfIterations)
+            {
+                Step();
+                
+                // prepare for the next iteration
+                currIteration++;
+                    
+                // begin timing rendering
+                timingRendering = true;
+                beginThisRender = getTimer();
+            }
+            else
+            { 
+                try {
+                     new LocalConnection().connect('dummy');
+                     new LocalConnection().connect('dummy');
+                } catch (e:*) {}
+
+
+                queueResults = true;
+                createTest.enabled = true;  
+                currIteration = -1;
+            }
+            
+            if (queueResults)
+            {
+                reportResults();
+                queueResults = false;
+            }
+        }
+      
+        // Grid generator.
+        private function createInputs():void
+        {
+            var curY:int = 10;
+            var input:DisplayObject;
+            for (var i:int = 0; i < 25; i++)
+            {
+                var st:String = sampleText;
+                input = this[_func](st);
+                lineHolder.rawChildren.addChild(input);
+                input.x = 10;
+                input.y = curY;
+                
+                input = this[_func](st);
+                lineHolder.rawChildren.addChild(input);
+                input.x = 220;
+                input.y = curY;
+                    
+                curY += input.height + 2;
+                   
+            }
+
+        }
+        
+        
+        private function reportResults():void
+        {
+            var totalTestTime:int = totalRenderTime + totalCreationTime;
+			flash.system.System.gc();	//mark
+			flash.system.System.gc();	//sweep
+            var memoryAllocated:Number = flash.system.System.totalMemory/1024;
+                
+            var vellumType:String = "Vellum Build: " + flashx.textLayout.TextLayoutVersion.BUILD_NUMBER + "\n";
+
+            resultText = new Text();
+            resultText.text = "CreationTime (msecs): " + totalCreationTime.toString() + "\nRenderTime (msec): " + totalRenderTime.toString() + "\nTotalTime (msec): " + totalTestTime.toString() 
+                  + " \nmem (K): " + memoryAllocated.toString() + "\n" + vellumType;
+            resultText.x = 80; 
+            resultText.y = 140;
+            resultText.width = 400;
+            resultText.setStyle("fontFamily", "Verdana");
+            resultText.setStyle("fontSize", 18);
+            resultText.opaqueBackground = 0xFFFFFFFF;
+            lineHolder.addChild(resultText);  
+            this.dispatchEvent(new Event(Event.COMPLETE)); 
+        }
+        
+       ]]>
+    </mx:Script>
+
+    <mx:VBox height="100%" width="100%">
+        <mx:HBox id="controlBox" paddingLeft="4" paddingTop="4">
+            <mx:Label text="InputTest" fontWeight="bold"/>
+            <mx:ComboBox id="testTypeCombo" editable="false" closeDuration="0" openDuration="0" selectionDuration="0"
+                        paddingLeft="4" paddingTop="4" selectedIndex="0"
+                        dataProvider="{testTypeArray}"/>
+            <mx:Label text="Iterations:" fontWeight="bold"/>
+            <mx:TextInput id="iterationsInput" text="100" width="40"/>
+            <mx:Button id="createTest" label="Run Test" click="runTest()"/>
+        </mx:HBox>
+        <mx:Canvas id="lineHolder" width="100%" height="100%"  />
+    </mx:VBox>
+    
+</mx:Canvas>

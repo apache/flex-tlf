@@ -1,0 +1,399 @@
+<Tests>
+<TestCase functionName="bidiNavigationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">school.xml</TestData>
+</TestCase>
+<TestCase functionName="overflowNavigationTest">
+	<TestData name="flash">false</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptBackspaceGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptDeleteGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDeleteLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptLeftGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlLeftLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptRightGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlRightLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlUpLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlUpLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlHomeGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlHomeLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlHomeLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="OptDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDownLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlDownLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlEndGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlEndLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="CtrlEndLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftOptLeftGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlLeftLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftOptRightGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightHyphenTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightParagraphTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightImageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlRightLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftOptUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlUpLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlUpLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlHomeGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlHomeLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlHomeLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftOptDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlDownLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlDownLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlEndGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlEndLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftCtrlEndLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="HomeGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="HomeLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="HomeLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftHomeGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftHomeLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftHomeLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="EndGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="EndLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="EndLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftEndGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftEndLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftEndLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="oversetText_2754698">
+</TestCase>
+<TestCase functionName="TabPromoteDemoteListTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="CtrlBackspaceTest_Bug2821844">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!-- <TestCase functionName="PgUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="PgUpLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="PgUpLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgUpGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgUpLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgUpLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="PgDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="PgDownLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="PgDownLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgDownGeneralTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgDownLocationTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="ShiftPgDownLanguageTest">
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase> -->
+</Tests>
