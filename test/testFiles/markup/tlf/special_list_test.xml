@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+  <TextFlow version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008" paddingLeft="4" paddingTop="4" fontSize="12" columnCount="1">
+
+<!-- Big Marker Size -->
+<p></p>
+<p>Big Marker Size Test</p>
+<p>BEFORE</p>
+<list paddingRight="36" paddingLeft="36" listStyleType="upperAlpha" listStylePosition="inside"><listMarkerFormat><ListMarkerFormat color="0xff0000" paragraphEndIndent="4" fontSize="300" paddingLeft="40" paddingRight="90"/></listMarkerFormat><li>item</li><li>another</li></list>
+<p>AFTER</p>
+<p></p>
+
+<!-- counterResetIncrease Negatively -->
+<p>counterResetIncrease Negatively Test</p>
+<p>BEFORE</p>
+<list listStylePosition="outside" listStyleType="decimal" paddingLeft="24">
+<listMarkerFormat><ListMarkerFormat counterIncrement="ordered -1"/></listMarkerFormat>
+<li>
+<listMarkerFormat><ListMarkerFormat counterReset="ordered 10" counterIncrement="ordered 0"/></listMarkerFormat>
+<p>item</p>
+</li>
+<li>another</li>
+<li/><li/><li/><li/><li/><li/><li/><li/>
+</list>
+<list listStyleType="decimal"  paddingLeft="96" paddingRight="24">
+<listMarkerFormat><ListMarkerFormat fontSize="16" beforeContent="XX" afterContent="YY" counterIncrement="ordered -1"/></listMarkerFormat>
+<li><p><span>content none list</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- suffix "auto" and "none" in different listStyleList Test-->
+<p>Suffix "auto" and "none" in different listStyleList Test</p>
+<p>BEFORE</p>
+<list paddingRight="36" paddingLeft="36" listStyleType="upperAlpha"><listMarkerFormat><ListMarkerFormat color="0xff0000" paragraphEndIndent="4" fontSize="20" suffix="auto" counterReset="ordered 2"/></listMarkerFormat><li>item</li><li>another 2</li><li>another 3</li><li>another 4</li></list>
+<list paddingRight="36" paddingLeft="36" listStyleType="upperAlpha"><listMarkerFormat><ListMarkerFormat color="0xff0000" paragraphEndIndent="4" fontSize="20" suffix="none" counterReset="ordered 2"/></listMarkerFormat><li>item</li><li>another 2</li><li>another 3</li><li>another 4</li></list>
+<list paddingRight="36" paddingLeft="36" listStyleType="devanagari"><listMarkerFormat><ListMarkerFormat color="0xcc0000" paragraphEndIndent="4" fontSize="10" counterIncrement="ordered 2" suffix="auto"/></listMarkerFormat><li>devanagari item</li><li>another 2</li><li>another 3</li><li>another 4</li></list>
+<list paddingRight="36" paddingLeft="36" listStyleType="devanagari"><listMarkerFormat><ListMarkerFormat color="0xcc0000" paragraphEndIndent="4" fontSize="10" counterIncrement="ordered 2" suffix="none"/></listMarkerFormat><li>devanagari another item</li><li>another 2</li><li>another 3</li><li>another 4</li></list>
+<p>AFTER</p>
+<p></p>
+
+<!-- Customized suffix Test -->
+<p>Customized Suffix Test</p>
+<p>BEFORE</p>
+<list listStyleType="disc"  paddingLeft="96" paddingRight="24">
+<listMarkerFormat><ListMarkerFormat fontSize="16" beforeContent="Section " content="counters(ordered,&quot;  *&quot;,upperRoman)" afterContent="&#x9;"/></listMarkerFormat>
+<li><p><span>content none list</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- Div in list Test-->
+<p>Div in list Test</p>
+<p>BEFORE</p>
+<list listStylePosition="outside" listStyleType="decimal" paddingLeft="44">
+<li>
+<div>div1</div>
+<div>div2</div>
+<div>div3</div>
+</li>
+<li>
+<div>div4</div>
+</li>
+<li>
+<div>div5</div>
+</li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- Paragraph in list Test-->
+<p>Paragraph in list Test</p>
+<p>BEFORE</p>
+<list listStylePosition="outside" listStyleType="decimal" paddingLeft="44">
+<li>
+<p>paragraph1</p>
+<p>paragraph2</p>
+<p>paragraph3</p>
+</li>
+<li>
+<p>paragraph4</p>
+</li>
+<li>
+<p>paragraph5</p>
+</li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- Ordered list with counter set, counter has no effect -->
+<p>Ordered list with counter set, counter has no effect</p>
+<p>BEFORE</p> 
+<list paddingRight="24" paddingLeft="24" listStyleType="disc" counterReset="ordered 2" counterIncrement="ordered 10"><li>item</li><li>another</li></list>
+<p>AFTER</p>
+<p></p>
+
+<!--Negative counterIncrement for Alphabetic, should -->
+<p>Negative counterIncrement for Alphabetic</p>
+<p>BEFORE</p>
+<list listStyleType="upperAlpha"  paddingLeft="96" paddingRight="24">
+<listMarkerFormat><ListMarkerFormat fontSize="16" beforeContent="XX" afterContent="YY" counterIncrement="ordered -1"/></listMarkerFormat>
+<li><p><span>content none list</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!--List will display in decimal when counterIncrement is negative For both Algorithmic and Alphabetic -->
+<p>List will display in decimal when counterIncrement is negative For both Algorithmic and Alphabetic</p>
+<p>BEFORE</p>
+<list listStyleType="upperRoman"  paddingLeft="96" paddingRight="24">
+<listMarkerFormat><ListMarkerFormat fontSize="16" counterIncrement="ordered -1"/></listMarkerFormat>
+<li><p><span>first</span></p></li>
+<li><p><span>second</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!--Both negative counterReset and negative counterIncrement for Algorithmic and Alphabetic test-->
+<p>Both negative counterReset and negative counterIncrement for Algorithmic and Alphabetic test</p>
+<p>BEFORE</p>
+<list paddingRight="36" paddingLeft="36" listStyleType="upperAlpha"><listMarkerFormat><ListMarkerFormat fontSize="20"  counterIncrement="ordered -1"/></listMarkerFormat>
+<li>first item<listMarkerFormat><ListMarkerFormat fontSize="20"  counterReset="ordered -1"/></listMarkerFormat></li><li>another 2</li><li>another 3</li><li>another 4</li></list>
+<p>AFTER</p>
+<p></p>
+
+<!--test space in before content and after content -->
+<p>Space in BeforeContent and AfterContent</p>
+<p>BEFORE</p>
+<list listStyleType="upperAlpha"  paddingLeft="96" paddingRight="24">
+<listMarkerFormat><ListMarkerFormat fontSize="16" beforeContent="  XX  " afterContent=" YY " counterIncrement="ordered -1"/></listMarkerFormat>
+<li><p><span>content none list</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- huge value of counterReset, this test case is commented out now due to a bug which reset counter to wrong value 1410065409, it should be 10000000001, comment needs to be removed after the bug fix-->
+<!--
+<p>Huge Value of counterReset Test</p>
+<p>BEFORE</p>
+<list listStylePosition="outside" listStyleType="decimal" paddingLeft="80">
+<li>
+<listMarkerFormat><ListMarkerFormat counterReset="ordered 10000000000"/></listMarkerFormat>
+<p>item</p>
+</li>
+</list>
+<p>AFTER</p>
+<p></p>
+-->
+
+<!-- Five nested level with different listStyleTyle test -->
+<p> Five nested level with different listStyleTyle test </p>
+<p>BEFORE</p>
+<list paddingRight="24" paddingLeft="24" listStyleType="decimal">
+	<li>nest level 1
+	<list listStyleType="upperAlpha" paddingRight="24" paddingLeft="24">
+	<li>nest level 2
+	<list paddingRight="24" paddingLeft="24" listStyleType="decimal">
+	<li>nest level 3 with different listSyleType
+	<list paddingRight="24" paddingLeft="24" 	listStyleType="lowerAlpha">
+	<li>nest level 4 with different listSyleType
+	<list paddingRight="24" paddingLeft="24" 	listStyleType="cjkEarthlyBranch">
+	<li>nest level 5 with different listSyleType</li>
+	<li>again</li>
+	<li>again</li>
+	</list>
+	</li>
+	<li>again</li>
+	<li>again</li>
+	</list>
+	</li>
+	<li>again</li>	
+	<li>and again another</li>
+	</list>
+	</li>
+	<li>nest level 2 again</li>
+	<li>and again</li>
+	<li>and again</li>
+	<li>and again</li>
+	</list></li>
+	<li>another</li>
+	<li>and again</li>
+	<li>and again again</li>
+	<li>and again another</li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- Empty List Test -->
+<p>Empty List Test</p>
+<p>BEFORE</p>
+<list paddingRight="24" paddingLeft="24" listStyleType="decimal">
+	<li></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- mixed (upperAlpha & upperRoman) listStyleType test -->
+<p>Mixed (upperAlpha & upperRoman) listStyleType test</p>
+<p><span>BEFORE</span></p>
+<list listStyleType="upperAlpha" listStylePosition="inside">
+<listMarkerFormat><ListMarkerFormat fontSize="14" beforeContent="Chapter " content="counters(ordered,&quot;.&quot;)" afterContent="&#x9;"/></listMarkerFormat>
+<li>
+<p><span>First</span></p></li>
+<li><p><span>Second</span></p>
+</li>
+<li>
+<p><span>Third</span></p>
+<list>
+<listMarkerFormat><ListMarkerFormat fontSize="12" beforeContent="Chapter " content="counters(ordered,&quot;.&quot;,upperRoman)" afterContent="&#x9;"/></listMarkerFormat>
+<li>section</li>
+<li>another</li>
+</list>
+</li>
+</list>
+<p><span>AFTER</span></p>
+<p></p>
+
+<!--counter reset twice and mixed listStyleType -->
+<p>counter reset twice and mixed listStyleType</p>
+<p>BEFORE</p>
+<list listStyleType="decimal" listStylePosition="inside">
+<li><p><span>item</span></p></li>
+<li><p><span>another</span></p></li>
+<li><listMarkerFormat><ListMarkerFormat counterReset="ordered"/></listMarkerFormat>
+<p><span>reset here to default value inside a list</span></p>
+</li>
+<li><p><span>and increment</span></p></li>
+<li>
+<listMarkerFormat><ListMarkerFormat counterReset="ordered 3"/></listMarkerFormat>
+<p><span>reset here to 3 and then increment</span></p>
+</li>
+<li><p><span>another</span></p></li>
+<li>
+<listMarkerFormat><ListMarkerFormat content="counter(ordered,upperRoman)"/></listMarkerFormat>
+<p><span>upper roman please</span></p>
+</li>
+<li>
+<listMarkerFormat><ListMarkerFormat  counterReset="ordered 3" content="counter(ordered,lowerAlpha)"/></listMarkerFormat>
+<p><span>another</span></p>
+</li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- different level counterReset and counterIncrement -->
+<p>different level counterReset and counterIncrement </p>
+<p>BEFORE</p>
+<list listStyleType="upperRoman" paddingLeft="36" paddingRight="24" listStylePosition="outside">
+<listMarkerFormat><ListMarkerFormat fontSize="18" counterIncrement="ordered -1" counterReset="ordered 5"/></listMarkerFormat>
+<li>
+<listMarkerFormat><ListMarkerFormat fontSize="18" counterReset="ordered 10" counterIncrement="ordered -2" /></listMarkerFormat>
+<p><span>countdown list</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+<li><p><span>another</span></p></li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+<!-- content=counters(ordered) vs content=counter(ordered) -->
+<p>content=counters(ordered) vs content=counter(ordered) test</p>
+<p><span>BEFORE</span></p>
+<list listStyleType="decimal" listStylePosition="inside">
+<listMarkerFormat><ListMarkerFormat fontSize="14" beforeContent="Chapter " content="counters(ordered,&quot;.&quot;,upperRoman)" afterContent="&#x9;"/></listMarkerFormat>
+<li>
+<p><span>First</span></p>
+<list>
+<listMarkerFormat><ListMarkerFormat fontSize="12" beforeContent="Section " content="counters(ordered,&quot;.&quot;,upperRoman)" afterContent="&#x9;"/></listMarkerFormat>
+<li>section</li>
+<li>another</li>
+</list>
+</li>
+<li>
+<p><span>Second -- use counters(ordered)</span></p>
+<list>
+<listMarkerFormat><ListMarkerFormat fontSize="12" beforeContent="Section " content="counters(ordered)" afterContent="&#x9;"/></listMarkerFormat>
+<li>section</li>
+<li>another</li>
+</list>
+</li>
+<li>
+<p><span>Third -- use counter(ordered)</span></p>
+<list>
+<listMarkerFormat><ListMarkerFormat fontSize="12" beforeContent="Section " content="counter(ordered)" afterContent="&#x9;"/></listMarkerFormat>
+<li>section</li>
+<li>another</li>
+</list>
+</li>
+</list>
+<p><span>AFTER</span></p>
+<p></p>
+
+<p>BEFORE</p>
+<list paddingRight="36" paddingLeft="36" listStylePosition="inside">
+<listMarkerFormat><ListMarkerFormat fontSize="12" beforeContent="Chapter " content="counters(ordered,&quot;.&quot;, upperRoman)" afterContent="&#x9;"/></listMarkerFormat>
+<li>Introduction</li>
+</list>
+<p>AFTER</p>
+<p></p>
+
+</TextFlow>

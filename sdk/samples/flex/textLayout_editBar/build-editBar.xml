@@ -1,0 +1,42 @@
+<project name="editbar" default="rebuild.editBar" basedir="..">
+	<import file="${basedir}/build/config.xml"/>
+	<!-- ***************************************************************************
+	 * 
+	 *  build.xml - editBar
+	 *  Build script for editBar
+	 * 
+	 *  ***************************************************************************** -->
+	
+	<target name="config.editBar" depends="config"/>
+	
+	<target name="rebuild.editBar" depends="clean.editBar,build.editBar" description="Cleans, then builds, editBar swc"/>
+	
+	<target name="clean.editBar" depends="config.editBar" description="Deletes the editBar swc">
+		<delete file="${dir.libs.config}/${output.editBar}"/>
+		<delete file="${dir.output.config}/editBar_link.xml"/>
+	</target>
+	
+	<target name="build.editBar" depends="config.editBar" description="Builds editBar swc">
+		<available file="${dir.libs.config}/${output.core}" property="core.available"/>
+		<fail unless="core.available" message="Required file ${dir.libs.config}/${output.core} does not exist!"/>
+		
+		<compc fork="${forkValue}" output="${dir.libs.config}/${output.editbar}" 
+			include-classes="EditBarClasses" compute-digest="${digest}">
+			<!-- <optimize/> -->
+			<source-path path-element="${dir.editbar}/src"/>			
+			<jvmarg line="${jvm.args}"/>
+			<library-path/>
+			<external-library-path dir="${dir.playerglobals}" includes="playerglobal.swc" 	append="false"/>
+			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/>
+			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+ 			<external-library-path dir="${dir.libs.config}" includes="${output.combined}" append="true"/>
+			<static-link-runtime-shared-libraries/>
+
+			<define name="CONFIG::debug" 			value="${debug}"/>
+			<define name="CONFIG::release" 			value="${release}"/>
+		</compc>
+     </target>
+</project>

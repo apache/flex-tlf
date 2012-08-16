@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+   <flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontFamily="Minion Pro" fontSize="13" spaceAfter="8" indent="12">
+    <flow:div id="main">
+      <flow:div class="title" fontSize="48"><flow:p><flow:span>Table Example</flow:span></flow:p></flow:div>
+      <flow:div id="articleBody">
+        <flow:p><flow:span>
+          This table is added to the text as an "inline-block", which allows it to take more space than is available in the column. At the moment, these are being treated more as floats, so if there is not room for the table in the text-frame, it will continue to flow lines that appear in the text after the table. Eventually, what should happen is that the table gets flowed across frames row by row, so that if the entire table doesn't fit, it will show whatever rows do fit.
+        </flow:span></flow:p>
+
+          <flow:p><flow:span>Cups of coffee consumed by each senator</flow:span></flow:p>
+          <flow:p><flow:span>This table charts the number of cups of coffee consumed by each senator, the type of coffee (decaf or regular), and whether taken with sugar.</flow:span></flow:p>
+        <flow:table width="400" class="ex"  borderColor="0xFF00FF" borderThickness="1" borderStyle="solid" paddingLeft="8" paddingTop="2" paddingRight="8" paddingBottom="2">
+             <flow:tr bold="true">
+              <flow:th id="t1" width="25%"><flow:p><flow:span>Name</flow:span></flow:p></flow:th>
+              <flow:th id="t2" width="20%"><flow:p><flow:span>Cups</flow:span></flow:p></flow:th>
+              <flow:th id="t3" abbr="Type" width="35%"><flow:p><flow:span>Type of Coffee</flow:span></flow:p></flow:th>
+              <flow:th id="t4"  width="20%"><flow:p bold="true"><flow:span>Sugar?</flow:span></flow:p></flow:th>
+            </flow:tr>
+            <flow:tr italic="true">
+              <flow:td headers="t1"><flow:p><flow:span>T. Sexton</flow:span></flow:p></flow:td>
+              <flow:td headers="t2"><flow:p><flow:span>10</flow:span></flow:p></flow:td>
+              <flow:td headers="t3"><flow:p><flow:span>Espresso</flow:span></flow:p></flow:td>
+              <flow:td headers="t4"><flow:p><flow:span>No</flow:span></flow:p></flow:td>
+            </flow:tr>
+            <flow:tr>
+              <flow:td headers="t1"><flow:p><flow:span>J. Dinnen</flow:span></flow:p></flow:td>
+              <flow:td headers="t2"><flow:p><flow:span>5</flow:span></flow:p></flow:td>
+              <flow:td headers="t3"><flow:p><flow:span>Decaf</flow:span></flow:p></flow:td>
+              <flow:td headers="t4"><flow:p><flow:span>Yes</flow:span></flow:p></flow:td>
+            </flow:tr>
+        </flow:table>
+        <flow:p> <flow:span>Here is another table, a little more complex. This one has multiple paragraphs in a cell</flow:span></flow:p>
+        <flow:table inline="true" class="ex" cellspacing="0" borderThickness="1" width="100%" paddingTop="2" paddingLeft="3" paddingBottom="2" paddingRight="3">
+          <flow:tr class="headerRow">
+            <flow:th width="20%"> <flow:p alignment="left" ><flow:span>Attribute</flow:span></flow:p></flow:th>
+            <flow:th width="20%"> <flow:p alignment="left" ><flow:span>Value</flow:span></flow:p></flow:th>
+            <flow:th width="40%"> <flow:p alignment="left" ><flow:span>Description</flow:span></flow:p></flow:th>
+            <flow:th width="20%"> <flow:p alignment="left" ><flow:span>DTD</flow:span></flow:p></flow:th>
+          </flow:tr>
+          <flow:tr>
+            <flow:td><flow:p><flow:span>align</flow:span></flow:p></flow:td>
+            <flow:td>
+              <flow:p><flow:span>left</flow:span></flow:p>
+              <flow:p><flow:span>center</flow:span></flow:p>
+              <flow:p><flow:span>right</flow:span></flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>Aligns the table. Deprecated. Use styles instead.</flow:span></flow:p></flow:td>
+            <flow:td><flow:p><flow:span>TF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <flow:tr>
+            <flow:td><flow:p><flow:span>bgcolor</flow:span></flow:p></flow:td>
+            <flow:td>
+              <flow:p><flow:span>#0(r,g,b)</flow:span></flow:p>
+            </flow:td>
+            <flow:td>
+              <flow:p><flow:span>Specifies the background color of the table. Deprecated. Use styles instead.</flow:span></flow:p>
+              <flow:p><flow:span>This is the second paragraph in the cell. Just to show that you can have multiple paragraphs in the cell.</flow:span></flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>TF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <!--        <flow:tr>
+            <flow:td><flow:p><flow:span>border</flow:span></flow:p></flow:td>
+            <flow:td><flow:p><flow:span>pixels</flow:span></flow:p></flow:td>
+            <flow:td><flow:p><flow:span>
+              Specifies the border width.</flow:span></flow:p><flow:p bold="true">
+                <flow:span>Tip:</flow:span></flow:p><flow:p><flow:span> Set border=&quot;0&quot; to display tables with no borders!</flow:span></flow:p>
+              </flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>STF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <flow:tr>
+            <flow:td><flow:p><flow:span>cellpadding</flow:span></flow:p></flow:td>
+            <flow:td>
+              <flow:p><flow:span>pixels</flow:span></flow:p>
+              <flow:p><flow:span>%</flow:span></flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>Specifies the space between the cell walls and contents</flow:span></flow:p></flow:td>
+            <flow:td><flow:p><flow:span>STF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <flow:tr>
+            <flow:td><flow:p><flow:span>cellspacing</flow:span></flow:p></flow:td>
+            <flow:td>
+              <flow:p><flow:span>pixels</flow:span></flow:p>
+              <flow:p><flow:span>%</flow:span></flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>Specifies the space between cells</flow:span></flow:p></flow:td>
+            <flow:td><flow:p><flow:span>STF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <flow:tr>
+            <flow:td><flow:p><flow:span>frame</flow:span></flow:p></flow:td>
+            <flow:td>
+              <flow:p><flow:span>void</flow:span></flow:p>
+              <flow:p><flow:span>above</flow:span></flow:p>
+              <flow:p><flow:span>below</flow:span></flow:p>
+              <flow:p><flow:span>hsides</flow:span></flow:p>
+              <flow:p><flow:span>lhs</flow:span></flow:p>
+              <flow:p><flow:span>rhs</flow:span></flow:p>
+              <flow:p><flow:span>vsides</flow:span></flow:p>
+              <flow:p><flow:span>box</flow:span></flow:p>
+              <flow:p><flow:span>border</flow:span></flow:p>
+            </flow:td>
+            <flow:td>
+              <flow:p><flow:span>Specifies which sides of the border surrounding a table will be visible</flow:span></flow:p>
+              <flow:p><flow:span bold="true">
+                Note:</flow:span><flow:span> The &quot;border&quot; attribute can be used in conjunction with the &quot;frame&quot; attribute to specify the width of the border!</flow:span>
+              </flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>STF</flow:span></flow:p></flow:td>
+          </flow:tr>
+          <flow:tr>
+            <flow:td>rules</flow:td>
+            <flow:td>
+              <flow:p><flow:span>none</flow:span></flow:p>
+              <flow:p><flow:span>groups</flow:span></flow:p>
+              <flow:p><flow:span>rows</flow:span></flow:p>
+              <flow:p><flow:span>cols</flow:span></flow:p>
+              <flow:p><flow:span>all</flow:span></flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>
+              Specifies the horizontal/vertical divider lines.</flow:span></flow:p><flow:p>
+                <flow:span bold="true">Note:</flow:span><flow:span>Must be used in conjunction with the &quot;border&quot; attribute!</flow:span>
+              </flow:p>
+            </flow:td>
+            <flow:td><flow:p><flow:span>STF</flow:span></flow:p></flow:td>
+          </flow:tr>
+       -->
+        </flow:table>
+        <flow:p><flow:span>Still to be done: flowing table across frames, repeated header rows, reflowing table to resized layout if enclosing columns change.</flow:span></flow:p>
+        <flow:p><flow:span>If carbon dioxide concentrations in the atmosphere reach twice their pre-industrial levels, the report said, the global climate will probably warm by 3.5 to 8 degrees. But there would be more than a 1-in-10 chance of much greater warming, a situation many earth scientists say poses an unacceptable risk. </flow:span></flow:p>
+        <flow:p><flow:span>Many energy and environment experts see such a doubling as a foregone conclusion sometime after midcentury unless there is a prompt and sustained shift away from the 20th-century pattern of unfettered burning of coal and oil, the main sources of carbon dioxide, and an aggressive quest for expanded and improved nonpolluting energy options.</flow:span></flow:p>
+        <flow:p><flow:span>Even an increased level of warming that falls in the middle of the group’s range of projections would likely cause significant stress to ecosystems and alter longstanding climate patterns that shape water supplies and agricultural production, according to many climate experts and biologists. </flow:span></flow:p>
+        <flow:p><flow:span>While the new report projected a modest rise in seas by 2100 — between 7 and 23 inches — it also concluded that seas would continue to rise, and crowded coasts retreat, for at least 1,000 years to come. By comparison, seas rose about 6 to 9 inches in the 20th century.</flow:span></flow:p>
+        <flow:p><flow:span>
+          John P. Holdren, an energy and climate expert at <flow:a href="http://topics.nytimes.com/top/reference/timestopics/organizations/h/harvard_university/index.html?inline=nyt-org" title="More articles about Harvard University.">Harvard University</flow:a>, said that the “report powerfully underscores the need for a massive effort to slow the pace of global climatic disruption before intolerable consequences become inevitable.”
+        </flow:span></flow:p>
+        <flow:p><flow:span>“Since 2001 there has been a torrent of new scientific evidence on the magnitude, human origins and growing impacts of the climatic changes that are underway,” said Mr. Holdren, who is the president of the American Association for the Advancement of Science. “In overwhelming proportions, this evidence has been in the direction of showing faster change, more danger and greater confidence about the dominant role of fossil fuel burning and tropical deforestation in causing the changes that are being observed.”</flow:span></flow:p>
+        <flow:p><flow:span>The conclusions came after a three-year review of hundreds of studies of clues illuminating past climate shifts, observations of retreating ice, warming and rising seas, and other shifts around the planet, and a greatly expanded suite of supercomputer simulations used to test how earth will respond to a building blanket of gases that hold heat in the atmosphere. </flow:span></flow:p>
+        <flow:p><flow:span>The section released today was a 20-page summary for policymakers, which was approved early this morning by teams of officials from more than 100 countries after three days and nights of wrangling over wording with the lead authors, all of whom are scientists.</flow:span></flow:p>
+        <flow:p><flow:span>It described far-flung ramifications for both humans and nature. </flow:span></flow:p>
+      </flow:div>
+    </flow:div>
+  </flow:TextFlow>
+

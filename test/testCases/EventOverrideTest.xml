@@ -1,0 +1,215 @@
+<Tests>
+<TestCase functionName="keyDownDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseDownDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="mouseMoveDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="textEventDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!-- <TestCase functionName="focusInDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="focusOutDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="activateDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase> -->
+<TestCase functionName="deactivateDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="deleteNextDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="deletePreviousDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="deleteNextWordDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="deletePreviousWordDerivedTest">
+	<TestData name="overrideEditManager">true</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<!-- Removed for expected ARB-related updates
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">MOUSE_DOWN</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">MOUSE_OVER</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">MOUSE_OUT</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">MOUSE_WHEEL</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">DOUBLE_CLICK</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">KEY_DOWN</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">FOCUS_IN</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">FOCUS_OUT</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">TEXT_INPUT</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">ACTIVATE</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">DEACTIVATE</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">MENU_SELECT</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">SELECT_ALL</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">COPY</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">CUT</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="testEventOverride">
+	<TestData name="overrideEditManager">false</TestData>
+	<TestData name="flash">false</TestData>
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="eventOverride">PASTE</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase> -->
+</Tests>

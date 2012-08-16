@@ -1,0 +1,446 @@
+<Tests>
+	<TestCase functionName="asknot.xml">
+		<TestData name="testFile">asknot.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="school.xml">
+		<TestData name="testFile">school.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_links.xml">
+		<TestData name="testFile">simple_with_links.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+  	<TestCase functionName="simple_with_floats.xml">
+		<TestData name="testFile">simple_with_floats.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+
+	<!-- <TestCase functionName="floatAtParaStart.xml">
+		<TestData name="testFile">floatAtParaStart.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase> -->
+	<TestCase functionName="backgroundColorTest.xml">
+		<TestData name="testFile">backgroundColorTest.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="digits.xml">
+		<TestData name="testFile">digits.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<!-- <TestCase functionName="tableExample.xml">
+		<TestData name="testFile">tableExample.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="requiresLayout">true</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>	-->
+	<TestCase functionName="asknot.txt">
+		<TestData name="testFile">asknot.txt</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="whitespace1.xml">
+		<TestData name="testFile">whitespace1.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="whitespace2.xml">
+		<TestData name="testFile">whitespace2.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="tabStops.xml">
+		<TestData name="testFile">tabStops.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="font-embedding.xml">
+		<TestData name="testFile">font-embedding.xml</TestData>
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest.html">
+		<TestData name="testFile">htmlTest.html</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest2.html">
+		<TestData name="testFile">htmlTest2.html</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest3.html">
+		<TestData name="testFile">htmlTest3.html</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="moreAttributes.xml">
+		<TestData name="testFile">moreAttributes.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="ulFETest_ttb.xml">
+		<TestData name="testFile">ulFETest_ttb.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="ulFETest_ttb_zh.xml">
+		<TestData name="testFile">ulFETest_ttb.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+		<TestData name="locale">zh</TestData>
+	</TestCase>
+	<TestCase functionName="ulFETest.xml">
+		<TestData name="testFile">ulFETest.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="emptyElements.xml">
+		<TestData name="testFile">emptyElements.xml</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="VA-Justify.xml">
+		<TestData name="testFile">VA-Justify.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="RTLTabs.xml">
+		<TestData name="testFile">RTLTabs.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="ParaAlignLTR.xml">
+		<TestData name="testFile">ParaAlignLTR.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="ParaAlignRTL.xml">
+		<TestData name="testFile">ParaAlignRTL.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="ParaAlignVertical.xml">
+		<TestData name="testFile">ParaAlignVertical.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="letterSizeBase.xml">
+		<TestData name="testFile">letterSizeBase.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="letterSizeBaseVert.xml">
+		<TestData name="testFile">letterSizeBaseVert.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="all_ordered_lists.xml">
+		<TestData name="testFile">all_ordered_lists.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="all_unordered_lists.xml">
+		<TestData name="testFile">all_unordered_lists.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_lists.xml">
+		<TestData name="testFile">simple_with_lists.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="simple_with_lists_ul.xml">
+		<TestData name="testFile">simple_with_lists_ul.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="allCounterProps.xml">
+		<TestData name="testFile">allCounterProps.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="simple.xml">
+		<TestData name="testFile">simple.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="float.xml">
+		<TestData name="testFile">float.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="tb_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="InsideSpaceContentTest.xml">
+		<TestData name="testFile">InsideSpaceContentTest.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="special_list_test.xml">
+		<TestData name="testFile">special_list_test.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest_list.html">
+		<TestData name="testFile">htmlTest_list.html</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="adornmentTest.xml">
+		<TestData name="testFile">adornmentTest.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest_list_all.html">
+		<TestData name="testFile">htmlTest_list_all.html</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="flex">false</TestData>
+	</TestCase>
+	<TestCase functionName="lists_with_floats.xml">
+		<TestData name="testFile">lists_with_floats.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+	</TestCase>
+	<TestCase functionName="htmlTest_list_all_2717620.html">
+		<TestData name="testFile">htmlTest_list_all_2717620.html</TestData>
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+	</TestCase>
+	<!--<TestCase functionName="BoxLeadingModel.xml">
+		<TestData name="testFile">BoxLeadingModel.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">true</TestData>
+		<TestData name="htmlSnapshot">true</TestData>
+	</TestCase>-->
+	<TestCase functionName="listMarkerAlignment.xml">
+		<TestData name="testFile">listMarkerAlignment.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+	</TestCase>
+	<TestCase functionName="all_inside_lists.xml">
+		<TestData name="testFile">all_inside_lists.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+	</TestCase>
+	<TestCase functionName="listAndBackgroundColor.xml">
+		<TestData name="testFile">listAndBackgroundColor.xml</TestData>
+		<TestData name="bitmapSnapshot">true</TestData>
+		<TestData name="lineSnapshot">false</TestData>
+		<TestData name="xflSnapshot">false</TestData>
+		<TestData name="htmlSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+	</TestCase>
+</Tests>

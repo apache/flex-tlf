@@ -1,0 +1,20 @@
+<Tests>
+<TestCase functionName="impliedParagraphHTMLImportTest1">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="impliedParagraphHTMLImportTest2">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="impliedParagraphHTMLImportTest3">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="impliedParagraphHTMLImportTest4">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="impliedParagraphHTMLImportTest5">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+<TestCase functionName="impliedParagraphHTMLImportTest6">
+	<TestData name="fileName">empty.xml</TestData>
+</TestCase>
+</Tests>

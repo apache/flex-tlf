@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?><!-- NOTE: This will *not* work if these fonts are not installed -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+      <flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" columnCount="2" fontFamily="Times New Roman">
+      
+      	<flow:p><flow:span fontStyle="italic">Separators</flow:span></flow:p>
+		<flow:p><flow:span>Line Separator = A
+B</flow:span></flow:p>
+		<flow:p><flow:span>Paragraph Separator = C
+D</flow:span></flow:p>
+		
+		<flow:p><flow:span fontStyle="italic">Control Spaces</flow:span></flow:p>
+		<flow:p><flow:span>Non-Breaking Space = E F</flow:span></flow:p>
+		<flow:p><flow:span>Word Joiner = G⁠H</flow:span></flow:p>
+		<flow:p><flow:span>Zero-Width Non-Breaking Space = I﻿J</flow:span></flow:p>
+		<flow:p><flow:span>Zero-Width Space = K​L</flow:span></flow:p>
+		
+		<flow:p><flow:span fontStyle="italic">Hyphens</flow:span></flow:p>
+		<flow:p><flow:span>Hyphen = M‐N</flow:span></flow:p>
+		<flow:p><flow:span>Non-Breaking Hyphen = O‑P</flow:span></flow:p>
+		<flow:p><flow:span>Figure Dash = Q‒R</flow:span></flow:p>
+		<flow:p><flow:span>En Dash = S–T</flow:span></flow:p>
+		<flow:p><flow:span>Em Dash = U—V</flow:span></flow:p>
+		<flow:p><flow:span>Horizontal Bar = W―X</flow:span></flow:p>
+		<flow:p><flow:span>Soft Hyphen = Y­Z</flow:span></flow:p>
+		
+		<flow:p><flow:span fontStyle="italic">Quotes</flow:span></flow:p>
+		<flow:p><flow:span>Single Quotes = ‘A’</flow:span></flow:p>
+		<flow:p><flow:span>Single Low Quotes = ‚B‛</flow:span></flow:p>
+		<flow:p><flow:span>Double Quotes = “C”</flow:span></flow:p>
+		<flow:p><flow:span>Double Low Quotes = „A‟</flow:span></flow:p>
+		
+		<flow:p><flow:span fontStyle="italic">Directions</flow:span></flow:p>
+		<flow:p><flow:span>Left-to-Right Mark = ‎ABCD</flow:span></flow:p>
+		<flow:p><flow:span>Right-to-Left Mark = ‏EFGH</flow:span></flow:p>
+		<flow:p><flow:span>Left-to-Right Embedding = ‏IJ‪KL</flow:span></flow:p>
+		<flow:p><flow:span>Pop Directions Formatting PDF = ‏MN‬OP‬QR</flow:span></flow:p>
+		<flow:p><flow:span>Left-to-Right Override = ‏‭STUV</flow:span></flow:p>
+		<flow:p><flow:span>Right-to-Left Override = ‎‮WXYZ</flow:span></flow:p>
+		
+		<flow:p><flow:span fontStyle="italic">Spaces</flow:span></flow:p>
+		<flow:p><flow:span>----------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>En Quad = a b</flow:span></flow:p>
+		<flow:p><flow:span>----------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Em Quad = c d</flow:span></flow:p>
+		<flow:p><flow:span>-----------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>En Space = e f</flow:span></flow:p>
+		<flow:p><flow:span>-----------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Em Space = g h</flow:span></flow:p>
+		<flow:p><flow:span>-----------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>3-per Em Space = i j</flow:span></flow:p>
+		<flow:p><flow:span>-----------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>4-per Em Space = k l</flow:span></flow:p>
+		<flow:p><flow:span>-----------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>6-per Em Space = m n</flow:span></flow:p>
+		<flow:p><flow:span>--------------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Punctuation Space = o p</flow:span></flow:p>
+		<flow:p><flow:span>-------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Thin Space = q r</flow:span></flow:p>
+		<flow:p><flow:span>-------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Hair Space = s t</flow:span></flow:p>
+		<flow:p><flow:span>-------------------0123456789</flow:span></flow:p>
+		<flow:p><flow:span>Zero Width Space = u v</flow:span></flow:p>
+				
+		<flow:p><flow:span>En Quad = E&#x2000;F</flow:span></flow:p>
+		<flow:p><flow:span>Em Quad = E&#x2001;F</flow:span></flow:p>
+		<flow:p><flow:span>En Space = E&#x2002;F</flow:span></flow:p>
+		<flow:p><flow:span>Em Space = E&#x2003;F</flow:span></flow:p>
+		<flow:p><flow:span>Three-per-em Space = E&#x2004;F</flow:span></flow:p>
+		<flow:p><flow:span>Four-per-em Space = E&#x2005;F</flow:span></flow:p>
+		<flow:p><flow:span>Six-per-em Space = E&#x2006;F</flow:span></flow:p>
+		<flow:p><flow:span>Figure Space = E&#x2007;F</flow:span></flow:p>
+		<flow:p><flow:span>Punctuation Space = E&#x2008;F</flow:span></flow:p>
+		<flow:p><flow:span>Thin Space = E&#x2009;F</flow:span></flow:p>
+		<flow:p><flow:span>Hair Space = E&#x200A;F</flow:span></flow:p>
+		<flow:p><flow:span>Narrow no-break Space = E&#x202F;F</flow:span></flow:p>
+		<flow:p><flow:span>Medium Mathmatical Space = E&#x205F;F</flow:span></flow:p>
+		<flow:p><flow:span>Ideographic Space = E&#x3000;F</flow:span></flow:p>
+
+	  </flow:TextFlow>

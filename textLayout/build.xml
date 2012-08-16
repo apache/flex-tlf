@@ -1,0 +1,87 @@
+
+<project name="combined" default="main" basedir=".">
+	<property name="FLEX_HOME" location="${basedir}/../../.."/>
+	<property file="${FLEX_HOME}/build.properties"/>
+	<property name="output.file" value="${FLEX_HOME}/frameworks/libs/textLayout.swc"/>
+	<property name="output.docs" value="${FLEX_HOME}/tempDoc"/>
+	<property name="flexTasks.location" value="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+	<property name="project.uri" value="library://ns.adobe.com/flashx/textLayout"/>
+	<property name="compc.jvm.args" value="-Xmx384m" />
+
+        <!-- We use abbreviated token names here as, the 'release' 
+             and 'debug' tokens conflict with those specified in 
+             build.properties -->
+	<property name="dbg" value="false"/>
+	<property name="rel" value="true"/>
+
+  <target name="main" depends="clean,compile" description="Clean build of combined textLayout.swc"/>
+
+	<target name="clean" description="Deletes the combined swc">
+		<delete failonerror="false">
+			<fileset dir="${FLEX_HOME}/frameworks/libs">
+				<include name="textLayout.swc"/>
+				<include name="combined_link.xml"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="compile" description="Compiles textLayout.swc">
+		<taskdef resource="flexTasks.tasks" classpath="${flexTasks.location}"/>
+   		<compc fork="true"
+			   output="${output.file}"
+			   compute-digest="true"
+			   include-classes="flashx.textLayout.CoreClasses flashx.textLayout.EditClasses flashx.textLayout.ConversionClasses">
+			<jvmarg line="${compc.jvm.args}"/>
+			<keep-as3-metadata>IMXMLObject</keep-as3-metadata>
+			<include-namespaces uri="${project.uri}"/>
+			<namespace uri="${project.uri}" manifest="manifest.xml"/>
+			<source-path path-element="src"/>
+			<library-path/>
+			<include-file name="manifest.xml" path="${basedir}/manifest.xml"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+
+	<target name="doc" depends="clean-temp-docs" description="Updates textLayout.swc with ASDoc XML">
+		<taskdef resource="flexTasks.tasks" classpath="${flexTasks.location}"/>
+		<condition property="asdoc.jvm.args" value="-Xmx384m">
+			<os family="windows"/>
+		</condition>
+		<condition property="asdoc.jvm.args" value="-Xmx512m">
+			<os family="mac"/>
+		</condition>
+		<condition property="asdoc.jvm.args" value="-Xmx512m">
+			<os family="unix"/>
+		</condition>
+		
+		<delete failonerror="false">
+			<fileset dir="${output.docs}">
+				<include name="validation_errors.log"/>
+			</fileset>
+		</delete>
+		
+		<!-- builds ASDoc XML -->
+		<asdoc output="${output.docs}" lenient="false" failonerror="true" keep-xml="true" skip-xsl="true" fork="true">
+			<doc-classes class="flashx.textLayout.CoreClasses"/>
+			<doc-classes class="flashx.textLayout.EditClasses"/>
+			<doc-classes class="flashx.textLayout.ConversionClasses"/>
+		    <compiler.source-path path-element="src"/>
+			<external-library-path dir="${output.file}"/>
+		    <doc-namespaces uri="${project.uri}"/>
+		    <namespace uri="${project.uri}" manifest="manifest.xml"/>
+		    <jvmarg line="${asdoc.jvm.args}"/>
+			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+    </asdoc>
+		
+		<available file="${output.docs}/validation_errors.log" property="asdoc.errors"/>
+		<fail if="asdoc.errors" message="ASDoc Errors"/>
+	</target>
+	<target name="clean-temp-docs">
+		<delete dir="${output.docs}\tempdita" failonerror="false" includeEmptyDirs="true"/>
+	</target>
+
+</project>

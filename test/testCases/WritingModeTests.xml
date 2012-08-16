@@ -1,0 +1,61 @@
+<Tests>
+<TestCase functionName="japaneseAttrib">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="arabicAttrib">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="romanAttrib">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="rtlAttrib">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="japanesePositioning">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="arabicPositioning">
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="romanPositioning">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="rtlPositioning">
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="japaneseJustification">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="tb_rtl">false</TestData>
+</TestCase>
+<TestCase functionName="arabicJustification">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="romanJustification">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="rtlJustification">
+	<TestData name="fileName">empty.xml</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="tb_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="arabicDirection">
+	<TestData name="fileName">sampleArabic.xml</TestData>
+	<TestData name="tb_ltr">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+</Tests>

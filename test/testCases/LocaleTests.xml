@@ -1,0 +1,37 @@
+<Tests>
+<TestCase functionName="textFlowLocale">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="validateEnLocaleSettings">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="validateZhLocaleSettings">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="validateJaLocaleSettings">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="validateDefaultLocaleSettings">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="overrideLocaleWithEastAsian">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+<TestCase functionName="overrideLocaleWithEnOrDefault">
+	<TestData name="bitmapSnapshot">true</TestData>
+	<TestData name="tb_rtl">false</TestData>
+	<TestData name="rl_ltr">false</TestData>
+</TestCase>
+</Tests>

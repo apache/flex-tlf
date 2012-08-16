@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:Canvas 
+	creationComplete="handleCreationComplete()" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flow="library://ns.adobe.com/flashx/textLayout">
+    <mx:Script>
+		<![CDATA[
+		
+		
+		import flash.text.engine.ElementFormat;
+		import flash.text.engine.FontDescription;
+		import flash.text.engine.LineJustification;
+		import flash.text.engine.SpaceJustifier;
+		import flash.text.engine.TextBlock;
+		import flash.text.engine.TextElement;
+		import flash.text.engine.TextLine;
+		import flash.text.engine.TextLineValidity;
+		import flash.utils.getQualifiedClassName;
+		
+		import flashx.textLayout.TextLayoutVersion;
+		import flashx.textLayout.container.ContainerController;
+		import flashx.textLayout.container.ScrollPolicy;
+		import flashx.textLayout.conversion.TextConverter;
+		import flashx.textLayout.edit.EditManager;
+		import flashx.textLayout.elements.Configuration;
+		import flashx.textLayout.elements.ParagraphElement;
+		import flashx.textLayout.elements.SpanElement;
+		import flashx.textLayout.elements.TextFlow;
+		import flashx.textLayout.factory.StringTextLineFactory;
+		import flashx.textLayout.formats.BlockProgression;
+		import flashx.textLayout.formats.TextLayoutFormat;
+		import flashx.textLayout.formats.LineBreak;
+		import flashx.textLayout.formats.VerticalAlign;
+		import flashx.textLayout.tlf_internal;
+		
+		import mx.collections.ArrayCollection;
+		import mx.controls.Text;
+
+		use namespace tlf_internal;
+			
+		
+		private static var factory:StringTextLineFactory = new StringTextLineFactory();
+		
+		private var beginCreationTime:int;
+		private var endCreationTime:int;
+		private var beginRenderTime:int;
+		public var creationTimeElapsed:int;
+		public var renderTimeElapsed:int;
+		
+		// state for running tests
+		private var stopAtNextFrame:int = -1;
+		
+		private var resultText:Text;
+  		
+  		[Bindable]
+		static private var testTypeArray:ArrayCollection = new ArrayCollection([
+			{label:"TextField", 	 	data:"buildTextFieldExample"},
+			{label:"FTE", 		 		data:"buildFTEExample"},
+			{label:"Vellum Factory", 	data:"buildVellumFactory"},
+			{label:"Vellum TextFlow", 	data:"buildVellumTextFlow"},
+			{label:"Vellum TextFlowEdit", 	data:"buildVellumTextFlowEdit"},
+			{label:"Vellum TextFlowImport", 	data:"buildVellumTextFlowImport"},
+			{label:"Rectangles", 		data:"buildRectangles"},
+			{label:"Nothing", 			data:"buildNothing"},
+			{label:"VellumVJ",			data:"buildVellumFactoryVJ"},
+			{label:"VellumExplicit",	data:"buildVellumFactoryExplicit"}																																																						
+		]);
+
+		private function setDebugFlag():void
+		{
+			var e:Error = new Error();
+			var s:String = e.getStackTrace();
+			// trace(s);
+			var i:int = s.indexOf("setDebugFlag");
+			if (s.charAt(i + 14) == '[')
+				debugMode = true;
+		}
+		
+		[Bindable]
+		public var debugMode:Boolean = false;
+
+		public function handleCreationComplete(): void
+		{
+			setDebugFlag();
+			return; 
+		}
+		
+		// data about last test run
+		private var _func:String;
+		private var numberOfIterations:int = 0;
+		
+		static private const rawTestData:String = 
+		"From the part Mr. Burke took in the American Revolution, it was natural that I should consider him a friend to mankind; and as our acquaintance commenced on that ground, it would have been more agreeable to me to have had cause to continue in that opinion than to change it. " + 
+		"At the time Mr. Burke made his violent speech last winter in the English Parliament against the French Revolution and the National Assembly, I was in Paris, and had written to him but a short time before to inform him how prosperously matters were going on. Soon after this I saw his advertisement of the Pamphlet he intended to publish: As the attack was to be made in a language but little studied, and less understood in France, and as everything suffers by translation, I promised some of the friends of the Revolution in that country that whenever Mr. Burke's Pamphlet came forth, I would answer it. This appeared to me the more necessary to be done, when I saw the flagrant misrepresentations which Mr. Burke's Pamphlet contains; and that while it is an outrageous abuse on the French Revolution, and the principles of Liberty, it is an imposition on the rest of the world. " + 
+		"I am the more astonished and disappointed at this conduct in Mr. Burke, as (from the circumstances I am going to mention) I had formed other expectations. " + 
+		"I had seen enough of the miseries of war, to wish it might never more have existence in the world, and that some other mode might be found out to settle the differences that should occasionally arise in the neighbourhood of nations. This certainly might be done if Courts were disposed to set honesty about it, or if countries were enlightened enough not to be made the dupes of Courts. The people of America had been bred up in the same prejudices against France, which at that time characterised the people of England; but experience and an acquaintance with the French Nation have most effectually shown to the Americans the falsehood of those prejudices; and I do not believe that a more cordial and confidential intercourse exists between any two countries than between America and France. " + 
+		"When I came to France, in the spring of 1787, the Archbishop of Thoulouse was then Minister, and at that time highly esteemed. I became much acquainted with the private Secretary of that Minister, a man of an enlarged benevolent heart; and found that his sentiments and my own perfectly agreed with respect to the madness of war, and the wretched impolicy of two nations, like England and France, continually worrying each other, to no other end than that of a mutual increase of burdens and taxes. That I might be assured I had not misunderstood him, nor he me, I put the substance of our opinions into writing and sent it to him; subjoining a request, that if I should see among the people of England, any disposition to cultivate a better understanding between the two nations than had hitherto prevailed, how far I might be authorised to say that the same disposition prevailed on the part of France? He answered me by letter in the most unreserved manner, and that not for himself only, but for the Minister, with whose knowledge the letter was declared to be written. " + 
+		"I put this letter into the, hands of Mr. Burke almost three years ago, and left it with him, where it still remains; hoping, and at the same time naturally expecting, from the opinion I had conceived of him, that he would find some opportunity of making good use of it, for the purpose of removing those errors and prejudices which two neighbouring nations, from the want of knowing each other, had entertained, to the injury of both. " +
+		"When the French Revolution broke out, it certainly afforded to Mr. Burke an opportunity of doing some good, had he been disposed to it; instead of which, no sooner did he see the old prejudices wearing away, than he immediately began sowing the seeds of a new inveteracy, as if he were afraid that England and France would cease to be enemies. That there are men in all countries who get their living by war, and by keeping up the quarrels of Nations, is as shocking as it is true; but when those who are concerned in the government of a country, make it their study to sow discord and cultivate prejudices between Nations, it becomes the more unpardonable. " +
+		"With respect to a paragraph in this work alluding to Mr. Burke's having a pension, the report has been some time in circulation, at least two months; and as a person is often the last to hear what concerns him the most to know, I have mentioned it, that Mr. Burke may have an opportunity of contradicting the rumour, if he thinks proper.";
+		
+		private var testDataText:String;
+		
+		public function clearPreviousRun():void
+		{
+			if (resultText)
+			{
+				lineHolder.removeChild(resultText);
+				resultText = null;
+			}
+			while (lineHolder.rawChildren.numChildren)
+				lineHolder.rawChildren.removeChildAt(0);
+				
+			lineHolder.visible = false;			
+		}
+		
+		public function runTheTest():void
+		{
+			clearPreviousRun();
+			
+			// number of iterations to run	
+			numberOfIterations = int(iterationsInput.text);
+			
+			// setup testDataText - this is the per paragraph text
+			var desiredLength:int = int(paraLength.text);
+			testDataText = rawTestData;
+			while (testDataText.length < desiredLength)
+				testDataText = testDataText + rawTestData;
+			testDataText = testDataText.substring(0,desiredLength);
+			
+			addEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			runButton.enabled = false;
+
+			beginCreationTime = getTimer();
+			
+			stopAtNextFrame = 0;
+			
+			_func = testTypeArray[testTypeCombo.selectedIndex].data;
+			
+			var compositionWidth:Number = Number(paraWidth.text);
+			
+			for (var testNum:int = 0; testNum < numberOfIterations; testNum++)
+			{
+				var example:DisplayObject = this[_func](compositionWidth);
+				if (example)
+				{
+					//example.x += 0;
+					//example.y += testNum*5;
+					lineHolder.rawChildren.addChild(example);
+				}
+			}
+			
+			endCreationTime = getTimer();
+		}
+		
+		static private var templateTextElement:TextElement = null;
+		static private var templateTextBlock:TextBlock = null;
+		/** FTE as a factory */
+		public function buildFTEExample(compositionWidth:Number):DisplayObject
+		{
+			if (!templateTextElement)
+			{
+				var elementFormat:ElementFormat = new ElementFormat();
+				var fontDescription:FontDescription = new FontDescription();
+				fontDescription.fontName = "Times New Roman";
+				elementFormat.fontDescription = fontDescription;
+				templateTextElement = new TextElement();
+				templateTextElement.elementFormat = elementFormat;
+				templateTextBlock = new TextBlock(templateTextElement);	
+				templateTextBlock.textJustifier = new SpaceJustifier("en",LineJustification.UNJUSTIFIED,false);
+						
+			}
+			templateTextElement.text = testDataText;
+			
+			var rslt:Sprite = new Sprite();
+			var textLine:TextLine = null;
+			var y:Number = 8.3;
+			while (textLine = templateTextBlock.createTextLine(textLine,compositionWidth))
+			{
+				textLine.x = 0;
+				textLine.y = y;
+				y += 14.4;
+				rslt.addChild(textLine);
+			}		
+			for (var i:int = 0; i < rslt.numChildren; i++)
+				TextLine(rslt.getChildAt(i)).validity = TextLineValidity.STATIC;
+			return rslt;	
+		}
+		
+		static private var _rslt:Sprite;
+		static private var _bounds:Rectangle = new Rectangle(0,0,Number.MAX_VALUE,Number.MAX_VALUE);
+		static public function callback(tl:TextLine):void
+		{ 
+			_rslt.addChild(tl); 
+		}
+		
+		/** use the vellum factory via the callback */
+		public function buildVellumFactory(compositionWidth:Number):DisplayObject
+		{
+			_rslt = new Sprite();
+			_bounds.width = compositionWidth;
+			factory.compositionBounds = _bounds;
+			factory.text = testDataText;
+			factory.createTextLines(callback);
+			return _rslt;	
+		}
+		
+		/** build a textFlow each time */
+		public function buildVellumTextFlowEdit(compositionWidth:Number):DisplayObject
+		{
+			return buildVellumTextFlow(compositionWidth, new EditManager());
+		}
+		/** build a textFlow each time */
+		public function buildVellumTextFlow(compositionWidth:Number, im:EditManager = null):DisplayObject
+		{
+			var tf:TextFlow = new TextFlow();
+			var p:ParagraphElement = new ParagraphElement();
+			tf.addChild(p);
+			var s:SpanElement = new SpanElement();
+			p.addChild(s);
+			s.text = testDataText;
+			
+			tf.interactionManager = im;
+
+			var rslt:Sprite = new Sprite();
+			tf.flowComposer.addController(new ContainerController(rslt,compositionWidth,this.height-controlBox.height));
+			tf.flowComposer.updateAllControllers();
+			return rslt;
+		}
+		
+		/** import a textFlow each time */
+		public function buildVellumTextFlowImport(compositionWidth:Number):DisplayObject
+		{
+			var markup:XML = <TextFlow xmlns='http://ns.adobe.com/textLayout/2008'><p><span>{testDataText}</span></p></TextFlow>;
+			var tf:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
+
+			var rslt:Sprite = new Sprite();
+			tf.flowComposer.addController(new ContainerController(rslt,compositionWidth,this.height-controlBox.height));
+			tf.flowComposer.updateAllControllers();
+			return rslt;
+		}
+		
+		/** use the vellum factory via the callback. Test code for VJ */
+		private var containerFormat:TextLayoutFormat;
+		public function buildVellumFactoryVJ(compositionWidth:Number):DisplayObject
+		{
+			if (!containerFormat)
+			{
+				containerFormat = new TextLayoutFormat();
+				containerFormat.verticalAlign = VerticalAlign.JUSTIFY;
+			} 
+			var compositionHeight:Number = 500;
+			_rslt = new Sprite();	
+			_rslt.graphics.beginFill(0xff0000);	// red
+			_rslt.graphics.drawRect(0,0,compositionWidth,compositionHeight);
+			_rslt.graphics.endFill();
+			factory.text = testDataText;
+			factory.compositionBounds = new Rectangle(0,0,compositionWidth,compositionHeight);
+			factory.textFlowFormat = containerFormat;
+			factory.createTextLines(callback);
+			return _rslt;	
+		}
+		
+		/** use the vellum factory via the callback. Test code for Explicit linebreaks */
+		private var explicitContainerFormat:TextLayoutFormat;
+		public function buildVellumFactoryExplicit(compositionWidth:Number):DisplayObject
+		{
+			if (!containerFormat)
+			{
+				explicitContainerFormat = new TextLayoutFormat();
+				explicitContainerFormat.lineBreak = LineBreak.EXPLICIT;
+			} 
+			var compositionHeight:Number = 500;
+			_rslt = new Sprite();	
+			_rslt.graphics.beginFill(0xff0000);	// red
+			_rslt.graphics.drawRect(0,0,compositionWidth,compositionHeight);
+			_rslt.graphics.endFill();
+			factory.text = testDataText;
+			factory.compositionBounds = new Rectangle(0,0,compositionWidth,compositionHeight);
+			factory.textFlowFormat = explicitContainerFormat;
+			factory.createTextLines(callback);
+			return _rslt;	
+		}
+		
+		/** build rectangles */
+		public function buildRectangles(compositionWidth:Number):DisplayObject
+		{
+			var s:Shape = new Shape();
+			s.graphics.beginFill(0xff0000);	// red
+			s.graphics.drawRect(0,0,compositionWidth,this.height-controlBox.height);
+			s.graphics.endFill();
+			return s;
+		}
+		
+		/** build a TextField */
+		static private var defaultTextFormat:TextFormat;
+		public function buildTextFieldExample(compositionWidth:Number):DisplayObject
+		{
+			if (!defaultTextFormat)
+			{
+				defaultTextFormat = new TextFormat();
+				defaultTextFormat.font = "Times New Roman";
+			}
+			
+			var a:TextField = new TextField();
+			a.defaultTextFormat = defaultTextFormat;
+			a.text = testDataText;
+			a.x = -2;
+			a.y = -6;
+			a.width = compositionWidth;
+			a.height = 10000;
+			a.multiline = true;
+			a.wordWrap = true;
+			return a;
+		}
+		
+		/** test that builds nothing - used to measure the overhead of the harness */
+		public function buildNothing(compositionWidth:Number):DisplayObject
+		{ return null; }
+		
+		// debugging code 
+		private function displayHierarchy(root:DisplayObject):String
+		{
+			var outputString:String;
+			
+			outputString = flash.utils.getQualifiedClassName(root);
+			outputString += " rect (" + root.x.toString() + "," + root.y.toString() + "," + root.width.toString() + "," + root.height.toString() + ")";
+			if (root is DisplayObjectContainer && (root as DisplayObjectContainer).numChildren > 0)
+			{
+				outputString += " {\n";
+				for (var i:int = 0; i < (root as DisplayObjectContainer).numChildren; i++)
+					outputString += displayHierarchy((root as DisplayObjectContainer).getChildAt(i));
+				outputString += "}\n";
+			}
+			return outputString;
+		}
+	
+		// count of number of tests run this session
+		private var testCount:int = 0;
+		
+		/** generate a report at the next enter frame */
+		public function handleEnterFrame(e:Event): void
+		{
+			if (stopAtNextFrame == 0)
+			{
+				stopAtNextFrame = 1;
+				lineHolder.visible = true;
+				beginRenderTime = getTimer();
+			}
+			else if (stopAtNextFrame == 1)
+			{
+				var endRenderTime:int = getTimer();
+				creationTimeElapsed = endCreationTime - beginCreationTime;
+				renderTimeElapsed = endRenderTime - beginRenderTime;
+				var totalTimeElapsed:int    = endRenderTime - beginCreationTime;
+				
+				testCount++;
+				
+				flash.system.System.gc();	//mark
+				flash.system.System.gc();	//sweep
+				var memoryAllocated:Number = flash.system.System.totalMemory/1024;
+
+				trace(_func,"creation time (msecs)",creationTimeElapsed.toString(), "render time (msecs)",renderTimeElapsed.toString(), "total time (msecs)",totalTimeElapsed.toString(), " mem (K)", memoryAllocated);
+
+				stopAtNextFrame = -1;
+				
+				var testDescription:String = testCount.toString() + ") iters: " + numberOfIterations.toString();
+				
+				var playerType:String = this.debugMode ? "DEBUGGING PLAYER (not suitable for measuring performance)" : "RELEASE PLAYER "+Capabilities.version;
+				var vellumType:String = "Vellum build: " + flashx.textLayout.TextLayoutVersion.BUILD_NUMBER + "\n" + (Configuration.tlf_internal::debugCodeEnabled ? "DEBUG vellum engine (not suitable for measuring performance)" : "RELEASE vellum engine");
+
+				resultText = new Text();
+				resultText.text = _func + "\n" +  testDescription + "\nCreationTime (msecs): " + creationTimeElapsed.toString() + "\nRenderTime (msec): " + renderTimeElapsed.toString() + "\nTotalTime (msec): " + totalTimeElapsed.toString() 
+					+ " \nmem (K): " + memoryAllocated.toString() + "\n" + playerType + "\n" + vellumType;
+				resultText.x = 100; 
+				resultText.y = 140;
+				resultText.width = 400;
+				resultText.setStyle("fontFamily", "Minion Pro");
+				resultText.setStyle("fontSize", 24);
+				resultText.opaqueBackground = 0xFFFFFFFF;
+				lineHolder.addChild(resultText);
+				this.dispatchEvent(new Event(Event.COMPLETE));
+				
+				runButton.enabled = true;	// start another test?
+				removeEventListener(Event.ENTER_FRAME,handleEnterFrame);
+			}
+  		}
+      
+       ]]>
+	</mx:Script>
+
+	<mx:VBox>
+		<mx:HBox id="controlBox" paddingLeft="4" paddingTop="4">
+			<mx:Label text="VellumParaTest" fontWeight="bold"/>
+			<mx:ComboBox id="testTypeCombo" editable="false" closeDuration="0" openDuration="0" selectionDuration="0"
+						paddingLeft="4" paddingTop="4" selectedIndex="0"
+						dataProvider="{testTypeArray}"/>
+			<mx:Label text="Iterations:" fontWeight="bold"/>
+			<mx:TextInput id="iterationsInput" text="100" width="40"/>
+			<mx:Label text="ParagraphLength:" fontWeight="bold"/>
+			<mx:TextInput id="paraLength" text="5000" width="60"/>
+			<mx:Label text="Width:" fontWeight="bold"/>
+			<mx:TextInput id="paraWidth" text="1100" width="60"/>
+			<!-- <mx:Label text="ParagraphCount:" fontWeight="bold"/> -->
+			<!-- <mx:TextInput id="paraCount" text="1" width="40"/> -->
+			<mx:Button id="runButton" label="Run" click="runTheTest()"/>
+		</mx:HBox>
+		<mx:Canvas id="lineHolder"/>
+	</mx:VBox>
+	
+</mx:Canvas>

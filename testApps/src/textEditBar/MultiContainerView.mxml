@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<mx:ViewStack xmlns:mx="http://www.adobe.com/2006/mxml" resize="resizeContainers()" backgroundColor="0xffffff">
+	<mx:Script>
+		<![CDATA[
+			import flashx.textLayout.container.ContainerController;
+			import flashx.textLayout.debug.assert;
+			import flashx.textLayout.elements.Configuration;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.formats.BlockProgression;
+			
+			import mx.containers.Canvas;
+			
+			import textEditBar.SpriteWithIME;
+			
+			private var _numContainers:int = -1;
+			private var _arrangement:String = null;
+			private var _visibleContainer:int = -1;
+			private var _textPanelOffset:int = 0;
+			private var _activeFlow:TextFlow = null;
+			
+			public var measureWidth:Boolean = false;
+			public var measureHeight:Boolean = false;
+			
+			public function get numContainers():int { return _numContainers; }
+			public function get visibleContainer():int { return _visibleContainer; }
+			public function get arrangement():String { return _arrangement; }
+			
+	 		public function changeContainerSetup(newActiveFlow:TextFlow, newArrangement:String,newVisibleContainer:int,newContainerChainLength:int):void
+	 		{
+	 			var needResize:Boolean = false;
+	 			
+	 			 if (newContainerChainLength <= 0)
+	 				newContainerChainLength = 1;
+	 			
+	 			if (newVisibleContainer > newContainerChainLength)
+			 		newVisibleContainer = newContainerChainLength;
+			 	if (newVisibleContainer <= 0)
+			 		newVisibleContainer = 1;	
+			 	if (newArrangement == null)
+			 		newArrangement = MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE;
+			 		
+			 	if (_activeFlow != newActiveFlow || _numContainers != newContainerChainLength || newArrangement != _arrangement)
+			 	{
+	 				_activeFlow = newActiveFlow;
+			 		if (_activeFlow)
+			 			_activeFlow.flowComposer.removeAllControllers();
+	  				removeAllChildren();
+	 				addPanels(newContainerChainLength, newArrangement);
+	 				_textPanelOffset = 0;
+	 				_visibleContainer = newVisibleContainer;
+	 				selectedIndex = _arrangement == MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE ? _textPanelOffset : (_textPanelOffset + _visibleContainer-1);
+	 				needResize = true;
+	 				_arrangement = newArrangement;
+	 				_numContainers = newContainerChainLength;
+			 	
+			 		if (_activeFlow)
+	 				{
+						for (var idx:int = 0; idx < _numContainers; idx++)
+						{
+							var newController:ContainerController = containerFactoryFunction();
+							var panel:Canvas = getChildAt(_arrangement == MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE ? 0 : idx) as Canvas;
+							panel.rawChildren.addChild(newController.container);		
+							_activeFlow.flowComposer.addController(newController);
+						}
+						needResize = true;
+			 		}
+			 	}
+	
+			 		
+			 	if (newVisibleContainer != _visibleContainer)
+			 	{
+			 		if (_arrangement == MultiContainerChangeEvent.ARRANGE_AS_VIEWSTACK)
+			 		{
+			 			selectedIndex =  _textPanelOffset + newVisibleContainer - 1;
+			 			_visibleContainer = newVisibleContainer;
+			 		}
+			 	}
+			 	
+			 	if (needResize && _activeFlow)
+			 		resizeContainers();
+	  		}
+	 		
+	 		public function containerFactoryFunction(frameName:String=null):ContainerController
+	 		{
+				var config:Configuration = TextFlow.defaultConfiguration;
+	 			var controllerClass:Class = ContainerController;
+	 			
+				//var textContainer:DisplayObjectContainer = new Sprite();
+				var textContainer:DisplayObjectContainer = new SpriteWithIME();
+				textContainer.focusRect = false;
+	
+				return new controllerClass(textContainer);
+	 		}
+ 		
+			public function resizeContainers():void
+			{
+				var newFrameWidth:Number = width;
+				var newFrameHeight:Number = height;
+				
+				// for now lots of skinny frames - later can tile them or something fun
+				var divFrameWidth:int;
+				var divFrameHeight:int;
+				
+				var deltax:int;
+				var deltay:int;
+	      
+	      		if (_arrangement == MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE)
+	      		{
+					if (_activeFlow && _activeFlow.computedFormat.blockProgression!= BlockProgression.RL)
+					{
+						divFrameWidth = newFrameWidth/_numContainers;
+						divFrameHeight = newFrameHeight;
+					} 
+					else {
+						divFrameWidth = newFrameWidth;
+						divFrameHeight = newFrameHeight/_numContainers;
+					}
+					deltax = divFrameWidth;
+					deltay = divFrameHeight;
+	      		}
+	      		else
+	      		{
+	      			divFrameWidth = newFrameWidth;
+	      			divFrameHeight = newFrameHeight;
+	      			deltax = 0;
+	      			deltay = 0;
+	      		}
+	
+				var x:Number = 0;
+				var y:Number = 0;
+				
+				if (_activeFlow && _activeFlow.flowComposer)
+				{
+					for (var idx:int = 0; idx < _activeFlow.flowComposer.numControllers; idx++)
+					{
+						var cont:ContainerController = _activeFlow.flowComposer.getControllerAt(idx);
+						if (cont.container is DisplayObject)
+							updateFrameDimensions(cont,x,y,divFrameWidth,divFrameHeight);
+						if (_activeFlow.computedFormat.blockProgression != BlockProgression.RL)
+							x = x + deltax;
+						else 
+							y = y + deltay;
+					}			
+					_activeFlow.flowComposer.updateAllControllers();
+					
+					if (_activeFlow.interactionManager && _activeFlow.interactionManager.hasSelection())
+						_activeFlow.flowComposer.getControllerAt(_activeFlow.flowComposer.numControllers-1).scrollToRange(_activeFlow.interactionManager.activePosition,_activeFlow.interactionManager.anchorPosition);	
+	
+				}
+			}
+				
+	 		/** helper function to update a frame's dimensions */
+	 		private function updateFrameDimensions(controller:ContainerController,x:Number,y:Number,w:Number,h:Number):void
+	 		{
+	 			var tc:DisplayObject = controller.container;
+	 			
+	   			if (tc.x != x)
+	 				tc.x = x;
+	 			if (tc.y != y)
+	 				tc.y = y;
+				controller.setCompositionSize(this.measureWidth ? NaN : w,this.measureHeight ? NaN : h);
+	 		}
+ 		
+ 	 		// manage the panels based on the arrangement
+	  		private function makePanel():Canvas
+	  		{
+	  			var rslt:Canvas = new Canvas();
+	  			rslt.verticalScrollPolicy="off";
+	  			rslt.horizontalScrollPolicy="off";
+	  			rslt.setStyle("backgroundColor","0xffffff");
+	  			rslt.width = width;
+	  			rslt.height = height;
+	  			return rslt;
+	  		}
+
+	  		private function addPanels(numberOfPanels:int, arrangement:String):void
+	  		{
+	  			if (arrangement == MultiContainerChangeEvent.ARRANGE_SIDE_BY_SIDE)
+	  				addChild(makePanel());
+	  			else
+	  			{
+	  				for (var idx:int = 0; idx < numberOfPanels; idx++)
+	  					addChild(makePanel());
+	  			}
+	  		}
+ 
+		]]>
+	</mx:Script>
+</mx:ViewStack>
+

@@ -1,0 +1,990 @@
+<Tests> 
+  <TestCase testID="ImportTest:asknot.xml(sprite,tb,ltr)">
+    <XFL>211093</XFL>
+    <HTML>211619</HTML>
+    <Bitmap playerVersion="-1">211946</Bitmap>
+    <Bitmap playerVersion="MAC">212920</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213560</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:school.xml(sprite,tb,ltr)">
+    <XFL>211094</XFL>
+    <HTML>211585</HTML>
+    <Bitmap playerVersion="-1">211656</Bitmap>
+    <Bitmap playerVersion="MAC">212736</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213562</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:simple_with_links.xml(sprite,tb,ltr)">
+    <XFL>211095</XFL>
+    <HTML>211618</HTML>
+    <Bitmap playerVersion="-1">211944</Bitmap>
+    <Bitmap playerVersion="MAC">212884</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213564</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:digits.xml(sprite,tb,ltr)">
+    <XFL>211096</XFL>
+    <HTML>211587</HTML>
+    <Bitmap playerVersion="-1">211660</Bitmap>
+    <Bitmap playerVersion="MAC">212838</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213570</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:asknot.txt(sprite,tb,ltr)">
+    <XFL>211097</XFL>
+    <HTML>211616</HTML>
+    <Bitmap playerVersion="-1">211940</Bitmap>
+    <Bitmap playerVersion="MAC">212750</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213572</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:whitespace1.xml(sprite,tb,ltr)">
+    <XFL>211098</XFL>
+    <HTML>211588</HTML>
+    <Bitmap playerVersion="-1">211662</Bitmap>
+    <Bitmap playerVersion="MAC">212898</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213574</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:whitespace2.xml(sprite,tb,ltr)">
+    <XFL>211099</XFL>
+    <HTML>211615</HTML>
+    <Bitmap playerVersion="-1">211938</Bitmap>
+    <Bitmap playerVersion="MAC">212684</Bitmap>
+    <Bitmap playerVersion="WIN">213346</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213347</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213799</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:tabStops.xml(sprite,tb,ltr)">
+    <XFL>211100</XFL>
+    <HTML>211589</HTML>
+    <Bitmap playerVersion="-1">211664</Bitmap>
+    <Bitmap playerVersion="MAC">212832</Bitmap>
+    <Bitmap playerVersion="WIN">213349</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213350</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213578</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:font-embedding.xml(sprite,tb,ltr)">
+    <XFL>211101</XFL>
+    <HTML>211614</HTML>
+  </TestCase>
+  <TestCase testID="ImportTest:htmlTest.html(sprite,tb,ltr)">
+    <XFL>211102</XFL>
+    <HTML>211590</HTML>
+    <Bitmap playerVersion="-1">211936</Bitmap>
+    <Bitmap playerVersion="MAC">212808</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213580</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:htmlTest2.html(sprite,tb,ltr)">
+    <XFL>211103</XFL>
+    <HTML>211613</HTML>
+    <Bitmap playerVersion="-1">211666</Bitmap>
+    <Bitmap playerVersion="MAC">212766</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:htmlTest3.html(sprite,tb,ltr)">
+    <XFL>211104</XFL>
+    <HTML>211591</HTML>
+    <Bitmap playerVersion="-1">211934</Bitmap>
+    <Bitmap playerVersion="MAC">212868</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213584</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:moreAttributes.xml(sprite,tb,ltr)">
+    <XFL>211105</XFL>
+    <HTML>211612</HTML>
+    <Bitmap playerVersion="-1">211668</Bitmap>
+    <Bitmap playerVersion="MAC">212744</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213586</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ulFETest.xml(sprite,tb,ltr)">
+    <XFL>211106</XFL>
+    <HTML>211592</HTML>
+    <Bitmap playerVersion="-1">211932</Bitmap>
+    <Bitmap playerVersion="MAC">212892</Bitmap>
+    <Bitmap playerVersion="WIN">213361</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213362</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213588</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:emptyElements.xml(sprite,tb,ltr)">
+    <XFL>211107</XFL>
+    <HTML>211611</HTML>
+  </TestCase>
+  <TestCase testID="ImportTest:VA-Justify.xml(sprite,tb,ltr)">
+    <XFL>211108</XFL>
+    <HTML>211593</HTML>
+    <Bitmap playerVersion="-1">211670</Bitmap>
+    <Bitmap playerVersion="MAC">212678</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213590</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:htmlTest_list.html(sprite,tb,ltr)">
+    <XFL>211109</XFL>
+    <HTML>211606</HTML>
+    <Bitmap playerVersion="-1">211920</Bitmap>
+    <Bitmap playerVersion="MAC">212858</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213612</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:htmlTest_list_all.html(sprite,tb,ltr)">
+    <XFL>211110</XFL>
+    <HTML>211605</HTML>
+    <Bitmap playerVersion="-1">211918</Bitmap>
+    <Bitmap playerVersion="MAC">212790</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213616</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:lists_with_floats.xml(sprite,tb,ltr)">
+    <XFL>211111</XFL>
+    <HTML>211599</HTML>
+    <Bitmap playerVersion="-1">211684</Bitmap>
+    <Bitmap playerVersion="MAC">212938</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:lists_with_floats.xml(sprite,tb,rtl)">
+    <XFL>211112</XFL>
+    <HTML>211604</HTML>
+    <Bitmap playerVersion="-1">211736</Bitmap>
+    <Bitmap playerVersion="MAC">212628</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ulFETest_ttb.xml(sprite,rl,ltr)">
+    <XFL>211113</XFL>
+    <HTML>211600</HTML>
+    <Bitmap playerVersion="-1">211774</Bitmap>
+    <Bitmap playerVersion="MAC">212786</Bitmap>
+    <Bitmap playerVersion="WIN">213397</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213398</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213724</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ulFETest_ttb_zh.xml(sprite,rl,ltr)">
+    <XFL>211114</XFL>
+    <HTML>211603</HTML>
+    <Bitmap playerVersion="-1">211828</Bitmap>
+    <Bitmap playerVersion="MAC">212916</Bitmap>
+    <Bitmap playerVersion="WIN">213370</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213371</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213728</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:lists_with_floats.xml(sprite,rl,ltr)">
+    <XFL>211115</XFL>
+    <HTML>211602</HTML>
+    <Bitmap playerVersion="-1">211824</Bitmap>
+    <Bitmap playerVersion="MAC">212798</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:simple_with_floats.xml(sprite,tb,ltr)">
+    <XFL>211583</XFL>
+    <HTML>211586</HTML>
+    <Bitmap playerVersion="-1">211658</Bitmap>
+    <Bitmap playerVersion="MAC">212670</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213566</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:backgroundColorTest.xml(sprite,tb,ltr)">
+    <XFL>211584</XFL>
+    <HTML>211617</HTML>
+    <Bitmap playerVersion="-1">211942</Bitmap>
+    <Bitmap playerVersion="MAC">212666</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213568</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:imgSourceFilterFunctionTest(sprite,tb,ltr):">
+    <Bitmap playerVersion="-1">211654</Bitmap>
+    <Bitmap playerVersion="MAC">212960</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignJustifyTest(sprite,tb,ltr):false">
+    <Bitmap playerVersion="-1">211980</Bitmap>
+    <Bitmap playerVersion="MAC">212972</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignBottomTest(sprite,tb,ltr):false">
+    <Bitmap playerVersion="-1">211620</Bitmap>
+    <Bitmap playerVersion="MAC">212978</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignJustifyTest(sprite,tb,ltr):true">
+    <Bitmap playerVersion="-1">211978</Bitmap>
+    <Bitmap playerVersion="MAC">212958</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignBottomTest(sprite,tb,ltr):true">
+    <Bitmap playerVersion="-1">211622</Bitmap>
+    <Bitmap playerVersion="MAC">212968</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerTypeTest:singleTextLine(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211976</Bitmap>
+    <Bitmap playerVersion="MAC">212890</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerTypeTest:tenTextLines(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211624</Bitmap>
+    <Bitmap playerVersion="MAC">212676</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213502</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerTypeTest:oneHundredTextLines(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211974</Bitmap>
+    <Bitmap playerVersion="MAC">212824</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:asknot.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211628</Bitmap>
+    <Bitmap playerVersion="MAC">212856</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213506</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:school.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211972</Bitmap>
+    <Bitmap playerVersion="MAC">212756</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213508</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:simple_with_links.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211630</Bitmap>
+    <Bitmap playerVersion="MAC">212904</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213510</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:simple_with_floats.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211970</Bitmap>
+    <Bitmap playerVersion="MAC">212690</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213512</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:digits.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211632</Bitmap>
+    <Bitmap playerVersion="MAC">212704</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213514</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:whitespace1.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211968</Bitmap>
+    <Bitmap playerVersion="MAC">212818</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213516</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:whitespace2.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211634</Bitmap>
+    <Bitmap playerVersion="MAC">212758</Bitmap>
+    <Bitmap playerVersion="WIN">213406</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213407</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213518</Bitmap>
+  </TestCase>
+  <TestCase testID="FactoryImportTest:simple_with_images.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211966</Bitmap>
+    <Bitmap playerVersion="MAC">212852</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213520</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsString-surprised.png(sprite,tb,ltr)::surprised.png">
+    <Bitmap playerVersion="-1">211636</Bitmap>
+    <Bitmap playerVersion="MAC">212692</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213522</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsDisplayObject(sprite,tb,ltr):">
+    <Bitmap playerVersion="-1">211964</Bitmap>
+    <Bitmap playerVersion="MAC">212840</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213524</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsURLRequest(sprite,tb,ltr):">
+    <Bitmap playerVersion="-1">211638</Bitmap>
+    <Bitmap playerVersion="MAC">212804</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213526</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:undoRedoInsertImageTest-surprised.png(sprite,tb,ltr)::surprised.png">
+    <Bitmap playerVersion="-1">211962</Bitmap>
+    <Bitmap playerVersion="MAC">212772</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213528</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeImageTest-surprised.png-FremontBridge.jpg-surprised.png-FremontBridge.jpg(sprite,tb,ltr)::surprised.png:FremontBridge.jpg:surprised.png:FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211640</Bitmap>
+    <Bitmap playerVersion="MAC">212922</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213530</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeBaselineTest-image1.jpg(sprite,tb,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211960</Bitmap>
+    <Bitmap playerVersion="MAC">212708</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213532</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:baselineShiftTest-image1.jpg(sprite,tb,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211642</Bitmap>
+    <Bitmap playerVersion="MAC">212740</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213534</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:breakOpportunityTest-image1.jpg(sprite,tb,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211958</Bitmap>
+    <Bitmap playerVersion="MAC">212640</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213536</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-smiling.png(sprite,tb,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211644</Bitmap>
+    <Bitmap playerVersion="MAC">212788</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213538</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-FremontBridge.jpg(sprite,tb,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211956</Bitmap>
+    <Bitmap playerVersion="MAC">212926</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213540</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-smiling.png(sprite,tb,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211646</Bitmap>
+    <Bitmap playerVersion="MAC">212720</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213542</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-FremontBridge.jpg(sprite,tb,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211986</Bitmap>
+    <PlainText>211988</PlainText>
+    <Line>211994</Line>
+    <Bitmap playerVersion="MAC">212768</Bitmap>
+    <Bitmap playerVersion="WIN">213343</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213344</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213544</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-smiling.png(sprite,tb,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211648</Bitmap>
+    <Bitmap playerVersion="MAC">212652</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213546</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-FremontBridge.jpg(sprite,tb,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211952</Bitmap>
+    <Line>211995</Line>
+    <PlainText>211996</PlainText>
+    <Bitmap playerVersion="MAC">212800</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213548</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-FremontBridge.jpg(sprite,tb,rtl)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211872</Bitmap>
+    <Bitmap playerVersion="MAC">212680</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213582</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">212213</Bitmap>
+    <Bitmap playerVersion="MAC">212782</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213784</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-smiling.png(sprite,tb,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211650</Bitmap>
+    <Bitmap playerVersion="MAC">212932</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213550</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-smiling.png(sprite,tb,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211652</Bitmap>
+    <Bitmap playerVersion="MAC">212784</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213554</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-FremontBridge.jpg(sprite,tb,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211948</Bitmap>
+    <Bitmap playerVersion="MAC">212660</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213556</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ParaAlignLTR.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211930</Bitmap>
+    <Bitmap playerVersion="MAC">212826</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213592</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:letterSizeBase.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211672</Bitmap>
+    <Bitmap playerVersion="MAC">212820</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213594</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:all_ordered_lists.xml(sprite,tb,ltr)">
+    <HTML>211610</HTML>
+    <Bitmap playerVersion="-1">211928</Bitmap>
+    <Bitmap playerVersion="MAC">212760</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213596</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:all_unordered_lists.xml(sprite,tb,ltr)">
+    <HTML>211594</HTML>
+    <Bitmap playerVersion="-1">211674</Bitmap>
+    <Bitmap playerVersion="MAC">212908</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213598</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:simple_with_lists.xml(sprite,tb,ltr)">
+    <HTML>211609</HTML>
+    <Bitmap playerVersion="-1">211926</Bitmap>
+    <Bitmap playerVersion="MAC">212694</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213600</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:simple_with_lists_ul.xml(sprite,tb,ltr)">
+    <HTML>211595</HTML>
+    <Bitmap playerVersion="-1">211676</Bitmap>
+    <Bitmap playerVersion="MAC">212842</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213602</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:allCounterProps.xml(sprite,tb,ltr)">
+    <HTML>211608</HTML>
+    <Bitmap playerVersion="-1">211924</Bitmap>
+    <Bitmap playerVersion="MAC">212626</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213604</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:simple.xml(sprite,tb,ltr)">
+    <HTML>211596</HTML>
+    <Bitmap playerVersion="-1">211678</Bitmap>
+    <Bitmap playerVersion="MAC">212774</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213606</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:InsideSpaceContentTest.xml(sprite,tb,ltr)">
+    <HTML>211607</HTML>
+    <Bitmap playerVersion="-1">211922</Bitmap>
+    <Bitmap playerVersion="MAC">212886</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213608</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:special_list_test.xml(sprite,tb,ltr)">
+    <HTML>211597</HTML>
+    <Bitmap playerVersion="-1">211680</Bitmap>
+    <Bitmap playerVersion="MAC">212710</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:adornmentTest.xml(sprite,tb,ltr)">
+    <HTML>211598</HTML>
+    <Bitmap playerVersion="-1">211682</Bitmap>
+    <Bitmap playerVersion="MAC">212642</Bitmap>
+    <Bitmap playerVersion="WIN">213355</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213356</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213614</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:listMarkerAlignment.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211916</Bitmap>
+    <Bitmap playerVersion="MAC">212722</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213620</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:all_inside_lists.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211686</Bitmap>
+    <Bitmap playerVersion="MAC">212870</Bitmap>
+    <Bitmap playerVersion="WIN">213358</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213359</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213622</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:listAndBackgroundColor.xml(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211914</Bitmap>
+    <Bitmap playerVersion="MAC">212654</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:textFlowLocale(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211688</Bitmap>
+    <Bitmap playerVersion="MAC">212802</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213626</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:validateEnLocaleSettings(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211912</Bitmap>
+    <Bitmap playerVersion="MAC">212918</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213628</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:validateZhLocaleSettings(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211690</Bitmap>
+    <Bitmap playerVersion="MAC">212732</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213630</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:validateJaLocaleSettings(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211910</Bitmap>
+    <Bitmap playerVersion="MAC">212878</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213632</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:validateDefaultLocaleSettings(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211692</Bitmap>
+    <Bitmap playerVersion="MAC">212662</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213634</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:overrideLocaleWithEastAsian(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211908</Bitmap>
+    <Bitmap playerVersion="MAC">212636</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213636</Bitmap>
+  </TestCase>
+  <TestCase testID="LocaleTests:overrideLocaleWithEnOrDefault(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211694</Bitmap>
+    <Bitmap playerVersion="MAC">212888</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213638</Bitmap>
+  </TestCase>
+  <TestCase testID="ScrollingTest:scrollWithAdormentsAndInlines(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211906</Bitmap>
+    <Bitmap playerVersion="MAC">212738</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213640</Bitmap>
+  </TestCase>
+  <TestCase testID="ScrollingTest:scrollWithInsideList(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211696</Bitmap>
+    <Bitmap playerVersion="MAC">212806</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213642</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,ltr):auto">
+    <Bitmap playerVersion="-1">211904</Bitmap>
+    <Bitmap playerVersion="MAC">212672</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213644</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,ltr):0">
+    <Bitmap playerVersion="-1">211698</Bitmap>
+    <Bitmap playerVersion="MAC">212664</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213646</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,ltr):90">
+    <Bitmap playerVersion="-1">211902</Bitmap>
+    <Bitmap playerVersion="MAC">212902</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213648</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,ltr):180">
+    <Bitmap playerVersion="-1">211700</Bitmap>
+    <Bitmap playerVersion="MAC">212752</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213650</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,ltr):270">
+    <Bitmap playerVersion="-1">211900</Bitmap>
+    <Bitmap playerVersion="MAC">212834</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213652</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:scrollToRangeExplicitMeasureTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211702</Bitmap>
+    <Bitmap playerVersion="MAC">212686</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213654</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:hostFormatTabsTCMTestString(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211898</Bitmap>
+    <Bitmap playerVersion="MAC">212962</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:hostFormatTabsTCMTestTextFlow(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211704</Bitmap>
+    <Bitmap playerVersion="MAC">212982</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:floatAndBackgroundColorTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211896</Bitmap>
+    <Bitmap playerVersion="MAC">212946</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:floatAndBackgroundColorTestThenReset(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211706</Bitmap>
+    <Bitmap playerVersion="MAC">212950</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:ZOrderHighlightingTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211894</Bitmap>
+    <Bitmap playerVersion="MAC">212966</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlineAndSelectionFilterTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211708</Bitmap>
+    <Bitmap playerVersion="MAC">212848</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213666</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlinesFilterTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211892</Bitmap>
+    <Bitmap playerVersion="MAC">212632</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213494</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:selectionFilterTest(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211710</Bitmap>
+    <Bitmap playerVersion="MAC">212780</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213797</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:stringFactoryBackgroundColor(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211890</Bitmap>
+    <Bitmap playerVersion="MAC">212930</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:embeddedInlineGraphics(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211712</Bitmap>
+    <Bitmap playerVersion="MAC">212964</Bitmap>
+  </TestCase>
+  <TestCase testID="WritingModeTest:romanAttrib(sprite,tb,ltr)">
+    <Bitmap playerVersion="-1">211888</Bitmap>
+    <Bitmap playerVersion="MAC">212734</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213676</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignTopTest(sprite,tb,rtl):false">
+    <Bitmap playerVersion="-1">211714</Bitmap>
+    <Bitmap playerVersion="MAC">212980</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignTopTest(sprite,tb,rtl):true">
+    <Bitmap playerVersion="-1">211886</Bitmap>
+    <Bitmap playerVersion="MAC">212948</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsString-surprised.png(sprite,tb,rtl)::surprised.png">
+    <Bitmap playerVersion="-1">211716</Bitmap>
+    <Bitmap playerVersion="MAC">212914</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213682</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsDisplayObject(sprite,tb,rtl):">
+    <Bitmap playerVersion="-1">211884</Bitmap>
+    <Bitmap playerVersion="MAC">212716</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213684</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsURLRequest(sprite,tb,rtl):">
+    <Bitmap playerVersion="-1">211718</Bitmap>
+    <Bitmap playerVersion="MAC">212864</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213686</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:undoRedoInsertImageTest-surprised.png(sprite,tb,rtl)::surprised.png">
+    <Bitmap playerVersion="-1">211882</Bitmap>
+    <Bitmap playerVersion="MAC">212648</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213688</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeImageTest-surprised.png-FremontBridge.jpg-surprised.png-FremontBridge.jpg(sprite,tb,rtl)::surprised.png:FremontBridge.jpg:surprised.png:FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211720</Bitmap>
+    <Bitmap playerVersion="MAC">212796</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213690</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeBaselineTest-image1.jpg(sprite,tb,rtl)::image1.jpg">
+    <Bitmap playerVersion="-1">211880</Bitmap>
+    <Bitmap playerVersion="MAC">212940</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213692</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:baselineShiftTest-image1.jpg(sprite,tb,rtl)::image1.jpg">
+    <Bitmap playerVersion="-1">211722</Bitmap>
+    <Bitmap playerVersion="MAC">212726</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213694</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:breakOpportunityTest-image1.jpg(sprite,tb,rtl)::image1.jpg">
+    <Bitmap playerVersion="-1">211878</Bitmap>
+    <Bitmap playerVersion="MAC">212874</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213558</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-smiling.png(sprite,tb,rtl)::smiling.png">
+    <Bitmap playerVersion="-1">211724</Bitmap>
+    <Bitmap playerVersion="MAC">212658</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213698</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-FremontBridge.jpg(sprite,tb,rtl)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211876</Bitmap>
+    <Bitmap playerVersion="MAC">212814</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213700</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-smiling.png(sprite,tb,rtl)::smiling.png">
+    <Bitmap playerVersion="-1">211726</Bitmap>
+    <Bitmap playerVersion="MAC">212924</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213702</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-FremontBridge.jpg(sprite,tb,rtl)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211874</Bitmap>
+    <Bitmap playerVersion="MAC">212746</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213704</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-smiling.png(sprite,tb,rtl)::smiling.png">
+    <Bitmap playerVersion="-1">211728</Bitmap>
+    <Bitmap playerVersion="MAC">212894</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213706</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211998</Bitmap>
+    <Bitmap playerVersion="MAC">212850</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213776</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-smiling.png(sprite,tb,rtl)::smiling.png">
+    <Bitmap playerVersion="-1">211730</Bitmap>
+    <Bitmap playerVersion="MAC">212828</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213710</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-FremontBridge.jpg(sprite,tb,rtl)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211870</Bitmap>
+    <Bitmap playerVersion="MAC">212810</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213712</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-smiling.png(sprite,tb,rtl)::smiling.png">
+    <Bitmap playerVersion="-1">211732</Bitmap>
+    <Bitmap playerVersion="MAC">212762</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213714</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-FremontBridge.jpg(sprite,tb,rtl)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211868</Bitmap>
+    <Bitmap playerVersion="MAC">212910</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213716</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:RTLTabs.xml(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211734</Bitmap>
+    <Bitmap playerVersion="MAC">212696</Bitmap>
+    <Bitmap playerVersion="WIN">213352</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213353</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213718</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ParaAlignRTL.xml(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211866</Bitmap>
+    <Bitmap playerVersion="MAC">212844</Bitmap>
+    <Bitmap playerVersion="WIN">213403</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213404</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213610</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:listMarkerAlignment.xml(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211864</Bitmap>
+    <Bitmap playerVersion="MAC">212776</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213618</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:all_inside_lists.xml(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211738</Bitmap>
+    <Bitmap playerVersion="MAC">212928</Bitmap>
+    <Bitmap playerVersion="WIN">213367</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213368</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213726</Bitmap>
+  </TestCase>
+  <TestCase testID="ScrollingTest:scrollWithAdormentsAndInlines(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211862</Bitmap>
+    <Bitmap playerVersion="MAC">212712</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213624</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,rtl):auto">
+    <Bitmap playerVersion="-1">211740</Bitmap>
+    <Bitmap playerVersion="MAC">212860</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213730</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,rtl):0">
+    <Bitmap playerVersion="-1">211860</Bitmap>
+    <Bitmap playerVersion="MAC">212644</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213732</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,rtl):90">
+    <Bitmap playerVersion="-1">211742</Bitmap>
+    <Bitmap playerVersion="MAC">212792</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213734</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,rtl):180">
+    <Bitmap playerVersion="-1">211858</Bitmap>
+    <Bitmap playerVersion="MAC">212936</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213736</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,tb,rtl):270">
+    <Bitmap playerVersion="-1">211744</Bitmap>
+    <Bitmap playerVersion="MAC">212724</Bitmap>
+    <Bitmap playerVersion="WIN">213364</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213365</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213738</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlineAndSelectionFilterTest(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211856</Bitmap>
+    <Bitmap playerVersion="MAC">212872</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213740</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlinesFilterTest(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211746</Bitmap>
+    <Bitmap playerVersion="MAC">212656</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213658</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:selectionFilterTest(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211854</Bitmap>
+    <Bitmap playerVersion="MAC">212624</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213656</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:stringFactoryBackgroundColor(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211748</Bitmap>
+    <Bitmap playerVersion="MAC">212934</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:embeddedInlineGraphics(sprite,tb,rtl)">
+    <Bitmap playerVersion="-1">211852</Bitmap>
+    <Bitmap playerVersion="MAC">212944</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignJustifyTest(sprite,rl,ltr):false">
+    <Bitmap playerVersion="-1">211750</Bitmap>
+    <Bitmap playerVersion="MAC">212952</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignBottomTest(sprite,rl,ltr):false">
+    <Bitmap playerVersion="-1">211850</Bitmap>
+    <Bitmap playerVersion="MAC">212974</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignMiddleTest(sprite,rl,ltr):false">
+    <Bitmap playerVersion="-1">211752</Bitmap>
+    <Bitmap playerVersion="MAC">212984</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignJustifyTest(sprite,rl,ltr):true">
+    <Bitmap playerVersion="-1">211848</Bitmap>
+    <Bitmap playerVersion="MAC">212956</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignBottomTest(sprite,rl,ltr):true">
+    <Bitmap playerVersion="-1">211754</Bitmap>
+    <Bitmap playerVersion="MAC">212970</Bitmap>
+  </TestCase>
+  <TestCase testID="ContainerAttributeTest:checkVerticalAlignMiddleTest(sprite,rl,ltr):true">
+    <Bitmap playerVersion="-1">211846</Bitmap>
+    <Bitmap playerVersion="MAC">212954</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsString-surprised.png(sprite,rl,ltr)::surprised.png">
+    <Bitmap playerVersion="-1">211756</Bitmap>
+    <Bitmap playerVersion="MAC">212674</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213722</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsDisplayObject(sprite,rl,ltr):">
+    <Bitmap playerVersion="-1">211844</Bitmap>
+    <Bitmap playerVersion="MAC">212822</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213764</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:insertImageAsURLRequest(sprite,rl,ltr):">
+    <Bitmap playerVersion="-1">211758</Bitmap>
+    <Bitmap playerVersion="MAC">212854</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213766</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:undoRedoInsertImageTest-surprised.png(sprite,rl,ltr)::surprised.png">
+    <Bitmap playerVersion="-1">211842</Bitmap>
+    <Bitmap playerVersion="MAC">212754</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213768</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeImageTest-surprised.png-FremontBridge.jpg-surprised.png-FremontBridge.jpg(sprite,rl,ltr)::surprised.png:FremontBridge.jpg:surprised.png:FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211760</Bitmap>
+    <Bitmap playerVersion="MAC">212836</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213744</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:changeBaselineTest-image1.jpg(sprite,rl,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211840</Bitmap>
+    <Bitmap playerVersion="MAC">212688</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213772</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:baselineShiftTest-image1.jpg(sprite,rl,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211762</Bitmap>
+    <Bitmap playerVersion="MAC">212700</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213758</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:breakOpportunityTest-image1.jpg(sprite,rl,ltr)::image1.jpg">
+    <Bitmap playerVersion="-1">211838</Bitmap>
+    <Bitmap playerVersion="MAC">212646</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213756</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-smiling.png(sprite,rl,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211764</Bitmap>
+    <Bitmap playerVersion="MAC">212770</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213778</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalSize-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211836</Bitmap>
+    <Bitmap playerVersion="MAC">212876</Bitmap>
+    <Bitmap playerVersion="WIN">213400</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213401</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213770</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-smiling.png(sprite,rl,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211766</Bitmap>
+    <Bitmap playerVersion="MAC">212702</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213782</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoWidth-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211834</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalAutoHeight-smiling.png(sprite,rl,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211768</Bitmap>
+    <Bitmap playerVersion="MAC">212634</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213780</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-smiling.png(sprite,rl,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211770</Bitmap>
+    <Bitmap playerVersion="MAC">212880</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213786</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211486</Bitmap>
+    <Bitmap playerVersion="MAC">212706</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213774</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-smiling.png(sprite,rl,ltr)::smiling.png">
+    <Bitmap playerVersion="-1">211772</Bitmap>
+    <Bitmap playerVersion="MAC">212742</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213762</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedHeight-FremontBridge.jpg(sprite,rl,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">211490</Bitmap>
+    <Bitmap playerVersion="MAC">212638</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213760</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:ParaAlignVertical.xml(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211776</Bitmap>
+    <Bitmap playerVersion="MAC">212718</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213754</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:letterSizeBaseVert.xml(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211498</Bitmap>
+    <Bitmap playerVersion="WIN">211826</Bitmap>
+    <Bitmap playerVersion="MAC">212866</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213750</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:float.xml(sprite,rl,ltr)">
+    <HTML>211601</HTML>
+    <Bitmap playerVersion="-1">211778</Bitmap>
+    <Bitmap playerVersion="MAC">212650</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213696</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:listMarkerAlignment.xml(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211780</Bitmap>
+    <Bitmap playerVersion="MAC">212942</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213752</Bitmap>
+  </TestCase>
+  <TestCase testID="ImportTest:all_inside_lists.xml(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211822</Bitmap>
+    <Bitmap playerVersion="MAC">212728</Bitmap>
+    <Bitmap playerVersion="WIN">213394</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213395</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213708</Bitmap>
+  </TestCase>
+  <TestCase testID="ScrollingTest:scrollWithAdormentsAndInlines(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211782</Bitmap>
+    <Bitmap playerVersion="MAC">212882</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213746</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,rl,ltr):auto">
+    <Bitmap playerVersion="-1">211820</Bitmap>
+    <Bitmap playerVersion="MAC">212668</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213748</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,rl,ltr):0">
+    <Bitmap playerVersion="-1">211784</Bitmap>
+    <Bitmap playerVersion="MAC">212816</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213680</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,rl,ltr):90">
+    <Bitmap playerVersion="-1">211818</Bitmap>
+    <Bitmap playerVersion="MAC">212900</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213674</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,rl,ltr):180">
+    <Bitmap playerVersion="-1">211786</Bitmap>
+    <Bitmap playerVersion="MAC">212748</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213678</Bitmap>
+  </TestCase>
+  <TestCase testID="SelectionTest:selectedTextRotationTest(sprite,rl,ltr):270">
+    <Bitmap playerVersion="-1">211816</Bitmap>
+    <Bitmap playerVersion="MAC">212896</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213742</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:makeLTR_TCYTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211788</Bitmap>
+    <Bitmap playerVersion="MAC">212682</Bitmap>
+    <Bitmap playerVersion="WIN">213391</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213392</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213664</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:makeRTL_TCYTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211814</Bitmap>
+    <Bitmap playerVersion="MAC">212830</Bitmap>
+    <Bitmap playerVersion="WIN">213388</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213389</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213662</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:makeJ_TCYTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211790</Bitmap>
+    <Bitmap playerVersion="MAC">212812</Bitmap>
+    <Bitmap playerVersion="WIN">213385</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213386</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213660</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:headOfLineTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211812</Bitmap>
+    <Bitmap playerVersion="MAC">212764</Bitmap>
+    <Bitmap playerVersion="WIN">213382</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213383</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213720</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:endOfLineTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211792</Bitmap>
+    <Bitmap playerVersion="MAC">212912</Bitmap>
+    <Bitmap playerVersion="WIN">213379</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213380</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213668</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:linkCrossingTCYTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211810</Bitmap>
+    <Bitmap playerVersion="MAC">212698</Bitmap>
+    <Bitmap playerVersion="WIN">213376</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213377</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213670</Bitmap>
+  </TestCase>
+  <TestCase testID="TCYTests:linkInsideTCYTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211794</Bitmap>
+    <Bitmap playerVersion="MAC">212846</Bitmap>
+    <Bitmap playerVersion="WIN">213373</Bitmap>
+    <Bitmap playerVersion="WIN 10,0">213374</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213504</Bitmap>
+  </TestCase>
+  <TestCase testID="TextContainerManagerTest:scrollToRangeExplicitMeasureTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211808</Bitmap>
+    <Bitmap playerVersion="MAC">212630</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlineAndSelectionFilterTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211796</Bitmap>
+    <Bitmap playerVersion="MAC">212778</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213500</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:textlinesFilterTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211806</Bitmap>
+    <Bitmap playerVersion="MAC">212906</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213498</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:selectionFilterTest(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211798</Bitmap>
+    <Bitmap playerVersion="MAC">212714</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213496</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:stringFactoryBackgroundColor(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211804</Bitmap>
+    <Bitmap playerVersion="MAC">212862</Bitmap>
+  </TestCase>
+  <TestCase testID="TextLineFilterTest:embeddedInlineGraphics(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211800</Bitmap>
+    <Bitmap playerVersion="MAC">212976</Bitmap>
+  </TestCase>
+  <TestCase testID="WritingModeTest:japaneseAttrib(sprite,rl,ltr)">
+    <Bitmap playerVersion="-1">211802</Bitmap>
+    <Bitmap playerVersion="MAC">212794</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213672</Bitmap>
+  </TestCase>
+  <TestCase testID="FETest:proportionalFixedWidth-FremontBridge.jpg(sprite,tb,ltr)::FremontBridge.jpg">
+    <Bitmap playerVersion="-1">212618</Bitmap>
+    <Bitmap playerVersion="MAC">212730</Bitmap>
+    <Bitmap playerVersion="MAC 10,0">213552</Bitmap>
+  </TestCase>
+</Tests>

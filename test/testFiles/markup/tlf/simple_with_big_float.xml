@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+  <flow:TextFlow version="2.0.0" xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paragraphSpaceAfter="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">
+    <flow:p>Images in a flow are a good thing. For example, here is a float. Don't you agree? Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. It should show on the left: <flow:img float="left" height="500" width="19" source="../../test/testFiles/assets/surprised.png"></flow:img> Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. </flow:p>
+     <flow:p>Here is another float, it should show up on the right: <flow:img float="right" height="50" elementHeight="200" width="19" source="../../test/testFiles/assets/surprised.png"></flow:img> Don't you agree? Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. Another sentence here. </flow:p> 
+   <!-- <flow:p>This is an animated embedded SWF.<flow:img height="100" width="100" source="../../test/testFiles/assets/RedCircles.swf"></flow:img></flow:p>
+    
+    <flow:p>Image is inline but not in a paragraph. XFL Import puts it in one.</flow:p>
+    <flow:img height="60" width="80" source="../../test/testFiles/assets/FremontBridge.jpg"/>
+    <flow:p alignment="center" bold="true">Fremont Bridge During Approach Replacement.</flow:p>
+    
+   <flow:p textAlign="center" fontWeight="bold">Embedded Video As A Foreign Element</flow:p>
+   <flow:p textAlign="center" >X<flow:img height="60" width="80" source="../../test/testFiles/assets/FremontBridge.swf"/>Y</flow:p> 
+   <flow:p textAlign="center" fontWeight="bold">Fremont Bridge During Approach Replacement.</flow:p>
+    -->
+  </flow:TextFlow>

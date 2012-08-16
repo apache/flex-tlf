@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<textEditBar:GraphicBar 
+	xmlns:textEditBar="textEditBar.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="handleCreationComplete()">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Button;
+			import mx.managers.PopUpManager;
+			import mx.controls.ComboBox;
+			import mx.collections.ArrayCollection;
+			import flashx.textLayout.formats.Float;
+			import flashx.textLayout.elements.InlineGraphicElement;
+			import flashx.textLayout.edit.ElementRange;
+			import flashx.textLayout.tlf_internal;
+			use namespace tlf_internal;
+
+			private var floatList:ArrayCollection = new ArrayCollection([
+				{ label:"None", data:Float.NONE },
+				{ label:"Float Left", data:Float.LEFT },
+				{ label:"Float Right", data:Float.RIGHT },
+				{ label:"Float Start", data:Float.START },
+				{ label:"Float End", data:Float.END }
+			]);
+
+			private var floatCombo:ComboBox;
+			private var statusButton:Button;
+			
+			private function handleCreationComplete():void
+			{
+				// Add the float control before the apply
+				floatCombo = new ComboBox();
+				floatCombo.width = 105;
+				floatCombo.dataProvider= floatList;
+ 				addChildAt(floatCombo, getChildIndex(imageButton));
+
+				statusButton = new Button();
+				statusButton.label = "Status";
+				statusButton.enabled = false;
+				statusButton.addEventListener( flash.events.MouseEvent.CLICK, onStatusDialog);
+			}
+						
+ 			override protected function applyChange():void
+			{
+				changeForeignElement(imageURL.text, imageWidth.text, imageHeight.text, floatCombo.selectedItem.data, doChangeImage);				
+			}
+			 			
+ 			override protected function updateForChange(inlineElement:InlineGraphicElement):void
+ 			{
+ 				super.updateForChange(inlineElement);
+ 				floatCombo.selectedIndex = getFloatSelectionIndex(inlineElement.float);
+				statusButton.enabled = true;
+			}
+			
+ 			override protected function updateForInsert(range:ElementRange):void
+ 			{
+ 				super.updateForInsert(range);
+ 				floatCombo.selectedIndex = getFloatSelectionIndex(Float.NONE);
+				statusButton.enabled = false;
+			}
+	 		
+			
+ 			private function getFloatSelectionIndex(floatVal:String):int
+ 			{
+ 				var theIndex:int = 0;
+ 				var idxIter:int = (floatCombo.dataProvider as ArrayCollection).length;
+ 				
+ 				while(idxIter > 0)
+ 				{
+ 					if(((floatCombo.dataProvider as ArrayCollection).getItemAt(--idxIter) as Object).data == floatVal)
+ 					{
+ 						theIndex = idxIter;
+ 						break;
+ 					}
+ 				}
+ 				
+ 				return theIndex;
+ 			}
+ 			
+			private function closeStatusPopup(dlg:StatusPopup):void
+			{
+				PopUpManager.removePopUp(dlg);
+			}
+			
+			private function onStatusDialog():void
+			{
+				var dlg:StatusPopup = new StatusPopup();
+				dlg.closeFunction = closeStatusPopup;
+				
+				PopUpManager.addPopUp(dlg, this, true);
+				PopUpManager.centerPopUp(dlg);
+				// stick it in the upper left
+				dlg.x = 0;
+				dlg.y = 0;
+				
+				var ilg:InlineGraphicElement = InlineGraphicElement(lastRange.firstLeaf)
+				
+				dlg.setDialogText("status: " + ilg.status.toString() 
+					+ "\nsource: " + ilg.source.toString()
+					+ "\nwidth property: "  + InlineGraphicElement.tlf_internal::widthPropertyDefinition.toXMLString(ilg.width)
+					+ "\nheight property: " + InlineGraphicElement.tlf_internal::heightPropertyDefinition.toXMLString(ilg.height)
+					+ "\nmeasuredWidth: "  + ilg.measuredWidth.toString()
+					+ "\nmeasuredHeight: " + ilg.measuredHeight.toString()
+					+ "\nactualWidth: "  + ilg.actualWidth.toString()
+					+ "\nactualHeight :" + ilg.actualHeight.toString()
+					+ "\nfloat: " + ilg.float);
+			}
+			
+		]]>
+	</mx:Script>
+
+</textEditBar:GraphicBar>

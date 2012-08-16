@@ -1,0 +1,323 @@
+<Tests>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineEnglishForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseForward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseTCYForward</TestData>
+	</TestCase>
+
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineEnglishBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseBackward</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineTCYJapaneseBackward</TestData>
+	</TestCase>
+	
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineEnglishForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseTCYForwardLong</TestData>
+	</TestCase>
+
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineEnglishBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineArabicAndEnglishInScrollBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">singleLineJapaneseBackwardLong</TestData>
+	</TestCase>
+
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishArabicSpanForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishArabicAndEnglishSpanForwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishEnglishAndArabicSpanNoSpaceForwardLong</TestData>
+	</TestCase>
+
+
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishArabicSpanBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishArabicAndEnglishSpanBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishEnglishAndArabicSpanBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishEnglishAndArabicSpanNoSpaceBackwardLong</TestData>
+	</TestCase>
+	<TestCase functionName="singleLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishArabicAndEnglishSpanNoSpaceBackwardLong</TestData>
+	</TestCase>
+
+	<!--  Multi-line cases -->
+	<TestCase functionName="aliceTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">aliceTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishParagraphForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineSpanForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishParagraphBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineSpanBackwardTest</TestData>
+	</TestCase>
+
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseParagraphForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseParagraphBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseSpanForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseSpanBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineListElementForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineListElementBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineListItemElementForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">englishMultiLineListItemElementBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseListElementForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseListElementBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseListItemElementForwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="multiLineTest">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">japaneseListItemElementBackwardTest</TestData>
+	</TestCase>
+	<TestCase functionName="aboveAndBelow">
+		<TestData name="bitmapSnapshot">false</TestData>
+		<TestData name="tb_rtl">false</TestData>
+		<TestData name="rl_ltr">false</TestData>
+		<TestData name="id">aboveAndBelow</TestData>
+	</TestCase>
+</Tests>
