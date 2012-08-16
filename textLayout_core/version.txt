@@ -1,0 +1,8 @@
+#Fri Jan 29 11:40:38 PST 2010
+buildType=Published
+flashplayer.latest.good.win=309
+flashplayer.latest.good.lnx=584
+version=1.0
+flashplayer.latest.good.mac=307
+flashplayer.version=10.1.50.302
+build=595
