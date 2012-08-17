@@ -16,13 +16,16 @@
 -->
 
 <project name="tlf" default="main" basedir=".">
-	<property name="FLEX_HOME" value="D:\flex_sdk_4.5.0.19786"/>
+
+    <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
+	<property name="FLEX_HOME" value="${basedir}/../../../sdk/trunk"/>
+	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
+	
 	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
 	<property name="flex.locale" value="en_US"/>
 
 	<property name="output.dir" value="bin"/>
 	<property name="output.docs" value="${FLEX_HOME}/tempDoc"/>
-	<property name="flexTasks.location" value="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 	<property name="project.uri" value="library://ns.adobe.com/flashx/textLayout"/>
 	<property name="compc.jvm.args" value="-Xmx384m" />
 	<property name="textLayout.namespace" value="flashx.textLayout"/>
@@ -45,7 +48,14 @@
 		<istrue value="${debug}"/>
 	</condition>
 
-	<taskdef resource="flexTasks.tasks" classpath="${flexTasks.location}"/>
+    <!-- for Flex tags suchs as mxmlc and compc -->
+    <path id="flexTasks.path">
+        <fileset dir="${FLEX_HOME}">
+            <include name="lib/flexTasks.jar" />
+            <include name="ant/lib/flexTasks.jar" />
+        </fileset>
+    </path>
+	<taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
 
 	<target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps" description="Clean build of TLF component and associated applications"/>
 	<target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
