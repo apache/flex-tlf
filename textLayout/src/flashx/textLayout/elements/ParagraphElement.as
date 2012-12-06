@@ -95,7 +95,7 @@ package flashx.textLayout.elements
 			_terminatorSpan = null;
 			_interactiveChildrenCount = 0 ;
 		}
-		tlf_internal function get _interactiveChildrenCount():int
+		tlf_internal function get interactiveChildrenCount():int
 		{
 			return _interactiveChildrenCount;
 		}
