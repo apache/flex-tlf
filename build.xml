@@ -17,10 +17,17 @@
 
 <project name="tlf" default="main" basedir=".">
 
+    <property file="${basedir}/env.properties"/>
+    <property environment="env"/>
+	<property file="${basedir}/build.properties"/>
+    <!-- Specify a FLEX_HOME in local.properties or
+         Override on cmd line with -D=FLEX_HOME=path. -->
+	<property file="${basedir}/local.properties"/>
     <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
-	<property name="FLEX_HOME" value="${basedir}/../../../sdk/trunk"/>
+	<property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
 	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
 	
+
 	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
 	<property name="flex.locale" value="en_US"/>
 
@@ -80,6 +87,19 @@
 			<library-path/>
 			<include-file name="manifest.xml" path="${textLayout.dir}/manifest.xml"/>
 			<static-link-runtime-shared-libraries/>
+			<define name="CONFIG::debug" value="${dbg}"/>
+			<define name="CONFIG::release" value="${rel}"/>
+		</compc>
+     </target>
+
+	<target name="textLayout_flex" description="Compiles textLayout.swc for Flex SDK">
+   		<compc fork="true"
+			   output="${output.dir}/textLayout.swc">
+			<jvmarg line="${compc.jvm.args}"/>
+            <load-config filename="compile-config.xml" />
+            <arg value="+playerglobal.version=${playerglobal.version}" />
+            <arg value="+env.PLAYERGLOBAL_HOME=${env.PLAYERGLOBAL_HOME}" />
+            <arg value="+source.dir=textLayout" />
 			<define name="CONFIG::debug" value="${dbg}"/>
 			<define name="CONFIG::release" value="${rel}"/>
 		</compc>
