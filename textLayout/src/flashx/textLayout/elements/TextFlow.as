@@ -197,11 +197,12 @@ package flashx.textLayout.elements
 	 * hierarchical tree of elements. TextFlow is the root object of the element tree. All elements on the tree
 	 * derive from the base class, FlowElement. 
 	 *
-	 * <p>A TextFlow object can have ParagraphElement and DivElement objects as children. A div (DivElement object)
-	 * represents a group of paragraphs (ParagraphElement objects). A paragraph can have SpanElement, InlineGraphicElement, 
+	 * <p>A TextFlow object can have ParagraphElement, ListElement and DivElement objects as children. A div (DivElement
+	 * object) represents a group of paragraphs (ParagraphElement objects). A ListElement contains ListItemElement objects
+	 * which in turn contain one or more ParagraphElement objects. A paragraph can have SpanElement, InlineGraphicElement, 
 	 * LinkElement, and TCYElement objects as children.</p>
 	 * 
-	 * <p>A span (SpanElement) is a range of text in a paragraph that has the same attributes. An image 
+	 * <p>A span (SpanElement) is a range of text in a paragraph that has the same attributes. An image
 	 * (InlineGraphicElement) represents an arbitrary graphic that appears as a single character in a line of text. A 
 	 * LinkElement represents a hyperlink, or HTML <code>a</code> tag, and it can contain multiple spans. A TCYElement object
 	 * is used in Japanese text when there is a small run of text that appears perpendicular to the line, as in a horizontal
@@ -586,7 +587,8 @@ package flashx.textLayout.elements
 		 * @param styleNameValue The name of the style for which to find elements that have it set.
 		 *
 		 * @return An array of the elements whose <code>typeName</code> value matches <code>typeNameValue</code>. For example,
-		 * all elements that have the type name "foo".
+		 * all elements that have the type name "foo". A <code>typeName</code> is the TextFlow markup tag (such as the
+		 * <code>&lt;p&gt;</code> tag for ParagraphElements).
 		 *
 		 * @playerversion Flash 10
 		 * @playerversion AIR 1.5
