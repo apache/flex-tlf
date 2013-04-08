@@ -447,13 +447,15 @@ package flashx.textLayout.conversion
 			var format:ITextLayoutFormat = span.computedFormat;
 			var outerElement:Object = xml;
 			
-			// Nest in <B/>, <I/>, or <U/> if applicable
+			// Nest in <B/>, <I/>, <U/>, or <S/> if applicable
 			if (format.textDecoration.toString() == flashx.textLayout.formats.TextDecoration.UNDERLINE)
 				outerElement = nest (<U/>, outerElement);
 			if (format.fontStyle.toString() == flash.text.engine.FontPosture.ITALIC)
 				outerElement = nest (<I/>, outerElement);
 			if (format.fontWeight.toString() == flash.text.engine.FontWeight.BOLD)
 				outerElement = nest (<B/>, outerElement);
+			if (format.lineThrough == true)
+				outerElement = nest (<S/>, outerElement);
 				
 			// Nest in <FONT/> if the computed values of certain character-level formats 
 			// differ from the corresponding computed values for the containing parent that's exported
