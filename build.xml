@@ -72,6 +72,8 @@
 			<fileset dir="${output.dir}">
 			</fileset>
 		</delete>
+        <delete dir="${basedir}/bin"/>
+        <delete file="${basedir}/bundles.properties"/>
 	</target>
 
 	<target name="textLayout" description="Compiles textLayout.swc">
