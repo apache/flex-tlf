@@ -102,8 +102,7 @@ package flashx.textLayout.conversion
 
 			// Mark partial last paragraph (string doesn't end in paragraph terminator)
 			if (useClipboardAnnotations && 
-				(source.lastIndexOf('\u000A', source.length - 2) < 0 || 
-					source.lastIndexOf('\u000D\u000A', source.length - 3) < 0))
+				source.lastIndexOf('\u000A', source.length - 1) != source.length - 1)
 			{
 				var lastLeaf:FlowLeafElement = textFlow.getLastLeaf();
 				lastLeaf.setStyle(ConverterBase.MERGE_TO_NEXT_ON_PASTE, "true");
