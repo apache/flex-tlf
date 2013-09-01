@@ -1,0 +1,150 @@
+diff --git a/textLayout/src/flashx/textLayout/compose/BaseCompose.as b/textLayout/src/flashx/textLayout/compose/BaseCompose.as
+index e8ddb7b..2ad0506 100644
+--- a/textLayout/src/flashx/textLayout/compose/BaseCompose.as
++++ b/textLayout/src/flashx/textLayout/compose/BaseCompose.as
+@@ -1435,7 +1435,7 @@ package flashx.textLayout.compose
+ 				
+ 				// advance to the next element, using the rootElement of the container as a limitNode
+ 				// to prevent going past the content bound to this container
+-				_curElementOffset += _curLine.textLength;
++				_curElementOffset = _curLine.absoluteStart + _curLine.textLength - _curElementStart;
+ 				if (_curElementOffset >= _curElement.textLength)
+ 				{
+ 					// We may have composed ahead over several spans; skip until we match up
+diff --git a/textLayout/src/flashx/textLayout/compose/ComposeState.as b/textLayout/src/flashx/textLayout/compose/ComposeState.as
+index bdddf85..ce7bddc 100644
+--- a/textLayout/src/flashx/textLayout/compose/ComposeState.as
++++ b/textLayout/src/flashx/textLayout/compose/ComposeState.as
+@@ -340,6 +340,11 @@ package flashx.textLayout.compose
+ 			var line:TextFlowLine = _curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[_curLineIndex] : null;
+ 			
+ 			var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
++			// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
++			// starting the next line.
++			if (useExistingLine && line.textLength > 0 &&
++				line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
++				useExistingLine = false;
+ 			var numberLine:TextLine;
+ 			
+ 			// create numberLine if in a listElement
+diff --git a/textLayout/src/flashx/textLayout/compose/FlowComposerBase.as b/textLayout/src/flashx/textLayout/compose/FlowComposerBase.as
+index 04bc2a3..b03592a 100644
+--- a/textLayout/src/flashx/textLayout/compose/FlowComposerBase.as
++++ b/textLayout/src/flashx/textLayout/compose/FlowComposerBase.as
+@@ -296,6 +296,16 @@ package flashx.textLayout.compose
+ 		 */
+ 		public function damage(startPosition:int, damageLength:int, damageType:String):void
+ 		{
++			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
++			{
++				// damage everything from the beginning.  
++				// The player tends to screw up if you start
++				// composition in the middle and there are lines above broken on
++				// hyphens.
++				damageLength += startPosition;
++				startPosition = 0;
++			}
++			
+ 			// find the line at damageStart
+ 			if (_lines.length == 0 || textFlow.textLength == 0)
+ 				return;
+diff --git a/textLayout/src/flashx/textLayout/container/ContainerController.as b/textLayout/src/flashx/textLayout/container/ContainerController.as
+index 50161ee..528c26d 100644
+--- a/textLayout/src/flashx/textLayout/container/ContainerController.as
++++ b/textLayout/src/flashx/textLayout/container/ContainerController.as
+@@ -111,6 +111,8 @@ package flashx.textLayout.container
+ 	 */
+ 	public class ContainerController implements IInteractionEventHandler, ITextLayoutFormat, ISandboxSupport
+ 	{		
++		static tlf_internal var usesDiscretionaryHyphens:Boolean = true;
++		
+ 		private var _textFlowCache:TextFlow;
+ 		private var _rootElement:ContainerFormattedElement;
+ 		
+diff --git a/textLayout/src/flashx/textLayout/elements/FlowLeafElement.as b/textLayout/src/flashx/textLayout/elements/FlowLeafElement.as
+index 8571ca8..22bfe40 100644
+--- a/textLayout/src/flashx/textLayout/elements/FlowLeafElement.as
++++ b/textLayout/src/flashx/textLayout/elements/FlowLeafElement.as
+@@ -574,7 +574,7 @@ package flashx.textLayout.elements
+ 			if (blockProgression == BlockProgression.RL && (parent is TCYElement))
+ 				return 0;
+ 			CONFIG::debug { assert(_computedFormat != null,"Missing _computedFormat in FlowLeafElement.getEffectiveLineHeight"); }
+-			return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(_computedFormat.lineHeight, getEffectiveFontSize());
++			return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(computedFormat.lineHeight, getEffectiveFontSize());
+ 		}
+ 		
+ 		/** @private 
+diff --git a/textLayout/src/flashx/textLayout/elements/ParagraphElement.as b/textLayout/src/flashx/textLayout/elements/ParagraphElement.as
+index f58e1d4..13590a5 100644
+--- a/textLayout/src/flashx/textLayout/elements/ParagraphElement.as
++++ b/textLayout/src/flashx/textLayout/elements/ParagraphElement.as
+@@ -33,7 +33,9 @@ package flashx.textLayout.elements
+ 	import flash.text.engine.TextRotation;
+ 	import flash.utils.getQualifiedClassName;
+ 	
++	import flashx.textLayout.tlf_internal;
+ 	import flashx.textLayout.compose.TextFlowLine;
++	import flashx.textLayout.container.ContainerController;
+ 	import flashx.textLayout.debug.Debugging;
+ 	import flashx.textLayout.debug.assert;
+ 	import flashx.textLayout.formats.BlockProgression;
+@@ -48,7 +50,6 @@ package flashx.textLayout.elements
+ 	import flashx.textLayout.formats.TextJustify;
+ 	import flashx.textLayout.formats.TextLayoutFormat;
+ 	import flashx.textLayout.property.Property;
+-	import flashx.textLayout.tlf_internal;
+ 	import flashx.textLayout.utils.CharacterUtil;
+ 	import flashx.textLayout.utils.LocaleUtil;
+ 	
+@@ -477,6 +478,25 @@ package flashx.textLayout.elements
+ 		 
+ 		public function findPreviousAtomBoundary(relativePosition:int):int
+ 		{
++			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
++			{
++				var textBlock:TextBlock = getTextBlock();
++				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
++				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
++				if (currentAtomIndex == 0)
++				{
++					tl = tl.previousLine;
++					if (!tl)
++						return -1;
++					return tl.textBlockBeginIndex + tl.rawTextLength;
++				}
++				while (--relativePosition)
++				{
++					if (tl.getAtomIndexAtCharIndex(relativePosition) < currentAtomIndex)
++						break;
++				}
++				return relativePosition;
++			}
+ 			return getTextBlock().findPreviousAtomBoundary(relativePosition);
+ 		}
+ 
+@@ -500,6 +520,25 @@ package flashx.textLayout.elements
+ 		 
+ 		public function findNextAtomBoundary(relativePosition:int):int
+ 		{
++			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
++			{
++				var textBlock:TextBlock = getTextBlock();
++				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
++				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
++				if (currentAtomIndex == tl.atomCount - 1)
++				{
++					tl = tl.nextLine;
++					if (!tl)
++						return -1;
++					return tl.textBlockBeginIndex;
++				}
++				while (++relativePosition)
++				{
++					if (tl.getAtomIndexAtCharIndex(relativePosition) > currentAtomIndex)
++						break;
++				}
++				return relativePosition;
++			}
+ 			return getTextBlock().findNextAtomBoundary(relativePosition);
+ 		}
+ 		

@@ -574,7 +574,7 @@ package flashx.textLayout.elements
 			if (blockProgression == BlockProgression.RL && (parent is TCYElement))
 				return 0;
 			CONFIG::debug { assert(_computedFormat != null,"Missing _computedFormat in FlowLeafElement.getEffectiveLineHeight"); }
-			return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(_computedFormat.lineHeight, getEffectiveFontSize());
+			return TextLayoutFormat.lineHeightProperty.computeActualPropertyValue(computedFormat.lineHeight, getEffectiveFontSize());
 		}
 		
 		/** @private 

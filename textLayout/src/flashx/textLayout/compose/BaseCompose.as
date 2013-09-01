@@ -1435,7 +1435,7 @@ package flashx.textLayout.compose
 				
 				// advance to the next element, using the rootElement of the container as a limitNode
 				// to prevent going past the content bound to this container
-				_curElementOffset += _curLine.textLength;
+				_curElementOffset = _curLine.absoluteStart + _curLine.textLength - _curElementStart;
 				if (_curElementOffset >= _curElement.textLength)
 				{
 					// We may have composed ahead over several spans; skip until we match up

@@ -296,6 +296,16 @@ package flashx.textLayout.compose
 		 */
 		public function damage(startPosition:int, damageLength:int, damageType:String):void
 		{
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+			{
+				// damage everything from the beginning.  
+				// The player tends to screw up if you start
+				// composition in the middle and there are lines above broken on
+				// hyphens.
+				damageLength += startPosition;
+				startPosition = 0;
+			}
+			
 			// find the line at damageStart
 			if (_lines.length == 0 || textFlow.textLength == 0)
 				return;

@@ -33,7 +33,9 @@ package flashx.textLayout.elements
 	import flash.text.engine.TextRotation;
 	import flash.utils.getQualifiedClassName;
 	
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.compose.TextFlowLine;
+	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
 	import flashx.textLayout.debug.assert;
 	import flashx.textLayout.formats.BlockProgression;
@@ -48,7 +50,6 @@ package flashx.textLayout.elements
 	import flashx.textLayout.formats.TextJustify;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.CharacterUtil;
 	import flashx.textLayout.utils.LocaleUtil;
 	
@@ -477,6 +478,25 @@ package flashx.textLayout.elements
 		 
 		public function findPreviousAtomBoundary(relativePosition:int):int
 		{
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+			{
+				var textBlock:TextBlock = getTextBlock();
+				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
+				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
+				if (currentAtomIndex == 0)
+				{
+					tl = tl.previousLine;
+					if (!tl)
+						return -1;
+					return tl.textBlockBeginIndex + tl.rawTextLength;
+				}
+				while (--relativePosition)
+				{
+					if (tl.getAtomIndexAtCharIndex(relativePosition) < currentAtomIndex)
+						break;
+				}
+				return relativePosition;
+			}
 			return getTextBlock().findPreviousAtomBoundary(relativePosition);
 		}
 
@@ -500,6 +520,25 @@ package flashx.textLayout.elements
 		 
 		public function findNextAtomBoundary(relativePosition:int):int
 		{
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+			{
+				var textBlock:TextBlock = getTextBlock();
+				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
+				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
+				if (currentAtomIndex == tl.atomCount - 1)
+				{
+					tl = tl.nextLine;
+					if (!tl)
+						return -1;
+					return tl.textBlockBeginIndex;
+				}
+				while (++relativePosition)
+				{
+					if (tl.getAtomIndexAtCharIndex(relativePosition) > currentAtomIndex)
+						break;
+				}
+				return relativePosition;
+			}
 			return getTextBlock().findNextAtomBoundary(relativePosition);
 		}
 		
