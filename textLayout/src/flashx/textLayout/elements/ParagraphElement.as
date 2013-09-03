@@ -482,7 +482,7 @@ package flashx.textLayout.elements
 			{
 				var textBlock:TextBlock = getTextBlock();
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
-				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
+				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
 				if (currentAtomIndex == 0)
 				{
 					tl = tl.previousLine;
@@ -524,7 +524,7 @@ package flashx.textLayout.elements
 			{
 				var textBlock:TextBlock = getTextBlock();
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
-				var currentAtomIndex = tl.getAtomIndexAtCharIndex(relativePosition);
+				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
 				if (currentAtomIndex == tl.atomCount - 1)
 				{
 					tl = tl.nextLine;

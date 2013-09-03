@@ -138,6 +138,7 @@ package flashx.textLayout.edit
 	 */			
 	public class EditManager extends SelectionManager implements IEditManager
 	{
+		static tlf_internal var handleShiftAsSoftReturn:Boolean = true;
 		 /**
 		 *  To minimize expensive recompositions during fast typing, inserts
 		 *  don't necessarily take place immediately. An insert operation that
@@ -306,8 +307,14 @@ package flashx.textLayout.edit
 							/* pre-Argo and on the mac then ignoreNextTextEvent */ 
 							if (!Configuration.versionIsAtLeast(10,1) && (Capabilities.os.search("Mac OS") > -1)) 
 								ignoreNextTextEvent = true;
-							undo();
-							event.preventDefault();
+							if(event.shiftKey){
+								redo();
+								event.preventDefault();
+
+							} else {
+								undo();
+								event.preventDefault();
+							}
 							break;
 						case 121:	// small y
 							ignoreNextTextEvent = true;
@@ -383,7 +390,7 @@ package flashx.textLayout.edit
 						if (listItem && firstLeaf.getParentByType(ListElement) != listItem.getParentByType(ListElement))
 							listItem = null;
 						
-						// inside a list shift-enter splits a paragraph and shift splits the listitem
+						// inside a list shift-enter splits a paragraph and enter splits the listitem
 						if (listItem && !event.shiftKey)
 						{
 							// if on last item of list and it's empty, remove it and put cursor on a new para immediatly following the list (new para should be wrapped in a new list item if parent of list is another list).
@@ -402,6 +409,13 @@ package flashx.textLayout.edit
 								selectRange(absoluteStart+1,absoluteStart+1);
 								refreshSelection();
 							}
+						}
+						else if(event.shiftKey &&
+							((!listItem && textFlow.configuration.shiftEnterLevel > 0) ||
+							textFlow.configuration.shiftEnterLevel > 1)
+						)
+						{
+							overwriteMode ? overwriteText("\u2028") : insertText("\u2028");
 						}
 						else
 							splitParagraph();

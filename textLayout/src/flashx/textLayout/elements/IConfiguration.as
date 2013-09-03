@@ -66,6 +66,20 @@ package flashx.textLayout.elements
 		function get manageEnterKey():Boolean
 		
 		/** 
+		 * Determines how shift-enter is treated. Shift-enter can be treated as a soft return or hard return.
+		 * There are three possible levels. Level 0 means all shift-returns will be hard returns.
+		 * Level 1 means shift-returns inside lists will be treated as hard returns. Otherwise they will be treated as hard returns.
+		 * Level 2 means all shift-returns will be treated as soft returns.
+		 *
+		 * <p>Default value is <code>2</code>.</p>
+		 *
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		
+		function get shiftEnterLevel():int;
+		/** 
 		* Policy used for deciding whether the last line of a container fits in the container, or whether it overflows.
 		* Use the constants of the OverflowPolicy class to set this property.
 		*

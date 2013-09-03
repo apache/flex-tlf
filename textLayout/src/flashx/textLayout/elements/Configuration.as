@@ -71,9 +71,17 @@ package flashx.textLayout.elements
 		static tlf_internal const playerEnablesSpicyFeatures:Boolean = versionIsAtLeast(10,2) && (new Sprite).hasOwnProperty("needsSoftKeyboard"); 
 		static tlf_internal const hasTouchScreen:Boolean = playerEnablesArgoFeatures && Capabilities["touchScreenType"] != "none";
 		
+		static public const SHIFT_RETURN_AS_HARD:int = 0;
+		static public const SHIFT_RETURN_AS_HARD_IN_LIST:int = 1;
+		static public const SHIFT_RETURN_AS_SOFT:int = 2;
+		
+		static tlf_internal var defaultShiftEnterLevel:int = SHIFT_RETURN_AS_SOFT;
+		
 		/** If manageTabKey and manageEnterKey are false, the client must handle those keys on their own. */
 		private var _manageTabKey:Boolean;
 		private var _manageEnterKey:Boolean;
+		
+		private var _shiftEnterLevel:int = defaultShiftEnterLevel;
 		
 		private var _overflowPolicy:String;
 		
@@ -250,7 +258,18 @@ package flashx.textLayout.elements
 		public function set manageEnterKey(value:Boolean):void
 		{ _manageEnterKey = value; _immutableClone = null; }
 		
-
+		/** 
+		 * @copy IConfiguration#shiftEnterLevel
+		 *
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		
+		public function get shiftEnterLevel():int
+		{ return _shiftEnterLevel; }
+		public function set shiftEnterLevel(value:int):void
+		{ _shiftEnterLevel = value; }
 		
 		/** 
 		* @copy IConfiguration#overflowPolicy
