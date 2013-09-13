@@ -310,8 +310,8 @@ package flashx.textLayout.factory
 		/** @private */
 		tlf_internal function doTruncation(bp:String, measureWidth:Boolean, measureHeight:Boolean):void
 		{
-			var bp:String = _tf.computedFormat.blockProgression;
-			if (!doesComposedTextFit(truncationOptions.lineCountLimit, _tf.textLength, bp))
+			var bpString:String = _tf.computedFormat.blockProgression;
+			if (!doesComposedTextFit(truncationOptions.lineCountLimit, _tf.textLength, bpString))
 			{
 				_isTruncated = true;
 				var somethingFit:Boolean = false; // were we able to fit something?
@@ -331,7 +331,7 @@ package flashx.textLayout.factory
 					{
 						var truncateAtCharPosition:int;
 						
-						if (_tf.computedFormat.lineBreak == LineBreak.EXPLICIT || (bp == BlockProgression.TB ? measureWidth : measureHeight))
+						if (_tf.computedFormat.lineBreak == LineBreak.EXPLICIT || (bpString == BlockProgression.TB ? measureWidth : measureHeight))
 						{
 							// 3., 4. Initial truncation position: end of the last allowed line 
 							var line:TextLine = _factoryComposer._lines[_truncationLineIndex] as TextLine; 
@@ -340,7 +340,7 @@ package flashx.textLayout.factory
 						else
 						{
 							// 3. Calculate allowed width (width left over from the last line of the truncation indicator)
-							var targetWidth:Number = (bp == BlockProgression.TB ? compositionBounds.width : compositionBounds.height); 
+							var targetWidth:Number = (bpString == BlockProgression.TB ? compositionBounds.width : compositionBounds.height); 
 							if (paragraphFormat)
 							{
 								targetWidth -= (Number(paragraphFormat.paragraphSpaceAfter) + Number(paragraphFormat.paragraphSpaceBefore));
@@ -375,7 +375,7 @@ package flashx.textLayout.factory
 						{
 							_tf.flowComposer.compose();
 							
-							if (doesComposedTextFit(truncationOptions.lineCountLimit, _tf.textLength, bp))
+							if (doesComposedTextFit(truncationOptions.lineCountLimit, _tf.textLength, bpString))
 							{
 								somethingFit = true;
 								break; 

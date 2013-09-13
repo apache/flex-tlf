@@ -355,8 +355,8 @@ package flashx.textLayout.elements
 				return parent.getNextLeafHelper(limitElement,this);
 			}
 			
-			var child:FlowElement = getChildAt(idx+1);
-			return (child is FlowLeafElement) ? FlowLeafElement(child) : FlowGroupElement(child).getFirstLeaf();
+			var childFlowElement:FlowElement = getChildAt(idx+1);
+			return (childFlowElement is FlowLeafElement) ? FlowLeafElement(childFlowElement) : FlowGroupElement(childFlowElement).getFirstLeaf();
 		}
 				
 		/** @private */
@@ -374,8 +374,8 @@ package flashx.textLayout.elements
 				return parent.getPreviousLeafHelper(limitElement,this);
 			}
 			
-			var child:FlowElement = getChildAt(idx-1);
-			return (child is FlowLeafElement) ? FlowLeafElement(child) : FlowGroupElement(child).getLastLeaf();
+			var childFlowElement:FlowElement = getChildAt(idx-1);
+			return (childFlowElement is FlowLeafElement) ? FlowLeafElement(childFlowElement) : FlowGroupElement(childFlowElement).getLastLeaf();
 		}
 	
 		/**

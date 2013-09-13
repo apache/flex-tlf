@@ -600,21 +600,21 @@ package flashx.textLayout.edit
 			CONFIG::debug { assert(begIdx <= endIdx,"bad indexeds passed to ParaEdit.cacheContainerStyleInformation");  }
 			if (flowRoot.flowComposer)
 			{
-				var startIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-				if (startIdx == -1)
+				var ctrlrBegIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
+				if (ctrlrBegIdx == -1)
 					return;
-				var endIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
-				if (endIdx == -1)
-					endIdx = flowRoot.flowComposer.numControllers-1;
-				while (startIdx <= endIdx)
+				var ctrlrEndIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
+				if (ctrlrEndIdx == -1)
+					ctrlrEndIdx = flowRoot.flowComposer.numControllers-1;
+				while (ctrlrBegIdx <= ctrlrEndIdx)
 				{
-					var controller:ContainerController = flowRoot.flowComposer.getControllerAt(startIdx);
+					var controller:ContainerController = flowRoot.flowComposer.getControllerAt(ctrlrBegIdx);
 					var obj:Object = new Object();
 					obj.container = controller;
 					// save just the styles
 					obj.attributes = new TextLayoutFormat(controller.format);
 					undoArray.push(obj);
-					startIdx++;
+					ctrlrBegIdx++;
 				}
 			}
 		}
@@ -624,22 +624,22 @@ package flashx.textLayout.edit
 			CONFIG::debug { assert(begIdx <= endIdx,"bad indexes passed to ParaEdit.cacheContainerStyleInformation");  }
 			if (flowRoot.flowComposer)
 			{
-				var startIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-				if (startIdx == -1)
+				var ctrlrBegIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
+				if (ctrlrBegIdx == -1)
 					return;
-				var endIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
-				if (endIdx == -1)
-					endIdx = flowRoot.flowComposer.numControllers-1;
+				var ctrlrEndIdx:int = flowRoot.flowComposer.findControllerIndexAtPosition(endIdx,true);
+				if (ctrlrEndIdx == -1)
+					ctrlrEndIdx = flowRoot.flowComposer.numControllers-1;
 				var controllerIndex:int = flowRoot.flowComposer.findControllerIndexAtPosition(begIdx,false);
-				while (startIdx <= endIdx)
+				while (ctrlrBegIdx <= ctrlrEndIdx)
 				{
-					var controller:ContainerController = flowRoot.flowComposer.getControllerAt(startIdx);
+					var controller:ContainerController = flowRoot.flowComposer.getControllerAt(ctrlrBegIdx);
 					var newFormat:TextLayoutFormat = new TextLayoutFormat(controller.format);
 					if (applyFormat)
 						newFormat.apply(applyFormat);
 					undefineDefinedFormats(newFormat,undefineFormat);
 					controller.format = newFormat;
-					startIdx++;
+					ctrlrBegIdx++;
 				}
 			}
 		}

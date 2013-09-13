@@ -1924,7 +1924,6 @@ package flashx.textLayout.compose
 		{
 			var blockRect:Rectangle = new Rectangle();
 			var globalStart:Point = new Point(0,0);
-			var heightAndAdj:Array;
 			
 			if(begAtomIndex > endAtomIndex)
 			{

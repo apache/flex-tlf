@@ -145,12 +145,12 @@ package flashx.textLayout.property
 				var addComma:Boolean = false;
 				for each (var prop:Property in desc)
 				{
-					var val:Object = member[prop.name];
-					if (val != null)
+					var memberVal:Object = member[prop.name];
+					if (memberVal != null)
 					{
 						if (addComma)
 							rslt += ", ";
-						rslt += prop.name + ":" + prop.toXMLString(val);
+						rslt += prop.name + ":" + prop.toXMLString(memberVal);
 						addComma = true;
 					}
 				}
