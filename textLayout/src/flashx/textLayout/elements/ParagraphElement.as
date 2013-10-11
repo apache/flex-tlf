@@ -488,6 +488,9 @@ package flashx.textLayout.elements
 					tl = tl.previousLine;
 					if (!tl)
 						return -1;
+					// need this when 0x2028 line separator in use
+					if (tl.textBlockBeginIndex + tl.rawTextLength == relativePosition)
+						return tl.textBlockBeginIndex + tl.rawTextLength - 1;
 					return tl.textBlockBeginIndex + tl.rawTextLength;
 				}
 				while (--relativePosition)
