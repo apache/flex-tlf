@@ -481,26 +481,59 @@ package flashx.textLayout.elements
 			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
 			{
 				var textBlock:TextBlock = getTextBlock();
+                var isRTL:Boolean = textBlock.bidiLevel == 1;
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
-				if (currentAtomIndex == 0)
-				{
-					tl = tl.previousLine;
-					if (!tl)
-						return -1;
-					// need this when 0x2028 line separator in use
-					if (tl.textBlockBeginIndex + tl.rawTextLength == relativePosition)
-						return tl.textBlockBeginIndex + tl.rawTextLength - 1;
-					return tl.textBlockBeginIndex + tl.rawTextLength;
-				}
-				while (--relativePosition)
-				{
-					if (tl.getAtomIndexAtCharIndex(relativePosition) < currentAtomIndex)
-						break;
-				}
+                trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
+                if (isRTL)
+                {
+                   var foo:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
+                   if (currentAtomIndex == 0)
+                   {
+                       // when cursor is left of all characters (end of line)
+                       // atomIndex is 0, so compensate
+                       if (tl.atomCount > 0)
+                       {
+                           while (--relativePosition)
+                           {
+                               if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+                                   break;
+                           }
+                       }
+                   }
+                   else
+                   {
+                       while (--relativePosition)
+                       {
+                           if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+                               break;
+                       }
+                   }
+                   trace("previous", relativePosition, foo);
+                }
+                else
+                {
+    				if (currentAtomIndex == 0)
+    				{
+    					tl = tl.previousLine;
+    					if (!tl)
+    						return -1;
+    					// need this when 0x2028 line separator in use
+    					if (tl.textBlockBeginIndex + tl.rawTextLength == relativePosition)
+    						return tl.textBlockBeginIndex + tl.rawTextLength - 1;
+    					return tl.textBlockBeginIndex + tl.rawTextLength;
+    				}
+    				while (--relativePosition)
+    				{
+    					if (tl.getAtomIndexAtCharIndex(relativePosition) < currentAtomIndex)
+    						break;
+    				}
+                }
 				return relativePosition;
 			}
-			return getTextBlock().findPreviousAtomBoundary(relativePosition);
+            var pos:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
+            trace("previous", relativePosition, pos);
+			return pos;
 		}
 
 		/** 
@@ -526,23 +559,51 @@ package flashx.textLayout.elements
 			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
 			{
 				var textBlock:TextBlock = getTextBlock();
+                var isRTL:Boolean = textBlock.bidiLevel == 1;
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
-				if (currentAtomIndex == tl.atomCount - 1)
-				{
-					tl = tl.nextLine;
-					if (!tl)
-						return -1;
-					return tl.textBlockBeginIndex;
-				}
-				while (++relativePosition)
-				{
-					if (tl.getAtomIndexAtCharIndex(relativePosition) > currentAtomIndex)
-						break;
-				}
+                trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
+                if (isRTL)
+                {
+                    var foo:int = getTextBlock().findNextAtomBoundary(relativePosition);
+                    if (currentAtomIndex == 0)
+                    {
+                        while (++relativePosition)
+                        {
+                            if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        while (++relativePosition)
+                        {
+                            if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+                                break;
+                        }
+                    }
+                    trace("next", relativePosition, foo);
+                }
+                else
+                {
+    				if (currentAtomIndex == tl.atomCount - 1)
+    				{
+    					tl = tl.nextLine;
+    					if (!tl)
+    						return -1;
+    					return tl.textBlockBeginIndex;
+    				}
+    				while (++relativePosition)
+    				{
+    					if (tl.getAtomIndexAtCharIndex(relativePosition) > currentAtomIndex)
+    						break;
+    				}
+                }
 				return relativePosition;
 			}
-			return getTextBlock().findNextAtomBoundary(relativePosition);
+			var pos:int = getTextBlock().findNextAtomBoundary(relativePosition);
+            trace("next", relativePosition, pos);
+            return pos;
 		}
 		
 		/** @private */
