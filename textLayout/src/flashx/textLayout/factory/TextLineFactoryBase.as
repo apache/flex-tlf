@@ -84,9 +84,9 @@ package flashx.textLayout.factory
 		static tlf_internal var _factoryComposer:SimpleCompose;
 
 		/** @private */		
-		static protected var _truncationLineIndex:int; 	// used during truncation
+		protected var _truncationLineIndex:int; 	// used during truncation
 		/** @private */		
-		static protected var _pass0Lines:Array; 		// used during truncation
+		protected var _pass0Lines:Array; 		// used during truncation
 		
 		/** @private return the next factory composer that will be used */
 		static tlf_internal function peekFactoryCompose():SimpleCompose
