@@ -484,7 +484,7 @@ package flashx.textLayout.elements
                 var isRTL:Boolean = textBlock.bidiLevel == 1;
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
-                trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
+                //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 if (isRTL)
                 {
                    var foo:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
@@ -509,7 +509,7 @@ package flashx.textLayout.elements
                                break;
                        }
                    }
-                   trace("previous", relativePosition, foo);
+                   //trace("previous", relativePosition, foo);
                 }
                 else
                 {
@@ -532,7 +532,7 @@ package flashx.textLayout.elements
 				return relativePosition;
 			}
             var pos:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
-            trace("previous", relativePosition, pos);
+            //trace("previous", relativePosition, pos);
 			return pos;
 		}
 
@@ -562,7 +562,7 @@ package flashx.textLayout.elements
                 var isRTL:Boolean = textBlock.bidiLevel == 1;
 				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
-                trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
+                //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 if (isRTL)
                 {
                     var foo:int = getTextBlock().findNextAtomBoundary(relativePosition);
@@ -582,7 +582,7 @@ package flashx.textLayout.elements
                                 break;
                         }
                     }
-                    trace("next", relativePosition, foo);
+                    //trace("next", relativePosition, foo);
                 }
                 else
                 {
@@ -602,7 +602,7 @@ package flashx.textLayout.elements
 				return relativePosition;
 			}
 			var pos:int = getTextBlock().findNextAtomBoundary(relativePosition);
-            trace("next", relativePosition, pos);
+            //trace("next", relativePosition, pos);
             return pos;
 		}
 		
