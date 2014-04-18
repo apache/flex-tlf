@@ -1109,7 +1109,7 @@ package flashx.textLayout.utils
 			var flowComposer:IFlowComposer = range.textFlow.flowComposer;
 			var controller:ContainerController = null;
 			checkCompose(flowComposer, range.absoluteEnd);
-			if (range.absoluteEnd > flowComposer.damageAbsoluteStart - 1)
+			if (range.absoluteEnd >= flowComposer.damageAbsoluteStart - 1)
 			{
 				clampToFit(range, flowComposer.damageAbsoluteStart - 1);
 				return true;
