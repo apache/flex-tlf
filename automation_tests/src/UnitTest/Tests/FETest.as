@@ -55,7 +55,11 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.*;
 	import flashx.textLayout.operations.FlowOperation;
 	import flashx.textLayout.tlf_internal;
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 	
 	import mx.utils.LoaderUtil;
 	import flashx.textLayout.conversion.ITextLayoutImporter;
@@ -176,7 +180,7 @@ package UnitTest.Tests
 			if(!callback)
 			{
 				callback = true;
-				TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(loadUnloadGraphicsTest,2500,null),false,0,true);
+				//TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(loadUnloadGraphicsTest,2500,null),false,0,true);
 				
 				var src:String = data[data.length-1].toString();
 				var width:int = 20;
@@ -192,7 +196,7 @@ package UnitTest.Tests
 
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(loadUnloadGraphicsTest,2500,null),false,0,true);
+				//	textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(loadUnloadGraphicsTest,2500,null),false,0,true);
 				}
 				else
 				{
@@ -213,7 +217,7 @@ package UnitTest.Tests
 					textFlow.prepareGraphicsForLoad();
 					textFlow.applyFunctionToElements(function (elem:FlowElement):Boolean{ if (elem is InlineGraphicElement) textFlow.damage(elem.getAbsoluteStart(),1,TextLineValidity.INVALID); return false; });
 					textFlow.flowComposer.updateAllControllers();
-					textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(waitInlineGraphic,2500,null),false,0,true);
+					//textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(waitInlineGraphic,2500,null),false,0,true);
 					
 					function waitInlineGraphic(callback:Object = null):void
 					{
@@ -221,7 +225,7 @@ package UnitTest.Tests
 						//if it doesn't become ready within the test timeout, the test will error.
 						if (img.status != "ready")
 						{
-							textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(waitInlineGraphic,2500,null),false,0,true);
+							//textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(waitInlineGraphic,2500,null),false,0,true);
 						}else{
 							assertTrue("Inline Graphic is not loaded by prepareGraphicsForLoad", img.status == "ready");
 						}
@@ -256,13 +260,13 @@ package UnitTest.Tests
 			var para:ParagraphElement = newTF.getChildAt(0) as ParagraphElement;
 			assertTrue("The second element in the paragraph is not an inline graphic element, after converting markup to textflow", para.getChildAt(1) is InlineGraphicElement);
 			var img:InlineGraphicElement = para.getChildAt(1) as InlineGraphicElement;
-			TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(assertFirstly,2500,null),false,0,true);
+		//	TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(assertFirstly,2500,null),false,0,true);
 			
 			function assertFirstly(callback:Object = null):void
 			{
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(assertFirstly,2500,null),false,0,true);
+				//	newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(assertFirstly,2500,null),false,0,true);
 				}
 				else
 				{
@@ -273,7 +277,7 @@ package UnitTest.Tests
 					newTF.prepareGraphicsForLoad();
 					newTF.applyFunctionToElements(function (elem:FlowElement):Boolean{ if (elem is InlineGraphicElement) newTF.damage(elem.getAbsoluteStart(),1,TextLineValidity.INVALID); return false; });
 					newTF.flowComposer.updateAllControllers();
-					newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(assertSecondly,2500,null),false,0,true);
+					//newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, addAsync(assertSecondly,2500,null),false,0,true);
 				}
 			}
 			
@@ -281,7 +285,7 @@ package UnitTest.Tests
 			{
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(assertSecondly,2500,null),false,0,true);
+				//	newTF.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(assertSecondly,2500,null),false,0,true);
 				}
 				else
 				{
@@ -359,7 +363,7 @@ package UnitTest.Tests
   			if(!callback)
   			{
 		 		callback = true;
-		 		TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsString,2500,null),false,0,true);
+		 		//TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsString,2500,null),false,0,true);
 
 	  			var startIndx:int = SelManager.textFlow.textLength/2;
 	  			var endIndx:int = startIndx;
@@ -394,7 +398,7 @@ package UnitTest.Tests
   				img = InlineGraphicElement(elem);
   				if(img.status != InlineGraphicElementStatus.READY)
   				{
-					SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsString,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsString,2500,null),false,0,true);
   				}
   			}
 		}
@@ -416,7 +420,7 @@ package UnitTest.Tests
   			if(!callback)
   			{
 		 		callback = true;
-		 		TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsDisplayObject,2500,null),false,0,true);
+		 	//	TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsDisplayObject,2500,null),false,0,true);
 
 	  			var startIndx:int = SelManager.textFlow.textLength/4;
 	  			var endIndx:int = startIndx + 5;		// replace existing text
@@ -452,7 +456,7 @@ package UnitTest.Tests
   				img = InlineGraphicElement(elem);
   				if(img.status != InlineGraphicElementStatus.READY)
   				{
-					SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsDisplayObject,2500,null),false,0,true);
+			//		SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsDisplayObject,2500,null),false,0,true);
   				}
   			}
 		}
@@ -467,7 +471,7 @@ package UnitTest.Tests
 	  		if(!callback)
   			{
 		 		callback = true;
-		 		TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsURLRequest,2500,null),false,0,true);
+		 		//TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsURLRequest,2500,null),false,0,true);
 
 	  			var startIndx:int = SelManager.textFlow.textLength/3;
 	  			var endIndx:int = startIndx + 5;		// replace existing text
@@ -503,7 +507,7 @@ package UnitTest.Tests
   				img = InlineGraphicElement(elem);
   				if(img.status != InlineGraphicElementStatus.READY)
   				{
-					SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsURLRequest,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertImageAsURLRequest,2500,null),false,0,true);
   				}
   			}
   			}
@@ -523,7 +527,7 @@ package UnitTest.Tests
 			if(!callback)
 			{
 				callback = true;
-				TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertAtEndAndUndo,2500,null),false,0,true);
+			//	TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(insertAtEndAndUndo,2500,null),false,0,true);
 
 				var textFlow:TextFlow = SelManager.textFlow;
 				
@@ -547,7 +551,7 @@ package UnitTest.Tests
 				var img:InlineGraphicElement = InlineGraphicElement(elem);
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertAtEndAndUndo,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(insertAtEndAndUndo,2500,null),false,0,true);
 					return;
 				}
 			//	SelManager.textFlow.flowComposer.updateAllControllers();
@@ -648,7 +652,7 @@ package UnitTest.Tests
 			{
 				// Insert 3 images
 				callBack = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(copyMultipleImageTest,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(copyMultipleImageTest,2500,null),false,0,true);
 	  			var indx:int = SelManager.textFlow.textLength/2;
 	  			var origFlowLength:int = SelManager.textFlow.textLength;
 	
@@ -742,7 +746,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY || img2.status != InlineGraphicElementStatus.READY || img3.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(copyMultipleImageTest,2500,null),false,0,true);
+			//		SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(copyMultipleImageTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -752,7 +756,7 @@ package UnitTest.Tests
 			if (!callBack)
 			{
 				callBack = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(cutMultipleImageTest,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(cutMultipleImageTest,2500,null),false,0,true);
 				// Insert 3 images
 	  			var indx:int = SelManager.textFlow.textLength/2;
 	  			var origFlowLength:int = SelManager.textFlow.textLength;
@@ -876,7 +880,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY || img2.status != InlineGraphicElementStatus.READY || img3.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(cutMultipleImageTest,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(cutMultipleImageTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -889,7 +893,7 @@ package UnitTest.Tests
 			if (!callback)
 			{
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoInsertImageTest,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoInsertImageTest,2500,null),false,0,true);
 				var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 				indx1 = startIndx;
@@ -918,7 +922,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoInsertImageTest,2500,null),false,0,true);
+					//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoInsertImageTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -963,7 +967,7 @@ package UnitTest.Tests
 			if (!callback)
 			{
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeImageTest,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeImageTest,2500,null),false,0,true);
 				var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 				indx1 = startIndx;
@@ -1015,7 +1019,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeImageTest,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeImageTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1028,7 +1032,7 @@ package UnitTest.Tests
 			if (!callback)	
 			{
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoChangeImageTest,2500,null),false,0,true);
+				//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoChangeImageTest,2500,null),false,0,true);
 				var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 				indx1 = startIndx;
@@ -1111,7 +1115,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoChangeImageTest,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(undoRedoChangeImageTest,2500,null),false,0,true);
 				}
 			}
 		
@@ -1158,7 +1162,7 @@ package UnitTest.Tests
 			if (!callback)
 			{	
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeBaselineTest,2500,null),false,0,true);
+				//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeBaselineTest,2500,null),false,0,true);
 				var tb:Boolean = TestFrame.rootElement.computedFormat.blockProgression ==
 						BlockProgression.RL;
 				var src:String = data[data.length-1].toString();
@@ -1209,7 +1213,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeBaselineTest,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(changeBaselineTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1222,7 +1226,7 @@ package UnitTest.Tests
 			if (!callback)
 			{
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(baselineShiftTest,2500,null),false,0,true);
+				//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(baselineShiftTest,2500,null),false,0,true);
 				var tb:Boolean = TestFrame.rootElement.computedFormat.blockProgression ==
 						BlockProgression.RL;
 	
@@ -1273,7 +1277,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(baselineShiftTest,2500,null),false,0,true);
+			//		SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(baselineShiftTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1288,7 +1292,7 @@ package UnitTest.Tests
 			if (!callback)
 			{	
 				callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(breakOpportunityTest,2500,null),false,0,true);
+				//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(breakOpportunityTest,2500,null),false,0,true);
 				SelManager.selectAll();
 				var ca:TextLayoutFormat = new TextLayoutFormat();
 				ca.fontFamily = "Times New Roman";
@@ -1368,7 +1372,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(breakOpportunityTest,2500,null),false,0,true);
+					//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(breakOpportunityTest,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1461,7 +1465,7 @@ package UnitTest.Tests
 			if (!callBack)
 			{
 				callBack = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(insertFEInLink,2500,null),false,0,true);
+				//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(insertFEInLink,2500,null),false,0,true);
 				var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 				indx1 = startIndx;
@@ -1498,7 +1502,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(insertFEInLink,2500,null),false,0,true);
+				//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(insertFEInLink,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1511,7 +1515,7 @@ package UnitTest.Tests
 			if (!callBack)
 			{
 				callBack = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(foreignElementToLink,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(foreignElementToLink,2500,null),false,0,true);
 				var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 				indx1 = startIndx;
@@ -1549,7 +1553,7 @@ package UnitTest.Tests
 				
 				if(img1.status != InlineGraphicElementStatus.READY)
 				{
-					SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(foreignElementToLink,2500,null),false,0,true);
+					//SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(foreignElementToLink,2500,null),false,0,true);
 				}
 			}
 		}
@@ -1564,7 +1568,7 @@ package UnitTest.Tests
 			 if(!callback)
 			 {
 				 callback = true;
-				 TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(proportionalSize,2500,null),false,0,true);
+				// TestFrame.container.addEventListener(Event.ENTER_FRAME,addAsync(proportionalSize,2500,null),false,0,true);
 				 
 				 var startIndx:int = SelManager.textFlow.textLength/2;
 				 var endIndx:int = startIndx;
@@ -1629,7 +1633,7 @@ package UnitTest.Tests
 				 
 				 if(img1.status != InlineGraphicElementStatus.READY || img2.status != InlineGraphicElementStatus.READY || img3.status != InlineGraphicElementStatus.READY)
 				 {
-					 SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(proportionalSize,2500,null),false,0,true);
+					// SelManager.textFlow.addEventListener(Event.ENTER_FRAME,addAsync(proportionalSize,2500,null),false,0,true);
 				 }
 			 }
 		}
@@ -1686,7 +1690,7 @@ package UnitTest.Tests
 		 {
 		 	if(!callback){
 		 		callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoWidth,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoWidth,2500,null),false,0,true);
 
 			 	var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
@@ -1709,7 +1713,7 @@ package UnitTest.Tests
 				{
 					case InlineGraphicElementStatus.LOADING:
 					case InlineGraphicElementStatus.SIZE_PENDING:
-						SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoWidth,2500,null),false,0,true);
+				//		SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoWidth,2500,null),false,0,true);
 						break;
 					case InlineGraphicElementStatus.READY:
 						var effWidth:Number = image.actualWidth as Number;
@@ -1720,7 +1724,7 @@ package UnitTest.Tests
 						
 						assertTrue("Final width is not half of initial width!", nomWidth/2 == effWidth);
 						assertTrue("Final height is not half of initial height!", nomHeight/2 == effHeight);
-						SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
 						break;
 					default:
 						assertTrue("unexpected StatusChangeEvent status: "+event.status,false);
@@ -1737,7 +1741,7 @@ package UnitTest.Tests
 		 	if(!callback)
 		 	{
 		 		callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoHeight,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoHeight,2500,null),false,0,true);
 
 			 	var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
@@ -1760,7 +1764,7 @@ package UnitTest.Tests
 				{
 					case InlineGraphicElementStatus.LOADING:
 					case InlineGraphicElementStatus.SIZE_PENDING:
-						SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoHeight,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalAutoHeight,2500,null),false,0,true);
 						break;
 					case InlineGraphicElementStatus.READY:
 						var effWidth:Number = image.actualWidth as Number;
@@ -1771,7 +1775,7 @@ package UnitTest.Tests
 						
 						assertTrue("Final width is not half of initial width!", nomWidth/2 == effWidth);
 						assertTrue("Final height is not half of initial height!", nomHeight/2 == effHeight);
-						SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
 						break;
 					default:
 						assertTrue("unexpected StatusChangeEvent status: "+event.status,false);
@@ -1788,7 +1792,7 @@ package UnitTest.Tests
 		 	if(!callback)
 		 	{
 		 		callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedWidth,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedWidth,2500,null),false,0,true);
 			 	var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
 
@@ -1811,7 +1815,7 @@ package UnitTest.Tests
 				{
 					case InlineGraphicElementStatus.LOADING:
 					case InlineGraphicElementStatus.SIZE_PENDING:
-						SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedWidth,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedWidth,2500,null),false,0,true);
 						break;
 					case InlineGraphicElementStatus.READY:
 						var effWidth:Number = image.actualWidth as Number;
@@ -1824,7 +1828,7 @@ package UnitTest.Tests
 							"Ratio of width to height is not correct!",
 							nomWidth/effWidth == nomHeight/effHeight
 						);
-						SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
 						break;
 					default:
 						assertTrue("unexpected StatusChangeEvent status: "+event.status,false);
@@ -1841,7 +1845,7 @@ package UnitTest.Tests
 			if(!callback)
 			{
 		 		callback = true;
-				SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedHeight,2500,null),false,0,true);
+			//	SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedHeight,2500,null),false,0,true);
 
 			 	var startIndx:int = SelManager.textFlow.textLength/2;
 				var endIndx:int = startIndx;
@@ -1864,7 +1868,7 @@ package UnitTest.Tests
 				{
 					case InlineGraphicElementStatus.LOADING:
 					case InlineGraphicElementStatus.SIZE_PENDING:
-						SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedHeight,2500,null),false,0,true);
+				//		SelManager.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(proportionalFixedHeight,2500,null),false,0,true);
 						break;
 					case InlineGraphicElementStatus.READY:
 						var effWidth:Number = image.actualWidth as Number;
@@ -1877,7 +1881,7 @@ package UnitTest.Tests
 							"Ratio of width to height is not correct!",
 							nomWidth/effWidth == nomHeight/effHeight
 						);
-						SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
+					//	SelManager.textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
 						break;
 					default:
 						assertTrue("unexpected StatusChangeEvent status: "+event.status,false);
@@ -1922,7 +1926,7 @@ package UnitTest.Tests
 		{
 			TestFrame.textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, graphicStatusChangeEvent);
 
-			TestFrame.textFlow.addEventListener(Event.SOUND_COMPLETE, addAsync(failEvent,2500, null, nullFunction));
+			//TestFrame.textFlow.addEventListener(Event.SOUND_COMPLETE, addAsync(failEvent,2500, null, nullFunction));
 
 		 	SelManager.selectAll();
 		 	SelManager.deleteText();
@@ -2061,7 +2065,7 @@ package UnitTest.Tests
 			{
 				callback = true;
 				tf = SelManager.textFlow;
-				tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(imgSourceFilterFunctionTest,2500,null),false,0,true);	
+			//	tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(imgSourceFilterFunctionTest,2500,null),false,0,true);
 				var textImporter:ITextImporter;
 							
 				SelManager.selectAll();
@@ -2087,7 +2091,7 @@ package UnitTest.Tests
 				tf = img.getTextFlow();
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(imgSourceFilterFunctionTest,2500,null),false,0,true);
+				//	tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(imgSourceFilterFunctionTest,2500,null),false,0,true);
 				}
 			}
 		}

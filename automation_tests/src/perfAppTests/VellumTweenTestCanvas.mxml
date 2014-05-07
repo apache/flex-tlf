@@ -48,7 +48,9 @@
 	import mx.collections.ArrayCollection;
 	import mx.controls.Text;
 
-	use namespace tlf_internal;
+            import org.flexunit.asserts.assertTrue;
+
+            use namespace tlf_internal;
 
 		private static var factory:StringTextLineFactory = new StringTextLineFactory();
 		
@@ -171,8 +173,10 @@
 			{
 				lineHolder.rawChildren.removeChildAt(0);
 			}
-				
-			CONFIG::debug { assert(lineHolder.rawChildren.numChildren == 0,"bad test"); }
+
+            assertTrue(lineHolder.rawChildren.numChildren == 0,"bad test");
+
+		//	CONFIG::debug { assert(lineHolder.rawChildren.numChildren == 0,"bad test"); }
 				
 			//lineHolder.visible = false;			
 			

@@ -42,7 +42,11 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextAlign;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.formats.VerticalAlign;
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 
 	import mx.utils.UIDUtil;
 	import flashx.textLayout.edit.EditManager;

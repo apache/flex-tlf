@@ -22,7 +22,7 @@
 	<property file="${basedir}/build.properties"/>
     <!-- Specify a FLEX_HOME in local.properties or
          Override on cmd line with -D=FLEX_HOME=path. -->
-	<property file="${basedir}/local.properties"/>
+	<!--<property file="${basedir}/local.properties"/>-->
     <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
 	<property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
 	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
@@ -190,7 +190,7 @@
 	<target name="testApps" description="Builds TLF test application">
 		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/flowCss.css" 
 				keep-generated-actionscript="false"
-				output="${output.dir}/apps/testApps/bin/Flow.swf">
+				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
 			<jvmarg line="${jvm.args}"/>
 			<library-path/>
 			<library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
@@ -214,7 +214,7 @@
 
 		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/Flow.mxml" 
 				keep-generated-actionscript="false"
-				output="${output.dir}/apps/testApps/bin/Flow.swf">
+				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
 			
 			<default-size width="1100" height="550" />
 			<jvmarg line="${jvm.args}"/>
@@ -341,10 +341,12 @@
 				output="${output.dir}/apps/automation_apps/bin/VellumUnit.swf">
 			<jvmarg line="${jvm.args}"/>
 			<library-path/>
+
 			<library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
 			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" 	append="true"/>
 			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_tests.swc" 	append="true"/>
-			<library-path dir="${automation_core.dir}/libs" includes="flexunit.swc" 		append="true"/>
+			<library-path dir="${automation_apps.dir}/libs" includes="flexunit.swc" 		append="true"/>
+            <library-path dir="${automation_apps.dir}/libs" includes="flexunit-uilistener.swc" 		append="true"/>
 
 			<!-- External swcs -->
 			<library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
@@ -357,10 +359,10 @@
 			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
 			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
 			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
+			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/>
+            <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="textLayout_rb.swc" append="true"/>
 
-
-			<static-link-runtime-shared-libraries/>
+            <static-link-runtime-shared-libraries/>
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
 			<define name="CONFIG::release" 			value="${rel}"/>

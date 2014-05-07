@@ -51,7 +51,14 @@ package UnitTest.Tests
 	import flashx.textLayout.conversion.TextConverter;
 	
 	import mx.containers.Canvas;
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertFalse;
+
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+    import org.flexunit.async.Async;
+
+    use namespace tlf_internal;
 
 	public class TCYTests extends VellumTestCase
 	{
@@ -447,7 +454,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_DOWN, addAsync(checkMouseDownEvent,2500,null),false,0,true);
+
+            var checkMouseDownHandler = Async.asyncHandler(this, checkMouseDownEvent, 2500, {timeOut: "Timeout reached checkMouseDownEvent"}, tcyTestsTimeout);
+
+			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_DOWN, checkMouseDownHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -466,7 +476,7 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(0, 0);
 		}
-		
+
 		public function tcyMouseClickEventMirrorTest():void	
 		{	
 			SelManager.selectAll();
@@ -487,7 +497,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.CLICK, addAsync(checkMouseClickEvent,2500,null),false,0,true);
+
+            var checkMouseClickHandler = Async.asyncHandler(this, checkMouseClickEvent, 2500, {timeOut: "Timeout reached checkMouseClickEvent"}, tcyTestsTimeout);
+
+			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.CLICK, checkMouseClickHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -511,7 +524,12 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(0, 0);
 		}
-		
+
+        private function checkMouseClickTimeout(passThroughData:Object = null):void
+        {
+            fail("Timeout reached TCYTests.checkMouseClick");
+        }
+
 		public function tcyMouseMoveEventMirrorTest():void	
 		{	
 			SelManager.selectAll();
@@ -532,7 +550,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_MOVE, addAsync(checkMouseMoveEvent,2500,null),false,0,true);
+
+            var checkMouseMoveHandler = Async.asyncHandler(this, checkMouseMoveEvent, 2500, {timeOut: "Timeout reached checkMouseMoveEvent"}, tcyTestsTimeout);
+
+            tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_MOVE, checkMouseMoveHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -575,7 +596,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_UP, addAsync(checkMouseUpEvent,2500,null),false,0,true);
+
+            var checkMouseUpHandler = Async.asyncHandler(this, checkMouseUpEvent, 2500, {timeOut: "Timeout reached checkMouseUpEvent"}, tcyTestsTimeout);
+
+			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_UP, checkMouseUpHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -616,7 +640,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OVER, addAsync(checkMouseRollOverEvent,2500,null),false,0,true);
+
+            var checkMouseRollOverHandler = Async.asyncHandler(this, checkMouseRollOverEvent, 2500, {timeOut: "Timeout reached checkMouseRollOverEvent"}, tcyTestsTimeout);
+
+			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OVER, checkMouseRollOverHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -660,7 +687,10 @@ package UnitTest.Tests
 			tf.interactionManager = editmanager;
 			editmanager.selectRange(4,7);
 			var tcy:TCYElement = editmanager.applyTCY(true);
-			tcy.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OUT, addAsync(checkMouseRollOutEvent,2500,null),false,0,true);
+
+            var checkMouseRollOutHandler = Async.asyncHandler(this, checkMouseRollOutEvent, 2500, {timeOut: "Timeout reached checkMouseRollOutEvent"}, tcyTestsTimeout);
+
+            tcy.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OUT, checkMouseRollOutHandler,false,0,true);
 			
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -736,38 +766,43 @@ package UnitTest.Tests
 		}
 		
 		
-		private function checkMouseDownEvent(e:FlowElementMouseEvent):void
+		private function checkMouseDownEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseDown event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.MOUSE_DOWN, checkMouseDownEvent);
 		}
-		private function checkMouseUpEvent(e:FlowElementMouseEvent):void
+		private function checkMouseUpEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseUp event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.MOUSE_UP, checkMouseUpEvent);
 		}
-		private function checkMouseClickEvent(e:FlowElementMouseEvent):void
+		private function checkMouseClickEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseClick event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.CLICK, checkMouseClickEvent);
 		}
-		private function checkMouseMoveEvent(e:FlowElementMouseEvent):void
+		private function checkMouseMoveEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseMove event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.MOUSE_MOVE, checkMouseMoveEvent);
 		}
-		private function checkMouseRollOverEvent(e:FlowElementMouseEvent):void
+		private function checkMouseRollOverEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseRollOver event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.ROLL_OVER, checkMouseRollOverEvent);
 		}
-		private function checkMouseRollOutEvent(e:FlowElementMouseEvent):void
+		private function checkMouseRollOutEvent(e:FlowElementMouseEvent, passThroughData:Object):void
 		{
 			assertTrue("mouseRollOut event is not fired", !(e is ErrorEvent));
 			tf.removeEventListener(FlowElementMouseEvent.ROLL_OUT, checkMouseRollOutEvent);
 		}
-		
-		public function addDivInTcyTest():void	
+
+        private function tcyTestsTimeout(passThroughData:Object = null):void
+        {
+            fail(passThroughData.timeOut);
+        }
+
+        public function addDivInTcyTest():void
 		{	
 			SelManager.selectAll();
 			SelManager.deleteText();

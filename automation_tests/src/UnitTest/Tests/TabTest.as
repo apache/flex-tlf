@@ -30,8 +30,10 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TabStopFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
 
+    import org.flexunit.asserts.assertTrue;
 
-	public class TabTest extends VellumTestCase
+
+    public class TabTest extends VellumTestCase
 	{
 		public function TabTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{

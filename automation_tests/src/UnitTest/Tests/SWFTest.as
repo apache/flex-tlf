@@ -42,7 +42,9 @@ package UnitTest.Tests
 	import mx.containers.Canvas;
 	import mx.utils.LoaderUtil;
 
-	public class SWFTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class SWFTest extends VellumTestCase
 	{
 		public function SWFTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{
@@ -63,9 +65,9 @@ package UnitTest.Tests
 			load_file = TestData.swf;
 			ldr = new Loader();
 			ldr.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL,"../../asPrivateTestApps/bin/" + load_file)));
-			var func:Function = addAsync(validateLoad, 10000, null);
+			/*var func:Function = addAsync(validateLoad, 10000, null);
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,  func, false, 0, true);
-			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);   */
 		}
 		
 		public function validateLoad(e:Event):void
@@ -79,7 +81,7 @@ package UnitTest.Tests
 				
 				thing1.addChild(ldr);
 				var result:String = ldr.content["validateTest"]();
-				assertTrue (result, result=="");
+				assertTrue(result, result=="");
 			}
 		}
 		
@@ -92,9 +94,9 @@ package UnitTest.Tests
 		{
 			ldr = new Loader();
 			ldr.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL,fileName)));
-			var func:Function = addAsync(validateInspectableLoad, 10000, null);
+			/*var func:Function = addAsync(validateInspectableLoad, 10000, null);
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,  func, false, 0, true);
-			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true); */
 		}
 		
 		public function validateInspectableLoad(e:Event):void
@@ -119,9 +121,9 @@ package UnitTest.Tests
 			// load these into a separate application domain
 			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());
 			ldr.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL,"../../asPrivateTestApps/bin/" + load_file)),loaderContext);
-			var func:Function = addAsync(validateLoadDC, 10000, null);
+		/*	var func:Function = addAsync(validateLoadDC, 10000, null);
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,  func, false, 0, true);
-			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true); */
 			exceptionList = exceptions;
 		}
 		
@@ -196,14 +198,14 @@ package UnitTest.Tests
 			}
 		}
 
-		public override function tearDown():void
+		public override function tearDownTest():void
 		{
 			if (thing1.parent)
 			{
 				var canvas:Canvas = testApp.getDisplayObject();
 				canvas.rawChildren.removeChild(thing1);
 			}
-			super.tearDown();
+			super.tearDownTest();
 		}
 	}
 }

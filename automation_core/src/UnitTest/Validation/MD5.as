@@ -18,9 +18,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation {
 
-	import UnitTest.Validation.IntUtil;
-	import flash.utils.ByteArray;
-	/**
+    import flash.utils.ByteArray;
+
+    /**
 	 * The MD5 Message-Digest Algorithm
 	 *
 	 * Implementation based on algorithm description at

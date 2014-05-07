@@ -44,7 +44,9 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 	
 
  	public class LinkTest extends VellumTestCase	
@@ -110,7 +112,7 @@ package UnitTest.Tests
 			ts.addTestDescriptor(new TestDescriptor (LinkTest, "partlyComposingTest", customTestConfig ) );
   		}
 
-   		override public function setUp() : void
+   		override public function setUpTest() : void
 		{
 			if (containerType == "custom")
 			{
@@ -118,7 +120,7 @@ package UnitTest.Tests
 			}
 			else
 			{
-				super.setUp();
+				super.setUpTest();
 			}
 		}
 
@@ -996,7 +998,7 @@ package UnitTest.Tests
 			var bounds:Rectangle = boundsInfo.rect as Rectangle;
 			var textLine:TextLine = boundsInfo.textLine;
 			
-			tf.addEventListener("customEvent", addAsync(checkEvent,2500,null),false,0,true);
+			//tf.addEventListener("customEvent", addAsync(checkEvent,2500,null),false,0,true);
 			tf.flowComposer.updateAllControllers();
 		
 			tf.interactionManager = null;
@@ -1040,7 +1042,7 @@ package UnitTest.Tests
 			tf.flowComposer.addController(cc);
 			tf.flowComposer.updateAllControllers();
 			
-			link.getEventMirror().addEventListener("customEvent", addAsync(checkEvent,2500,null),false,0,true);
+			//link.getEventMirror().addEventListener("customEvent", addAsync(checkEvent,2500,null),false,0,true);
 			tf.flowComposer.updateAllControllers();
 			
 			var editmanager:EditManager = new EditManager();
@@ -1076,7 +1078,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_DOWN, addAsync(checkMouseDownEvent,2500,null),false,0,true);
+			//span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_DOWN, addAsync(checkMouseDownEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1117,7 +1119,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.CLICK, addAsync(checkMouseClickEvent,2500,null),false,0,true);
+		//	span.getEventMirror().addEventListener(FlowElementMouseEvent.CLICK, addAsync(checkMouseClickEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1162,7 +1164,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_MOVE, addAsync(checkMouseMoveEvent,2500,null),false,0,true);
+			//span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_MOVE, addAsync(checkMouseMoveEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1204,7 +1206,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_UP, addAsync(checkMouseUpEvent,2500,null),false,0,true);
+		//	span.getEventMirror().addEventListener(FlowElementMouseEvent.MOUSE_UP, addAsync(checkMouseUpEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1243,7 +1245,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OVER, addAsync(checkMouseRollOverEvent,2500,null),false,0,true);
+		//	span.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OVER, addAsync(checkMouseRollOverEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1284,7 +1286,7 @@ package UnitTest.Tests
 			var span:SpanElement = new SpanElement();
 			span.text = "Hello world";
 			span.fontSize = 16;
-			span.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OUT, addAsync(checkMouseRollOutEvent,2500,null),false,0,true);
+		//	span.getEventMirror().addEventListener(FlowElementMouseEvent.ROLL_OUT, addAsync(checkMouseRollOutEvent,2500,null),false,0,true);
 			p.addChild(span);
 			var container:Sprite = new Sprite();
 			var TestCanvas:Canvas = testApp.getDisplayObject();
@@ -1434,19 +1436,19 @@ package UnitTest.Tests
 			//get the first paragraph
 			var span1:SpanElement = textFlow.getFirstLeaf() as SpanElement;
 			var para1:ParagraphElement = span1.parent as ParagraphElement;
-			assertTrue("The number of interactive children does not equal 2", para1._interactiveChildrenCount == 2);
+			assertTrue("The number of interactive children does not equal 2", para3::tlf_internal.interactiveChildrenCount == 2);
 			//get the second paragraph
 			var para2:ParagraphElement = para1.getNextSibling() as ParagraphElement;
-			assertTrue("The number of interactive children does not equal 0", para2._interactiveChildrenCount == 0);
+			assertTrue("The number of interactive children does not equal 0", para3::tlf_internal.interactiveChildrenCount == 0);
 			//get the third paragraph
 			var para3:ParagraphElement = textFlow.getChildAt(1) as ParagraphElement;
-			assertTrue("The number of interactive children does not equal 0", para3._interactiveChildrenCount == 0);
+			assertTrue("The number of interactive children does not equal 0", para3::tlf_internal.interactiveChildrenCount == 0);
 			//
 			editmanager.applyLink("www.adobe.com", "_self", false, new SelectionState(textFlow, 0, 6));
-			assertTrue("The number of interactive children is incorrect after apply link", para1._interactiveChildrenCount == 3);
+			assertTrue("The number of interactive children is incorrect after apply link", para3::tlf_internal.interactiveChildrenCount == 3);
 			//
 			editmanager.applyLink(null, null, false, new SelectionState(textFlow, 0, 6)); 
-			assertTrue("The number of interactive children is incorrect after cancel the link", para1._interactiveChildrenCount == 2);
+			assertTrue("The number of interactive children is incorrect after cancel the link", para3::tlf_internal.interactiveChildrenCount == 2);
 		}
 		
 		public function partlyComposingTest():void	

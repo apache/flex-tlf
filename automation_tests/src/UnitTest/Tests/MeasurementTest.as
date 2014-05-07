@@ -48,7 +48,9 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.VerticalAlign;
 	import flashx.textLayout.tlf_internal;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 
 
 

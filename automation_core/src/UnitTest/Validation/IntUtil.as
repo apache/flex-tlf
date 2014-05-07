@@ -18,9 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation {
 
-	import flash.utils.Endian;
-
-	/**
+    /**
 	 * Contains reusable methods for operations pertaining
 	 * to int values.
 	 */

@@ -51,7 +51,10 @@ package UnitTest.Tests
 	
 	import mx.utils.LoaderUtil;
 
-	public class SelectionTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    public class SelectionTest extends VellumTestCase
 	{
 		public function SelectionTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{
@@ -72,14 +75,14 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-   		public override function setUp():void
+   		public override function setUpTest():void
    		{
-			super.setUp();
+			super.setUpTest();
    		}
 
-   		public override function tearDown():void
+   		public override function tearDownTest():void
    		{
-   			super.tearDown();
+   			super.tearDownTest();
    		}
 
    		// Tests the default SelectionFormat

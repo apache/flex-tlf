@@ -36,7 +36,9 @@ package UnitTest.Tests
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.tlf_internal;
 
-	import spark.components.Group;
+    import org.flexunit.asserts.assertTrue;
+
+    import spark.components.Group;
 	import spark.components.RichText;
 	use namespace tlf_internal;
 
@@ -58,7 +60,7 @@ package UnitTest.Tests
 		public function MXMLCompilationTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{
 			//baseURL = testConfig.baseURL ;
-			super("LoadSWF", testConfig, testCaseXML);
+			super("LoadSWF", testID, testConfig, testCaseXML);
 		}
 
 		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
@@ -81,9 +83,9 @@ package UnitTest.Tests
 			var swfFile:String = (TestData.testFile as String).replace(".xml","") + ".swf";
 
 			swfLloader = new Loader();
-			var func:Function = addAsync(onLoadSWFComplete, 10000, null);
+		/*	var func:Function = addAsync(onLoadSWFComplete, 10000, null);
 			swfLloader.contentLoaderInfo.addEventListener(Event.COMPLETE,  func, false, 0, true);
-			swfLloader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			swfLloader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true); */
 			swfLloader.load(new URLRequest("./mxmlTestApps/"+swfFile));
 		}
 

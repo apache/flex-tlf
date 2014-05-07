@@ -18,12 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.events.CompositionCompleteEvent;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-	public class CompositionCompleteEventValidator extends EventValidator
+    import flashx.textLayout.events.CompositionCompleteEvent;
+
+    public class CompositionCompleteEventValidator extends EventValidator
 	{
 		public function CompositionCompleteEventValidator(target:IEventDispatcher, expectedEvent:Event)
 		{

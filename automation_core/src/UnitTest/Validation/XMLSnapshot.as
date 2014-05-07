@@ -18,14 +18,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.utils.ByteArray;
-	
-	import flashx.textLayout.conversion.ConversionType;
-	import flashx.textLayout.conversion.ITextExporter;
-	import flashx.textLayout.conversion.TextConverter;
-	import flashx.textLayout.elements.TextFlow;
+    import flash.utils.ByteArray;
 
-	public class XMLSnapshot
+    import flashx.textLayout.conversion.ConversionType;
+    import flashx.textLayout.conversion.ITextExporter;
+    import flashx.textLayout.conversion.TextConverter;
+    import flashx.textLayout.elements.TextFlow;
+
+    public class XMLSnapshot
 	{
 		private var baselineXMLStack:Array = new Array();
 		private var currentXMLStack:Array = new Array();

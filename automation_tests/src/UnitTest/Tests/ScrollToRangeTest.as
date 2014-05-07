@@ -40,7 +40,10 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
-	public class ScrollToRangeTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    public class ScrollToRangeTest extends VellumTestCase
 	{
 		private var testCanvas:Canvas;
 		private var testCaseXML:XML;
@@ -71,7 +74,7 @@ package UnitTest.Tests
 			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
 		}
 		
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
 			TestDisplayObject = testApp.getDisplayObject();
@@ -81,7 +84,7 @@ package UnitTest.Tests
 			}
 			else
 			{
-				fail ("Did not get a blank canvas to work with");
+				fail("Did not get a blank canvas to work with");
 			}
 		}
 		

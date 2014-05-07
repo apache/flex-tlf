@@ -54,8 +54,10 @@ package UnitTest.Tests
 	import flashx.textLayout.tlf_internal;
 	
 	import mx.containers.Canvas;
-	
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 
 	public class ListTest extends VellumTestCase
 	{
@@ -66,7 +68,7 @@ package UnitTest.Tests
 			// Note: These must correspond to a Watson product area (case-sensitive)
 			metaData.productArea = "Lists";
 		}
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			if (containerType == "custom")
 			{
@@ -74,7 +76,7 @@ package UnitTest.Tests
 			}
 			else
 			{
-				super.setUp();
+				super.setUpTest();
 			}
 		}
 		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void

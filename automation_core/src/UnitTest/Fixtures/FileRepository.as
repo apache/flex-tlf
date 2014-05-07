@@ -102,7 +102,9 @@ package UnitTest.Fixtures
 	import flash.events.IOErrorEvent;
 	import flashx.textLayout.debug.assert;
 
-	/** Serves as a single bottleneck for all requests that go through
+import org.flexunit.asserts.assertEquals;
+
+/** Serves as a single bottleneck for all requests that go through
 	 * FileRepository. Requests come in as URLLoader.load calls, and we
 	 * always listen for completion, error, and security error. If a handler
 	 * for any of these is passed in when the CustomURLLoader is constructed,
@@ -178,7 +180,8 @@ package UnitTest.Fixtures
 		 * and the file contents as a string. */
 		static private function addToCache(urlLoader:CustomURLLoader, data:String):void
 		{
-			CONFIG::debug { assert(_fileCache[getFileKey(urlLoader)] == null, "Adding over existing cache entry!"); }
+
+			//CONFIG::debug { assertEquals(_fileCache[getFileKey(urlLoader)] == null, "Adding over existing cache entry!"); }
 			_fileCache[getFileKey(urlLoader)] = data;
 		}
 
@@ -247,7 +250,7 @@ package UnitTest.Fixtures
 			// If we have already read this file in, or we are already in the middle of reading it in, don't make another request
 			if (_fileCache.hasOwnProperty(getFileKey(this)))
 			{
-				CONFIG::debug { assert (completeHandler == null, "Load has file cached, won't be calling completeHandler! You should call get() before calling readFile()"); }
+				//CONFIG::debug { assert (completeHandler == null, "Load has file cached, won't be calling completeHandler! You should call get() before calling readFile()"); }
 				return;
 			}
 

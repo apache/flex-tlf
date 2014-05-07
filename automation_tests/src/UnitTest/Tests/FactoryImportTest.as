@@ -36,8 +36,10 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
+    import org.flexunit.asserts.fail;
 
- 	public class FactoryImportTest extends VellumTestCase
+
+    public class FactoryImportTest extends VellumTestCase
 	{
 		private var ItemsToRemove:Array;
 		private var TestCanvas:Canvas = null;
@@ -75,7 +77,7 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
 			ItemsToRemove = [];

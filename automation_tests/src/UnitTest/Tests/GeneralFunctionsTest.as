@@ -45,7 +45,11 @@ package UnitTest.Tests
 	import flashx.textLayout.operations.UndoOperation;
 	import flashx.textLayout.tlf_internal;
 	import flashx.undo.UndoManager;
- 	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 
 
  	public class GeneralFunctionsTest extends VellumTestCase

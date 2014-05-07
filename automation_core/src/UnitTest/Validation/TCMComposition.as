@@ -18,32 +18,25 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
-	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
+    import flash.display.DisplayObjectContainer;
+    import flash.display.Sprite;
+    import flash.geom.Rectangle;
+    import flash.utils.ByteArray;
 
-	import flashx.textLayout.container.ScrollPolicy;
-	import flashx.textLayout.conversion.TextConverter;
-	import flashx.textLayout.edit.EditingMode;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.tlf_internal;
+    import flashx.textLayout.container.TextContainerManager;
+    import flashx.textLayout.edit.EditingMode;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.tlf_internal;
 
-	use namespace tlf_internal;
+    import mx.containers.Canvas;
+    import mx.skins.Border;
 
-	import flexunit.framework.TestCase;
+    use namespace tlf_internal;
 
-	import mx.containers.Canvas;
-	import mx.core.UIComponent;
-	import mx.skins.Border;
-	import mx.utils.LoaderUtil;
 
-	import flashx.textLayout.container.TextContainerManager;
-	import flashx.textLayout.factory.TextFlowTextLineFactory;
-
-	public class TCMComposition
+    public class TCMComposition
 	{
 		private var ItemsToRemove:Array;
 		private var testCanvas:Canvas = null;

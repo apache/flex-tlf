@@ -18,18 +18,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
-	import flash.text.engine.TextLine;
-	
-	import flashx.textLayout.compose.IFlowComposer;
-	import flashx.textLayout.compose.TextFlowLine;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.elements.TextFlow;
-	
-	import flexunit.framework.Assert;
-	
-	public class CompositionResults
+    import flash.display.Sprite;
+    import flash.text.engine.TextLine;
+
+    import flashx.textLayout.compose.IFlowComposer;
+    import flashx.textLayout.compose.TextFlowLine;
+    import flashx.textLayout.elements.TextFlow;
+
+    import flexunit.framework.Assert;
+
+    public class CompositionResults
 	{
 		static public function getContainerResults(container:Sprite):Array
 		{

@@ -24,20 +24,37 @@ package UnitTest.Fixtures
 
 	public class TestConfig
 	{
+        private static var _instance:TestConfig;
+
 		public var writingDirection:Array = [ BlockProgression.TB, Direction.LTR ] ;
 		public var containerType:String = "flex";
 		public var doBeforeAfterCompare:Boolean = false;
 		public var useEmbeddedFonts:Boolean = false;
 		public var baseURL:String = "";
 		public var flashVersion:String = Capabilities.version.substr(4,4);
+        public var testXMLStore:XML;
 
-		public function TestConfig()
+		public function TestConfig(testConfigEnforcer:TestConfigEnforcer)
 		{
+            if (testConfigEnforcer == null)
+            {
+                throw  new Error("Call getInstant()!");
+            }
 		}
+
+        public static function getInstance():TestConfig
+        {
+            if (_instance == null)
+            {
+                _instance = new TestConfig(new TestConfigEnforcer());
+            }
+
+            return _instance;
+        }
 
 		public function copyTestConfig():TestConfig
 		{
-			var newConfig:TestConfig = new TestConfig();
+			var newConfig:TestConfig = new TestConfig(new TestConfigEnforcer());
 			newConfig.writingDirection = writingDirection;
 			newConfig.containerType = containerType;
 			newConfig.doBeforeAfterCompare = doBeforeAfterCompare;
@@ -49,3 +66,5 @@ package UnitTest.Fixtures
 
 	}
 }
+
+class TestConfigEnforcer{}

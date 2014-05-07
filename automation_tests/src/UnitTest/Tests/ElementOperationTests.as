@@ -42,7 +42,9 @@ package UnitTest.Tests
 	import flashx.textLayout.operations.ApplyElementUserStyleOperation;
 	import flashx.textLayout.operations.ApplyFormatToElementOperation;
 
- 	public class ElementOperationTests extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class ElementOperationTests extends VellumTestCase
 	{
 		public function ElementOperationTests(methodName:String, testID:String, testConfig:TestConfig, testXML:XML = null)
 		{

@@ -18,13 +18,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.edit.SelectionState;
-	import flashx.textLayout.events.SelectionEvent;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-	public class SelectionEventValidator extends EventValidator
+    import flashx.textLayout.edit.SelectionState;
+    import flashx.textLayout.events.SelectionEvent;
+
+    public class SelectionEventValidator extends EventValidator
 	{
 		public function SelectionEventValidator(target:IEventDispatcher, expectedEvent:Event)
 		{

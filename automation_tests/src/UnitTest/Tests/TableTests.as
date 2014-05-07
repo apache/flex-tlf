@@ -48,6 +48,8 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
+    import org.flexunit.asserts.assertTrue;
+
     use namespace tlf_internal;
 	
 	public class TableTests extends VellumTestCase
@@ -152,16 +154,16 @@ package UnitTest.Tests
             ts.addTestDescriptor (new TestDescriptor (TableTests,"callTestMethod", testConfig, testXML) );
 		}
 		
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
-			super.setUp();
+			super.setUpTest();
 			initializeSourceTextFlow();
 			initializeFlow();
 		}
 		
-		override public function tearDown(): void
+		override public function tearDownTest(): void
 		{
-			super.tearDown();
+			super.tearDownTest();
 		}
 		
         public function callTestMethod():void

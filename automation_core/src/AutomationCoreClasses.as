@@ -20,27 +20,31 @@ package
 {
  	internal class AutomationCoreClasses
 	{
-		import UnitTest.ExtendedClasses.TestDescriptor; TestDescriptor;
+        import UnitTest.ExtendedClasses.VellumTestCase; VellumTestCase;
+        import UnitTest.Validation.BoundsChecker; BoundsChecker;
+        import UnitTest.Validation.CompositionResults; CompositionResults;
+        import UnitTest.Validation.SelectionEventValidator; SelectionEventValidator;
+        import UnitTest.Validation.DamageEventValidator; DamageEventValidator;
+        import UnitTest.Validation.StatusChangeEventValidator; StatusChangeEventValidator;
+        import UnitTest.Validation.FlowOperationEventValidator; FlowOperationEventValidator;
+        import UnitTest.Validation.CompositionCompleteEventValidator; CompositionCompleteEventValidator;
+        import UnitTest.Validation.FlowElementMouseEventValidator; FlowElementMouseEventValidator;
+        import UnitTest.Validation.EventValidator; EventValidator;
+        import UnitTest.Validation.UpdateCompleteEventValidator; UpdateCompleteEventValidator;
+
+		/*import UnitTest.ExtendedClasses.TestDescriptor; TestDescriptor;
 		import UnitTest.ExtendedClasses.TestSuiteExtended; TestSuiteExtended;
 		import UnitTest.ExtendedClasses.VellumPerformanceCase; VellumPerformanceCase;
-		import UnitTest.ExtendedClasses.VellumTestCase; VellumTestCase;
+
 		import UnitTest.Fixtures.FileRepository; FileRepository;
 		import UnitTest.Fixtures.TestApp; TestApp;
 		import UnitTest.Fixtures.TestConfig; TestConfig;
 		import UnitTest.Fixtures.TestEditManager; TestEditManager;
 
-		import UnitTest.Validation.BoundsChecker; BoundsChecker;
-		import UnitTest.Validation.CompositionCompleteEventValidator; CompositionCompleteEventValidator;
-		import UnitTest.Validation.CompositionResults; CompositionResults;
-		import UnitTest.Validation.DamageEventValidator; DamageEventValidator;
-		import UnitTest.Validation.EventValidator; EventValidator;
-		import UnitTest.Validation.FlowElementMouseEventValidator; FlowElementMouseEventValidator;
-		import UnitTest.Validation.FlowOperationEventValidator; FlowOperationEventValidator;
+
 		import UnitTest.Validation.LineSnapshot; LineSnapshot;
-		import UnitTest.Validation.SelectionEventValidator; SelectionEventValidator;
-		import UnitTest.Validation.StatusChangeEventValidator; StatusChangeEventValidator;
-		import UnitTest.Validation.UpdateCompleteEventValidator; UpdateCompleteEventValidator;
-		import UnitTest.Validation.XMLSnapshot; XMLSnapshot;
+
+		import UnitTest.Validation.XMLSnapshot; XMLSnapshot;     */
 		// Alphabetical list of classes to be included as part of vellum.swc.
 		// This should mirror what's in the .flexLibProperties
 	}

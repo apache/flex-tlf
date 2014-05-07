@@ -59,7 +59,10 @@ package UnitTest.Tests
 	import mx.core.ByteArrayAsset;
 	import mx.utils.LoaderUtil;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 
 	public class TextLineFilterTest extends VellumTestCase
 	{
@@ -129,7 +132,7 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
 			TestDisplayObject = testApp.getDisplayObject();
@@ -139,7 +142,7 @@ package UnitTest.Tests
 			}
 			else
 			{
-				fail ("Did not get a blank canvas to work with");
+				fail("Did not get a blank canvas to work with");
 			}
 
 		}
@@ -577,7 +580,7 @@ package UnitTest.Tests
 			if(!callback)
 			{
 				callback = true;
-				tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(embeddedInlineGraphics,2500,null),false,0,true);	
+				//tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(embeddedInlineGraphics,2500,null),false,0,true);
 				var TestCanvas:Canvas;
 				TestDisplayObject = testApp.getDisplayObject();
 				if (TestDisplayObject)
@@ -621,7 +624,7 @@ package UnitTest.Tests
 				var img:InlineGraphicElement = tf.findLeaf(3) as InlineGraphicElement;
 				if(img.status != InlineGraphicElementStatus.READY)
 				{
-					tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(embeddedInlineGraphics,2500,null),false,0,true);
+					//tf.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(embeddedInlineGraphics,2500,null),false,0,true);
 				}
 			}
 			

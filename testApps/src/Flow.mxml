@@ -22,7 +22,6 @@
     xmlns="http://ns.adobe.com/mxml/2009"
  	xmlns:s="library://ns.adobe.com/flex/spark"
  	xmlns:mx="library://ns.adobe.com/flex/mx"
-	xmlns:flow="library://ns.adobe.com/flashx/textLayout"
 	xmlns:textEditBar="textEditBar.*"
 	xmlns:txui="flashx.textLayout.ui.*"
 	xmlns:txrulers="flashx.textLayout.ui.rulers.*"
@@ -37,8 +36,6 @@
 		import flashx.textLayout.TextLayoutVersion;
 		import flashx.textLayout.compose.StandardFlowComposer;
 		import flashx.textLayout.container.ContainerController;
-		import flashx.textLayout.debug.Debugging;
-		import flashx.textLayout.debug.assert;
 		import flashx.textLayout.edit.EditManager;
 		import flashx.textLayout.edit.EditingMode;
 		import flashx.textLayout.edit.ElementRange;
@@ -69,24 +66,11 @@
 		use namespace tlf_internal;
 		
 		import mx.containers.Panel;
-		import mx.core.UIComponent;
 		import mx.events.IndexChangedEvent;
 		import mx.events.ScrollEvent;
 		import mx.events.ScrollEventDetail;
 		import mx.events.ScrollEventDirection;
-		import mx.managers.CursorManager;
 		import textEditBar.MultiContainerChangeEvent;
-		import textEditBar.FeatureSetChangeEvent;
-		import textEditBar.GraphicChangeEvent;
-		import textEditBar.GraphicBar;
-		import textEditBar.LinkBar;
-		import textEditBar.LinkChangeEvent;
-		import textEditBar.MultiContainerBar;
-		import textEditBar.ScrollBar;
-		import textEditBar.SelectionColorPropsBar;
-		import textEditBar.StatusBar;
-		import textEditBar.StatusPopup;
-		import textEditBar.StyleBar;
 		import textEditBar.StyleChangeEvent;
 		import textEditBar.FileIOHelper;
 		
@@ -138,10 +122,10 @@
  	
 		public function handleCreationComplete(): void
 		{
-			CONFIG::debug { 
+            /*CONFIG::debug {
 				if (this.hasOwnProperty("debugWindow"))
-					Debugging.setTraceChanged(traceChanged); 
-			}
+					Debugging.setTraceChanged(traceChanged);
+			}                 */
 			
 			GlobalSettings.enableDefaultTabStops = true;
 			
@@ -152,10 +136,14 @@
 			// The next two will enable a dump of the flow hierarchy at various interesting times
 			// CONFIG::debug { Debugging.debugCheckTextFlow = true; }
 			// CONFIG::debug { Debugging.verbose = true; }
-			
-			CONFIG::debug { Debugging.generateDebugTrace = false; }
+            /*
+			CONFIG::debug {
+                Debugging.generateDebugTrace = false;
+            }           */
 			// turn on containerLineValidation
-			CONFIG::debug { Debugging.containerLineValidation = true; }
+		//	CONFIG::debug {
+            // Debugging.containerLineValidation = true;
+            // }
 			// turn on throw on assert 
 		//	CONFIG::debug { Debugging.throwOnAssert = true; }
 			            
@@ -451,7 +439,7 @@
 					var oldContainer:DisplayObject = cont.container as DisplayObject;
 					if (oldContainer && oldContainer.parent)
 					{
-						CONFIG::debug { assert(oldContainer.parent is Canvas,"bad container parent"); }
+						//CONFIG::debug { assert(oldContainer.parent is Canvas,"bad container parent"); }
 						Canvas(oldContainer.parent).rawChildren.removeChild(oldContainer);
 					}
 				}
@@ -487,7 +475,7 @@
 		
 		private function damageListener(evt:DamageEvent):void
 		{
-			CONFIG::debug { assert(evt.textFlow == activeFlow,"bad modelChangeEvent") };
+			//CONFIG::debug { assert(evt.textFlow == activeFlow,"bad modelChangeEvent") };
 		}
 		
 		public function changeContent(newFlow:TextFlow):void

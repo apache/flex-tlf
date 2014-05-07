@@ -29,7 +29,9 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextAlign;
 	import flashx.textLayout.formats.TextLayoutFormat;
 
-	public class StyleTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class StyleTest extends VellumTestCase
 	{
 		private var formatResolver:TestFormatResolver;
 
@@ -48,19 +50,19 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-		public override function setUp():void
+		public override function setUpTest():void
 		{
-			super.setUp();
+			super.setUpTest();
 
 			formatResolver = new TestFormatResolver();
 			TestFrame.textFlow.formatResolver = formatResolver;
 		}
 
-		public override function tearDown():void
+		public override function tearDownTest():void
 		{
 			TestFrame.textFlow.formatResolver = null;
 
-			super.tearDown();
+			super.tearDownTest();
 		}
 
 		public function basicStyleTest():void

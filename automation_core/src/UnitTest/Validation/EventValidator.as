@@ -18,60 +18,61 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flexunit.framework.Assert;
 
-	public class EventValidator
-	{
-		private var _eventCount:int;
-		private var _expectedEvent:Event;
-		private var _target:IEventDispatcher;
-		private var _attachCount:int;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-		public var lastEvent:Event;
-		
-		public function EventValidator(target:IEventDispatcher, expectedEvent:Event)
-		{
-			_target = target;
-			_attachCount = 0;
-			reset(expectedEvent);
-		}
+    import flexunit.framework.Assert;
 
-		protected function validateHandler(event:Event):void
-		{
-	   		if (event.type == _expectedEvent.type && eventsAreEqual(event, _expectedEvent))
-			{
-				lastEvent = event;
-	   			++_eventCount;
-			}
-		}
+    public class EventValidator
+    {
+        private var _eventCount:int;
+        private var _expectedEvent:Event;
+        private var _target:IEventDispatcher;
+        private var _attachCount:int;
 
-		protected function eventsAreEqual(event:Event, expectedEvent:Event):Boolean
-		{
-			return true; // override in derived class
-		}
+        public var lastEvent:Event;
 
-		public function validate(count:int):Boolean
-		{
-			var result:Boolean = _eventCount == count;
-			_eventCount = 0;
-	   		_target.removeEventListener(_expectedEvent.type, validateHandler);
-	   		--_attachCount;
-			Assert.assertTrue("Expected to get an event, but didn't", result);
-			return result;
-		}
-		
-		public function reset(expectedEvent:Event = null):void
-		{
-			CONFIG::debug { assert (_attachCount == 0, "Expected previous call to validate"); }
-			if (expectedEvent != null)
-				_expectedEvent = expectedEvent;
-			_eventCount = 0;
-			lastEvent = null;
-	   		_target.addEventListener(_expectedEvent.type, validateHandler);
-	   		++_attachCount;
-		}
-	}
+        public function EventValidator(target:IEventDispatcher, expectedEvent:Event)
+        {
+            _target = target;
+            _attachCount = 0;
+            reset(expectedEvent);
+        }
+
+        protected function validateHandler(event:Event):void
+        {
+            if (event.type == _expectedEvent.type && eventsAreEqual(event, _expectedEvent))
+            {
+                lastEvent = event;
+                ++_eventCount;
+            }
+        }
+
+        protected function eventsAreEqual(event:Event, expectedEvent:Event):Boolean
+        {
+            return true; // override in derived class
+        }
+
+        public function validate(count:int):Boolean
+        {
+            var result:Boolean = _eventCount == count;
+            _eventCount = 0;
+            _target.removeEventListener(_expectedEvent.type, validateHandler);
+            --_attachCount;
+            Assert.assertTrue("Expected to get an event, but didn't", result);
+            return result;
+        }
+
+        public function reset(expectedEvent:Event = null):void
+        {
+            //CONFIG::debug { assert (_attachCount == 0, "Expected previous call to validate"); }
+            if (expectedEvent != null)
+                _expectedEvent = expectedEvent;
+            _eventCount = 0;
+            lastEvent = null;
+            _target.addEventListener(_expectedEvent.type, validateHandler);
+            ++_attachCount;
+        }
+    }
 }

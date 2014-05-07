@@ -59,7 +59,11 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 
 	import mx.containers.Canvas;
 	import mx.core.ByteArrayAsset;
@@ -97,7 +101,7 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
 			TestDisplayObject = testApp.getDisplayObject();
@@ -107,7 +111,7 @@ package UnitTest.Tests
 			}
 			else
 			{
-				fail ("Did not get a blank canvas to work with");
+				fail("Did not get a blank canvas to work with");
 			}
 		}
 
@@ -500,7 +504,7 @@ package UnitTest.Tests
 			testTCM.compositionHeight = 50;
 			testTCM.updateContainer();
 		}
-		var selectionChanged:Boolean = false;
+		private var selectionChanged:Boolean = false;
 		public function tcmSelectionTest():void
 		{
 			var sprite:Sprite = new Sprite();
@@ -1009,7 +1013,7 @@ package UnitTest.Tests
 		public function setTextDamageTest():void
 		{
 			tempTCM = addTCM();
-			tempTCM.addEventListener(DamageEvent.DAMAGE, addAsync(damageHandler, 1000, null));
+			//tempTCM.addEventListener(DamageEvent.DAMAGE, addAsync(damageHandler, 1000, null));
 			tempTCM.setText("test");
 		}
 

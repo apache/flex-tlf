@@ -39,8 +39,10 @@ package UnitTest.Tests
 
 	import mx.utils.LoaderUtil;
 
+    import org.flexunit.asserts.assertTrue;
 
-	public class FontEmbedTest extends VellumTestCase
+
+    public class FontEmbedTest extends VellumTestCase
 	{
 		public function FontEmbedTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{
@@ -66,9 +68,9 @@ package UnitTest.Tests
 			ldr = new Loader();
 			thing1.addChild(ldr);
 			ldr.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL,"../../asTestApps/moduleFontLoss.swf")));
-			var func:Function = addAsync(finished_loading, 10000, null);
+		/*	var func:Function = addAsync(finished_loading, 10000, null);
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, func, false, 0, true);
-			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);    */
 		}
 
 		public function embeddedFontsDisplayTest():void
@@ -82,9 +84,9 @@ package UnitTest.Tests
 			ldr = new Loader();
 			thing1.addChild(ldr);
 			ldr.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL,"../../asTestApps/moduleFontDisplay.swf")));
-			var func:Function = addAsync(finished_loading, 10000, null);
+			/*var func:Function = addAsync(finished_loading, 10000, null);
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, func, false, 0, true);
-			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);
+			ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, func, false, 0, true);   */
 		}
 
 		public function finished_loading (e:Event):void

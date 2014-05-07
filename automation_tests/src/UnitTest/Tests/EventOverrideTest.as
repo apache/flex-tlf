@@ -29,7 +29,9 @@ package UnitTest.Tests
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.undo.UndoManager;
 
-	public class EventOverrideTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class EventOverrideTest extends VellumTestCase
 	{
 		public function EventOverrideTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{
@@ -50,14 +52,14 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-   		public override function setUp():void
+   		public override function setUpTest():void
    		{
    			/*if ( TestData.eventOverride )
    			{
    				TextFlow.defaultConfiguration.manageEventListeners = false;
    			}*/
 
-   			super.setUp();
+   			super.setUpTest();
 
    			if ( TestData.overrideEditManager == "true" )
    			{
@@ -68,7 +70,7 @@ package UnitTest.Tests
 	   		}
    		}
 
-   		public override function tearDown():void
+   		public override function tearDownTest():void
    		{
    			/*if ( TestData.eventOverride )
    			{

@@ -45,7 +45,10 @@ package UnitTest.Tests
 	
 	import mx.utils.LoaderUtil;
 
-	public class KeyboardGestureTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    public class KeyboardGestureTest extends VellumTestCase
 	{
 		private var version:Number;
 		
@@ -70,9 +73,9 @@ package UnitTest.Tests
    		private const BASIC_TEST:String = "This is a test of the keyboard gesture system.";
    		private const HYPHEN_TEST:String = "This is-a test-of-the keyboard-gesture system.-";
 
-   		public override function setUp():void
+   		public override function setUpTest():void
    		{
-   			super.setUp();
+   			super.setUpTest();
 
    			SelManager.selectAll();
    			SelManager.deleteNextCharacter();

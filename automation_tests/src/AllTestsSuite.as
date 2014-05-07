@@ -16,31 +16,30 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package UnitTest.Validation
+package
 {
-    import flash.events.Event;
-    import flash.events.IEventDispatcher;
-    import flash.events.MouseEvent;
 
-    import flashx.textLayout.events.FlowElementMouseEvent;
+    import UnitTest.Tests.AccessibilityMethodsTest;
+    import UnitTest.Tests.AllEventTest;
+    import UnitTest.Tests.AttributeTest;
+    import UnitTest.Tests.BoxTest;
+    import UnitTest.Tests.ContainerTypeTest;
+    import UnitTest.Tests.FloatTest;
+    import UnitTest.Tests.OperationTest;
+    import UnitTest.Tests.ScrollingTest;
 
-    public class FlowElementMouseEventValidator extends EventValidator
-	{
-		public function FlowElementMouseEventValidator(target:IEventDispatcher, expectedEvent:Event)
-		{
-			super(target, expectedEvent);
-		}
+    [Suite]
+    [RunWith("org.flexunit.runners.Suite")]
+    public dynamic class AllTestsSuite
+    {
+        public var accessibilityMethodsTest:AccessibilityMethodsTest;
+        public var allEventTest:AllEventTest;
+        public var attributeTest:AttributeTest;
+        public var boxTest:BoxTest;
+        public var containerTypeTest:ContainerTypeTest;
+        public var floatTest:FloatTest;
+        public var operationTest:OperationTest;
+        public var scrollingTest:ScrollingTest;
+    }
 
-		override protected function validateHandler(event:Event):void
-		{
-			super.validateHandler(event);
-	   		if (event.type == MouseEvent.CLICK)
-	   			event.preventDefault();
-		}
-
-		override protected function eventsAreEqual(event:Event, expectedEvent:Event):Boolean
-		{
-			return FlowElementMouseEvent(event).flowElement == FlowElementMouseEvent(expectedEvent).flowElement;
-		}
-	}
 }

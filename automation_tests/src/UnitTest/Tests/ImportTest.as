@@ -44,7 +44,9 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.BlockProgression;
 	import flashx.textLayout.formats.TextLayoutFormat;
 
- 	public class ImportTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class ImportTest extends VellumTestCase
 	{
 		//private var importFileName:String;
 
@@ -86,10 +88,10 @@ package UnitTest.Tests
 			checkForInlines();
 		}
 		
-		override public function tearDown():void
+		override public function tearDownTest():void
 		{
 			compareResultsToFactory();
-			super.tearDown();
+			super.tearDownTest();
 		}
 
 
@@ -140,8 +142,8 @@ package UnitTest.Tests
  				for (var leaf:FlowLeafElement = textFlow.getFirstLeaf(); leaf != null; leaf = leaf.getNextLeaf())
  					if (leaf is InlineGraphicElement && InlineGraphicElement(leaf).status != InlineGraphicElementStatus.READY)
  						notReadyGraphicsCount++;
- 				if (notReadyGraphicsCount != 0)
-	 				textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(checkForInlines,2500,null),false,0,true);
+ 				/*if (notReadyGraphicsCount != 0)
+	 				textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(checkForInlines,2500,null),false,0,true);*/
 		 	}
 		 	else
 		 	{
@@ -150,16 +152,16 @@ package UnitTest.Tests
 				{
 					case InlineGraphicElementStatus.LOADING:
 					case InlineGraphicElementStatus.SIZE_PENDING:
-						textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(checkForInlines,2500,null),false,0,true);
+					//	textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(checkForInlines,2500,null),false,0,true);
 						break;
 					case InlineGraphicElementStatus.READY:
 						notReadyGraphicsCount--;
-						if (notReadyGraphicsCount != 0)
+					/*	if (notReadyGraphicsCount != 0)
 							textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE,addAsync(checkForInlines,2500,null),false,0,true);
 						else if (textFlow.flowComposer.composing)
 							textFlow.addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE,addAsync(updateCompletionHandler,2500,null),false,0,true);
 						else
-							textFlow.flowComposer.updateAllControllers();
+							textFlow.flowComposer.updateAllControllers();  */
 						break;
 					default:
 						assertTrue("unexpected StatusChangeEvent status: "+event.status,false);

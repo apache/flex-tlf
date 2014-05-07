@@ -40,7 +40,9 @@ package UnitTest.Tests
     import flashx.textLayout.property.Property;
     import flashx.textLayout.tlf_internal;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 
  	public class ParagraphTest extends VellumTestCase
 	{

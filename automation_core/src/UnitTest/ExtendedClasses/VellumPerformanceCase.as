@@ -19,15 +19,16 @@
 package UnitTest.ExtendedClasses
 {
 	import flash.events.Event;
+    import flash.utils.getQualifiedClassName;
 
-	import flexunit.framework.TestCase;
+    import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
 
 	import mx.collections.ArrayCollection;
 	import mx.controls.ComboBox;
 	import mx.containers.Canvas;
 
-	public class VellumPerformanceCase extends TestCase
+	public class VellumPerformanceCase extends TestCaseBase
 	{
 		private static const standardTimeout:int = 1000000;
 		public static var testApp:Canvas;
@@ -48,7 +49,8 @@ package UnitTest.ExtendedClasses
 			}
 
 			// always add className to the TestID
-			TestID = className.substr(className.lastIndexOf(':')+1) + '.';
+            var className:String = getQualifiedClassName(this);
+            TestID = className.substr(className.lastIndexOf(':')+1) + '.';
 			TestID = TestID + ((TestData.id) ? TestData.id : methodName);
 
 			super(methodName);
@@ -56,7 +58,7 @@ package UnitTest.ExtendedClasses
 
 		override public function toString():String
 		{
-			return TestID + " (" + className + ")";
+			return TestID + " (" + getQualifiedClassName(this) + ")";
 		}
 
 		public static function suiteFromXML(testCaseClass:Class, testListXML:XML):TestSuite
@@ -69,14 +71,15 @@ package UnitTest.ExtendedClasses
    			return ts;
 		}
 
-		override public function tearDown() : void
+		public function tearDown() : void
 		{
 			TestData = null;
 		}
 
 		public function addAsyncForTestComplete (timeout:int = standardTimeout):void
 		{
-			testApp.addEventListener(Event.COMPLETE, addAsync(testComplete, timeout, null));
+            //TODO: Add Support for addSync PZ
+			//testApp.addEventListener(Event.COMPLETE, addAsync(testComplete, timeout, null));
 		}
 
 		/** empty testComplete to call once the performance app sends

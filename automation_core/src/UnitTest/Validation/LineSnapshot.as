@@ -18,10 +18,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.compose.IFlowComposer;
+    import flashx.textLayout.elements.TextFlow;
 
-	public class LineSnapshot
+    public class LineSnapshot
 	{
 		/* abandoned in favor of the code already in VellumUnit
 		 * main entry point -
@@ -49,7 +48,7 @@ package UnitTest.Validation
 			{
 				try
 				{
-					CONFIG::debug { newSnapshot = newSnapshot.appendChild(aFlow.flowComposer.getLineAt(i).dumpToXML()); }
+					//CONFIG::debug { newSnapshot = newSnapshot.appendChild(aFlow.flowComposer.getLineAt(i).dumpToXML()); }
 				}
 				catch (m:Error)
 				{

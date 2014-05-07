@@ -50,8 +50,11 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
-	
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 	
 	import mx.containers.Canvas;
 	import mx.utils.LoaderUtil;
@@ -203,13 +206,13 @@ package UnitTest.Tests
 		}
 		// end of IEventDispatcher functions
 
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
 			TestDisplayObject = testApp.getDisplayObject();
 			if (!TestDisplayObject)
 			{
-				fail ("Did not get a blank canvas to work with");
+				fail("Did not get a blank canvas to work with");
 			}
 		}
 
@@ -323,8 +326,8 @@ package UnitTest.Tests
 			var textFlowArray:Array = createTextFlows(sampleText);
 			if (notReadyGraphicsCount > 0)
 			{
-				addEventListener("spriteInUse", addAsync(spriteHandler, 5000,
-					[xOrigin, yOrigin, width, height, sampleText, format]), false, 0, true);
+			/*	addEventListener("spriteInUse", addAsync(spriteHandler, 5000,
+					[xOrigin, yOrigin, width, height, sampleText, format]), false, 0, true);  */
 				addTestSet(xOrigin, yOrigin, width, height, textFlowArray, format, _creationType, _lineBreak, marginOfError);
 			}
 			else

@@ -35,7 +35,11 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    import org.flexunit.asserts.fail;
+
+    use namespace tlf_internal;
 
 	public class SpacingTest extends VellumTestCase
 	{
@@ -55,9 +59,9 @@ package UnitTest.Tests
 			ts.addTestDescriptor(new TestDescriptor(SpacingTest, "spaceLeadingMarginTest", testConfig));
 		}
 
-		public override function setUp():void
+		public override function setUpTest():void
 		{
-			super.setUp();
+			super.setUpTest();
 
 			var ca:TextLayoutFormat = new TextLayoutFormat(TestFrame.format);
 			ca.columnCount = 1;

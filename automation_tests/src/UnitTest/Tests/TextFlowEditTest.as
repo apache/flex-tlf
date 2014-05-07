@@ -34,7 +34,9 @@ package UnitTest.Tests
 
 	import mx.utils.LoaderUtil;
 
- 	public class TextFlowEditTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class TextFlowEditTest extends VellumTestCase
 	{
 		public function TextFlowEditTest(methodName:String, testID:String, testConfig:TestConfig, testXML:XML = null)
 		{

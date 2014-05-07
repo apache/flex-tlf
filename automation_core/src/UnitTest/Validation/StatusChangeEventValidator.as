@@ -18,12 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.events.StatusChangeEvent;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-	public class StatusChangeEventValidator extends EventValidator
+    import flashx.textLayout.events.StatusChangeEvent;
+
+    public class StatusChangeEventValidator extends EventValidator
 	{
 		public function StatusChangeEventValidator(target:IEventDispatcher, expectedEvent:Event)
 		{

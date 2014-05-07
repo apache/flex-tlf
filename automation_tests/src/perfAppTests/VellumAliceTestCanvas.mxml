@@ -47,8 +47,10 @@
 			import mx.controls.Text;
 			import mx.core.ByteArrayAsset;
 
-			
-		use namespace tlf_internal;
+            import org.flexunit.asserts.assertTrue;
+
+
+            use namespace tlf_internal;
 		
 		private static var factory:TextFlowTextLineFactory = new TextFlowTextLineFactory();
 		
@@ -161,8 +163,9 @@
 			{
 				lineHolder.rawChildren.removeChildAt(0);
 			}
-				
-			CONFIG::debug { assert(lineHolder.rawChildren.numChildren == 0,"bad test"); }		
+
+            assertTrue(lineHolder.rawChildren.numChildren == 0,"bad test");
+			//CONFIG::debug { assert(lineHolder.rawChildren.numChildren == 0,"bad test"); }
 			
 			var begTime:int = getTimer();
 			var example:DisplayObject = buildVellumFactory(currWidthVal);

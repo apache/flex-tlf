@@ -29,7 +29,9 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.BlockProgression;
 	import flashx.textLayout.formats.Direction;
 
-	public class WritingModeTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class WritingModeTest extends VellumTestCase
 	{
 		public function WritingModeTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{

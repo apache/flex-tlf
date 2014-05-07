@@ -31,7 +31,9 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.property.*;
 
-	/** Base class for All*AttributeTest */
+    import org.flexunit.asserts.assertTrue;
+
+    /** Base class for All*AttributeTest */
 	public class AllAttributeTest extends VellumTestCase
 	{
 		// test specific configuration

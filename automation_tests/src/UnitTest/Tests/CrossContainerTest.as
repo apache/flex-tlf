@@ -41,6 +41,8 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
+    import org.flexunit.asserts.assertTrue;
+
     use namespace tlf_internal;
 	
 	public class CrossContainerTest extends VellumTestCase
@@ -82,14 +84,15 @@ package UnitTest.Tests
 			ts.addTestDescriptor (new TestDescriptor (CrossContainerTest,"callTestMethod", testConfig, testXML) );
 		}
 		
-		override public function setUp() : void
+		override public function setUpTest() : void
 		{
-			super.setUp();
+			super.setUpTest();
 			setupTextFlow();
 			initializeFlow();
 		}
 		
-		private function setupTextFlow():void
+		private function setupTextFlow():void
+
 		{
 			var textFlow:TextFlow = new TextFlow();
 			var para1String:String = "In the first paragraph of a "
@@ -183,12 +186,13 @@ package UnitTest.Tests
 			_textFlowSprite.addChild(_container2);
 			_textFlowSprite.addChild(_container3);
 		
-			_textFlow = textFlow;
+			_textFlow = textFlow;
+
 		}
 		
-		override public function tearDown(): void
+		override public function tearDownTest(): void
 		{
-			super.tearDown();
+			super.tearDownTest();
 		}
 		
 		private function initializeFlow():void

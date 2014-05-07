@@ -54,7 +54,9 @@ package UnitTest.Tests
 	
 	import mx.containers.Canvas;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 
  	public class ContainerAttributeTest extends VellumTestCase
 	{
@@ -79,9 +81,9 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-    	public override function setUp():void
+    	public override function setUpTest():void
     	{
-    		super.setUp();
+    		super.setUpTest();
     		paddingRight = 0;
 			paddingLeft = 0;
 			SelManager.textFlow.paddingLeft = 0;
@@ -92,13 +94,13 @@ package UnitTest.Tests
 			columnCount = FormatValue.AUTO;
     	}
 
-		public override function tearDown():void
+		public override function tearDownTest():void
 		{
 			if(initSize){
 				size = initSize;
 			}
 
-			super.tearDown();
+			super.tearDownTest();
 		}
 
 		private function set columnCount(count:Object):void

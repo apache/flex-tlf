@@ -44,8 +44,10 @@ package UnitTest.Tests
 	import flashx.textLayout.tlf_internal;
 	
 	import mx.containers.Canvas;
-	
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 	
 	public class TableBackgroundTest extends VellumTestCase
 	{
@@ -64,17 +66,17 @@ package UnitTest.Tests
 			super(methodName, testID, testConfig, testCaseXML);
 		}
 		
-		override public function setUp():void
+		override public function setUpTest():void
 		{
 			// TODO Auto Generated method stub
-			super.setUp();
+			super.setUpTest();
 			_canvas = VellumTestCase.testApp.getDisplayObject() as Canvas;
 		}
 		
 		
-		override public function tearDown():void
+		override public function tearDownTest():void
 		{	
-			super.tearDown();
+			super.tearDownTest();
 		}
 		
 		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void

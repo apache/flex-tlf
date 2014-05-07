@@ -18,12 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flashx.textLayout.conversion.ConversionType;
-	import flashx.textLayout.conversion.ITextExporter;
-	import flashx.textLayout.conversion.TextConverter;
-	import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.conversion.ConversionType;
+    import flashx.textLayout.conversion.ITextExporter;
+    import flashx.textLayout.conversion.TextConverter;
+    import flashx.textLayout.elements.TextFlow;
 
-	public class StringSnapshot
+    public class StringSnapshot
 	{
 		/**
 		 * return PlainText data from the TextFlow in String

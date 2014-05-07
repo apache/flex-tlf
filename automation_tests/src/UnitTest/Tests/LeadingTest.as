@@ -51,7 +51,9 @@ package UnitTest.Tests
 	import mx.core.UIComponent;
 	import mx.utils.LoaderUtil;
 
-	use namespace tlf_internal;
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 
 	public class LeadingTest extends VellumTestCase
 	{

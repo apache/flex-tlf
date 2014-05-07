@@ -18,46 +18,30 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Graphics;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
-	import flash.geom.Rectangle;
-	import flash.system.*;
-	import flash.text.engine.TextLine;
-	import flash.text.engine.TextRotation;
-	
-	import flashx.textLayout.compose.StandardFlowComposer;
-	import flashx.textLayout.container.ContainerController;
-	import flashx.textLayout.container.ScrollPolicy;
-	import flashx.textLayout.conversion.ConversionType;
-	import flashx.textLayout.conversion.TextConverter;
-	import flashx.textLayout.edit.EditManager;
-	import flashx.textLayout.edit.IEditManager;
-	import flashx.textLayout.elements.FlowLeafElement;
-	import flashx.textLayout.elements.InlineGraphicElement;
-	import flashx.textLayout.elements.InlineGraphicElementStatus;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.events.StatusChangeEvent;
-	import flashx.textLayout.factory.StringTextLineFactory;
-	import flashx.textLayout.factory.TextFlowTextLineFactory;
-	import flashx.textLayout.formats.BlockProgression;
-	import flashx.textLayout.formats.Direction;
-	import flashx.textLayout.formats.Float;
-	import flashx.textLayout.formats.ITextLayoutFormat;
-	import flashx.textLayout.formats.TextAlign;
-	import flashx.textLayout.formats.TextLayoutFormat;
-	import flashx.textLayout.formats.VerticalAlign;
-	import flashx.textLayout.tlf_internal;
-	
-	import flexunit.framework.Assert;
-	
-	import mx.core.UIComponent;
+    import flash.display.DisplayObject;
+    import flash.display.Sprite;
+    import flash.geom.Rectangle;
+    import flash.text.engine.TextRotation;
 
-	use namespace tlf_internal;
+    import flashx.textLayout.compose.StandardFlowComposer;
+    import flashx.textLayout.container.ContainerController;
+    import flashx.textLayout.container.ScrollPolicy;
+    import flashx.textLayout.elements.FlowLeafElement;
+    import flashx.textLayout.elements.InlineGraphicElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.factory.TextFlowTextLineFactory;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.formats.Direction;
+    import flashx.textLayout.formats.Float;
+    import flashx.textLayout.formats.ITextLayoutFormat;
+    import flashx.textLayout.formats.TextAlign;
+    import flashx.textLayout.formats.TextLayoutFormat;
+    import flashx.textLayout.formats.VerticalAlign;
+    import flashx.textLayout.tlf_internal;
+
+    import flexunit.framework.Assert;
+
+    use namespace tlf_internal;
 
 	/** Check a sample text composition result to make sure:
 	 * (1) The text falls in the correct area of the container, given the vertical and horizontal alignment values applied to the TextFlow;

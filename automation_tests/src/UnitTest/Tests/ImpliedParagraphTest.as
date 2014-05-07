@@ -28,7 +28,9 @@ package UnitTest.Tests
 	import flashx.textLayout.conversion.TextConverter;
 	import flashx.textLayout.elements.TextFlow;
 
-	public class ImpliedParagraphTest extends VellumTestCase
+    import org.flexunit.asserts.assertTrue;
+
+    public class ImpliedParagraphTest extends VellumTestCase
 	{
 		public function ImpliedParagraphTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
 		{

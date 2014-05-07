@@ -35,7 +35,10 @@ package UnitTest.Tests
 	import flashx.textLayout.operations.ApplyLinkOperation;
 	
 	import flashx.textLayout.tlf_internal;
-	use namespace tlf_internal;
+
+    import org.flexunit.asserts.assertTrue;
+
+    use namespace tlf_internal;
 	/** Test the state of selection after each operation is done, undone, and redone.
 	 */
  	public class UndoRedoTest extends VellumTestCase
@@ -94,7 +97,7 @@ package UnitTest.Tests
 			editManager.selectRange(1,posOfSelection);
 			editManager.doOperation(new  ApplyLinkOperation(editManager.getSelectionState(), "http://www.yahoo.com", "_self", true));
 			var resultString:String = editManager.errors;
-			assertTrue ("Undo and Redo not successfully. " + resultString, resultString == "");
+			assertTrue("Undo and Redo not successfully. " + resultString, resultString == "");
 		}
 
 		

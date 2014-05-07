@@ -18,12 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.events.DamageEvent;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-	public class DamageEventValidator extends EventValidator
+    import flashx.textLayout.events.DamageEvent;
+
+    public class DamageEventValidator extends EventValidator
 	{
 		public function DamageEventValidator(target:IEventDispatcher, expectedEvent:Event)
 		{

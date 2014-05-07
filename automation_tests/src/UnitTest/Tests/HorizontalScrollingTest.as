@@ -29,9 +29,10 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.BlockProgression;
 	import flashx.textLayout.container.ContainerController;
 
+    import org.flexunit.asserts.assertTrue;
 
 
-	public class HorizontalScrollingTest extends VellumTestCase
+    public class HorizontalScrollingTest extends VellumTestCase
 	{
 		// List of available keyboard gestures
 		// Note that on Mac: CTRL == COMMAND
@@ -96,17 +97,17 @@ package UnitTest.Tests
  			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
  		}
 
-   		public override function setUp():void
+   		public override function setUpTest():void
    		{
 			// Booga - Need to load up the test file here.
 
-			super.setUp();
+			super.setUpTest();
    		}
 
-   		public override function tearDown():void
+   		public override function tearDownTest():void
    		{
    			// Restore default configurations
-   			super.tearDown();
+   			super.tearDownTest();
    		}
 
 

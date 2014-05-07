@@ -20,7 +20,7 @@ package
 {
  	internal class AutomationTestClasses
 	{
-		import perfAppTests.FTEGridTestCanvas; FTEGridTestCanvas;
+		/*import perfAppTests.FTEGridTestCanvas; FTEGridTestCanvas;
 		import perfAppTests.InputManagerTestSprite; InputManagerTestSprite;
 		import perfAppTests.TextFlowTestSprite; TextFlowTestSprite;
 
@@ -32,9 +32,11 @@ package
 		import UnitTest.PerformanceTests.VellumAliceTests; VellumAliceTests;
 		import UnitTest.PerformanceTests.VellumParaTests; VellumParaTests;
 		import UnitTest.PerformanceTests.VellumWordTests; VellumWordTests;
-
-		import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
-		import UnitTest.Tests.AllAttributeTest; AllAttributeTest;
+                                                            */
+		import AllTestsSuite; AllTestsSuite;
+        import MinimalTestsSuite; MinimalTestsSuite;
+        import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
+		/*import UnitTest.Tests.AllAttributeTest; AllAttributeTest;
 		import UnitTest.Tests.AllCharAttributeTest; AllCharAttributeTest;
 		import UnitTest.Tests.AllContAttributeTest; AllContAttributeTest;
 		import UnitTest.Tests.AllParaAttributeTest; AllParaAttributeTest;
@@ -84,7 +86,7 @@ package
 		import UnitTest.Tests.TextFlowTextLineFactoryTest; TextFlowTextLineFactoryTest;
 		import UnitTest.Tests.TextLineFilterTest; TextLineFilterTest;
 		import UnitTest.Tests.UndoRedoTest; UndoRedoTest;
-		import UnitTest.Tests.ScrollToRangeTest; ScrollToRangeTest;
+		import UnitTest.Tests.ScrollToRangeTest; ScrollToRangeTest;   */
 	}
 }
 

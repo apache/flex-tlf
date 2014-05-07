@@ -18,12 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Validation
 {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.events.FlowOperationEvent;
+    import flash.events.Event;
+    import flash.events.IEventDispatcher;
 
-	public class FlowOperationEventValidator extends EventValidator
+    import flashx.textLayout.events.FlowOperationEvent;
+
+    public class FlowOperationEventValidator extends EventValidator
 	{
 		public function FlowOperationEventValidator(target:IEventDispatcher, expectedEvent:Event)
 		{
