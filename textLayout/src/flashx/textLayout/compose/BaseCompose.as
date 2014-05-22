@@ -30,6 +30,7 @@ package flashx.textLayout.compose
 	import flash.text.engine.TextLineValidity;
 	import flash.utils.Dictionary;
 	
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
 	import flashx.textLayout.debug.assert;
@@ -69,7 +70,6 @@ package flashx.textLayout.compose
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.formats.VerticalAlign;
 	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.LocaleUtil;
 	import flashx.textLayout.utils.Twips;
 
@@ -892,8 +892,9 @@ package flashx.textLayout.compose
 			
 			resetControllerBounds();
 			
-			// Bug, needs to remove 
-			_startComposePosition = _startController.absoluteStart;
+			// Bug, needs to remove
+			if (ContainerController.tlf_internal::startComposeFromBeginning)
+				_startComposePosition = _startController.absoluteStart;
 			
 			// This is where we will start composing from
 			_curElement = _textFlow.findLeaf(_startComposePosition);
