@@ -27,6 +27,7 @@ package flashx.textLayout.compose
 	import flash.text.engine.TextLineCreationResult;
 	import flash.text.engine.TextLineValidity;
 	
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
 	import flashx.textLayout.debug.assert;
@@ -46,7 +47,6 @@ package flashx.textLayout.compose
 	import flashx.textLayout.formats.ListStylePosition;
 	import flashx.textLayout.formats.TextAlign;
 	import flashx.textLayout.formats.VerticalAlign;
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.Twips;
 	
 	use namespace tlf_internal;
@@ -340,11 +340,14 @@ package flashx.textLayout.compose
 			var line:TextFlowLine = _curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[_curLineIndex] : null;
 			
 			var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
-			// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
-			// starting the next line.
-			if (useExistingLine && line.textLength > 0 &&
-				line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
-				useExistingLine = false;
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+			{
+				// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
+				// starting the next line.
+				if (useExistingLine && line.textLength > 0 &&
+					line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
+					useExistingLine = false;
+			}
 			var numberLine:TextLine;
 			
 			// create numberLine if in a listElement

@@ -112,6 +112,7 @@ package flashx.textLayout.container
 	public class ContainerController implements IInteractionEventHandler, ITextLayoutFormat, ISandboxSupport
 	{		
 		static tlf_internal var usesDiscretionaryHyphens:Boolean = true;
+		static tlf_internal var startComposeFromBeginning:Boolean = false;
 		
 		private var _textFlowCache:TextFlow;
 		private var _rootElement:ContainerFormattedElement;
