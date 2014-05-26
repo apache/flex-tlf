@@ -35,7 +35,7 @@ package
                                                             */
 		import AllTestsSuite; AllTestsSuite;
         import MinimalTestsSuite; MinimalTestsSuite;
-        import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
+       // import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
 		/*import UnitTest.Tests.AllAttributeTest; AllAttributeTest;
 		import UnitTest.Tests.AllCharAttributeTest; AllCharAttributeTest;
 		import UnitTest.Tests.AllContAttributeTest; AllContAttributeTest;
