@@ -22,6 +22,7 @@ package
     import UnitTest.Tests.AccessibilityMethodsTest;
     import UnitTest.Tests.AllCharAttributeTest;
     import UnitTest.Tests.AllEventTest;
+    import UnitTest.Tests.AllParaAttributeTest;
     import UnitTest.Tests.AttributeTest;
     import UnitTest.Tests.BoxTest;
     import UnitTest.Tests.ContainerTypeTest;
@@ -42,7 +43,7 @@ package
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
         public var allAttributeTest:AllCharAttributeTest;
-      //  public var allParagraphTest:AllParaAttributeTest;
+        public var allParagraphTest:AllParaAttributeTest;
     }
 
 }
