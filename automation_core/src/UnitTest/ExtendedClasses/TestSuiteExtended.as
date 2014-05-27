@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.ExtendedClasses {
 
-    import UnitTest.ExtendedClasses.*;
-
     import flash.events.Event;
 
     import flexunit.framework.*;

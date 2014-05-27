@@ -21,7 +21,9 @@ package
 
     import UnitTest.Tests.AccessibilityMethodsTest;
     import UnitTest.Tests.AllCharAttributeTest;
+    import UnitTest.Tests.AllContAttributeTest;
     import UnitTest.Tests.AllEventTest;
+    import UnitTest.Tests.AllParaAttributeTest;
     import UnitTest.Tests.AttributeTest;
     import UnitTest.Tests.BoxTest;
     import UnitTest.Tests.ContainerTypeTest;
@@ -41,8 +43,9 @@ package
         public var floatTest:FloatTest;
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
-        public var allAttributeTest:AllCharAttributeTest;
-      //  public var allParagraphTest:AllParaAttributeTest;
+        public var allChartAttributeTest:AllCharAttributeTest;
+        public var allParagraphAttributeTest:AllParaAttributeTest;
+        public var allContAttirbuteTest:AllContAttributeTest;
     }
 
 }

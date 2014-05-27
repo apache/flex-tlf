@@ -18,114 +18,353 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
-	import UnitTest.Fixtures.TestConfig;
+    import UnitTest.Fixtures.TestConfig;
 
-	import flashx.textLayout.container.ContainerController;
-	import flashx.textLayout.elements.FlowLeafElement;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.formats.Category;
-	import flashx.textLayout.formats.FormatValue;
-	import flashx.textLayout.formats.ITextLayoutFormat;
-	import flashx.textLayout.formats.TextLayoutFormat;
-	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
+    import flash.display.Sprite;
+
+    import flashx.textLayout.container.ContainerController;
+    import flashx.textLayout.elements.FlowLeafElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.formats.Category;
+    import flashx.textLayout.formats.FormatValue;
+    import flashx.textLayout.formats.TextLayoutFormat;
+    import flashx.textLayout.property.BooleanPropertyHandler;
+    import flashx.textLayout.property.EnumPropertyHandler;
+    import flashx.textLayout.property.IntPropertyHandler;
+    import flashx.textLayout.property.NumberPropertyHandler;
+    import flashx.textLayout.property.PercentPropertyHandler;
+    import flashx.textLayout.property.Property;
+    import flashx.textLayout.tlf_internal;
 
     import org.flexunit.asserts.assertTrue;
 
     use namespace tlf_internal;
 
-	public class AllContAttributeTest extends AllAttributeTest
-	{
-		public function AllContAttributeTest(methodName:String, testID:String, testConfig:TestConfig, prop:Property, value:*, expected:*)
-		{
-			super (methodName, testID, testConfig, prop, value, expected);
+    public class AllContAttributeTest extends AllAttributeTest
+    {
+        public function AllContAttributeTest()
+        {
+            super("", "AllContAttributeTest", TestConfig.getInstance());
 
-			// Note: These must correspond to a Watson product area (case-sensitive)
-			metaData.productArea = "Text Container";
-		}
+            // Note: These must correspond to a Watson product area (case-sensitive)
+            metaData.productArea = "Text Container";
+        }
 
-		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
-		{
- 			testAllProperties(ts, testConfig, TextLayoutFormat.description, Category.CONTAINER, AllContAttributeTest, "runOneContainerAttributeTest");
-   		}
+        [Before]
+        override public function setUpTest():void
+        {
+            super.setUpTest();
+        }
 
-   		public override function tearDownTest():void
-		{
-			SelManager.applyContainerFormat(TextLayoutFormat.defaultFormat);
-			super.tearDownTest();
-		}
+        [After]
+        public override function tearDownTest():void
+        {
+            SelManager.applyContainerFormat(TextLayoutFormat.defaultFormat);
+            super.tearDownTest();
 
-		/**
-		 * Generic function to run one container attribute test.  Uses the selection manager to set the attributes on the entire flow at the span level
-		 * to value and then validates that the value is expectedValue.
-		 */
-		 public function runOneContainerAttributeTest():void
-		 {
-			 if (testProp == null)
-				 return;	// must be set
+            testProp = null;
+            expectedValue = null;
+            testValue = null;
+        }
 
-			 SelManager.selectAll();
 
-			 // Test direct change on single leaf
-			 var controller:ContainerController = SelManager.textFlow.flowComposer.getControllerAt(0);
-			 var originalValue:* = controller[testProp.name];
+        /**
+         * This builds testcases for properties in description that are Number types.  For each number property
+         * testcases are built to set the value to the below the minimum value, step from the minimum value to the maximum value
+         * and then above the maximum value.
+         */
+        [Test]
+        public function testAllNumberPropsFromMinToMax():void
+        {
+            for each (testProp in TextLayoutFormat.description)
+            {
+                var handler:NumberPropertyHandler = testProp.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
 
-			 assignmentHelper(controller);
+                if (handler && testProp.category == Category.CONTAINER)
+                {
+                    var minVal:Number = handler.minValue;
+                    var maxVal:Number = handler.maxValue;
+                    assertTrue(true, minVal < maxVal);
+                    var delta:Number = (maxVal - minVal) / 10;
+                    var includeInMinimalTestSuite:Boolean;
 
-			 var expectedResult:*;
-			 if (expectedValue === undefined)
-				 expectedResult = testValue === undefined || testValue === null ? undefined : originalValue;
-			 else
-				 expectedResult = expectedValue;
+                    for (var value:Number = minVal - delta; ;)
+                    {
+                        expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value);
+                        testValue = value;
+                        // include in the minmalTest values below the range, min value, max value and values above the range
+                        includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
 
-			 assertTrue("Controller does not have the expected value after direct change", controller[testProp.name] == expectedResult);
-			 controller[testProp.name] = originalValue;
+                        runOneContainerAttributeTest();
 
-			 var ca:TextLayoutFormat = new TextLayoutFormat();
-			 assignmentHelper(ca);
-			 SelManager.applyContainerFormat(ca);
+                        if (value > maxVal)
+                            break;
+                        value += delta;
+                    }
+                }
+            }
+        }
 
-			 // expect that all FlowLeafElements have expectedValue as the properties value
-			 if (expectedValue !== undefined)
-				 assertTrue("not all ContainerElements have the expected value", validateContainerPropertyOnEntireFlow(SelManager.textFlow,testProp,expectedValue));
-		 }
 
-		// support function to walk all FlowLeafElements and verify that prop is val
-		static public function validateContainerPropertyOnEntireFlow(textFlow:TextFlow, prop:Property, val:*):Boolean
-		{
-			var idx:int = 0;
-			var elem:FlowLeafElement = textFlow.getFirstLeaf();
-			assertTrue("either the first FlowLeafElement is null or the textFlow length is zero", elem != null || textFlow.textLength == 0);
-			while (elem)
-			{
-				// error if elements have zero length
-				assertTrue("The FlowLeafElement has zero length", elem.textLength != 0);
+        /**
+         * This builds testcases for properties in attributes in description that are Int types.  For each number property
+         * testcases are built to set the value to the below the minimum value, step from the minimum value to the maximum value
+         * and then above the maximum value.
+         */
+        [Test]
+        public function testAllIntPropsFromMinToMax():void
+        {
+            for each (testProp in TextLayoutFormat.description)
+            {
+                if (testProp.category == Category.CONTAINER)
+                {
+                    var handler:IntPropertyHandler = testProp.findHandler(IntPropertyHandler) as IntPropertyHandler;
+                    if (handler)
+                    {
+                        var minVal:int = handler.minValue;
+                        var maxVal:int = handler.maxValue;
+                        assertTrue(true, minVal < maxVal);
+                        var delta:int = (maxVal - minVal) / 10;
+                        var includeInMinimalTestSuite:Boolean;
 
-				// expect all values of prop to be supplied val
-				var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(elem.getAbsoluteStart(),false);
-				if (controllerIndex != -1)
-				{
-					var controller:ContainerController = textFlow.flowComposer.getControllerAt(controllerIndex);
-					if (controller.format[prop.name] !== val)
-						return false;
+                        for (var value:Number = minVal - delta; ;)
+                        {
+                            expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value);
+                            testValue = value;
+                            // include in the minmalTest values below the range, min value, max value and values above the range
+                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
 
-					// inherit is never computed
-					if ((val == FormatValue.INHERIT && controller.computedFormat[prop.name] == val) || controller.computedFormat[prop.name] === undefined)
-						return false;
-				}
+                            runOneContainerAttributeTest();
 
-				// skip to the next element
-				var nextElem:FlowLeafElement = elem.getNextLeaf();
-				var absoluteEnd:int = elem.getAbsoluteStart() + elem.textLength;
-				if (nextElem == null)
-					assertTrue("absoluteEnd of the last FlowLeafElement is not the end of the textFlow", absoluteEnd == textFlow.textLength);
-				else
-					assertTrue("the end of this FlowLeafElement does not equal the start of the next", absoluteEnd == nextElem.getAbsoluteStart());
+                            if (value > maxVal)
+                                break;
+                            value += delta;
+                        }
+                    }
+                }
+            }
+        }
 
-				elem = nextElem;
-			}
-			return true;
-		}
-	}
+        /**
+         * This builds testcases for properties in description that are NumberOrPercent types.  For each number property
+         * testcases are built to set the value to the below the minimum value, step from the minimum value to the maximum value
+         * and then above the maximum value.  This is done first using the min/max number values and then the min/max percent values.
+         */
+        [Test]
+        public function testAllNumberOrPercentPropsFromMinToMax():void
+        {
+            for each (testProp in TextLayoutFormat.description)
+            {
+                if (testProp.category == Category.CONTAINER)
+                {
+                    var numberHandler:NumberPropertyHandler = testProp.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
+                    var percentHandler:PercentPropertyHandler = testProp.findHandler(PercentPropertyHandler) as PercentPropertyHandler;
+                    if (numberHandler && percentHandler)
+                    {
+                        var minVal:Number = numberHandler.minValue;
+                        var maxVal:Number = numberHandler.maxValue;
+                        assertTrue(true, minVal < maxVal);
+                        var delta:Number = (maxVal - minVal) / 10;
+                        var includeInMinimalTestSuite:Boolean;
+
+                        for (var value:Number = minVal - delta; ;)
+                        {
+                            expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value);
+                            testValue = value;
+
+                            // include in the minmalTest values below the range, min value, max value and values above the range
+                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
+
+                            runOneContainerAttributeTest();
+                            //ts.addTestDescriptor( new TestDescriptor (testClass, methodName, testConfig, null, prop, value, expectedValue, includeInMinimalTestSuite) );
+
+                            if (value > maxVal)
+                                break;
+                            value += delta;
+                        }
+
+                        // repeat with percent values
+                        minVal = percentHandler.minValue;
+                        maxVal = percentHandler.maxValue;
+                        assertTrue(true, minVal < maxVal);
+                        delta = (maxVal - minVal) / 10;
+
+                        for (value = minVal - delta; ;)
+                        {
+                            expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value.toString() + "%");
+                            //ts.addTestDescriptor( new TestDescriptor (testClass, methodName, testConfig, null, prop, value.toString()+"%", expectedValue, true) );
+
+                            testValue = value.toString() + "%";
+
+                            runOneContainerAttributeTest();
+
+                            if (value > maxVal)
+                                break;
+                            value += delta;
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * This builds testcases for properties in attributes in description that are Boolean types.  A testcase is generated
+         * for true and false for the value.
+         */
+        [Test]
+        public function testAllBooleanProps():void
+        {
+            for each (testProp in TextLayoutFormat.description)
+            {
+                if (testProp.category == Category.CONTAINER && testProp.findHandler(BooleanPropertyHandler) != null)
+                {
+                    expectedValue = testValue = true;
+                    runOneContainerAttributeTest();
+
+                    expectedValue = testValue = false;
+                    runOneContainerAttributeTest();
+                }
+            }
+        }
+
+
+        /**
+         * This builds testcases for properties in attributes in description that are Enumerated types types.  A testcase is generated
+         * for each possible enumerated value
+         */
+        [Test]
+        public function testAllEnumProps():void
+        {
+            var range:Object = null;
+            var value:Object = null;
+
+            for each (testProp in TextLayoutFormat.description)
+            {
+                // new code
+                if (testProp.category == Category.CONTAINER)
+                {
+                    var handler:EnumPropertyHandler = testProp.findHandler(EnumPropertyHandler) as EnumPropertyHandler;
+                    if (handler)
+                    {
+                        range = handler.range;
+                        for (value in range)
+                        {
+                            if (value != FormatValue.INHERIT)
+                            {
+                                expectedValue = testValue = value;
+                                runOneContainerAttributeTest();
+                            }
+                        }
+                        expectedValue = undefined;
+                        testValue = "foo";
+                        runOneContainerAttributeTest();
+                    }
+
+                }
+            }
+        }
+
+        /**
+         * This builds testcases for setting all properties in description to inherit, null, undefined and an object.
+         */
+        [Test]
+        public function testAllSharedValues():void
+        {
+            for each (testProp in TextLayoutFormat.description)
+            {
+                if (testProp.category == Category.CONTAINER)
+                {
+
+                    testValue = expectedValue = FormatValue.INHERIT;
+                    runOneContainerAttributeTest();
+
+                    testValue = new Sprite();
+                    expectedValue = undefined;
+                    runOneContainerAttributeTest();
+
+                    testValue = null;
+                    expectedValue = undefined;
+                    runOneContainerAttributeTest();
+
+                    testValue = expectedValue = undefined;
+                    runOneContainerAttributeTest();
+
+                    testValue = expectedValue = undefined;
+                    clearFormatTest();
+                }
+            }
+        }
+
+        /**
+         * Generic function to run one container attribute test.  Uses the selection manager to set the attributes on the entire flow at the span level
+         * to value and then validates that the value is expectedValue.
+         */
+        public function runOneContainerAttributeTest():void
+        {
+            if (testProp == null)
+                return;	// must be set
+
+            SelManager.selectAll();
+
+            // Test direct change on single leaf
+            var controller:ContainerController = SelManager.textFlow.flowComposer.getControllerAt(0);
+            var originalValue:* = controller[testProp.name];
+
+            assignmentHelper(controller);
+
+            var expectedResult:*;
+            if (expectedValue === undefined)
+                expectedResult = testValue === undefined || testValue === null ? undefined : originalValue;
+            else
+                expectedResult = expectedValue;
+
+            assertTrue("Controller does not have the expected value after direct change", controller[testProp.name] == expectedResult);
+            controller[testProp.name] = originalValue;
+
+            var ca:TextLayoutFormat = new TextLayoutFormat();
+            assignmentHelper(ca);
+            SelManager.applyContainerFormat(ca);
+
+            // expect that all FlowLeafElements have expectedValue as the properties value
+            if (expectedValue !== undefined)
+                assertTrue("not all ContainerElements have the expected value", validateContainerPropertyOnEntireFlow(SelManager.textFlow, testProp, expectedValue));
+        }
+
+        // support function to walk all FlowLeafElements and verify that prop is val
+        static public function validateContainerPropertyOnEntireFlow(textFlow:TextFlow, prop:Property, val:*):Boolean
+        {
+            var idx:int = 0;
+            var elem:FlowLeafElement = textFlow.getFirstLeaf();
+            assertTrue("either the first FlowLeafElement is null or the textFlow length is zero", elem != null || textFlow.textLength == 0);
+            while (elem)
+            {
+                // error if elements have zero length
+                assertTrue("The FlowLeafElement has zero length", elem.textLength != 0);
+
+                // expect all values of prop to be supplied val
+                var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(elem.getAbsoluteStart(), false);
+                if (controllerIndex != -1)
+                {
+                    var controller:ContainerController = textFlow.flowComposer.getControllerAt(controllerIndex);
+                    if (controller.format[prop.name] !== val)
+                        return false;
+
+                    // inherit is never computed
+                    if ((val == FormatValue.INHERIT && controller.computedFormat[prop.name] == val) || controller.computedFormat[prop.name] === undefined)
+                        return false;
+                }
+
+                // skip to the next element
+                var nextElem:FlowLeafElement = elem.getNextLeaf();
+                var absoluteEnd:int = elem.getAbsoluteStart() + elem.textLength;
+                if (nextElem == null)
+                    assertTrue("absoluteEnd of the last FlowLeafElement is not the end of the textFlow", absoluteEnd == textFlow.textLength);
+                else
+                    assertTrue("the end of this FlowLeafElement does not equal the start of the next", absoluteEnd == nextElem.getAbsoluteStart());
+
+                elem = nextElem;
+            }
+            return true;
+        }
+    }
 }
