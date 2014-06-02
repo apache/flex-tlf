@@ -126,7 +126,7 @@ package UnitTest.ExtendedClasses
 
         public function VellumTestCase(methodName:String = null, testID:String = null, testConfig:TestConfig = null, testCaseXML:XML = null)
         {
-            TestData = new Object();
+            TestData = {};
 
             // set defaults to some items in TestData - these can be overridden
             // in a specific test case's constructor or in an XML file

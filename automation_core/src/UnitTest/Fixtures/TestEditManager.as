@@ -20,7 +20,6 @@ package UnitTest.Fixtures
 {
 	import flashx.textLayout.conversion.ConversionType;
 	import flashx.textLayout.conversion.ITextExporter;
-	import flashx.textLayout.conversion.ITextImporter;
 	import flashx.textLayout.conversion.TextConverter;
 	import flashx.textLayout.edit.EditManager;
 	import flashx.textLayout.operations.FlowOperation;

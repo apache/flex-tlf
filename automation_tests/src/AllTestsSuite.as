@@ -26,6 +26,7 @@ package
     import UnitTest.Tests.AllParaAttributeTest;
     import UnitTest.Tests.AttributeTest;
     import UnitTest.Tests.BoxTest;
+    import UnitTest.Tests.CompositionTest;
     import UnitTest.Tests.ContainerTypeTest;
     import UnitTest.Tests.FloatTest;
     import UnitTest.Tests.OperationTest;
@@ -36,16 +37,18 @@ package
     public dynamic class AllTestsSuite
     {
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
+        public var compositionTest:CompositionTest;
+        public var allChartAttributeTest:AllCharAttributeTest;
+        public var allContAttirbuteTest:AllContAttributeTest;
         public var allEventTest:AllEventTest;
+        public var allParagraphAttributeTest:AllParaAttributeTest;
         public var attributeTest:AttributeTest;
         public var boxTest:BoxTest;
         public var containerTypeTest:ContainerTypeTest;
         public var floatTest:FloatTest;
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
-        public var allChartAttributeTest:AllCharAttributeTest;
-        public var allParagraphAttributeTest:AllParaAttributeTest;
-        public var allContAttirbuteTest:AllContAttributeTest;
+
     }
 
 }

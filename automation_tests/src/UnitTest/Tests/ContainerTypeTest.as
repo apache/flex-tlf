@@ -57,41 +57,7 @@ package UnitTest.Tests
         private var ItemsToRemove:Array;
         private var hostFormat:TextLayoutFormat;
 
-        private const Markup:String = "<flow:TextFlow xmlns:flow='http://ns.adobe.com/textLayout/2008' fontSize='14' " +
-                "textIndent='0' paragraphSpaceBefore='6' paddingTop='4' paddingBottom='4'>" +
-                "<flow:p paragraphSpaceAfter='15' >" +
-                "<flow:span>There are many </flow:span>" +
-                "<flow:span fontStyle='italic'>such</flow:span>" +
-                "<flow:span> lime-kilns in that tract of country, for the purpose of burning the white" +
-                " marble which composes a large part of the substance of the hills. Some of them, built " +
-                "years ago, and long deserted, with weeds growing in the vacant round of the interior, " +
-                "which is open to the sky, and grass and wild-flowers rooting themselves into the chinks " +
-                "of the stones, look already like relics of antiquity, and may yet be overspread with the" +
-                " lichens of centuries to come. Others, where the lime-burner still feeds his daily and " +
-                "nightlong fire, afford points of interest to the wanderer among the hills, who seats " +
-                "himself on a log of wood or a fragment of marble, to hold a chat with the solitary man. " +
-                "It is a lonesome, and, when the character is inclined to thought, may be an intensely " +
-                "thoughtful occupation; as it proved in the case of Ethan Brand, who had mused to such " +
-                "strange purpose, in days gone by, while the fire in this very kiln was burning.</flow:span>" +
-                "</flow:p>" +
-                "<flow:p paragraphSpaceAfter='15'>" +
-                "<flow:span>" +
-                "The man who now watched the fire was of a different order, and troubled himself with no " +
-                "thoughts save the very few that were requisite to his business. At frequent intervals, " +
-                "he flung back the clashing weight of the iron door, and, turning his face from the " +
-                "insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a " +
-                "long pole. Within the furnace were seen the curling and riotous flames, and the burning " +
-                "marble, almost molten with the intensity of heat; while without, the reflection of the " +
-                "fire quivered on the dark intricacy of the surrounding forest, and showed in the " +
-                "foreground a bright and ruddy little picture of the hut, the spring beside its door, the " +
-                "athletic and coal-begrimed figure of the lime-burner, and the halffrightened child, " +
-                "shrinking into the protection of his father's shadow. And when again the iron door was " +
-                "closed, then reappeared the tender light of the half-full moon, which vainly strove to " +
-                "trace out the indistinct shapes of the neighboring mountains; and, in the upper sky, " +
-                "there was a flitting congregation of clouds, still faintly tinged with the rosy sunset, " +
-                "though thus far down into the valley the sunshine had vanished long and long ago.</flow:span>" +
-                "</flow:p>" +
-                "</flow:TextFlow>";
+        private var markup:String;
 
         public function ContainerTypeTest()
         {
@@ -102,6 +68,7 @@ package UnitTest.Tests
             metaData = {};
             // Note: These must correspond to a Watson product area (case-sensitive)
             metaData.productArea = "Text Container";
+            markup = getTestMarkup();
         }
 
         public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
@@ -251,7 +218,7 @@ package UnitTest.Tests
             format.paddingTop = 20;
             format.paddingBottom = 20;
 
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -329,7 +296,7 @@ package UnitTest.Tests
         [Test]
         public function checkContainerAttributesAfterTextInsertion():void
         {
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -519,7 +486,7 @@ package UnitTest.Tests
             format.paddingRight = 20;
             format.paddingTop = 20;
             format.paddingBottom = 20;
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -610,7 +577,7 @@ package UnitTest.Tests
         {
             //create the first text flow, import texts from markups, and assign flow composer to a container
             var flow_1:TextFlow = new TextFlow();
-            flow_1 = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            flow_1 = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             flow_1.flowComposer = new StandardFlowComposer();
             var container_1:Sprite = new Sprite();
             var controller_1:ContainerController = new ContainerController(container_1, 300, 250);
@@ -676,7 +643,7 @@ package UnitTest.Tests
 
             //create the second text flow, import texts from markups, and assign flow composer to a container
             var flow_2:TextFlow = new TextFlow();
-            flow_2 = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            flow_2 = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             flow_2.flowComposer = new StandardFlowComposer();
 
             //Create EditManager to manage edting changes in TextFlow
@@ -843,7 +810,7 @@ package UnitTest.Tests
             format.paddingRight = 20;
             format.paddingTop = 20;
             format.paddingBottom = 20;
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -937,7 +904,7 @@ package UnitTest.Tests
         [Test]
         public function containerRecomposeAndConsistenceTest():void
         {
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -1046,7 +1013,7 @@ package UnitTest.Tests
         public function autoAndDragScrollingTest():void
         {
 
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -1124,7 +1091,7 @@ package UnitTest.Tests
         [Test]
         public function navigateByLineTest():void
         {
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -1196,7 +1163,7 @@ package UnitTest.Tests
         [Test]
         public function defaultContextMenuOnTest():void
         {
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -1220,7 +1187,7 @@ package UnitTest.Tests
         [Test]
         public function contextMenuOffTest():void
         {
-            var textFlow:TextFlow = TextConverter.importToFlow(Markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
             var editManager:IEditManager = new EditManager();
             textFlow.interactionManager = editManager;
@@ -1331,6 +1298,45 @@ package UnitTest.Tests
             tcm.editingMode = EditingMode.READ_SELECT;
             tcm.updateContainer();
             assertTrue("The edit clipboard items such as cut and paste were enabled when TCM contextMenu using READ_SELECT", tcm.container.contextMenu == null);
+        }
+
+        private function getTestMarkup():String
+        {
+           return  "<flow:TextFlow xmlns:flow='http://ns.adobe.com/textLayout/2008' fontSize='14' " +
+                   "textIndent='0' paragraphSpaceBefore='6' paddingTop='4' paddingBottom='4'>" +
+                   "<flow:p paragraphSpaceAfter='15' >" +
+                   "<flow:span>There are many </flow:span>" +
+                   "<flow:span fontStyle='italic'>such</flow:span>" +
+                   "<flow:span> lime-kilns in that tract of country, for the purpose of burning the white" +
+                   " marble which composes a large part of the substance of the hills. Some of them, built " +
+                   "years ago, and long deserted, with weeds growing in the vacant round of the interior, " +
+                   "which is open to the sky, and grass and wild-flowers rooting themselves into the chinks " +
+                   "of the stones, look already like relics of antiquity, and may yet be overspread with the" +
+                   " lichens of centuries to come. Others, where the lime-burner still feeds his daily and " +
+                   "nightlong fire, afford points of interest to the wanderer among the hills, who seats " +
+                   "himself on a log of wood or a fragment of marble, to hold a chat with the solitary man. " +
+                   "It is a lonesome, and, when the character is inclined to thought, may be an intensely " +
+                   "thoughtful occupation; as it proved in the case of Ethan Brand, who had mused to such " +
+                   "strange purpose, in days gone by, while the fire in this very kiln was burning.</flow:span>" +
+                   "</flow:p>" +
+                   "<flow:p paragraphSpaceAfter='15'>" +
+                   "<flow:span>" +
+                   "The man who now watched the fire was of a different order, and troubled himself with no " +
+                   "thoughts save the very few that were requisite to his business. At frequent intervals, " +
+                   "he flung back the clashing weight of the iron door, and, turning his face from the " +
+                   "insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a " +
+                   "long pole. Within the furnace were seen the curling and riotous flames, and the burning " +
+                   "marble, almost molten with the intensity of heat; while without, the reflection of the " +
+                   "fire quivered on the dark intricacy of the surrounding forest, and showed in the " +
+                   "foreground a bright and ruddy little picture of the hut, the spring beside its door, the " +
+                   "athletic and coal-begrimed figure of the lime-burner, and the halffrightened child, " +
+                   "shrinking into the protection of his father's shadow. And when again the iron door was " +
+                   "closed, then reappeared the tender light of the half-full moon, which vainly strove to " +
+                   "trace out the indistinct shapes of the neighboring mountains; and, in the upper sky, " +
+                   "there was a flitting congregation of clouds, still faintly tinged with the rosy sunset, " +
+                   "though thus far down into the valley the sunshine had vanished long and long ago.</flow:span>" +
+                   "</flow:p>" +
+                   "</flow:TextFlow>";
         }
     }
 }
