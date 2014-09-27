@@ -59,12 +59,18 @@
     <path id="flexTasks.path">
         <fileset dir="${FLEX_HOME}">
             <include name="lib/flexTasks.jar" />
-            <include name="ant/lib/flexTasks.jar" />
         </fileset>
     </path>
 	<taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
+    <taskdef resource="flexUnitTasks.tasks">
+        <classpath>
+            <fileset dir="${FLEX_HOME}">
+                <include name="lib/flexUnitTasks-4.2.0-20140317.jar" />
+            </fileset>
+        </classpath>
+    </taskdef>
 
-	<target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps" description="Clean build of TLF component and associated applications"/>
+	<target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps, flexunnit_tests" description="Clean build of TLF component and associated applications"/>
 	<target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
 
 	<target name="clean" description="Cleans all SWCs and SWFs">
@@ -379,4 +385,8 @@
 			</fileset>
 		</copy>
 	</target>
+
+    <target name="flexunnit_tests">
+        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" timeout="180000" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="false" verbose="true" />
+    </target>
 </project>

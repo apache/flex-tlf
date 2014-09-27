@@ -631,7 +631,6 @@ package UnitTest.ExtendedClasses
 
         public function importContent(content:Object):void
         {
-            var beginTime:int = getTimer();
             //TestFrame.removeAllChildren();
             var parser:ITextImporter = importParser;
             var textFlow:TextFlow = parser.importToFlow(content);
@@ -662,11 +661,18 @@ package UnitTest.ExtendedClasses
 
             var extension:String = getExtension(fileName);
             if (extension == "html")
+            {
                 fileData = FileRepository.getFile(baseURL, "../../test/testFiles/markup/html/" + fileName);
+            }
             else if (extension == "txt")
+            {
                 fileData = FileRepository.getFile(baseURL, "../../test/testFiles/markup/plainText/" + fileName);
+            }
             else
+            {
                 fileData = FileRepository.getFileAsXML(baseURL, "../../test/testFiles/markup/tlf/" + fileName);
+            }
+
             return fileData;
         }
 
@@ -674,8 +680,6 @@ package UnitTest.ExtendedClasses
 
         public function loadTestFile(fileName:String):void
         {
-            var containerFormat:TextLayoutFormat;
-
             if (fileName == defaultFileName && cacheTestFile != null)
             {
                 var textFlow:TextFlow = cacheTestFile.deepCopy(0, cacheTestFile.textLength) as TextFlow;

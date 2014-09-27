@@ -19,9 +19,8 @@
 package UnitTest.Tests
 {
 
-    import UnitTest.ExtendedClasses.TestDescriptor;
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.MeasureConstants;
     import UnitTest.Fixtures.TestConfig;
     import UnitTest.Validation.BoundsChecker;
 
@@ -57,34 +56,67 @@ package UnitTest.Tests
     import org.flexunit.asserts.assertTrue;
     import org.flexunit.asserts.fail;
 
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class BoundsAndAlignmentTest extends VellumTestCase implements IEventDispatcher
     {
         // Creation Types
         private static const USE_FLOW:String = "textFlow";
         private static const USE_FACTORY_STRING:String = "factoryStr";
         private static const USE_FACTORY_FLOW:String = "factoryTF";
-        private static var creationTypes:Array = [USE_FLOW, USE_FACTORY_STRING, USE_FACTORY_FLOW ];
-
-        private static const MEASURE_WIDTH:String = "measureW";
-        private static const MEASURE_HEIGHT:String = "measureH";
-        private static const MEASURE_BOTH:String = "measureWH";
-        private static const MEASURE_NONE:String = "explicitWH";
-        private static var measureTypes:Array = [ MEASURE_NONE, MEASURE_BOTH ];
 
         private static var textAlignArray:Array = ["left", "center", "right", "start", "end" ];
         private static var verticalAlignArray:Array = ["top", "middle", "bottom"];
-        private static var lineBreakArray:Array = ["toFit", "explicit" ];
-        private const horizontalGap:Number = 30;
-        private const verticalGap:Number = 10;
+
+        private static var stringFactory:StringTextLineFactory = null;
+        private static var textFlowFactory:TextFlowTextLineFactory = null;
+        private static var labelFactory:StringTextLineFactory = null;
+
+        public static var data:Array = [
+            [
+                {measureType: MeasureConstants.MEASURE_WIDTH, blockProgression: BlockProgression.TB, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_WIDTH, blockProgression: BlockProgression.TB, direction: Direction.RTL}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_WIDTH, blockProgression: BlockProgression.RL, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_WIDTH, blockProgression: BlockProgression.RL, direction: Direction.RTL}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_HEIGHT, blockProgression: BlockProgression.TB, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_HEIGHT, blockProgression: BlockProgression.TB, direction: Direction.RTL}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_HEIGHT, blockProgression: BlockProgression.RL, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_HEIGHT, blockProgression: BlockProgression.RL, direction: Direction.RTL}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_BOTH, blockProgression: BlockProgression.TB, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_BOTH, blockProgression: BlockProgression.TB, direction: Direction.RTL}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_BOTH, blockProgression: BlockProgression.RL, direction: Direction.LTR}
+            ],
+            [
+                {measureType: MeasureConstants.MEASURE_BOTH, blockProgression: BlockProgression.RL, direction: Direction.RTL}
+            ]
+        ];
+
+        private const logicalWidth:Number = 400;
+        private const logicalHeight:Number = 400;
+
         private var w:Number = 210;
         private var h:Number = 40;
         private var width:Number;
         private var height:Number;
-        private var paddingWidth:int = 0;
-        private var paddingHeight:int = 0;
-
-        private var labelWidth:Number = 210;
-        private var labelHeight:Number = 50;
 
         private var _blockProgression:String;
         private var _direction:String;
@@ -95,8 +127,6 @@ package UnitTest.Tests
         // bounds and format of last sprite for comparison function
         private var compareBounds:Rectangle;
 
-        private var marginOfError:int = 3;
-        private var sFactBounds:Rectangle;
         private var fFactBounds:Rectangle;
         private var tFlowBounds:Rectangle;
 
@@ -104,75 +134,155 @@ package UnitTest.Tests
 
         private var scrollPolicy:String = ScrollPolicy.ON;
 
-        private static var stringFactory:StringTextLineFactory = null;
-        private static var textFlowFactory:TextFlowTextLineFactory = null;
-        private static var labelFactory:StringTextLineFactory = null;
         private var sprite:Sprite;
         private var testCanvas:Canvas;
 
+        private var editManager:IEditManager;
 
-        public function BoundsAndAlignmentTest(methodName:String, testID:String, testConfig:TestConfig, testXML:XML) //measureType:String, lineBreak:String)
+        public function BoundsAndAlignmentTest()
         {
-            super(methodName, testID, testConfig, null);
+            super("", "BoundsAndAlignmentTest", TestConfig.getInstance(), null);
 
             eventDispatcher = new EventDispatcher();
-
-            if (!stringFactory)
-                stringFactory = new StringTextLineFactory();
-            if (!textFlowFactory)
-                textFlowFactory = new TextFlowTextLineFactory();
-            if (!labelFactory)
-            {
-                labelFactory = new StringTextLineFactory();
-                var labelFormat:TextLayoutFormat = new TextLayoutFormat();
-                labelFormat.fontSize = 12;
-                labelFactory.spanFormat = labelFormat;
-            }
-
+            editManager = new EditManager();
             //reset containerType to avoid assert in tearDown
             containerType = "custom";
 
-            _blockProgression = testConfig.writingDirection[0];
-            _direction = testConfig.writingDirection[1];
-            //_creationType = creationType;
-            _measureType = testXML.TestData.(@name == "measureType").toString();
-            _lineBreak = testXML.TestData.(@name == "lineBreak").toString();
+            _blockProgression = TestConfig.getInstance().writingDirection[0];
+            _direction = TestConfig.getInstance().writingDirection[1];
 
             //reset ID to include more variables
             TestID = TestID + ":" + _measureType + ":" + _lineBreak;
 
-            width = logicalWidth;
-            height = logicalHeight;
-            switch (_measureType)
-            {
-                case MEASURE_BOTH:
-                    width = NaN;
-                    height = NaN;
-                    break;
-
-                case MEASURE_WIDTH:
-                    width = NaN;
-                    break;
-
-                case MEASURE_HEIGHT:
-                    height = NaN;
-                    break;
-            }
-            if (_blockProgression == BlockProgression.RL)		// swap coordinates if we're vertical
-            {
-                var tmp:Number = width;
-                width = height;
-                height = tmp;
-
-                tmp = w;
-                w = h;
-                h = tmp;
-            }
-
             // enables snapshots for the measurementgridtest - DO NOT SUBMIT ENABLED - It takes too long!
             // TestData["bitmapSnapshot"] = "true";
             // Note: These must correspond to a Watson product area (case-sensitive)
+            metaData = {};
             metaData.productArea = "Text Composition";
+        }
+
+        [BeforeClass]
+        public static function setUpClass():void
+        {
+            stringFactory = new StringTextLineFactory();
+            textFlowFactory = new TextFlowTextLineFactory();
+
+            labelFactory = new StringTextLineFactory();
+            var labelFormat:TextLayoutFormat = new TextLayoutFormat();
+            labelFormat.fontSize = 12;
+            labelFactory.spanFormat = labelFormat;
+
+          /*  testData = <TestCase>
+                <TestData name="measureType">{measureType}</TestData>
+                <TestData name="lineBreak">{lineBreak}</TestData>
+                <TestData name="id">{methodName}-{measureType}-{lineBreak}</TestData>
+                <TestData name="verticalAlign">{verticalAlign}</TestData>
+                <TestData name="textAlign">{textAlign}</TestData>
+            </TestCase>; */
+        }
+
+        [AfterClass]
+        public static function tearDownClass():void
+        {
+            stringFactory = null;
+            textFlowFactory = null;
+            labelFactory = null;
+        }
+
+        [Before]
+        override public function setUpTest():void
+        {
+            super.setUpTest();
+
+            cleanUpTestApp();
+            TestDisplayObject = testApp.getDisplayObject();
+            if (!TestDisplayObject)
+            {
+                fail("Did not get a blank canvas to work with");
+            }
+        }
+
+        [After]
+        override public function tearDownTest():void
+        {
+            super.tearDownTest();
+        }
+
+
+        /********************** Tests Start Here ***************************/
+
+        [Test(dataProvider="data")]
+        public function simpleMultiParagraph(measureType:Object):void
+        {
+            // This is a subset of simple.xml
+            // Exposed Watson bug 2559210
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup, insertText);
+        }
+
+        public function longSimpleMultiParagraph():void
+        {
+            // This is a longer version of simple.xml, so the text overflows the visible area and scrolls
+            // Exposed Watson bug 2559210
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup, insertText);
+        }
+
+        public function simpleMultiParagraphNoTextIndent():void
+        {
+            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup);
+        }
+
+        public function simpleMultiParagraphNegTextIndent():void
+        {
+            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
+                    '<flow:p paragraphSpaceAfter="30"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="30"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup);
+        }
+
+        public function simpleWithPaddingTopLeft():void
+        {
+            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="40" paddingLeft="20">' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup);
+        }
+
+        public function simpleWithPaddingBottomRight():void
+        {
+            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingBottom="40" paddingRight="20">' +
+                    '<flow:p><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup);
         }
 
         public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void
@@ -202,14 +312,47 @@ package UnitTest.Tests
 
         // end of IEventDispatcher functions
 
-        override public function setUpTest():void
+        private function setUpMeasureType(measureObj:Object):void
         {
-            cleanUpTestApp();
-            TestDisplayObject = testApp.getDisplayObject();
-            if (!TestDisplayObject)
+            width = logicalWidth;
+            height = logicalHeight;
+
+            switch (measureObj.measureType)
             {
-                fail("Did not get a blank canvas to work with");
+                case MeasureConstants.MEASURE_BOTH:
+                    width = NaN;
+                    height = NaN;
+                    break;
+
+                case MeasureConstants.MEASURE_WIDTH:
+                    width = NaN;
+                    break;
+
+                case MeasureConstants.MEASURE_HEIGHT:
+                    height = NaN;
+                    break;
             }
+
+            if (_blockProgression == BlockProgression.RL)		// swap coordinates if we're vertical
+            {
+                var tmp:Number = width;
+                width = height;
+                height = tmp;
+
+                tmp = w;
+                w = h;
+                h = tmp;
+            }
+        }
+
+        private function insertText(textFlow:TextFlow):void
+        {
+            textFlow.interactionManager = editManager;
+            editManager.selectRange(textFlow.textLength, textFlow.textLength);
+            editManager.insertText("INSERTED TEXT");
+            var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
+            controller.verticalScrollPosition = int.MAX_VALUE;
+            textFlow.flowComposer.updateAllControllers();
         }
 
         private function addToCanvas(sprite:Sprite):void
@@ -233,10 +376,6 @@ package UnitTest.Tests
             }
         }
 
-        // These tests run all creation types -- flow, textFlowfactory and string factory
-        private static var testsToRun:Array = [
-        ];
-
         // These tests run flow &  textFlowfactory creation types (they don't work on string factory)
         private static var testsToRunOnFlowAndTFFactory:Array = [
             "simpleMultiParagraph",
@@ -246,46 +385,6 @@ package UnitTest.Tests
             "simpleMultiParagraphNegTextIndent",
             "longSimpleMultiParagraph",
         ];
-
-        public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
-        {
-            // These tests run on all creation types
-            createTests(testConfig, ts, testsToRun);
-
-            // These tests run on TextFlow and TextFlow Factory only
-            createTests(testConfig, ts, testsToRunOnFlowAndTFFactory);
-        }
-
-        private static function createTests(testConfig:TestConfig, ts:TestSuiteExtended, testsToRun:Array):void
-        {
-            var methodName:String;
-            var creationType:String;
-            var measureType:String;
-            var lineBreak:String;
-            var verticalAlign:String;
-            var textAlign:String;
-
-            for each (methodName in testsToRun)
-            {
-                addTestCase(testConfig, ts, methodName, measureType, lineBreak, verticalAlign, textAlign);
-            }
-        }
-
-        private static function addTestCase(testConfig:TestConfig, ts:TestSuiteExtended, methodName:String, measureType:String, lineBreak:String, verticalAlign:String, textAlign:String):void
-        {
-            var testXML:XML = <TestCase>
-                <TestData name="measureType">{measureType}</TestData>
-                <TestData name="lineBreak">{lineBreak}</TestData>
-                <TestData name="id">{methodName}-{measureType}-{lineBreak}</TestData>
-                <TestData name="verticalAlign">{verticalAlign}</TestData>
-                <TestData name="textAlign">{textAlign}</TestData>
-            </TestCase>;
-
-            ts.addTestDescriptor(new TestDescriptor(BoundsAndAlignmentTest, methodName, testConfig, testXML));
-        }
-
-        private const logicalWidth:Number = 400;
-        private const logicalHeight:Number = 400;
 
         private function createDefaultTextLayoutFormat():TextLayoutFormat
         {
@@ -599,94 +698,6 @@ package UnitTest.Tests
 
             parentSprite.parent.removeChild(parentSprite);
         }
-
-        /********************** Tests Start Here ***************************/
-
-        private var editManager:IEditManager = new EditManager();
-
-        private function insertText(textFlow:TextFlow):void
-        {
-            textFlow.interactionManager = editManager;
-            editManager.selectRange(textFlow.textLength, textFlow.textLength);
-            editManager.insertText("INSERTED TEXT");
-            var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
-            controller.verticalScrollPosition = int.MAX_VALUE;
-            textFlow.flowComposer.updateAllControllers();
-        }
-
-        public function simpleMultiParagraph():void
-        {
-            // This is a subset of simple.xml
-            // Exposed Watson bug 2559210
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup, insertText);
-        }
-
-        public function longSimpleMultiParagraph():void
-        {
-            // This is a longer version of simple.xml, so the text overflows the visible area and scrolls
-            // Exposed Watson bug 2559210
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup, insertText);
-        }
-
-        public function simpleMultiParagraphNoTextIndent():void
-        {
-            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup);
-        }
-
-        public function simpleMultiParagraphNegTextIndent():void
-        {
-            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" textIndent="15" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
-                    '<flow:p paragraphSpaceAfter="30"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="30"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup);
-        }
-
-        public function simpleWithPaddingTopLeft():void
-        {
-            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="40" paddingLeft="20">' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup);
-        }
-
-        public function simpleWithPaddingBottomRight():void
-        {
-            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingBottom="40" paddingRight="20">' +
-                    '<flow:p><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup);
-        }
-
 
         // Ideographic baseline examples needed
 

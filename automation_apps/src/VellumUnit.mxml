@@ -31,25 +31,16 @@
 
     <Script>
 		<![CDATA[
-        import UnitTest.ExtendedClasses.TestDescriptor;
         import UnitTest.ExtendedClasses.TestSuiteExtended;
         import UnitTest.ExtendedClasses.VellumTestCase;
         import UnitTest.Fixtures.FileRepository;
         import UnitTest.Fixtures.TestApp;
         import UnitTest.Fixtures.TestConfig;
-        import UnitTest.MenuItemObj;
-        import UnitTest.TestRunnerWindow;
 
-        import flashx.textLayout.elements.Configuration;
         import flashx.textLayout.elements.TextFlow;
         import flashx.textLayout.tlf_internal;
 
         import mx.collections.ArrayCollection;
-        import mx.collections.ListCollectionView;
-        import mx.collections.Sort;
-        import mx.collections.SortField;
-        import mx.controls.Alert;
-        import mx.managers.PopUpManager;
         import mx.managers.SystemManager;
         import mx.managers.systemClasses.MarshallingSupport;
         import mx.utils.LoaderUtil;
@@ -64,7 +55,7 @@
         private var socket:XMLSocket;
         private var curDialog:Object;
         //TODO: Remove
-      //  private var treeData:XMLList;
+        //  private var treeData:XMLList;
         private var testCasesList:ArrayCollection;
         private var useTestSelectDialog:Boolean = false;
 
@@ -91,7 +82,6 @@
 
         private var curURL:String;
 
-        private var myLoader:URLLoader = new URLLoader();
         private var myXMLURL:URLRequest = new URLRequest();
         private var urlReqSnapShotStore:URLRequest = new URLRequest();
 
@@ -111,10 +101,6 @@
 
         public var testXMLStore:Object = null;
         public var skipList:Array;
-        //private var snapshotStack:Array;
-
-        [Bindable]
-        private var canRun:Boolean = true;
 
         // The data from these files is read on creationcomplete and
         // placed into the store.  The raw XML can be accessed using
@@ -122,7 +108,7 @@
         // Examples:
         // 	XFLStore.simple
         // 	XFLStore.tableExample
-        public var XFLFileNameList:Array = [
+        public var xmlFileNameList:Array = [
             "simple.xml",
             "tableExample.xml",
             "asknot.xml",
@@ -130,12 +116,16 @@
             "sampleArabic.xml",
             "aliceExcerpt.xml"
         ];
+
         public var reportXMLResults:Boolean = false;
 
         // this testApp object needs to be used to set
         // the static testApp member of VellumTestCase
         // before any VellumTestCase constructors are called.
         public var testApp:TestApp = new TestApp();
+
+        private var xmlFileNameListLength:int;
+        private var xmlFileNameListCounter:int;
 
         public function checkMemoryUsage():void
         {
@@ -171,51 +161,6 @@
              Font.registerFont(arialFontRoundedMTBold);     */
         }
 
-        /**
-         * If the testcase counter hasn't reached the end, read another
-         * testcase XML file.  Otherwise load up the tests and start testing
-         */
-        public function readTestCaseFiles():void
-        {
-            while (testXMLStore.suiteIndex < testXMLStore.suiteList.children().length())
-            {
-                var fileName:String = testXMLStore.suiteList.*[testXMLStore.suiteIndex].@fileName;
-                if (fileName.length > 0)
-                {
-                    FileRepository.readFile(normalizedURL, "../../test/" + fileName, onTestCaseFileRead, null, null, true);
-                    break;
-                }
-                ++testXMLStore.suiteIndex;
-            }
-            if (testXMLStore.suiteIndex >= testXMLStore.suiteList.children().length())
-            {
-                if (antSkipTestFile != "")
-                {
-                    FileRepository.readFile(normalizedURL, "../../test/" + antSkipTestFile, readSkipList, loadAndRunTests, loadAndRunTests, true);
-                }
-                else
-                {
-                    loadAndRunTests();
-                }
-            }
-        }
-
-        public function readSkipList(evtObj:Event):void
-        {
-            var fileContents:String = evtObj.target.data;
-            var lineSeparator:String;
-            if (fileContents.search("\r") == -1)
-            {
-                lineSeparator = "\n";
-            }
-            else
-            {
-                lineSeparator = "\r\n";
-            }
-            skipList = evtObj.target.data.split(lineSeparator);
-            loadAndRunTests();
-        }
-
         private function loadAndRunTests(isMinimialTests:Boolean = false):void
         {
             var config:TestConfig = TestConfig.getInstance();
@@ -248,158 +193,11 @@
 
         private var xmlRoot:XML = null;
 
-        private function createXMLTree(testSuiteTests:Array):XML
-        {
-            if (xmlRoot)
-                return xmlRoot;
-
-            xmlRoot = <root/>;
-            var curContainer:XML;
-            var curTestCase:XML;
-            var testCaseIndex:int = 0;
-
-            var curContainerName:String = null;
-
-            var containerCount:int = 0;
-            var menuCollection:ListCollectionView = createMenuCollection(testSuiteTests);
-            if (testEndIndex < 0)
-                testEndIndex = menuCollection.length;
-            for (var i:int = 0; i < menuCollection.length; i++)
-            {
-                // Store the list of tests in a structure so they can be called upon later.
-                // Need to be stored so they can be executed.
-                var menuItem:MenuItemObj = MenuItemObj(menuCollection.getItemAt(i));
-                if (curContainerName != menuItem.testGroupName)
-                {
-                    curContainer = <Container/>;
-                    curContainer.@["label"] = menuItem.testGroupName;
-                    xmlRoot.appendChild(curContainer);
-                    curContainerName = menuItem.testGroupName;
-                    ++containerCount;
-                }
-                curTestCase = <TestCase/>;
-                curTestCase.@["label"] = menuItem.testName;
-                curTestCase.@["testID"] = testCaseIndex;
-
-                testCasesList.addItem(menuItem.testCase);
-                if (rangeOfTests)
-                {
-                    curTestCase.@["selected"] = (testCaseIndex >= testStartIndex) && (testCaseIndex <= testEndIndex)
-                }
-                else
-                {
-                    curTestCase.@["selected"] = false;
-                }
-                curContainer.appendChild(curTestCase);
-                testCaseIndex++;
-            }
-
-            return xmlRoot;
-        }
-
-        private function createMenuCollection(testSuiteTests:Array):ArrayCollection
-        {
-            // Create and populate the list
-            var menuCollection:ArrayCollection = new ArrayCollection();
-            // so far I've flattened the test descriptor list. Seems as arbitrary as expecting one
-            // level of test suites.
-            var groupName:String = null;		// Force the groupName to be regenerated for the suite
-            for (var caseIndex:int = 0; caseIndex < testSuiteTests.length; caseIndex++)
-            {
-                var testDesc:TestDescriptor = testSuiteTests[caseIndex];
-
-                groupName = testDesc.className();
-
-                // Store the list of tests in a structure so they can be called upon later.
-                // Need to be stored so they can be executed.
-                var menuItem:MenuItemObj = new MenuItemObj();
-
-                var strTmp:String = testDesc.testID;
-                //menuItem.testName = strTmp;
-                menuItem.testName = strTmp.substr(strTmp.lastIndexOf(":") + 1);
-                menuItem.testGroupName = groupName;
-                menuItem.testCase = testDesc;
-                menuItem.writingDirection = testDesc.config.writingDirection;
-                menuCollection.addItem(menuItem);
-            }
-
-            // Sort the list
-            /* Create the SortField object for the "data" field in the ArrayCollection object, and make sure we do a numeric sort. */
-            var dataSortField1:SortField = new SortField();
-            dataSortField1.name = "testGroupName";
-            dataSortField1.numeric = false;
-
-            var dataSortField2:SortField = new SortField();
-            dataSortField2.name = "testName";
-            dataSortField2.numeric = false;
-
-            /* Create the Sort object and add the SortField object created earlier to the array of fields to sort on. */
-            var numericDataSort:Sort = new Sort();
-            numericDataSort.fields = [dataSortField1, dataSortField2];
-
-            /* Set the ArrayCollection object's sort property to our custom sort, and refresh the ArrayCollection. */
-            menuCollection.sort = numericDataSort;
-            menuCollection.refresh();
-
-            return menuCollection;
-        }
-
-        private function doJUnitRun(runID:int):void
-        {
-            doSnapshotData.runID = runID;
-            testRunner.startTest();
-        }
-
-        /**
-         * This is the callback function used to run the tests that are selected.
-         * It is supplied on the initial creation of the dialog.
-         */
-        public function runUnitTests(doBeforeAndAfterTest:Boolean = false, iterations:int = 1):void
-        {
-            testRunner.startTest();
-        }
-
         public function beforeRunTest(testCase:VellumTestCase, callBack:Function):void
         {
             beforeTestCallback = callBack;
             testCase.doBeforeAfterCompare = doBeforeAfterCompare;
             beforeTestCallback(testCase);
-        }
-
-        /**
-         * This function walks the test data set from the tree to determine
-         * what items are selected to be run.
-         */
-        private function walkTests(data:Object, testsToRun:Array):void
-        {
-            for each (var f:XML in data)
-            {
-                if (f.children().length() > 0)
-                    walkTests(f.children(), testsToRun);
-
-                if (f.@selected == true && f.@testID.length() > 0)
-                    testsToRun.push(int(f.@testID));
-            }
-        }
-
-        /**
-         * callback function of HandleRunInfo
-         * **/
-        private function finishHandleRunInfo(runID:int):void
-        {
-            doSnapshotData.runID = runID;
-        }
-
-        private function errorWithMachineID(info:Object, token:Object):void
-        {
-            //trace ("could not retrieve machine ID: snapshot tests aborted");
-            Alert.show(info.toString());
-        }
-
-
-        private function handleError(info:Object, token:Object):void
-        {
-            Alert.show(info.toString());
         }
 
         private function ioErrorPutBaseline(evtObj:IOErrorEvent):void
@@ -435,17 +233,6 @@
         }
 
         //*********************************************************************/
-
-        /**
-         * Add testcaseXML to testXMLStore with a property name from the
-         * suiteXML file, then go to the next entry
-         */
-        public function onTestCaseFileRead(evtObj:Event):void
-        {
-            testXMLStore[testXMLStore.suiteList.*[testXMLStore.suiteIndex].@suiteName] = XML(evtObj.target.data);
-            testXMLStore.suiteIndex++;
-            readTestCaseFiles();
-        }
 
         /**
          * Read through a test suite and return a new suite of tests
@@ -546,61 +333,12 @@
                  filePrefix = filePrefixLine.replace (filePrefixPattern, "$1");
                  }	*/
             }
-            readTestPropertiesFromProject();
-        }
-
-        public function readTestPropertiesFromProject(event:Event = null):void
-        {
-            testPropertiesPath = "../../build/test.properties";
-            FileRepository.readFile(normalizedURL, testPropertiesPath, getTestProperties, readTestPropertiesFromDist);
-        }
-
-        public function readTestPropertiesFromDist(event:Event = null):void
-        {
-            testPropertiesPath = "../../../../../../build/test.properties";
-            FileRepository.readFile(normalizedURL, testPropertiesPath, getTestProperties, turnOffSnapshots);
         }
 
         public function turnOffSnapshots(event:Event = null):void
         {
             snapshotsOn = "false";
-            chooseTestRunner();
-        }
-
-        public function getTestProperties(event:Event = null):void
-        {
-            var testPropContents:String = FileRepository.getFile(normalizedURL, testPropertiesPath);
-            if (testPropContents)
-            {
-
-            }
-
-            chooseTestRunner();
-        }
-
-        /**
-         * Use JUnit runner if it has been specified in testMachine.txt
-         */
-        public function chooseTestRunner(evtObj:IOErrorEvent = null):void
-        {
-            canRun = true;
-
-            // if it was specified in testMachine.txt, run the tests with Junit
-            if (generateReport == "true")
-            {
-                reportXMLResults = true;
-
-                // If we haven't read in all the tests, do that first. onSuiteFileRead will also call loadAndRunTests().
-                // Else tests have already been read in, we just need to run them.
-               /* if (testXMLStore == null)
-                    FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError, true);
-                else       */
-                    loadAndRunTests();
-            }
-            if (rangeOfTests)
-            {
-                callLater(startRangeTests);
-            }
+            //  chooseTestRunner();
         }
 
         public function securityHandler(evtObj:SecurityErrorEvent):void
@@ -615,35 +353,10 @@
         private function startRangeTests():void
         {
             useTestSelectDialog = true;	// we select the range in the XML for this dialog
-           /* if (testXMLStore == null)
-                FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError, true);
-            else    */
-                loadAndRunTests();
-        }
-
-        private function onSuiteDone(evtObj:Event):void
-        {
-            if (evtObj)
-            {
-                evtObj.target.removeEventListener("complete", onSuiteDone);
-            }
-
-            // Remove the Event Listener because it has fired.
-            this.removeEventListener("TestComplete", onSuiteDone);
-            canRun = true;
-            //if (rangeOfTests) testRunner.sendResults();
-
-            if (reportXMLResults)
-            {
-                myLoader.load(new URLRequest("CoverageManagerExit.swf"));
-                myLoader.addEventListener(Event.COMPLETE, onLoad_Coverage);
-                myLoader.addEventListener(IOErrorEvent.IO_ERROR, onLoad_Flow);
-            }
-        }
-
-        private function onLoad_Flow(ev:IOErrorEvent):void
-        {
-            myLoader.removeEventListener(IOErrorEvent.IO_ERROR, onLoad_Flow);
+            /* if (testXMLStore == null)
+             FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError, true);
+             else    */
+            loadAndRunTests();
         }
 
         private function onLoad_Coverage(ev:Event):void
@@ -651,96 +364,10 @@
             loadedSWF.load("CoverageManagerExit.swf");
         }
 
-
-        private function onRunAllTests():void
-        {
-            /*
-             * In the VellumPerformance tests a timer had to be added after the
-             * FileRepository.readFile method in order to provide time necessary for loading.
-             * This has yet to be a problem in VellumUnit, but may be in the future.
-             * Refer to the VellumPerformance.mxml.
-             */
-            canRun = false;
-            useTestSelectDialog = true;
-            reportXMLResults = false;
-
-           /* if (testXMLStore == null)
-                FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError);
-            else   */
-                loadAndRunTests();
-        }
-
-        private function onRunMinimalTests():void
-        {
-            /*
-             * In the VellumPerformance tests a timer had to be added after the
-             * FileRepository.readFile method in order to provide time necessary for loading.
-             * This has yet to be a problem in VellumUnit, but may be in the future.
-             * Refer to the VellumPerformance.mxml.
-             */
-            useTestSelectDialog = true;
-            reportXMLResults = false;
-            testStartIndex = 0;
-            testEndIndex = -1;
-            rangeOfTests = true;
-
-          /*  if (testXMLStore == null)
-                FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError);
-            else       */
-                loadAndRunTests(true);
-        }
-
-        private function onCloseTestWindow():void
-        {
-            PopUpManager.removePopUp(TestRunnerWindow(curDialog));
-            curDialog = null;
-        }
-
-        private function createXMLElement(xmlDoc:XMLDocument, nodeName:String, nodeValue:String):XMLNode
-        {
-            var tmpNode:XMLNode = xmlDoc.createElement(nodeName);
-            var tmpNodeText:XMLNode = xmlDoc.createTextNode(nodeValue);
-            tmpNode.appendChild(tmpNodeText);
-            return (tmpNode);
-        }
-
-        private function setDebugOrRelease():void
-        {
-            var e:Error = new Error();
-            var s:String = e.getStackTrace();
-            debugOrRelease = s;
-            try
-            {
-                var i:int = s.indexOf("setDebugOrRelease");
-                if (s.charAt(i + 19) == '[')
-                {
-                    debugOrRelease = "Debug Player";
-                }
-                else
-                {
-                    debugOrRelease = "Release Player";
-                }
-            }
-            catch (err:Error)
-            {
-                debugOrRelease = "Release Player";
-            }
-            if (Configuration.tlf_internal::debugCodeEnabled)
-            {
-                vellumDebugOrRelease = "Debug";
-            }
-            else
-            {
-                vellumDebugOrRelease = "Release";
-            }
-        }
-
         //*********************************************************
 
         public function handleCreationComplete():void
         {
-            setDebugOrRelease();
-
             normalizedURL = LoaderUtil.normalizeURL(loaderInfo);
             // if we're in the AIR runtime, we get app:/VellumUnit.swf instead of
             // a file:/// URL. This checks for that and changes it to file:///
@@ -751,29 +378,47 @@
             }
 
             //Security.loadPolicyFile("http://flashqa.macromedia.com/crossdomain.xml");
-            for (var i:int = 0; i < XFLFileNameList.length; ++i)
-                FileRepository.readFile(normalizedURL, "../../test/testFiles/markup/tlf/" + XFLFileNameList[i]);
-
-            // We're going to look for the machine.txt, to fill out default machine name.
-            // If we don't find it, go ahead and start the test runner.
-            FileRepository.readFile(normalizedURL, "../../test/testMachine.txt", readMachineName, readTestPropertiesFromProject, securityHandler, true);
+            xmlFileNameListLength = xmlFileNameList.length;
+            for (var i:int = 0; i < xmlFileNameListLength; i++)
+            {
+                FileRepository.readFile(normalizedURL, "../../test/testFiles/markup/tlf/" + xmlFileNameList[i],
+                        onXmlFileListLoadComplete, onXmlFileListError, onXmlFileListSecurityError);
+            }
 
             // Load Arial Font SWF to Embed it in the application.
             loadEmbeddedFont(normalizedURL);
+        }
+
+        private function onXmlFileListLoadComplete(event:Event):void
+        {
+            xmlFileNameListCounter++;
+            if (xmlFileNameListCounter == xmlFileNameListLength)
+            {
+                loadAndRunTests();
+                xmlFileNameListCounter = 0;
+            }
+        }
+
+        private function onXmlFileListError(event:IOErrorEvent):void
+        {
+            //TODO: Error handlig for xml config filex
+        }
+
+        private function onXmlFileListSecurityError(event:SecurityErrorEvent):void
+        {
+            //TODO: Error handlig for xml config filex
         }
         ]]>
     </Script>
 
     <s:VGroup height="100%" width="100%">
         <s:HGroup>
-            <s:Button label="Run Tests" id="cmdRunTests" click="onRunAllTests()" enabled="{canRun}"/>
-            <s:Button label="Run Minimal Tests" id="cmdRunAllTests" click="onRunMinimalTests()" enabled="{canRun}"/>
             <!-- <mx:Button label="Run Selected Tests" id="cmdRunSelectedTests" click="onRunTest()" enabled="{canRun}"/> -->
             <s:Label text="memory usage:"/>
             <s:TextInput text="{currentlyUsedMemory}" width="71" height="20"/>
         </s:HGroup>
         <local:TestDescriptorRunner id="testRunner" height="30%" width="100%"/>
-        <s:SWFLoader id="loadedSWF" source="Flow.swf" height="536" width="1100" />
+        <s:SWFLoader id="loadedSWF" source="Flow.swf" height="536" width="1100"/>
     </s:VGroup>
 
 </s:Application>

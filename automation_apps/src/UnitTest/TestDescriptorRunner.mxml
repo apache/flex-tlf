@@ -16,11 +16,12 @@
   limitations under the License.
 -->
 <s:Group xmlns:s="library://ns.adobe.com/flex/spark"
-         xmlns:flexunituirunner="http://www.adobe.com/2009/flexUnitUIRunner" xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:flexunituirunner="http://www.adobe.com/2009/flexUnitUIRunner"
          xmlns:fx="http://ns.adobe.com/mxml/2009">
     <fx:Script>
 		<![CDATA[
         import org.flexunit.runner.FlexUnitCore;
+        import org.flexunit.runner.notification.RunListener;
 
         private var core:FlexUnitCore;
 
@@ -28,7 +29,10 @@
         {
 
             core = new FlexUnitCore();
+            core.addUncaughtErrorListener( systemManager.loaderInfo );
+            core.addListener(new RunListener());
             core.addListener(testRunner);
+
             if (isMinimalTests)
             {
                 core.run(new MinimalTestsSuite());

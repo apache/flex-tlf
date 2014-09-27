@@ -44,7 +44,6 @@ package UnitTest.Fixtures
          */
         static public function getFileAsXML(baseURL:String, fileName:String):XML
         {
-            var xmlData:XML = null;
             var sourceString:String = getFile(baseURL, fileName);
             return sourceString ? convertToXML(sourceString) : null;
         }
@@ -143,7 +142,9 @@ class CustomURLLoader extends URLLoader
         this.securityErrorHandler = securityErrorHandler;
 
         if (!_fileCache)
+        {
             _fileCache = new Object();
+        }
     }
 
     /** Returns number of file read requests that are pending -- i.e., that have neither
@@ -159,13 +160,16 @@ class CustomURLLoader extends URLLoader
     {
         // If it's in the cache, just return it
         if (_fileCache[fileName] != null)
+        {
             return _fileCache[fileName];
-
+        }
         // We have a request out, and we're waiting for the result. Unfortunately, there's no
         // way we know to wait and still handle the events that would cause the pending status
         // to complete. So we return failure here as well.
         if (_fileCache.hasOwnProperty(fileName))
+        {
             return null;
+        }
 
         // We've never seen this file
         return null;
@@ -188,8 +192,9 @@ class CustomURLLoader extends URLLoader
     {
         // Remove the event listener that was attached so this function could get called.
         if (event)
+        {
             event.target.removeEventListener(Event.COMPLETE, defaultCompleteHandler);
-
+        }
         // This request handled; is no longer pending
         --_requestsPending;
 
@@ -199,7 +204,9 @@ class CustomURLLoader extends URLLoader
 
         // Call the custom completion handler
         if (urlLoader.completeHandler != null)
+        {
             urlLoader.completeHandler(event);
+        }
         urlLoader.close();
     }
 
@@ -216,7 +223,9 @@ class CustomURLLoader extends URLLoader
         var urlLoader:CustomURLLoader = CustomURLLoader(event.target);
         addToCache(urlLoader, FILE_ERROR);
         if (urlLoader.securityErrorHandler != null)
+        {
             urlLoader.securityErrorHandler(event);
+        }
     }
 
     /** Default handler. This will get called on every i/o error of a read that goes
@@ -226,13 +235,17 @@ class CustomURLLoader extends URLLoader
     static private function defaultIOErrorHandler(event:IOErrorEvent):void
     {
         if (event)
+        {
             event.target.removeEventListener(IOErrorEvent.IO_ERROR, defaultIOErrorHandler);
+        }
 
         --_requestsPending;
         var urlLoader:CustomURLLoader = CustomURLLoader(event.target);
         addToCache(urlLoader, FILE_ERROR);
         if (urlLoader.ioErrorHandler != null)
+        {
             urlLoader.ioErrorHandler(event);
+        }
     }
 
     /* Start a file read.

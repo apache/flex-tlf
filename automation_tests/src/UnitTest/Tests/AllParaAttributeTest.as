@@ -234,13 +234,14 @@ package UnitTest.Tests
          * This builds testcases for properties in attributes in description that are Enumerated types types.  A testcase is generated
          * for each possible enumerated value
          */
+        [Ignore]
         [Test]
         public function testAllEnumProps():void
         {
             var range:Object = null;
             var value:Object = null;
-
-            for each (testProp in TextLayoutFormat.description)
+            var desc:Object = TextLayoutFormat.description;
+            for each (testProp in desc)
             {
                 // new code
                 if (testProp.category == Category.PARAGRAPH)
