@@ -829,7 +829,7 @@ package flashx.textLayout.conversion
 			parseChildrenUnderNewActiveFormatWithImpliedParaFormat (importer, xmlToParse, parent, newFormat);
 		}
 		
-		/** Parse the <b> formatting element
+		/** Parse the <s> formatting element
 		 * Calculates the new format to apply to _activeFormat and continues parsing down the hierarchy
 		 * @private
 		 */
