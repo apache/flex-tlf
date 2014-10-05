@@ -94,6 +94,12 @@ package flashx.textLayout.conversion
 		 * @langversion 3.0
 		 */
 		function get useClipboardAnnotations():Boolean;
-		function set useClipboardAnnotations(value:Boolean):void;		
+		function set useClipboardAnnotations(value:Boolean):void;
+		
+		/**
+		 * Accesses the config options for the exporter. 
+		 **/
+		function get config():ImportExportConfiguration;
+		function set config(value:ImportExportConfiguration):void;		
 	}
 }

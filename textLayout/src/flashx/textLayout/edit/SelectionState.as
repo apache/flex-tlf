@@ -27,6 +27,8 @@ package flashx.textLayout.edit
 	use namespace tlf_internal;
 	
 	import flashx.textLayout.tlf_internal;
+	import flashx.textLayout.elements.CellRange;
+
 	use namespace tlf_internal;
 	/**
 	 * The SelectionState class represents a selection in a text flow.  
@@ -48,6 +50,8 @@ package flashx.textLayout.edit
 	{		
 		/** Format that are associated with the caret position & will be applied to inserted text */
 		private var _pointFormat:ITextLayoutFormat;
+		
+		private var _cellRange:CellRange;
 		
 		private var _selectionManagerOperationState:Boolean;
 
@@ -72,11 +76,12 @@ package flashx.textLayout.edit
 		 * @playerversion AIR 1.5
  	 	 * @langversion 3.0
 		 */		
-		public function SelectionState(root:TextFlow,anchorPosition:int,activePosition:int,format:ITextLayoutFormat = null)
+		public function SelectionState(root:TextFlow,anchorPosition:int,activePosition:int,format:ITextLayoutFormat = null,cellRange:CellRange = null)
 		{
 			super(root, anchorPosition, activePosition);
 			if (format)
 				_pointFormat = format;
+			_cellRange = cellRange;
 		}
 		
 		/** 
@@ -126,5 +131,20 @@ package flashx.textLayout.edit
 		/** @private */
 		tlf_internal function clone():SelectionState
 		{ return new SelectionState(textFlow,anchorPosition,activePosition,pointFormat); }
+
+		/** Range of table cells in selection (null if no cells selected)*/
+		public function get cellRange():CellRange
+		{
+			return _cellRange;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set cellRange(value:CellRange):void
+		{
+			_cellRange = value;
+		}
+
 	}
 }

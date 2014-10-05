@@ -67,7 +67,7 @@ package flashx.textLayout.compose
 	public class StandardFlowComposer extends FlowComposerBase implements IFlowComposer
 	{
 		/** @private */
-		tlf_internal var _rootElement:ContainerFormattedElement;
+		protected var _rootElement:ContainerFormattedElement;
 		private var _controllerList:Array;
 		private var _composing:Boolean;
 

@@ -1114,10 +1114,14 @@ package flashx.textLayout.edit
 		/** if parent is a singleton element, deletes it, then repeats deletion of singletons up the parent chain.  Used after paragraph merge. */
 		tlf_internal static function removeEmptyParentChain(parent:FlowGroupElement):IMemento
 		{
+			if(parent is ParagraphElement)
+				ParagraphElement(parent).removeEmptyTerminator();
 			var mementoList:MementoList = new MementoList(parent.getTextFlow());
 			while(parent && (parent.numChildren == 0))
 			{
 				var grandParent:FlowGroupElement = parent.parent;
+				if(grandParent is ParagraphElement)
+					ParagraphElement(grandParent).removeEmptyTerminator();
 				if(grandParent)
 				{
 					var parentIdx:int = grandParent.getChildIndex(parent);

@@ -35,6 +35,7 @@ package flashx.textLayout.edit
 	import flash.ui.Keyboard;
 	import flash.utils.getQualifiedClassName;
 	
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.compose.IFlowComposer;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
@@ -52,11 +53,12 @@ package flashx.textLayout.edit
 	import flashx.textLayout.elements.ParagraphElement;
 	import flashx.textLayout.elements.SubParagraphGroupElement;
 	import flashx.textLayout.elements.TCYElement;
-	import flashx.textLayout.elements.TableDataCellElement;
+	import flashx.textLayout.elements.TableCellElement;
 	import flashx.textLayout.elements.TableElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.elements.TextRange;
 	import flashx.textLayout.events.FlowOperationEvent;
+	import flashx.textLayout.events.ModelChange;
 	import flashx.textLayout.formats.IListMarkerFormat;
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
@@ -85,7 +87,6 @@ package flashx.textLayout.edit
 	import flashx.textLayout.operations.SplitElementOperation;
 	import flashx.textLayout.operations.SplitParagraphOperation;
 	import flashx.textLayout.operations.UndoOperation;
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.CharacterUtil;
 	import flashx.textLayout.utils.GeometryUtil;
 	import flashx.textLayout.utils.NavigationUtil;
@@ -466,6 +467,23 @@ package flashx.textLayout.edit
 								doOperation(new CreateListOperation(new SelectionState(textFlow, element.getAbsoluteStart(), element.getAbsoluteStart() + element.textLength), listItem.parent));
 							}
 						}
+						else if (textFlow.nestedInTable()) {
+							var cell:TableCellElement;
+							
+							if (event.shiftKey) {
+								cell = (textFlow.parentElement as TableCellElement).getPreviousCell();
+							}
+							else {
+								cell = (textFlow.parentElement as TableCellElement).getNextCell();
+							}
+							
+							// select next cell in table
+							if (cell && cell.textFlow && cell.textFlow.interactionManager is EditManager) {
+								//cell.textFlow.interactionManager.selectLastPosition();
+								cell.textFlow.interactionManager.selectAll();
+								cell.textFlow.interactionManager.setFocus();
+							}
+						}
 						else
 						{
 							overwriteMode ? overwriteText(String.fromCharCode(event.charCode)) : insertText(String.fromCharCode(event.charCode));
@@ -829,8 +847,19 @@ package flashx.textLayout.edit
 				redrawListener = null;
 			}
 
+			var cellHeight:Number = 0;
 			if (textFlow.flowComposer)
 			{
+				if(superManager && superManager is IEditManager)
+				{
+					var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
+					if (controller)
+					{
+						cellHeight = controller.container.height;
+					}
+				}
+
+
 				 textFlow.flowComposer.updateAllControllers(); 
 
 				// Scroll to selection
@@ -839,6 +868,18 @@ package flashx.textLayout.edit
 					var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(activePosition);
 					if (controllerIndex >= 0)
 						textFlow.flowComposer.getControllerAt(controllerIndex).scrollToRange(activePosition,anchorPosition);	
+				}
+				if(superManager && superManager is IEditManager)
+				{
+					if(controller.container.height != cellHeight)
+					{
+						var setFormat:String = selectionFormatState;
+						var table:TableElement = (textFlow.parentElement as TableCellElement).getTable();
+						table.modelChanged(ModelChange.ELEMENT_MODIFIED, table, 0, table.textLength);
+						(superManager as IEditManager).updateAllControllers();
+						if(setFormat == SelectionFormatState.FOCUSED)
+							setFocus();
+					}
 				}
 			}
 
@@ -1259,12 +1300,14 @@ package flashx.textLayout.edit
 			if (!operationState)
 				return;
 
+			/*
+			This should not be necessary...
 			// mjzhang : fix for table
 			var leaf:FlowLeafElement = textFlow.findLeaf(operationState.absoluteStart);
 			var para:ParagraphElement = leaf.getParagraph();
 			if ( para.isInTable() )
 				return;
-			
+			*/
 			// Delete the next character if it's a caret selection, and allow adejacent delete next's to merge
 			// If it's a range selection, delete the range and disallow merge
 			var deleteOp:DeleteTextOperation;
@@ -1369,10 +1412,12 @@ package flashx.textLayout.edit
 				}
 				if(movePara)
 				{
+					/*
+					should not be necessary...
 					// mjzhang: fix for table feature
 					if ( para.isInTable() )
 						return;
-					
+					*/
 					var source:FlowGroupElement;
 					var target:FlowGroupElement;
 					var numElementsToMove:int;

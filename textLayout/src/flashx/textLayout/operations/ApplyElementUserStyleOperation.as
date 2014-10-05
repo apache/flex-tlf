@@ -30,7 +30,6 @@ package flashx.textLayout.operations
 
 	use namespace tlf_internal;
 	
-	[Deprecated(replacement="ApplyFormatToElementOperation", deprecatedSince="2.0")]
 	/**
 	 * The ApplyElementUserStyleOperation class encapsulates a change in a style value of an element.
 	 *

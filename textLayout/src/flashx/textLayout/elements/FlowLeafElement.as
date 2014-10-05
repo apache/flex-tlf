@@ -337,6 +337,8 @@ package flashx.textLayout.elements
 		{
 			if (!_blockElement)
 				createContentElement();
+			if(!_blockElement)
+				return null;
 			var ef:ElementFormat = _blockElement.elementFormat;
 			if (!ef)
 				return null;

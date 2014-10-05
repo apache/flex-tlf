@@ -230,6 +230,10 @@ package flashx.textLayout.compose
 				while (true)
 				{
 					line = _lines[lineIdx];
+					// An empty span following a table can cause this.
+					//if(line == null)
+					//	break;
+					
 					line.setAbsoluteStart(line.absoluteStart + lenToDel + deltaLength);
 					curPos = (startPosition > line.absoluteStart ? startPosition : line.absoluteStart);
 					
@@ -454,7 +458,20 @@ package flashx.textLayout.compose
 				_damageAbsoluteStart = newLine.absoluteStart + newLine.textLength;
 				
 			if (workLine == null)
-				lines.push(newLine);				
+				lines.push(newLine);
+			else if((workLine is TextFlowTableBlock) && workLine != newLine)
+				_lines.splice(workIndex,1,newLine);
+			else if(newLine is TextFlowTableBlock)
+			{
+				if(workLine != newLine)
+				{
+					_lines.splice(workIndex,0,newLine);
+					// set the next line absolute start to be rational for the next line...
+					if(workLine.absoluteStart == newLine.absoluteStart)
+						workLine.setAbsoluteStart(workLine.absoluteStart+1);
+				}
+			}
+								
 			else if (workLine.absoluteStart != newLine.absoluteStart)
 			{
 				if (workLine.absoluteStart + workLine.textLength > newLine.absoluteStart + newLine.textLength)

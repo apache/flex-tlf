@@ -48,6 +48,7 @@ package flashx.textLayout.container
 	import flashx.textLayout.compose.FlowDamageType;
 	import flashx.textLayout.compose.IFlowComposer;
 	import flashx.textLayout.compose.TextFlowLine;
+	import flashx.textLayout.compose.TextFlowTableBlock;
 	import flashx.textLayout.compose.TextLineRecycler;
 	import flashx.textLayout.debug.Debugging;
 	import flashx.textLayout.debug.assert;
@@ -56,6 +57,8 @@ package flashx.textLayout.container
 	import flashx.textLayout.edit.ISelectionManager;
 	import flashx.textLayout.edit.SelectionFormat;
 	import flashx.textLayout.elements.BackgroundManager;
+	import flashx.textLayout.elements.CellCoordinates;
+	import flashx.textLayout.elements.CellRange;
 	import flashx.textLayout.elements.Configuration;
 	import flashx.textLayout.elements.ContainerFormattedElement;
 	import flashx.textLayout.elements.FlowElement;
@@ -64,6 +67,10 @@ package flashx.textLayout.container
 	import flashx.textLayout.elements.InlineGraphicElement;
 	import flashx.textLayout.elements.LinkElement;
 	import flashx.textLayout.elements.ParagraphElement;
+	import flashx.textLayout.elements.TableBlockContainer;
+	import flashx.textLayout.elements.TableCellElement;
+	import flashx.textLayout.elements.TableElement;
+	import flashx.textLayout.elements.TableRowElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.events.FlowElementMouseEvent;
 	import flashx.textLayout.events.FlowElementMouseEventManager;
@@ -112,7 +119,6 @@ package flashx.textLayout.container
 	public class ContainerController implements IInteractionEventHandler, ITextLayoutFormat, ISandboxSupport
 	{		
 		static tlf_internal var usesDiscretionaryHyphens:Boolean = true;
-		static tlf_internal var startComposeFromBeginning:Boolean = false;
 		
 		private var _textFlowCache:TextFlow;
 		private var _rootElement:ContainerFormattedElement;
@@ -178,6 +184,7 @@ package flashx.textLayout.container
 		
 		private var _linesInView:Array;	// lines that were in view according to the previous compose(). Empty if the lines have already been posted to the display list.
 		private var _updateStart:int;
+		private var _tableBlocksInView:Array; // // table blocks that were in view according to the previous compose(). Empty if the lines have already been posted to the display list.
 		
 		private var _composedFloats:Array;  // floats that were composed into the controller -- array of FloatCompositionData
 		private var _floatsInContainer:Array;  // floats are currently in view -- array of DisplayObject
@@ -267,6 +274,7 @@ package flashx.textLayout.container
 			
 			_shapeChildren = [ ];
 			_linesInView = [ ];
+			_tableBlocksInView = [];
 			
 			setCompositionSize(compositionWidth, compositionHeight);
 			format = _containerControllerInitialFormat;
@@ -397,7 +405,7 @@ package flashx.textLayout.container
 		/** 
 		 * Sets the width and height allowed for text in the container. Width and height can be specified in pixels or <code>NaN</code> can be used for either value.  <code>NaN</code> indicates measure that value. 
 		 * This can be used to find the widest line and/or the total height of all the content.  When NaN is specified as the width lines are broken with a maximum width of <code>TextLine.MAX_LINE_WIDTH</code>. 
-		 * When <code>NaN</code> is specified as the height the container is assumed to have unlimited height.  The actual measured values can be ready back in <code>getContentBounds</code>.  
+		 * When <code>NaN</code> is specified as the height the container is assumed to have unlimited height.  The actual measured values can be read back in <code>getContentBounds</code>.  
 		 * When the computed <code>blockProgression</code> property of <code>TextFlow</code>
 		 * is <code>BlockProgression.RL</code> the meanings of width and height are exchanged.
 		 *
@@ -415,7 +423,7 @@ package flashx.textLayout.container
 		 * @langversion 3.0
 		 */
 		
-		public function setCompositionSize(w:Number,h:Number):void
+		public function setCompositionSize(w:Number, h:Number):void
 		{
 		//	trace("setCompositionSize(" + w + ", " + h + ")");
 			
@@ -737,13 +745,19 @@ package flashx.textLayout.container
 				var curLine:TextFlowLine;
 				var textLine:TextLine;
 				var lineIndex:int;
+				var testRslt:*;
 				
 				//Use binary search when there is one single column
 				if(columnCount == 1)
 				{
 					// First just test the firstLine - normal unscrolled case
-					curLine = flowComposer.getLineAt(firstLine);	
-					textLine = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null) as TextLine;
+					var testPos:int = firstLine;
+					curLine = flowComposer.getLineAt(testPos++);
+					while(curLine && curLine is TextFlowTableBlock)
+						curLine = flowComposer.getLineAt(testPos++);
+					
+					testRslt = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null)
+					textLine = testRslt as TextLine;
 					firstLine++;	// its been tested
 					if (textLine)
 					{
@@ -759,10 +773,11 @@ package flashx.textLayout.container
 							var mid:int = (firstLine+hi)/2;
 							CONFIG::debug { assert(mid != 0,"ContainerController:gatherVisibleLines: bad mid"); }
 							curLine = flowComposer.getLineAt(mid);
-							var testRslt:* = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null);
-							textLine = testRslt as TextLine;
-							if (textLine)
+							testRslt = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null);
+							
+							if (testRslt && testRslt is TextLine)
 							{
+								textLine = testRslt as TextLine;
 								// note that we tested firstLine above so going to mid-1 is always valid
 								var tempLine:TextFlowLine = flowComposer.getLineAt(mid-1);
 								if (!(testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, tempLine, null) is TextLine))
@@ -776,6 +791,8 @@ package flashx.textLayout.container
 								}
 								testRslt = -1;	// past the start
 							}
+							// need to deal with TextFlowTableBlocks
+							
 							if (testRslt < 0 || testRslt == 2)
 								hi = mid-1;
 							else
@@ -785,8 +802,12 @@ package flashx.textLayout.container
 					
 					for (lineIndex = firstLine; lineIndex <= lastLine; lineIndex++)
 					{
-						curLine = flowComposer.getLineAt(lineIndex);	
-						textLine = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null) as TextLine;
+						curLine = flowComposer.getLineAt(lineIndex);
+						testRslt = testLineVisible(wmode, scrollAdjustXTW, scrollAdjustYTW, scrollAdjustWidthTW, scrollAdjustHeightTW, curLine, null);
+						
+						if(testRslt is TableBlockContainer)
+							continue;
+						textLine = testRslt as TextLine;
 						if (!textLine)
 							break;
 		
@@ -2811,6 +2832,42 @@ package flashx.textLayout.container
 			addSelectionChild(selObj);
 		}
 		
+		/** Add cell selection shapes to the displaylist. @private */
+		tlf_internal function addCellSelectionShapes(color:uint, tableBlock:TextFlowTableBlock, startCoords:CellCoordinates, endCoords:CellCoordinates): void
+		{
+			if(!tableBlock)
+				return;
+			if(!startCoords.isValid() || !endCoords.isValid())
+				return;
+			var cells:Vector.<TableCellElement> = tableBlock.getCellsInRange(startCoords,endCoords);
+			var selObj:Shape = new Shape();
+			selObj.graphics.beginFill(color);
+			for each( var cell:TableCellElement in cells)
+			{
+				var row:TableRowElement = cell.getRow();
+				var r:Rectangle = new Rectangle(cell.x, cell.y + tableBlock.y, cell.width, row.composedHeight);
+				selObj.graphics.drawRect(r.x,r.y,r.width,r.height);
+			}
+			addSelectionChild(selObj);
+		}
+		
+		/** 
+		 * Add cell selection shapes to the displaylist.
+		 * */
+		tlf_internal function addCellSelections(cells:Array, color:uint, tableBlock:TextFlowTableBlock): void
+		{
+			var shape:Shape = new Shape();
+			shape.graphics.beginFill(color);
+			
+			for each(var cell:TableCellElement in cells) {
+				var row:TableRowElement = cell.getRow();
+				var rectangle:Rectangle = new Rectangle(cell.x, cell.y + tableBlock.y, cell.width, row.composedHeight);
+				shape.graphics.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+			}
+			
+			addSelectionChild(shape);
+		}
+		
 		/** Add selection shapes to the displaylist. @private */
 		tlf_internal function addSelectionShapes(selFormat:SelectionFormat, selectionAbsoluteStart:int, selectionAbsoluteEnd:int): void
 		{
@@ -2855,6 +2912,7 @@ package flashx.textLayout.container
 				{
 					nextLine = idx != flowComposer.numLines - 1 ? flowComposer.getLineAt(idx+1) : null;
 					
+					// 9-1-14 Harbs Do we draw a selection rect for tables? If yes, this needs special handling in TextFlowTableBlock
 					line.hiliteBlockSelection(selObj, selFormat, this._container,
 						selectionAbsoluteStart < line.absoluteStart ? line.absoluteStart : selectionAbsoluteStart,
 						selectionAbsoluteEnd > line.absoluteStart+line.textLength ? line.absoluteStart+line.textLength : selectionAbsoluteEnd, prevLine, nextLine);
@@ -2903,7 +2961,7 @@ package flashx.textLayout.container
 		{
 			// If there's no selectionSprite on this controller, we use the parent's.
 			// That means we have to translate the coordinates.
-			// TODO: this only supports one level of ntesting
+			// TODO: this only supports one level of nesting
 			var selectionSprite:DisplayObjectContainer = getSelectionSprite(true);
 			
 			if (selectionSprite == null)
@@ -2918,7 +2976,7 @@ package flashx.textLayout.container
 				selectionSprite.blendMode = curBlendMode;
 			
 			if (selectionSprite.alpha != curAlpha)
-				selectionSprite.alpha = curAlpha;
+				selectionSprite.alpha = 1;//curAlpha; testing remove this 
 			
 			if (selectionSprite.numChildren == 0)
 				addSelectionContainer(selectionSprite);
@@ -3042,10 +3100,13 @@ package flashx.textLayout.container
 		{
 			setTextLength(0); 
 			
-			for each (var textLine:TextLine in _shapeChildren)
+			for each (var line:* in _shapeChildren)
 			{
-				removeTextLine(textLine);
-				CONFIG::debug { Debugging.traceFTECall(null,_container,"removeTextLine",textLine); }
+				if(line is TextLine)
+					removeTextLine(line as TextLine);
+				else
+					removeTableBlock(line as TableBlockContainer);
+				CONFIG::debug { Debugging.traceFTECall(null,_container,"removeTextLine",line); }
 			}
 			_shapeChildren.length = 0;
 			_linesInView.length = 0;
@@ -3058,6 +3119,21 @@ package flashx.textLayout.container
 		
 		private static var scratchRectangle:Rectangle = new Rectangle();
 		
+		private function intersperseTableBlocks(targetArray:Array):void{
+			if(_tableBlocksInView.length == 0)
+				return;
+			var blockIdx:int = 0;
+			var startLoc:int = (_tableBlocksInView[0] as TableBlockContainer).userData.parentTable.getAbsoluteStart();
+			for(var i:int=0;i<targetArray.length;i++){
+				if( targetArray[i].userData.absoluteStart < startLoc )
+					continue;
+				targetArray.splice(i,0,_tableBlocksInView[blockIdx++]);
+				if(blockIdx == _tableBlocksInView.length)
+					break;
+			}
+			while(blockIdx < _tableBlocksInView.length)
+				targetArray.push(_tableBlocksInView[blockIdx++]);
+		}
 		/** Add DisplayObjects that were created by composition to the container. @private */
 		tlf_internal function updateCompositionShapes():void
 		{
@@ -3085,6 +3161,9 @@ package flashx.textLayout.container
 			fillShapeChildren();
 			var newShapeChildren:Array = _linesInView;
 			
+			// Add in table blocks
+			intersperseTableBlocks(newShapeChildren);
+			
 			var childIdx:int = getFirstTextLineChildIndex(); // index where the first text line must appear at in its container  
 			var newIdx:int = 0;		// offset into newShapeChildren
 			var shapeChildrenStartIdx:int = 0;	// starting offset into shapeChildren
@@ -3096,11 +3175,14 @@ package flashx.textLayout.container
 			// beginning as usual. This can happen if we're scrolled forward, and then edit the first visible line.
 			if (_updateStart > absoluteStart && newShapeChildren.length > 0)
 			{
-				var firstTextLine:TextLine = newShapeChildren[0];
-				var firstLine:TextFlowLine = TextFlowLine(firstTextLine.userData);
+				var firstLine:TextFlowLine = TextFlowLine(newShapeChildren[0].userData);
 				var prevLine:TextFlowLine = flowComposer.findLineAtPosition(firstLine.absoluteStart - 1);
-				var prevTextLine:TextLine = prevLine.peekTextLine(); 
-				shapeChildrenStartIdx = _shapeChildren.indexOf(prevTextLine);
+				if(prevLine is TextFlowTableBlock){
+					shapeChildrenStartIdx = _shapeChildren.indexOf((prevLine as TextFlowTableBlock).container);
+				} else {
+					var prevTextLine:TextLine = prevLine.peekTextLine(); 
+					shapeChildrenStartIdx = _shapeChildren.indexOf(prevTextLine);
+				}
 				if (shapeChildrenStartIdx >= 0)
 				{
 					shapeChildrenStartIdx++;
@@ -3113,7 +3195,7 @@ package flashx.textLayout.container
 			
 			while (newIdx != newShapeChildren.length)
 			{
-				var newChild:TextLine = newShapeChildren[newIdx];
+				var newChild:* = newShapeChildren[newIdx];
 				if (newChild == _shapeChildren[oldIdx])
 				{
 					// Same shape is in both lists, no change necessary, advance to next item in each list
@@ -3123,21 +3205,38 @@ package flashx.textLayout.container
 					oldIdx++;
 					continue;
 				}
-				
 				var newChildIdx:int = _shapeChildren.indexOf(newChild);
-				if (newChildIdx == -1)
-				{
-					// Shape is in the new list, but not in the old list, add it to the display list at the current location, and advance to next item
-					addTextLine(newChild, childIdx++);
-					CONFIG::debug { Debugging.traceFTECall(null,_container,"addTextLine",newChild); }
-					newIdx++;
-				}
-				else
-				{
+				if(newChild is TextLine){
+					if (newChildIdx == -1)
+					{
+						// Shape is in the new list, but not in the old list, add it to the display list at the current location, and advance to next item
+						addTextLine((newChild as TextLine), childIdx++);
+						CONFIG::debug { Debugging.traceFTECall(null,_container,"addTextLine",newChild); }
+						newIdx++;
+					}
+					else
+					{
 						// The shape is on both lists, but there are several intervening "old" shapes in between. We'll remove the old shapes that
-					// come before the new one we want to insert.
-					removeAndRecycleTextLines (oldIdx, newChildIdx);
-					oldIdx = newChildIdx;
+						// come before the new one we want to insert.
+						removeAndRecycleTextLines (oldIdx, newChildIdx);
+						oldIdx = newChildIdx;
+					}
+				} else {// it's a table block
+					if (newChildIdx == -1)
+					{
+						// Shape is in the new list, but not in the old list, add it to the display list at the current location, and advance to next item
+						addTableBlock((newChild as TableBlockContainer), childIdx++);
+						CONFIG::debug { Debugging.traceFTECall(null,_container,"addTableBlock",newChild); }
+						newIdx++;
+					}
+					else
+					{
+						// The shape is on both lists, but there are several intervening "old" shapes in between. We'll remove the old shapes that
+						// come before the new one we want to insert.
+						(newChild as TableBlockContainer).userData.updateCompositionShapes();
+						removeAndRecycleTextLines (oldIdx, newChildIdx);
+						oldIdx = newChildIdx;
+					}					
 				}
 			}
 			
@@ -3989,6 +4088,12 @@ package flashx.textLayout.container
 			var textBlock:TextBlock;
 			for (var index:int = beginIndex; index < endIndex; index++)
 			{
+				// we don't recycle table blocks
+				if( !(_shapeChildren[index] is TextLine) ){
+					removeTableBlock(_shapeChildren[index]);
+					child = null;
+					continue;
+				}
 				child = _shapeChildren[index];					
 				removeTextLine(child);
 				CONFIG::debug { Debugging.traceFTECall(null,_container,"removeTextLine",child); }
@@ -4013,6 +4118,10 @@ package flashx.textLayout.container
 			{
 				while (beginIndex < endIndex)
 				{
+					if( !(_shapeChildren[beginIndex] is TextLine) ){
+						beginIndex++;
+						continue;
+					}
 					child = _shapeChildren[beginIndex++];
 										
 					// Recycle if its not displayed and not connected to the textblock
@@ -4069,6 +4178,10 @@ package flashx.textLayout.container
 				{
 					break;
 				}
+				
+				if(_container.getChildAt(firstTextLine) is TableBlockContainer)
+					break;
+				
 			}
 			return firstTextLine;
 		}
@@ -4119,6 +4232,54 @@ package flashx.textLayout.container
 			if (_container.contains(textLine))
 				_container.removeChild(textLine);
 		}
+		
+		/**
+		 * Adds a <code>TableBlockContainer</code> object as a descendant of <code>container</code>.
+		 * The default implementation of this method, which may be overriden, adds the object
+		 * as a direct child of <code>container</code> at the specified index.
+		 * 
+		 * @param textLine the <code>TableBlockContainer</code> object to add
+		 * @param index insertion index of the text line in its parent 
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 * @see #container
+		 * 
+		 */	
+		protected function addTableBlock(block:TableBlockContainer, index:int):void
+		{ 
+			if ( index > _container.numChildren )
+				index = _container.numChildren;
+			_container.addChildAt(block, index);
+			block.userData.updateCompositionShapes();
+		}
+		
+		/**
+		 * Removes a <code>TableBlockContainer</code> object from its parent. 
+		 * The default implementation of this method, which may be overriden, removes the object
+		 * from <code>container</code> if it is a direct child of the latter.
+		 * 
+		 * This method may be called even if the object is not a descendant of <code>container</code>.
+		 * Any implementation of this method must ensure that no action is taken in this case.
+		 * 
+		 * @param textLine the <code>TableBlockContainer</code> object to remove 
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 * @see #container
+		 * 
+		 */	
+
+		protected function removeTableBlock(block:TableBlockContainer):void
+		{
+			if (_container.contains(block))
+				_container.removeChild(block);
+		}
+
 		
 		/**
 		 * Adds a <code>flash.display.Shape</code> object on which background shapes (such as background color) are drawn.
@@ -4586,6 +4747,13 @@ package flashx.textLayout.container
 			// bounds than the getBounds. I've left the old code here for verification.
 			CONFIG::debug { assert(textFlowLine != null,"testLineVisible"); }
 			
+			if(textFlowLine is TextFlowTableBlock)
+			{
+				if(textFlowLine.controller == this)
+					return TextFlowTableBlock(textFlowLine).container;
+				return null;
+			}
+			
 			//Bug #2988852, scrolling in the application causes all text to disappear. When auto-size images make the line "after visible"
 			//It's "after visible", but it cannot return 1. Because if it were 1, the binary-search in gatherVisibleLines() would make all the lines invisible.
 			if(textFlowLine.controller == null)
@@ -4653,6 +4821,10 @@ package flashx.textLayout.container
 			// about the children, and also the bounds of visible glyphs. We decided that the logical bounds is close enough,
 			// and is much faster to obtain. However, there may be some lines, that get a different result using the logical 
 			// bounds than the getBounds. I've left the old code here for verification.
+			
+			if(textFlowLine is TextFlowTableBlock)
+				return null;
+
 			if (!textFlowLine.hasLineBounds())
 			{
 				if (!textLine)
@@ -4727,7 +4899,47 @@ package flashx.textLayout.container
 			}
 			return boundsRect;
 		}
-		
+		/** @private */
+		tlf_internal function findCellAtPosition(point:Point):CellCoordinates
+		{
+			point = point.clone();
+			for each(var chld:Object in _shapeChildren)
+			{
+				if( !(chld is TableBlockContainer) )
+					continue;
+				
+				var block:TableBlockContainer = chld as TableBlockContainer;
+				if(block.y > point.y)
+					continue;
+				if(block.x > point.x)
+					continue;
+				if(block.y + block.height < point.y)
+					continue;
+				if(block.x + block.getTableWidth() < point.x)
+					continue;
+				
+				point.x -= block.x;
+				point.y -= block.y;
+				
+				// the point falls out inside the block. Find the cell...
+				var cells:Vector.<TableCellElement> = block.userData.getTableCells();
+				for each (var cell:TableCellElement in  cells)
+				{
+					if(cell.x + cell.width < point.x)
+						continue;
+					if(cell.y + cell.getRow().composedHeight < point.y)
+						continue;
+					if(cell.x > point.x)
+						continue;
+					if(cell.y > point.y)
+						continue;
+					return new CellCoordinates(cell.rowIndex,cell.colIndex,cell.getTable());
+					
+				}
+			}
+			
+			return null;
+		}
 		/** @private */
 		tlf_internal function getPlacedTextLineBounds(textLine:TextLine):Rectangle
 		{
@@ -4781,13 +4993,25 @@ package flashx.textLayout.container
 		{
 			_linesInView.push(textLine);			
 		}
-		
+
+		/** @private */
+		tlf_internal function addComposedTableBlock(block:TableBlockContainer):void
+		{
+			var idx:int = _tableBlocksInView.indexOf(block);
+			if(idx >= 0)
+				_tableBlocksInView.splice(idx,1);
+			else
+				_tableBlocksInView.push(block);
+		}
+
 		/** @private Return the array. Client code may add lines to the array. */
 		tlf_internal function get composedLines():Array
 		{
 			if (!_linesInView)
 				_linesInView = [];
-			return _linesInView;
+			var arr:Array = _linesInView.slice();
+			intersperseTableBlocks(arr);
+			return arr;
 		}
 		
 		/** @private Empty out the linesInView, starting from the supplied text index. */
@@ -4802,6 +5026,17 @@ package flashx.textLayout.container
 				index++;
 			}
 			_linesInView.length = index;
+			
+			index = 0;
+			for each (var tbc:TableBlockContainer in _tableBlocksInView)
+			{
+				var tftb:TextFlowTableBlock = tbc.userData;
+				if(tbc.userData.absoluteStart >= pos)
+					break;
+				index++;
+			}
+			_tableBlocksInView.length = index;
+			
 			_updateStart = Math.min(_updateStart, pos);
 		}
 		

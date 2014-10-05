@@ -582,7 +582,7 @@ package flashx.textLayout.elements
 		}
 		
 		/** @private */
-		tlf_internal function createContentAsGroup():GroupElement
+		tlf_internal function createContentAsGroup(pos:int=0):GroupElement
 		{
 			CONFIG::debug { assert(false,"invalid call to createContentAsGroup"); }
 			return null;
@@ -626,7 +626,7 @@ package flashx.textLayout.elements
 		 */
 		tlf_internal function canOwnFlowElement(elem:FlowElement):Boolean
 		{
-			return !(elem is TextFlow) && !(elem is FlowLeafElement) && !(elem is SubParagraphGroupElementBase) && !(elem is ListItemElement);
+			return !(elem is TextFlow) && !(elem is FlowLeafElement) && !(elem is SubParagraphGroupElementBase) && !(elem is ListItemElement) && !(elem is TableElement);
 		}
 		
 		/** @private */	
@@ -687,6 +687,7 @@ package flashx.textLayout.elements
 				{
 					child = this.getChildAt(beginChildIndex);
 					this.modelChanged(ModelChange.ELEMENT_REMOVAL, child, child.parentRelativeStart, child.textLength);
+					child.removed();
 					len += child.textLength;
 					
 					child.setParentAndRelativeStart(null,0);
@@ -770,8 +771,10 @@ package flashx.textLayout.elements
 								relStartIdx = beginChildIndex == _numChildren ? textLength : getChildAt(beginChildIndex).parentRelativeStart;
 							}
 						}
-						if (!canOwnFlowElement(newChild))
-							throw ArgumentError(GlobalSettings.resourceStringFunction("invalidChildType"));
+						
+						if (!canOwnFlowElement(newChild)) {
+							throw ArgumentError(GlobalSettings.resourceStringFunction("invalidChildType") + ". " + defaultTypeName + " cannot own " + newChild.defaultTypeName);
+						}
 						
 						// manage as an array or a single child
 						if (childrenToAdd == 0)
@@ -988,6 +991,7 @@ package flashx.textLayout.elements
 				parent.replaceChildren(myidx+1,myidx+1,newSibling);
 			}
 
+			newSibling.normalizeRange(0,newSibling.textLength);
 			return newSibling;
 		}
 

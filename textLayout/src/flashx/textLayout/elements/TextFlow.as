@@ -284,6 +284,9 @@ package flashx.textLayout.elements
 		
 		// ILG count
 		private var _graphicObjectCount:int;
+		
+		// nested TextFlow support
+		private var _parentElement:FlowGroupElement;
 				
 		/** 
 		 * Constructor - creates a new TextFlow instance.
@@ -1180,6 +1183,29 @@ package flashx.textLayout.elements
 				_formatResolver.invalidateAll(this);
 			formatChanged(true);
 		}
+
+		/** The parent element is the element that the TextFlow is nested inside (such as a TableCellElement).
+		 * This property is for support of nested TextFlows to handle things like selection and editing.
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 */		
+		public function get parentElement():FlowGroupElement
+		{
+			return _parentElement;
+		}
+
+		public function set parentElement(value:FlowGroupElement):void
+		{
+			_parentElement = value;
+		}
+		
+		public function nestedInTable():Boolean{
+			return parentElement && parentElement is TableCellElement;
+		}
+
 	} // end TextFlow class
 }
 import flash.utils.Dictionary;

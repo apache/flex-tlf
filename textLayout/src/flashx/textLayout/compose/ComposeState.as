@@ -27,7 +27,6 @@ package flashx.textLayout.compose
 	import flash.text.engine.TextLineCreationResult;
 	import flash.text.engine.TextLineValidity;
 	
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
 	import flashx.textLayout.debug.assert;
@@ -47,11 +46,11 @@ package flashx.textLayout.compose
 	import flashx.textLayout.formats.ListStylePosition;
 	import flashx.textLayout.formats.TextAlign;
 	import flashx.textLayout.formats.VerticalAlign;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.Twips;
 	
 	use namespace tlf_internal;
 
-	[ExcludeClass]
 	/** Keeps track of internal state during composition. 
 	 * 
 	 * This is the simpler version, used when there are no floats, no wraps, no columns.
@@ -111,7 +110,7 @@ package flashx.textLayout.compose
 			vjBeginLineIndex = 0;
 			vjDisableThisParcel = false;
 			
-			return super.composeTextFlow(textFlow, composeToPosition, controllerEndIndex);
+ 			return super.composeTextFlow(textFlow, composeToPosition, controllerEndIndex);
 		}
 		
 		protected override function initializeForComposer(composer:IFlowComposer,composeToPosition:int,controllerStartIndex:int, controllerEndIndex:int):void
@@ -303,7 +302,15 @@ package flashx.textLayout.compose
          	if (minY != TextLine.MAX_LINE_WIDTH && Math.abs(minY-_parcelTop) >= 1)
            		_parcelTop = minY;
  		}
- 				
+ 			
+		protected override function endTableBlock(block:TextFlowTableBlock):void
+		{
+			super.endTableBlock(block);
+			(_flowComposer as StandardFlowComposer).addLine(block,_curLineIndex);
+			
+			commitLastLineState (_curLine);
+			_curLineIndex++;
+		}
 		/** Called when we are finished composing a line. Handler for derived classes to override default behavior.  */
 		override protected function endLine(textLine:TextLine):void
 		{
@@ -340,14 +347,11 @@ package flashx.textLayout.compose
 			var line:TextFlowLine = _curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[_curLineIndex] : null;
 			
 			var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
-			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
-			{
-				// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
-				// starting the next line.
-				if (useExistingLine && line.textLength > 0 &&
-					line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
-					useExistingLine = false;
-			}
+			// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
+			// starting the next line.
+			if (useExistingLine && line.textLength > 0 &&
+				line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
+				useExistingLine = false;
 			var numberLine:TextLine;
 			
 			// create numberLine if in a listElement

@@ -34,6 +34,7 @@ package flashx.textLayout.conversion
 		private var _errors:Vector.<String> = null;
 		private var _throwOnError:Boolean = false;
 		private var _useClipboardAnnotations:Boolean = false;
+		private var _config:ImportExportConfiguration;
 
 		/** A converter that converts clipboard data into a TextFlow should use the MERGE_TO_NEXT_ON_PASTE property
 		 * to control how the elements are treated when they are merged into an existing TextFlow on paste. This is useful
@@ -109,6 +110,20 @@ package flashx.textLayout.conversion
 		public function set useClipboardAnnotations(value:Boolean):void
 		{
 			_useClipboardAnnotations = value;
+		}
+		
+		/**
+		 * Returns the import and export configuration. 
+		 **/
+		public function get config():ImportExportConfiguration {
+			return _config;
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function set config(value:ImportExportConfiguration):void {
+			_config = value;
 		}
 		
 	}

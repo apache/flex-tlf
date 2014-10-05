@@ -21,7 +21,7 @@ package flashx.textLayout.container
 	import flash.geom.Rectangle;
 	
 	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.elements.TableDataCellElement;
+	import flashx.textLayout.elements.TableCellElement;
 	import flashx.textLayout.formats.BlockProgression;
 	import flashx.textLayout.formats.Direction;
 	import flashx.textLayout.formats.FormatValue;
@@ -181,12 +181,12 @@ package flashx.textLayout.container
 			return _columnCount == 1 ? _singleColumn : _columnArray[index];
 		}
 		
-		public function getCellAt(index:int):TableDataCellElement
+		public function getCellAt(index:int):TableCellElement
 		{
 			return _tableCellArray[index];
 		}
 		
-		public function pushTableCell(cell:TableDataCellElement):void
+		public function pushTableCell(cell:TableCellElement):void
 		{
 			if ( _tableCellArray == null )
 				_tableCellArray = new Array();

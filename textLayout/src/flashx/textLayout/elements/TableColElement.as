@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package flashx.textLayout.elements
 {
+	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
 	
 	use namespace tlf_internal;
@@ -36,6 +37,15 @@ package flashx.textLayout.elements
 	{		
 		//public var height:Number;
 		public var x:Number;
+		public var colIndex:int;
+		
+		public function TableColElement(format:ITextLayoutFormat=null)
+		{
+			super();
+			if(format)
+				this.format = format;
+		}
+
 		
 		/** @private */
 		override protected function get abstract():Boolean
@@ -56,6 +66,29 @@ package flashx.textLayout.elements
 		{
 			super.modelChanged(changeType,elem,changeStart,changeLen,needNormalize,bumpGeneration);
 		}
-
+		
+		/**
+		 * Get a Vector of cells or null if the column contains no cells
+		 **/
+		public function get cells():Vector.<TableCellElement> {
+			
+			if (!table) {
+				return null;
+			}
+			
+			return table.getCellsForColumn(this);
+		}
+		
+		/**
+		 * Returns the number of cells in this column. 
+		 **/
+		public function get numCells():int {
+			
+			if (!table) {
+				return 0;
+			}
+			
+			return table.getCellsForColumn(this).length;
+		}
 	}
 }

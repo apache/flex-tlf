@@ -31,9 +31,9 @@ package flashx.textLayout.elements
 	import flash.text.engine.TextLine;
 	import flash.text.engine.TextLineValidity;
 	import flash.text.engine.TextRotation;
+	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
@@ -50,6 +50,7 @@ package flashx.textLayout.elements
 	import flashx.textLayout.formats.TextJustify;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.property.Property;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.CharacterUtil;
 	import flashx.textLayout.utils.LocaleUtil;
 	
@@ -79,7 +80,8 @@ package flashx.textLayout.elements
 	 
 	public final class ParagraphElement extends ParagraphFormattedElement
 	{
-		private var _textBlock:TextBlock;
+		//private var _textBlock:TextBlock;
+		private var _textBlockChildren:Dictionary;
 		private var _terminatorSpan:SpanElement;
 		
 		private var _interactiveChildrenCount:int;
@@ -95,6 +97,7 @@ package flashx.textLayout.elements
 			super();
 			_terminatorSpan = null;
 			_interactiveChildrenCount = 0 ;
+			_textBlockChildren = new Dictionary();
 		}
 		tlf_internal function get interactiveChildrenCount():int
 		{
@@ -106,26 +109,83 @@ package flashx.textLayout.elements
 		{
 			CONFIG::debug { assert(_textBlock == null,"createTextBlock called when there is already a textblock"); }
 			computedFormat;	// recreate the format BEFORE the _textBlock is created
-			_textBlock = new TextBlock();
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			//tbs.length = 0;
+			var tableCount:int = 0;
+			if(tbs.length == 0 && !(getChildAt(0) is TableElement) )
+				tbs.push(new TextBlock());
+			//getTextBlocks()[0] = new TextBlock();
 			CONFIG::debug { Debugging.traceFTECall(_textBlock,null,"new TextBlock()"); }
 			for (var i:int = 0; i < numChildren; i++)
 			{
 				var child:FlowElement = getChildAt(i);
+				if(child is TableElement)
+					tableCount++;
+//					tbs.push(new TextBlock());
+				else
+				{
+					//child.releaseContentElement();
+					//child.createContentElement();
+				}
+			}
+			while(tableCount >= tbs.length)
+				tbs.push(new TextBlock());
+			
+			for (i = 0; i < numChildren; i++)
+			{
+				child = getChildAt(i);
 				child.createContentElement();
 			}
-			updateTextBlock();
+			tbs.length = tableCount + 1;
+			var tb:TextBlock;
+			for each(tb in tbs){
+				updateTextBlock(tb);
+			}
 		}
-		
-		/** @private */
-		
-		tlf_internal function releaseTextBlock():void
+		private function updateTextBlockDict():void
 		{
-			if (!_textBlock)
-				return;
-				
-			if (_textBlock.firstLine)	// A TextBlock may have no firstLine if it has previously been released.
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			if(tbs.length == 0)
+				return;//nothing to do
+			var tbIdx:int = 0;
+			var tb:TextBlock = tbs[tbIdx];
+			var items:Array = [];
+			var child:FlowElement;
+			for (var i:int = 0; i < numChildren; i++)
 			{
-				for (var textLineTest:TextLine = _textBlock.firstLine; textLineTest != null; textLineTest = textLineTest.nextLine)
+				child = getChildAt(i);
+				if(child is TableElement)
+				{
+					_textBlockChildren[tb] = items;
+					tb = tbs[++tbIdx];
+					items = [];
+					continue;
+				}
+				items.push(child);
+			}
+			_textBlockChildren[tb] = items;
+		}
+		private function removeTextBlock(tb:TextBlock):void
+		{
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			if(tbs)
+			{
+				var idx:int = getTextBlocks().indexOf(tb);
+				if(idx > -1)
+				{
+					tbs.splice(idx,1);
+					delete _textBlockChildren[tb];
+				}
+			}
+		}
+		private function releaseTextBlockInternal(tb:TextBlock):void
+		{
+			if (!tb)
+				return;
+			
+			if (tb.firstLine)	// A TextBlock may have no firstLine if it has previously been released.
+			{
+				for (var textLineTest:TextLine = tb.firstLine; textLineTest != null; textLineTest = textLineTest.nextLine)
 				{	
 					if(textLineTest.numChildren != 0)
 					{	
@@ -138,55 +198,169 @@ package flashx.textLayout.elements
 					}
 				}
 				
-				CONFIG::debug { Debugging.traceFTECall(null,_textBlock,"releaseLines",_textBlock.firstLine, _textBlock.lastLine); }				
-				_textBlock.releaseLines(_textBlock.firstLine, _textBlock.lastLine);	
+				CONFIG::debug { Debugging.traceFTECall(null,tb,"releaseLines",tb.firstLine, tb.lastLine); }				
+				tb.releaseLines(tb.firstLine, tb.lastLine);	
 			}	
-
-			_textBlock.content = null;
-			for (var i:int = 0; i < numChildren; i++)
+			var items:Array = _textBlockChildren[tb];
+			var len:int = items.length;
+			for (var i:int = 0; i < len; i++)
 			{
-				var child:FlowElement = getChildAt(i);
+				var child:FlowElement = items[i];
 				child.releaseContentElement();
 			}
-			_textBlock = null;
+			items.length = 0;
+			tb.content = null;
+			removeTextBlock(tb);
+		}
+		/** @private */
+		tlf_internal function releaseTextBlock(tb:TextBlock=null):void
+		{
+			updateTextBlockDict();
+			if(tb)
+			{
+				releaseTextBlockInternal(tb);
+				return;
+			}
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			for each(var tb:TextBlock in tbs)
+			{
+				releaseTextBlockInternal(tb);
+			}
+			//_textBlock = null;
 			if (_computedFormat)
 				_computedFormat = null;
 		}
-		
+		private var _textBlocks:Vector.<TextBlock>;
+		tlf_internal function getTextBlocks():Vector.<TextBlock>
+		{
+			if(_textBlocks == null)
+				_textBlocks = new Vector.<TextBlock>();
+			return _textBlocks;
+		}
 		/** TextBlock where the text of the paragraph is kept. @private */
 		tlf_internal function getTextBlock():TextBlock
-		{ 
-			if (!_textBlock)
+		{
+			if (!getTextBlocks().length)
 				createTextBlock();
-			return _textBlock; 
+			
+			return getTextBlocks()[0]; 
+		}
+		/** Last TextBlock where the text of the paragraph is kept. @private */
+		tlf_internal function getLastTextBlock():TextBlock
+		{
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			if(!tbs.length)
+				createTextBlock();
+			
+			return tbs[tbs.length-1];
+		}
+
+		/** Get TextBlock at specified position. @private */
+		tlf_internal function getTextBlockAtPosition(pos:int):TextBlock
+		{
+			var curPos:int = 0;
+			var posShift:int = 0;
+			var tables:Vector.<TableElement> = getTables();
+			if(!tables.length)
+				return getTextBlock();
+			
+			for each(var table:TableElement in tables)
+			{
+				if(table.getElementRelativeStart(this) < pos)
+					posShift++;
+			}
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			for each(var tb:TextBlock in tbs)
+			{
+				if(tb.content == null)
+					return tb;
+				curPos += tb.content.rawText.length;
+				if(curPos + posShift > pos)
+				{
+					if(getTextBlockStart(tb) > pos)
+						return null;
+					return tb;
+				}
+			}
+			return null;
 		}
 		
+		tlf_internal function getTextBlockAbsoluteStart(tb:TextBlock):int
+		{
+			var start:int = getTextBlockStart(tb);
+			if(start < 0)
+				start = 0;
+			return getAbsoluteStart() + start;
+		}
+		tlf_internal function getTextBlockStart(tb:TextBlock):int
+		{
+			var i:int;
+			var curPos:int = 0;
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			if(tbs.length == 0)
+				return -1;
+			var tables:Vector.<TableElement> = getTables();
+			for each(var curTB:TextBlock in tbs)
+			{
+				for each(var table:TableElement in tables)
+				{
+					if(table.getElementRelativeStart(this) <= curPos)
+					{
+						curPos++;
+						tables.splice(tables.indexOf(table),1);
+					}
+				}
+				if(tb == curTB)
+					return curPos;
+				if(tb.content)
+					curPos += curTB.content.rawText.length;
+			}
+			
+			return -1;
+		}
+		
+		private function getTables():Vector.<TableElement>
+		{
+			var tables:Vector.<TableElement> = new Vector.<TableElement>();
+			for (var i:int = 0; i < numChildren; i++)
+			{
+				var child:FlowElement = getChildAt(i);
+				if(child is TableElement)
+					tables.push(child as TableElement);
+			}
+			return tables;
+		}
+
 		/** TextBlock where the text of the paragraph is kept, or null if we currently don't have one. @private */
 		tlf_internal function peekTextBlock():TextBlock
 		{ 
-			return _textBlock; 
+			return getTextBlocks().length == 0 ? null : getTextBlocks()[0];
 		}
 		
 		/** @private */
 		tlf_internal function releaseLineCreationData():void
 		{
 			CONFIG::debug { assert(Configuration.playerEnablesArgoFeatures,"bad call to releaseLineCreationData"); }
-			if (_textBlock)
-				_textBlock["releaseLineCreationData"]();
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			for each(var tb:TextBlock in tbs)
+			{
+				tb["releaseLineCreationData"]();
+			}
 		}
 		
 		/** @private */
-		tlf_internal override function createContentAsGroup():GroupElement
-		{ 			
-			var group:GroupElement = _textBlock.content as GroupElement;
+		tlf_internal override function createContentAsGroup(pos:int=0):GroupElement
+		{
+			var tb:TextBlock = getTextBlockAtPosition(pos);
+			var group:GroupElement = tb.content as GroupElement;
 			if (!group)
 			{
-				var originalContent:ContentElement = _textBlock.content;
+				var originalContent:ContentElement = tb.content;
 				
 				group = new GroupElement();
 				CONFIG::debug { Debugging.traceFTECall(group,null,"new GroupElement()"); }
-				_textBlock.content = group;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"content",group); }
+				tb.content = group;
+				CONFIG::debug { Debugging.traceFTEAssign(tb,"content",group); }
 
 				if (originalContent)
 				{
@@ -199,7 +373,7 @@ package flashx.textLayout.elements
 				}
 				
 				// Now we've got to force damage the entire paragraph, because we restructured it in FTE.
-				if (_textBlock.firstLine && textLength)
+				if (tb.firstLine && textLength)
 				{
 					var textFlow:TextFlow = getTextFlow();
 					if (textFlow)
@@ -212,7 +386,15 @@ package flashx.textLayout.elements
  		/** @private */
 		tlf_internal override function removeBlockElement(child:FlowElement, block:ContentElement):void
 		{
-			if (numChildren == 1)
+			var tb:TextBlock = getTextBlockAtPosition(child.getElementRelativeStart(this));
+			if(!tb)
+				tb = getTextBlock();
+			
+			if(tb.content == null)
+				return;
+			var relativeStart:int = child.getElementRelativeStart(this);
+
+			if (getChildrenInTextBlock(relativeStart).length < 2)
 			{
 				if (block is GroupElement)
 				{
@@ -221,18 +403,20 @@ package flashx.textLayout.elements
 					CONFIG::debug { assert(_textBlock.content is GroupElement,"removeBlockElement: bad content"); }
 					CONFIG::debug { assert(GroupElement(_textBlock.content).elementCount == 1,"removeBlockElement: bad element count"); }
 					CONFIG::debug { assert(GroupElement(_textBlock.content).getElementAt(0) == block,"removeBlockElement: bad group content"); }
-					GroupElement(_textBlock.content).replaceElements(0,1,null);
+					GroupElement(tb.content).replaceElements(0,1,null);
 					CONFIG::debug { Debugging.traceFTECall(null,_textBlock.content,"replaceElements",0,1,null); }
 				}
-				_textBlock.content = null;
+				tb.content = null;
 				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"content",null); }
 			}
-			else
+			else if(block.groupElement)
 			{
-				var idx:int = this.getChildIndex(child);
-				var group:GroupElement = GroupElement(_textBlock.content);
+				var idx:int = getChildIndexInBlock(child);
+				var group:GroupElement = GroupElement(tb.content);
 				CONFIG::debug { assert(group.elementCount == numChildren,"Mismatched group and elementCount"); }
 				group.replaceElements(idx,idx+1,null);
+				if(group.elementCount == 0)
+					return;
 				CONFIG::debug { Debugging.traceFTECall(null,group,"replaceElements",idx,idx+1,null); }
 				if (numChildren == 2)	// its going to be one so ungroup
 				{
@@ -243,10 +427,14 @@ package flashx.textLayout.elements
 					{
 						group.replaceElements(0,1,null);
 						CONFIG::debug { Debugging.traceFTECall(null,group,"replaceElements",0,1,null); }
-						_textBlock.content = elem;
-						CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"content",elem); }
+						tb.content = elem;
+						CONFIG::debug { Debugging.traceFTEAssign(tb,"content",elem); }
 					}
 				}
+			}
+			else {
+				//trace("1");
+				//tb.content = null;
 			}
 		}
 		
@@ -254,7 +442,7 @@ package flashx.textLayout.elements
 		/** @private */
 		tlf_internal override function hasBlockElement():Boolean
 		{
-			return _textBlock != null;
+			return getTextBlocks().length > 0;
 		}
 		
 		/** @private */
@@ -264,9 +452,42 @@ package flashx.textLayout.elements
 		}
 		
 		/** @private */
+		private function getChildrenInTextBlock(pos:int):Array
+		{
+			var retVal:Array = [];
+			if(numChildren == 0)
+				return retVal;
+			if(numChildren == 1)
+			{
+				retVal.push(getChildAt(0));
+				return retVal
+			}
+			var chldrn:Array = mxmlChildren.slice();
+			for(var i:int = 0; i<chldrn.length;i++)
+			{
+				if(chldrn[i] is TableElement)
+				{
+					if(chldrn[i].parentRelativeStart == pos)
+						return [chldrn[i]];
+					if(chldrn[i].parentRelativeStart < pos)
+					{
+						retVal.length = 0;
+						continue;
+					}
+					if(chldrn[i].parentRelativeStart > pos)
+						break;
+				}
+				retVal.push(chldrn[i]);		
+			}
+			return retVal;
+		}
+		
+		/** @private */
 		tlf_internal override function insertBlockElement(child:FlowElement, block:ContentElement):void
 		{
-			if (_textBlock == null)
+			var relativeStart:int = child.getElementRelativeStart(this);
+			var tb:TextBlock = getTextBlockAtPosition(relativeStart);
+			if (getTextBlocks().length == 0 || !tb)
 			{
 				child.releaseContentElement();
 				createTextBlock();	// does the whole tree
@@ -274,7 +495,7 @@ package flashx.textLayout.elements
 			}
 			var gc:Vector.<ContentElement>;	// scratch var
 			var group:GroupElement;			// scratch
-			if (numChildren == 1)
+			if (getChildrenInTextBlock(relativeStart).length < 2)
 			{
 				if (block is GroupElement)
 				{
@@ -285,19 +506,23 @@ package flashx.textLayout.elements
 					CONFIG::debug { Debugging.traceFTECall(null,gc,"push",block); }
 					group = new GroupElement(gc);
 					CONFIG::debug { Debugging.traceFTECall(group,null,"new GroupElement",gc); }
-					_textBlock.content = group;
+					tb.content = group;
 					CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"content",group); }
 				}
 				else
 				{
-					_textBlock.content = block;
+					if(block.groupElement)
+					{
+						block.groupElement.elementCount;
+					}
+					tb.content = block;
 					CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"content",block);  }
 				}
 			}
 			else
 			{
-				group = createContentAsGroup();
-				var idx:int = this.getChildIndex(child);
+				group = createContentAsGroup(relativeStart);
+				var idx:int = getChildIndexInBlock(child);
 				gc = new Vector.<ContentElement>();
 				CONFIG::debug { Debugging.traceFTECall(gc,null,"new Vector.<ContentElement>") }
 				gc.push(block);
@@ -305,6 +530,21 @@ package flashx.textLayout.elements
 				group.replaceElements(idx,idx,gc);
 				CONFIG::debug { Debugging.traceFTECall(null,group,"replaceElements",idx,idx,gc); }
 			}
+		}
+		
+		private function getChildIndexInBlock(elem:FlowElement):int
+		{
+			var relIdx:int = 0;
+			for (var i:int = 0; i < numChildren; i++)
+			{
+				var child:FlowElement = getChildAt(i);
+				if(child == elem)
+					return relIdx;
+				relIdx++;
+				if(child is TableElement)
+					relIdx = 0;
+			}
+			return -1;
 		}
 		
 		/** @private */
@@ -315,24 +555,63 @@ package flashx.textLayout.elements
 		tlf_internal override function get defaultTypeName():String
 		{ return "p"; }
 
+		tlf_internal function removeEmptyTerminator():void
+		{
+			if(numChildren == 1 && _terminatorSpan && _terminatorSpan.textLength == 1)
+			{
+				_terminatorSpan.removeParaTerminator();
+				super.replaceChildren(0, 1);
+				this._terminatorSpan = null;
+			}
+		}
 		/** @private */
 		public override function replaceChildren(beginChildIndex:int,endChildIndex:int,...rest):void
 		{
 			var applyParams:Array;
-			
-			// makes a measurable difference - rest.length zero and one are the common cases
-			if (rest.length == 1)
-				applyParams = [beginChildIndex, endChildIndex, rest[0]];
-			else
-			{
-				applyParams = [beginChildIndex, endChildIndex];
-				if (rest.length != 0)
-					applyParams = applyParams.concat.apply(applyParams, rest);
-			}
 
-			super.replaceChildren.apply(this, applyParams);
+			do{
+				if(_terminatorSpan)
+				{
+					var termIdx:int = getChildIndex(_terminatorSpan);
+					if(termIdx !=0 && _terminatorSpan.textLength == 1)
+					{
+						super.replaceChildren(termIdx, termIdx+1);
+						_terminatorSpan = null;
+						if(beginChildIndex >= termIdx)
+						{
+							beginChildIndex--;
+							if(rest.length == 0) // delete of terminator was already done.
+								break;
+						}
+						if(endChildIndex >= termIdx && beginChildIndex != endChildIndex)
+							endChildIndex--;
+					}
+				}
+				
+				// makes a measurable difference - rest.length zero and one are the common cases
+				if (rest.length == 1)
+					applyParams = [beginChildIndex, endChildIndex, rest[0]];
+				else
+				{
+					applyParams = [beginChildIndex, endChildIndex];
+					if (rest.length != 0)
+						applyParams = applyParams.concat.apply(applyParams, rest);
+				}
+				
+				super.replaceChildren.apply(this, applyParams);
+				
+			}while(false);
 			
 			ensureTerminatorAfterReplace();
+			// ensure correct text blocks
+			createTextBlock();
+		}
+		
+		public override function splitAtPosition(relativePosition:int):FlowElement
+		{
+			// need to handle multiple TextBlocks
+			// maybe not. It might be handled in replaceChildren().
+			return super.splitAtPosition(relativePosition);
 		}
 		/** @private */
 		tlf_internal function ensureTerminatorAfterReplace():void
@@ -340,27 +619,43 @@ package flashx.textLayout.elements
 			var newLastLeaf:FlowLeafElement = getLastLeaf();
 			if (_terminatorSpan != newLastLeaf)
 			{
-				if (_terminatorSpan)
+				if (newLastLeaf && _terminatorSpan)
 				{
 					_terminatorSpan.removeParaTerminator();
+					if(_terminatorSpan.textLength == 0)
+					{
+						var termIdx:int = getChildIndex(_terminatorSpan);
+						super.replaceChildren(termIdx, termIdx+1);
+					}
 					this._terminatorSpan = null;
 				}
 				
-				if (newLastLeaf)
+				if (newLastLeaf is SpanElement)
 				{
-					if (newLastLeaf is SpanElement)
-					{
-						(newLastLeaf as SpanElement).addParaTerminator();
-						this._terminatorSpan = newLastLeaf as SpanElement;
-					}
-					else
-					{
-						var s:SpanElement = new SpanElement();
-						super.replaceChildren(numChildren,numChildren,s);
-						s.format = newLastLeaf.format;
-						s.addParaTerminator();
-						this._terminatorSpan = s;
-					}
+					(newLastLeaf as SpanElement).addParaTerminator();
+					this._terminatorSpan = newLastLeaf as SpanElement;
+				}
+				else
+				{
+					var s:SpanElement = new SpanElement();
+					super.replaceChildren(numChildren,numChildren,s);
+					s.format = newLastLeaf ? newLastLeaf.format : _terminatorSpan.format;
+					s.addParaTerminator();
+					this._terminatorSpan = s;
+				}
+			}
+			//merge terminator span to previous if possible
+			if(_terminatorSpan.textLength == 1)
+			{
+				var prev:FlowLeafElement = _terminatorSpan.getPreviousLeaf(this);
+				if(prev && prev is SpanElement)
+				{
+					_terminatorSpan.removeParaTerminator();
+					termIdx = getChildIndex(_terminatorSpan);
+					super.replaceChildren(termIdx, termIdx+1);
+					s = prev as SpanElement;
+					s.addParaTerminator();
+					this._terminatorSpan = s;
 				}
 			}
 		}
@@ -387,7 +682,7 @@ package flashx.textLayout.elements
 						child.bindableElement = true;
 					
 					// Note: calling super.replaceChildren because we don't want to transfer para terminator each time
-					super.replaceChildren(numChildren, numChildren, child as FlowElement); 
+					super.replaceChildren(numChildren, numChildren, child as FlowElement);
 				}
 				else if (child is String)
 				{
@@ -404,6 +699,9 @@ package flashx.textLayout.elements
 			
 			// Now ensure para terminator
 			ensureTerminatorAfterReplace();
+			
+			// recreate text blocks to handle possible TableElement changes
+			createTextBlock();
 		}
 		
 		/** @private
@@ -411,16 +709,25 @@ package flashx.textLayout.elements
 		public override function getText(relativeStart:int=0, relativeEnd:int=-1, paragraphSeparator:String="\n"):String
 		{
 			// Optimization for getting text of the entire paragraph
-			if (relativeStart == 0 && (relativeEnd == -1 || relativeEnd >= textLength-1) && _textBlock)
+			if (relativeStart == 0 && (relativeEnd == -1 || relativeEnd >= textLength-1) && getTextBlocks().length)
 			{
-				if (_textBlock.content && _textBlock.content.rawText)
+				var tb:TextBlock;
+				var tbs:Vector.<TextBlock> = getTextBlocks();
+				var text:String = "";
+				for each(tb in tbs)
 				{
-					var text:String = _textBlock.content.rawText;
-					return text.substring(0, text.length - 1);
+					text = text + getTextInBlock(tb);
 				}
-				return "";		// content is null
+				if(tb.content && tb.content.rawText)
+					return text.substring(0, text.length - 1);
+				return text;
 			}
 			return super.getText(relativeStart, relativeEnd, paragraphSeparator);
+		}
+		private function getTextInBlock(tb:TextBlock):String{
+			if(!tb.content || !tb.content.rawText)
+				return "";
+			return tb.content.rawText;
 		}
 		
 		/** Returns the paragraph that follows this one, or null if there are no more paragraphs. 
@@ -478,39 +785,46 @@ package flashx.textLayout.elements
 		 
 		public function findPreviousAtomBoundary(relativePosition:int):int
 		{
+			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
+			var tbStart:int = getTextBlockStart(tb);
+			var textBlockPos:int = relativePosition - tbStart;
 			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
 			{
-				var textBlock:TextBlock = getTextBlock();
-				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
-				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
+				var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
+				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(textBlockPos);
                 //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 var isRTL:Boolean = tl.getAtomBidiLevel(currentAtomIndex) == 1;
                 if (isRTL)
                 {
-                   var foo:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
+                   var foo:int = tb.findPreviousAtomBoundary(textBlockPos);
                    if (currentAtomIndex == 0)
                    {
                        // when cursor is left of all characters (end of line)
                        // atomIndex is 0, so compensate
                        if (tl.atomCount > 0)
                        {
-                           while (--relativePosition)
+                           while (--textBlockPos)
                            {
-                               if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+							   --relativePosition;
+                               if (tl.getAtomIndexAtCharIndex(textBlockPos) != currentAtomIndex)
                                    break;
                            }
                        }
                    }
                    else
                    {
-                       while (--relativePosition)
+                       while (--relativePosition && --textBlockPos)
                        {
-                           if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+                           if (tl.getAtomIndexAtCharIndex(textBlockPos) != currentAtomIndex)
                                break;
                        }
                    }
                    if (CharacterUtil.isLowSurrogate(getText(relativePosition, relativePosition + 1).charCodeAt(0)))
-                       relativePosition--;
+				   {
+					   relativePosition--;
+					   textBlockPos--;
+				   }
+				   
                    //trace("previous", relativePosition, foo);
                 }
                 else
@@ -521,21 +835,26 @@ package flashx.textLayout.elements
     					if (!tl)
     						return -1;
     					// need this when 0x2028 line separator in use
-    					if (tl.textBlockBeginIndex + tl.rawTextLength == relativePosition)
-    						return tl.textBlockBeginIndex + tl.rawTextLength - 1;
-    					return tl.textBlockBeginIndex + tl.rawTextLength;
+    					if (tl.textBlockBeginIndex + tl.rawTextLength == textBlockPos)
+    						return tl.textBlockBeginIndex + tl.rawTextLength - 1 + tbStart;
+    					return tl.textBlockBeginIndex + tl.rawTextLength + tbStart;
     				}
-    				while (--relativePosition)
+    				while (--relativePosition && --textBlockPos)
     				{
-    					if (tl.getAtomIndexAtCharIndex(relativePosition) < currentAtomIndex)
+    					if (tl.getAtomIndexAtCharIndex(textBlockPos) < currentAtomIndex)
     						break;
     				}
                     if (CharacterUtil.isLowSurrogate(getText(relativePosition, relativePosition + 1).charCodeAt(0)))
-                        relativePosition--;
+					{
+						relativePosition--;
+						textBlockPos--;
+					}
                 }
 				return relativePosition;
 			}
-            var pos:int = getTextBlock().findPreviousAtomBoundary(relativePosition);
+            var pos:int = tb.findPreviousAtomBoundary(textBlockPos);
+			if(pos >= 0)
+				pos += tbStart;
             //trace("previous", relativePosition, pos);
 			return pos;
 		}
@@ -560,34 +879,41 @@ package flashx.textLayout.elements
 		 
 		public function findNextAtomBoundary(relativePosition:int):int
 		{
+			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
+			var tbStart:int = getTextBlockStart(tb);
+			var textBlockPos:int = relativePosition - tbStart;
 			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
 			{
-				var textBlock:TextBlock = getTextBlock();
-				var tl:TextLine = textBlock.getTextLineAtCharIndex(relativePosition);
-				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(relativePosition);
+				var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
+				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(textBlockPos);
                 //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 var isRTL:Boolean = tl.getAtomBidiLevel(currentAtomIndex) == 1;
                 if (isRTL)
                 {
-                    var foo:int = getTextBlock().findNextAtomBoundary(relativePosition);
+                    var foo:int = tb.findNextAtomBoundary(textBlockPos);
                     if (currentAtomIndex == 0)
                     {
-                        while (++relativePosition)
+                        while (++textBlockPos)
                         {
-                            if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+							++relativePosition;
+                            if (tl.getAtomIndexAtCharIndex(textBlockPos) != currentAtomIndex)
                                 break;
                         }
                     }
                     else
                     {
-                        while (++relativePosition)
+                        while (++textBlockPos)
                         {
-                            if (tl.getAtomIndexAtCharIndex(relativePosition) != currentAtomIndex)
+							++relativePosition;
+                            if (tl.getAtomIndexAtCharIndex(textBlockPos) != currentAtomIndex)
                                 break;
                         }
                     }
                     if (CharacterUtil.isHighSurrogate(getText(relativePosition, relativePosition + 1).charCodeAt(0)))
-                        relativePosition++;
+					{
+						relativePosition++;
+						textBlockPos++;
+					}
                     //trace("next", relativePosition, foo);
                 }
                 else
@@ -597,19 +923,25 @@ package flashx.textLayout.elements
     					tl = tl.nextLine;
     					if (!tl)
     						return -1;
-    					return tl.textBlockBeginIndex;
+    					return tl.textBlockBeginIndex + tbStart;
     				}
-    				while (++relativePosition)
+    				while (++textBlockPos)
     				{
-    					if (tl.getAtomIndexAtCharIndex(relativePosition) > currentAtomIndex)
+						++relativePosition;
+    					if (tl.getAtomIndexAtCharIndex(textBlockPos) > currentAtomIndex)
     						break;
     				}
                     if (CharacterUtil.isHighSurrogate(getText(relativePosition, relativePosition + 1).charCodeAt(0)))
-                        relativePosition++;
+					{
+						relativePosition++;
+						textBlockPos++;
+					}
                 }
 				return relativePosition;
 			}
-			var pos:int = getTextBlock().findNextAtomBoundary(relativePosition);
+			var pos:int = tb.findNextAtomBoundary(textBlockPos);
+			if(pos >= 0)
+				pos += tbStart;
             //trace("next", relativePosition, pos);
             return pos;
 		}
@@ -617,7 +949,27 @@ package flashx.textLayout.elements
 		/** @private */
 		public override function getCharAtPosition(relativePosition:int):String
 		{
-			return getTextBlock().content.rawText.charAt(relativePosition);
+			var foundTB:TextBlock = getTextBlockAtPosition(relativePosition);
+			if(!foundTB)
+				return "\u0016";
+			var tables:Vector.<TableElement> = getTables();
+			var pos:int = relativePosition;
+			for each(var table:TableElement in tables)
+			{
+				if(table.getElementRelativeStart(this) < pos)
+					relativePosition--;
+			}
+			var tbs:Vector.<TextBlock> = getTextBlocks();
+			for each(var tb:TextBlock in tbs)
+			{
+				if(foundTB == tb)
+					break;
+				if(tb)
+					relativePosition -= tb.content.rawText.length;
+				else
+					relativePosition -= 1;this.getText()
+			}
+			return foundTB.content.rawText.charAt(relativePosition);
 		} 
 
 		/** 
@@ -650,7 +1002,13 @@ package flashx.textLayout.elements
 				}
 				return relativePosition;
 			}
-			return getTextBlock().findPreviousWordBoundary(relativePosition);
+			var block:TextBlock = getTextBlockAtPosition(relativePosition);
+			if(block == null)
+				block = getTextBlockAtPosition(--relativePosition);
+			var pos:int = getTextBlockStart(block);
+			if(pos < 0)
+				pos = 0;
+			return relativePosition == pos ? pos : pos + block.findPreviousWordBoundary(relativePosition - pos);
 		}
 
 		/** 
@@ -683,7 +1041,13 @@ package flashx.textLayout.elements
 				}
 				return relativePosition;
 			}
-			return getTextBlock().findNextWordBoundary(relativePosition);
+			var block:TextBlock = getTextBlockAtPosition(relativePosition);
+			if(block == null)
+				block = getTextBlockAtPosition(--relativePosition);
+			var pos:int = getTextBlockStart(block);
+			if(pos < 0)
+				pos = 0;
+			return pos + block.findNextWordBoundary(relativePosition - pos);
 		}
 		
 		static private var _defaultTabStops:Vector.<TabStop>;
@@ -697,8 +1061,10 @@ package flashx.textLayout.elements
 				_defaultTabStops[i] = new TabStop(TextAlign.START, defaultTabWidth * i);
 		}
 		
-		private function updateTextBlock():void
+		private function updateTextBlock(textBlock:TextBlock=null):void
 		{
+			if(!textBlock)
+				textBlock = getTextBlock();
 			// find the ancestor with a container and use its format for various settings
 			var containerElement:ContainerFormattedElement = getAncestorWithContainer();
 			if (!containerElement)
@@ -746,10 +1112,10 @@ package flashx.textLayout.elements
 				}
 
 				CONFIG::debug { Debugging.traceFTECall(spaceJustifier,null,"new SpaceJustifier",_computedFormat.locale,lineJust,spaceJustifier.letterSpacing); }
-				_textBlock.textJustifier = spaceJustifier;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"textJustifier",spaceJustifier); }
-				_textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"baselineZero",_textBlock.baselineZero);  }
+				textBlock.textJustifier = spaceJustifier;
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"textJustifier",spaceJustifier); }
+				textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"baselineZero",textBlock.baselineZero);  }
 			}
 			else
 			{
@@ -758,21 +1124,21 @@ package flashx.textLayout.elements
 					eastAsianJustifier.composeTrailingIdeographicSpaces = true;
 				}
 				CONFIG::debug { Debugging.traceFTECall(eastAsianJustifier,null,"new EastAsianJustifier",_computedFormat.locale,lineJust,makeJustRuleStyle); }
-				_textBlock.textJustifier = eastAsianJustifier as EastAsianJustifier;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"textJustifier",eastAsianJustifier);  }
-				_textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"baselineZero",_textBlock.baselineZero);  }
+				textBlock.textJustifier = eastAsianJustifier as EastAsianJustifier;
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"textJustifier",eastAsianJustifier);  }
+				textBlock.baselineZero = getLeadingBasis(this.getEffectiveLeadingModel());
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"baselineZero",textBlock.baselineZero);  }
 			}
 			
-			_textBlock.bidiLevel = _computedFormat.direction == Direction.LTR ? 0 : 1;
-			CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"bidiLevel",_textBlock.bidiLevel);  }
+			textBlock.bidiLevel = _computedFormat.direction == Direction.LTR ? 0 : 1;
+			CONFIG::debug { Debugging.traceFTEAssign(textBlock,"bidiLevel",textBlock.bidiLevel);  }
 
-			_textBlock.lineRotation = containerElementFormat.blockProgression == BlockProgression.RL ? TextRotation.ROTATE_90 : TextRotation.ROTATE_0;
-			CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"lineRotation",_textBlock.lineRotation);  }
+			textBlock.lineRotation = containerElementFormat.blockProgression == BlockProgression.RL ? TextRotation.ROTATE_90 : TextRotation.ROTATE_0;
+			CONFIG::debug { Debugging.traceFTEAssign(textBlock,"lineRotation",textBlock.lineRotation);  }
 			
 			if (_computedFormat.tabStops && _computedFormat.tabStops.length != 0)
 			{
-				//create a vector of TabStops and assign it to tabStops in _textBlock
+				//create a vector of TabStops and assign it to tabStops in textBlock
 				var tabStops:Vector.<TabStop> = new Vector.<TabStop>();
 				CONFIG::debug { Debugging.traceFTECall(tabStops,null,"new Vector.<TabStop>()"); }
 				for each(var tsa:TabStopFormat in _computedFormat.tabStops)
@@ -786,8 +1152,8 @@ package flashx.textLayout.elements
 					tabStops.push(tabStop);
 					CONFIG::debug { Debugging.traceFTECall(null,tabStops,"push",tabStop); }
 				}
-				_textBlock.tabStops = tabStops;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"tabStops",tabStops);  }
+				textBlock.tabStops = tabStops;
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"tabStops",tabStops);  }
 			} 
 			else if (GlobalSettings.enableDefaultTabStops && !Configuration.playerEnablesArgoFeatures)
 			{
@@ -795,13 +1161,13 @@ package flashx.textLayout.elements
 				//	is true, TLF will set up default tabStops in the case where there are no tabs defined. 
 				if (_defaultTabStops == null)
 					initializeDefaultTabStops();
-				_textBlock.tabStops = _defaultTabStops;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"tabStops",_defaultTabStops);  }
+				textBlock.tabStops = _defaultTabStops;
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"tabStops",_defaultTabStops);  }
 			}
 			else
 			{
-				_textBlock.tabStops = null;
-				CONFIG::debug { Debugging.traceFTEAssign(_textBlock,"tabStops",null);  }
+				textBlock.tabStops = null;
+				CONFIG::debug { Debugging.traceFTEAssign(textBlock,"tabStops",null);  }
 			}		 
 		}
 		
@@ -811,8 +1177,10 @@ package flashx.textLayout.elements
 			if (!_computedFormat)
 			{
 				super.computedFormat;
-				if (_textBlock)
-					updateTextBlock();
+				var tbs:Vector.<TextBlock> = getTextBlocks();
+				for each(var tb:TextBlock in tbs)
+					updateTextBlock(tb);
+					
 			}
 			return _computedFormat;
 		}
@@ -820,7 +1188,7 @@ package flashx.textLayout.elements
 		/** @private */
 		tlf_internal override function canOwnFlowElement(elem:FlowElement):Boolean
 		{
-			return elem is FlowLeafElement || elem is SubParagraphGroupElementBase;
+			return elem is FlowLeafElement || elem is SubParagraphGroupElementBase || elem is TableElement;
 		}
 		
 		/** @private */
@@ -884,32 +1252,6 @@ package flashx.textLayout.elements
 			}
 		}
 		
-		// mjzhang : new API for table feature, to discuss
-		public function isInTable():Boolean
-		{
-			var parent:FlowElement = this.parent;
-			while ( parent )
-			{
-				if ( (parent is TableDataCellElement) )
-					return true;
-				parent = parent.parent;
-			}
-				
-			return false;
-		}
-		
-		public function getTableDataCellElement():TableDataCellElement
-		{
-			var parent:FlowElement = this.parent;
-			while ( parent )
-			{
-				if ( (parent is TableDataCellElement) )
-					return parent as TableDataCellElement;
-				parent = parent.parent;
-			}
-			
-			return null;
-		}
 		/** @private */
 		tlf_internal function getEffectiveLeadingModel():String
 		{
@@ -938,19 +1280,20 @@ package flashx.textLayout.elements
 		/** @private */
 		CONFIG::debug public override function debugCheckFlowElement(depth:int = 0, extraData:String = ""):int
 		{
-			var rslt:int = super.debugCheckFlowElement(depth," fte:"+getDebugIdentity(_textBlock)+" "+extraData);
+			var tb:TextBlock = getTextBlock();
+			var rslt:int = super.debugCheckFlowElement(depth," fte:"+getDebugIdentity(tb)+" "+extraData);
 			
 			// now check the character count and then the last character 
 			
-			if (_textBlock)
+			if (tb)
 			{
-				var contentLength:int = _textBlock.content && _textBlock.content.rawText ? _textBlock.content.rawText.length : 0;
+				var contentLength:int = tb.content && tb.content.rawText ? tb.content.rawText.length : 0;
 				rslt += assert(contentLength == textLength,"Bad paragraph length mode:"+textLength.toString()+" _textBlock:" + contentLength.toString());
 
-				var groupElement:GroupElement = _textBlock.content as GroupElement;
+				var groupElement:GroupElement = tb.content as GroupElement;
 				if (groupElement)
 					assert(groupElement.elementCount == numChildren,"Mismatched group and elementCount"); 
-				else if (_textBlock.content)
+				else if (tb.content)
 					assert(1 == numChildren,"Mismatched group and elementCount"); 
 				else 
 					assert(0 == numChildren,"Mismatched group and elementCount"); 
@@ -1013,5 +1356,11 @@ package flashx.textLayout.elements
 		{
 			return _interactiveChildrenCount != 0 ;
 		}
+
+		tlf_internal function get terminatorSpan():SpanElement
+		{
+			return _terminatorSpan;
+		}
+
 	}
 }

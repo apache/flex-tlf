@@ -25,7 +25,7 @@ package flashx.textLayout.compose
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.container.ScrollPolicy;
 	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.elements.TableDataCellElement;
+	import flashx.textLayout.elements.TableCellElement;
 	import flashx.textLayout.formats.BlockProgression;
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.LineBreak;
@@ -35,7 +35,6 @@ package flashx.textLayout.compose
 	
 	use namespace tlf_internal;
 			
-	[ExcludeClass]
 	/** @private
 	 * Used for composing text containers, keeps track of the areas that text in the 
 	 * flow is composed into.
@@ -208,7 +207,7 @@ package flashx.textLayout.compose
 			return _parcelArray.pop();
 		}
 		
-		public function addTableCell2ColumnState(controller:ContainerController, cell:TableDataCellElement):void
+		public function addTableCell2ColumnState(controller:ContainerController, cell:TableCellElement):void
 		{
 			var columnState:ColumnState = controller.columnState;
 			if (columnState)

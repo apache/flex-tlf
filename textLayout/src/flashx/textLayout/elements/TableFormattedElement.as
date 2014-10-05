@@ -25,6 +25,9 @@ package flashx.textLayout.elements
 			super();
 		}
 		
+		/**
+		 * Get a reference to the table. We could refactor this since it's accessed multiple times.
+		 **/
 		public function getTable():TableElement
 		{
 			// find the root element entry and either return null or the containing textFlow
@@ -32,6 +35,37 @@ package flashx.textLayout.elements
 			while ((elem.parent) != null && !( elem.parent is TableElement))
 				elem = elem.parent;
 			return elem.parent as TableElement;		
-		}	
+		}
+		
+		
+		private var _table:TableElement;
+		
+		/**
+		 * Returns a reference to the table. For this to work we need to set the 
+		 * table to null when it's removed. 
+		 **/
+		public function get table():TableElement {
+			
+			if (_table) return _table;
+			
+			// find the root element entry and either return null or the containing textFlow
+			var elem:FlowGroupElement = this;
+			
+			while ((elem.parent) != null && !(elem.parent is TableElement)) {
+				elem = elem.parent;
+			}
+			
+			_table = elem.parent as TableElement;
+			
+			return _table;
+		}
+		
+		/**
+		 * @private
+		 **/
+		public function set table(element:TableElement):void {
+			_table = element;
+		}
 	}
 }
+

@@ -21,6 +21,7 @@ package flashx.textLayout.conversion
 	import flash.system.System;
 	
 	import flashx.textLayout.TextLayoutVersion;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.debug.assert;
 	import flashx.textLayout.elements.BreakElement;
 	import flashx.textLayout.elements.Configuration;
@@ -36,15 +37,15 @@ package flashx.textLayout.conversion
 	import flashx.textLayout.elements.ParagraphFormattedElement;
 	import flashx.textLayout.elements.SpanElement;
 	import flashx.textLayout.elements.TabElement;
+	import flashx.textLayout.elements.TableCellElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
+
 	use namespace tlf_internal;
 
-	[ExcludeClass]
 	/**
-	 * @private  
-	 * BaseTextLayoutImporter is a base class for handling the import/export of TextLayout text in the native format.
+	 * BaseTextLayoutImporter is a base class for handling the import/export of TextLayout text 
+	 * in the native format.
 	 */ 
 	internal class BaseTextLayoutImporter extends ConverterBase implements ITextImporter
 	{	
@@ -205,7 +206,9 @@ package flashx.textLayout.conversion
 			return importer.createTextFlowFromXML(xmlToParse, null);
 		}		
 		
-		/** Static method to parse the supplied XML into a paragrph. Parse the <p ...> tag and it's children.
+		/** 
+		 * Static method to parse the supplied XML into a paragrph. 
+		 * Parse the <p ...> tag and it's children.
 		 * 
 		 * @param importer	parser object
 		 * @param xmlToParse	content to parse
@@ -230,7 +233,8 @@ package flashx.textLayout.conversion
 			dst.id          = src.id;
 		}
 		
-		/** Static method for constructing a span from XML. Parse the <span> ... </span> tag. 
+		/** 
+		 * Static method for constructing a span from XML. Parse the <span> ... </span> tag. 
 		 * Insert the span into its parent
 		 * 
 		 * @param importer	parser object
@@ -296,7 +300,8 @@ package flashx.textLayout.conversion
 			}
 		}
 		
-		/** Static method for constructing a break element from XML. Validate the <br> ... </br> tag. 
+		/** 
+		 * Static method for constructing a break element from XML. Validate the <br> ... </br> tag. 
 		 * Use "\u2028" as the text; Insert the new element into its parent 
 		 * 
 		 * @param importer	parser object
@@ -308,9 +313,9 @@ package flashx.textLayout.conversion
 			var breakElem:BreakElement = importer.createBreakFromXML(xmlToParse);
 			importer.addChild(parent, breakElem);
 		}
-
 		
-		/** Static method for constructing a tab element from XML. Validate the <tab> ... </tab> tag. 
+		/** 
+		 * Static method for constructing a tab element from XML. Validate the <tab> ... </tab> tag. 
 		 * Use "\t" as the text; Insert the new element into its parent 
 		 * 
 		 * @param importer	parser object
@@ -323,7 +328,14 @@ package flashx.textLayout.conversion
 			if (tabElem)
 				importer.addChild(parent, tabElem);
 		}
-
+		
+		/** 
+		 * Static method for constructing a list element from XML. 
+		 * 
+		 * @param importer	parser object
+		 * @param xmlToParse	content to parse
+		 * @param parent 		the parent for the new content
+		 */
 		static public function parseList(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
 		{
 			var listElem:ListElement = importer.createListFromXML(xmlToParse);
@@ -332,7 +344,14 @@ package flashx.textLayout.conversion
 				importer.parseFlowGroupElementChildren(xmlToParse, listElem);
 			}
 		}
-
+		
+		/** 
+		 * Static method for constructing a list item from XML. 
+		 * 
+		 * @param importer	parser object
+		 * @param xmlToParse	content to parse
+		 * @param parent 		the parent for the new content
+		 */
 		static public function parseListItem(importer:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
 		{
 			var listItem:ListItemElement = importer.createListItemFromXML(xmlToParse);
@@ -420,7 +439,9 @@ package flashx.textLayout.conversion
 			return workAttrs;
 		}	
 		
-		/** Parse XML and convert to  TextFlow.
+		/** 
+		 * Parse XML and convert to  TextFlow.
+		 * 
 		 * @param xmlToParse	content to parse
 		 * @param textFlow 		TextFlow we're parsing. If null, create or find a new TextFlow based on XML content
 		 * @return TextFlow	the new TextFlow created as a result of the parse
@@ -467,7 +488,9 @@ package flashx.textLayout.conversion
 			return new TabElement();
 		}
 		
-		/** Parse XML, convert to FlowElements and add to the parent.
+		/** 
+		 * Parse XML, convert to FlowElements and add to the parent.
+		 * 
 		 * @param xmlToParse	content to parse
 		 * @param parent 		the parent for the new content
 		 */
@@ -476,7 +499,9 @@ package flashx.textLayout.conversion
 			parseFlowGroupElementChildren(xmlToParse, parent);
 		}
 		
-		/** Parse XML, convert to FlowElements and add to the parent.
+		/** 
+		 * Parse XML, convert to FlowElements and add to the parent.
+		 * 
 		 * @param xmlToParse	content to parse
 		 * @param parent 		the parent for the new content
 		 * @param chainedParent whether parent actually corresponds to xmlToParse or has been chained (such as when xmlToParse is a formatting element) 
@@ -508,6 +533,54 @@ package flashx.textLayout.conversion
 			// no implied paragraph should extend across container elements
 			if (!chainedParent && parent is ContainerFormattedElement)
 				resetImpliedPara();
+		}
+		
+		/** 
+		 * Parse XML, convert XML to FlowElements and TextFlow and add to the parent table cell
+		 * 
+		 * @param xmlToParse	content to parse
+		 * @param parent 		the parent for the new content
+		 * @param chainedParent whether parent actually corresponds to xmlToParse or has been chained (such as when xmlToParse is a formatting element) 
+		 */
+		public function parseTableCellElementChildren(xmlToParse:XML, parent:FlowGroupElement, exceptionElements:Object = null, chainedParent:Boolean=false):void
+		{
+			var textFlow:TextFlow;
+			
+			for each (var child:XML in xmlToParse.children())
+			{
+				if (child.nodeKind() == "element")
+				{
+					if (child.name().localName=="p") {
+						textFlow = new TextFlow();
+						parseObject(child.name().localName, child, textFlow, exceptionElements);
+					}
+					else if (child.name().localName=="TextFlow") {
+						TableCellElement(parent).textFlow = createTextFlowFromXML(child);
+					}
+				}
+					// look for mixed content here
+				else if (child.nodeKind() == "text") 
+				{
+					var txt:String = child.toString();
+					// Strip whitespace-only text appearing as a child of a container-formatted element
+					var strip:Boolean = false;
+					if (parent is ContainerFormattedElement)
+					{
+						strip = txt.search(anyPrintChar) == -1;
+					}
+					
+					if (!strip) {
+						textFlow = new TextFlow();
+						parseObject(child.name().localName, child, textFlow, exceptionElements);
+						//addChild(textFlow, createImpliedSpan(txt));
+					}
+				}
+				
+				if (textFlow) {
+					TableCellElement(parent).textFlow = textFlow;
+					textFlow = null;
+				}
+			}
 		}
 		
 		/** create an implied span with specified text */

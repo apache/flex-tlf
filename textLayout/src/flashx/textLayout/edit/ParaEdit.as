@@ -93,9 +93,13 @@ package flashx.textLayout.edit
 					break;
 				}
 			}
-				
 			// adjust the flow so that we are in a span for the insertion
 			var insertSpan:SpanElement = sibling as SpanElement;
+			
+			// use the terminator span if it's empty
+			if(paragraph.terminatorSpan.textLength == 1 && paragraph.terminatorSpan == insertSpan)
+				createNewSpan = false;
+			
 			if (!insertSpan || createNewSpan)
 			{
 				var newSpan:SpanElement = new SpanElement();
@@ -111,7 +115,15 @@ package flashx.textLayout.edit
 							sibling.splitAtPosition(relativeStart);		// we'll insert between the two elements
 					}
 				}
-				insertParent.replaceChildren(siblingIndex, siblingIndex, newSpan);
+				var nextLeaf:FlowLeafElement = paragraph.findLeaf(paraSelBegIdx);
+				if(nextLeaf && nextLeaf.textLength == 1 && nextLeaf == paragraph.terminatorSpan)
+				{
+					// use the terminator span instead of inserting a new one.
+					newSpan = SpanElement(nextLeaf);
+				}
+				else {
+					insertParent.replaceChildren(siblingIndex, siblingIndex, newSpan);
+				}
 				var formatElem:FlowLeafElement = newSpan.getPreviousLeaf(paragraph);
 				if (formatElem == null)
 					newSpan.format = newSpan.getNextLeaf(paragraph).format;

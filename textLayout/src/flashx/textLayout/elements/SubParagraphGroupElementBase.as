@@ -190,7 +190,7 @@ package flashx.textLayout.elements
 		}
 		
 		/** @private */
-		tlf_internal override function createContentAsGroup():GroupElement
+		tlf_internal override function createContentAsGroup(pos:int=0):GroupElement
 		{ return groupElement; }
 
 		/** @private */

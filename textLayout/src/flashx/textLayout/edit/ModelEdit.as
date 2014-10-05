@@ -516,7 +516,7 @@ class JoinMemento extends BaseMemento implements IMemento
 		
 		var element1Mark:ElementMark = new ElementMark(element1,0);
 		var element2Mark:ElementMark = new ElementMark(element2,0);
-		performInternal(textFlow, element1Mark, element2Mark);		
+		performInternal(textFlow, element1Mark, element2Mark);
 		var removeParentChain:IMemento = TextFlowEdit.removeEmptyParentChain(element2);
 
 		if (createMemento)

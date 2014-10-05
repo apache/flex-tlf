@@ -17,15 +17,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 package flashx.textLayout.conversion 
-{	
+{
 	import flash.display.Shape;
 	import flash.text.engine.TextRotation;
 	import flash.utils.Dictionary;
 	
 	import flashx.textLayout.TextLayoutVersion;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.assert;
+	import flashx.textLayout.edit.EditManager;
+	import flashx.textLayout.edit.SelectionManager;
 	import flashx.textLayout.elements.BreakElement;
+	import flashx.textLayout.elements.ContainerFormattedElement;
 	import flashx.textLayout.elements.DivElement;
 	import flashx.textLayout.elements.FlowElement;
 	import flashx.textLayout.elements.FlowGroupElement;
@@ -40,16 +44,18 @@ package flashx.textLayout.conversion
 	import flashx.textLayout.elements.SubParagraphGroupElement;
 	import flashx.textLayout.elements.TCYElement;
 	import flashx.textLayout.elements.TabElement;
+	import flashx.textLayout.elements.TableCellElement;
+	import flashx.textLayout.elements.TableColElement;
+	import flashx.textLayout.elements.TableElement;
+	import flashx.textLayout.elements.TableRowElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.ListMarkerFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
 	
 	use namespace tlf_internal;
 
-	[ExcludeClass]
 	/** 
 	 * @private
 	 * TextLayoutImporter converts from XML to TextLayout data structures and back.
@@ -82,6 +88,10 @@ package flashx.textLayout.conversion
 				_defaultConfiguration.addIEInfo("a", LinkElement,            TextLayoutImporter.parseLink, 			TextLayoutExporter.exportLink);
 	 			_defaultConfiguration.addIEInfo("div", DivElement,           TextLayoutImporter.parseDivElement, 	TextLayoutExporter.exportDiv);
 				_defaultConfiguration.addIEInfo("img", InlineGraphicElement, TextLayoutImporter.parseInlineGraphic, TextLayoutExporter.exportImage);	
+				_defaultConfiguration.addIEInfo("table", TableElement, 		 TextLayoutImporter.parseTable,     	TextLayoutExporter.exportTable);	
+				_defaultConfiguration.addIEInfo("tr", TableRowElement, 	     TextLayoutImporter.parseTableRow,	    TextLayoutExporter.exportTableRow);	
+				_defaultConfiguration.addIEInfo("th", TableCellElement, 	 TextLayoutImporter.parseTableCell,  	TextLayoutExporter.exportTableCell);	
+				_defaultConfiguration.addIEInfo("td", TableCellElement, 	 TextLayoutImporter.parseTableCell,  	TextLayoutExporter.exportTableCell);	
 				
 				// validate the defaultTypeName values.  They are to match the TLF format export xml names
 				CONFIG::debug 
@@ -251,6 +261,48 @@ package flashx.textLayout.conversion
 			return divElem;
 		}
 		
+		/**
+		 * Create a table element from XML
+		 **/
+		public function createTableFromXML(xmlToParse:XML):TableElement
+		{
+			// add the table element to the parent
+			var tableElement:TableElement = new TableElement();
+			
+			parseStandardFlowElementAttributes(tableElement, xmlToParse);
+
+			return tableElement;
+		}
+		
+		/**
+		 * Create a table row element from XML
+		 **/
+		public function createTableRowFromXML(xmlToParse:XML):TableRowElement
+		{
+			// add the table row element to the parent
+			var tableRowElement:TableRowElement = new TableRowElement();
+			
+			parseStandardFlowElementAttributes(tableRowElement, xmlToParse);
+			
+			return tableRowElement;
+		}
+		
+		/**
+		 * Create a table cell element from XML
+		 **/
+		public function createTableCellFromXML(xmlToParse:XML):TableCellElement
+		{
+			// add the table cell element to the parent
+			var tableCellElement:TableCellElement = new TableCellElement();
+			
+			parseStandardFlowElementAttributes(tableCellElement, xmlToParse);
+			
+			return tableCellElement;
+		}
+		
+		/**
+		 * Create a paragraph element from XML
+		 **/
 		public override function createParagraphFromXML(xmlToParse:XML):ParagraphElement
 		{
 			var paraElem:ParagraphElement = new ParagraphElement();
@@ -258,6 +310,9 @@ package flashx.textLayout.conversion
 			return paraElem;
 		}
 		
+		/**
+		 * Create a sub paragraph group element from XML
+		 **/
 		public function createSubParagraphGroupFromXML(xmlToParse:XML):SubParagraphGroupElement
 		{
 			var elem:SubParagraphGroupElement = new SubParagraphGroupElement();
@@ -265,6 +320,9 @@ package flashx.textLayout.conversion
 			return elem;
 		}
 		
+		/**
+		 * Create a tate chu yoko element from XML
+		 **/
 		public function createTCYFromXML(xmlToParse:XML):TCYElement
 		{
 			var tcyElem:TCYElement = new TCYElement();
@@ -272,7 +330,7 @@ package flashx.textLayout.conversion
 			return tcyElem;
 		}
 		
-			
+		
 		static internal const _linkDescription:Object = {
 			href : Property.NewStringProperty("href",null, false, null),
 			target : Property.NewStringProperty("target",null, false, null)
@@ -280,7 +338,8 @@ package flashx.textLayout.conversion
 		static private const _linkFormatImporter:TLFormatImporter = new TLFormatImporter(Dictionary,_linkDescription);
 		static private const _linkElementFormatImporters:Array = [ _linkFormatImporter, _formatImporter,_idImporter,_typeNameImporter,_customFormatImporter ];
 
-		/** Parse a LinkElement Block.
+		/** 
+		 * Parse a LinkElement Block.
 		 * 
 		 * @param - importFilter:BaseTextLayoutImporter - parser object
 		 * @param - xmlToParse:XML - the xml describing the Link
@@ -300,6 +359,9 @@ package flashx.textLayout.conversion
 			return linkElem;
 		}
 		
+		/**
+		 * Create a span element from XML
+		 **/
 		public override function createSpanFromXML(xmlToParse:XML):SpanElement
 		{
 			var spanElem:SpanElement = new SpanElement();
@@ -319,6 +381,9 @@ package flashx.textLayout.conversion
 		static private const _ilgFormatImporter:TLFormatImporter = new TLFormatImporter(Dictionary,_imageDescription);
 		static private const _ilgElementFormatImporters:Array = [ _ilgFormatImporter, _formatImporter, _idImporter, _typeNameImporter, _customFormatImporter ];
 
+		/**
+		 * Create an inline graphic from XML
+		 **/
 		public function createInlineGraphicFromXML(xmlToParse:XML):InlineGraphicElement
 		{				
 			var imgElem:InlineGraphicElement = new InlineGraphicElement();
@@ -341,6 +406,9 @@ package flashx.textLayout.conversion
 			return imgElem;
 		}
 	
+		/**
+		 * Create a list element from XML
+		 **/
 		public override function createListFromXML(xmlToParse:XML):ListElement
 		{
 			var rslt:ListElement = new ListElement;
@@ -348,6 +416,9 @@ package flashx.textLayout.conversion
 			return rslt;
 		}
 
+		/**
+		 * Create a list item element from XML
+		 **/
 		public override function createListItemFromXML(xmlToParse:XML):ListItemElement
 		{
 			var rslt:ListItemElement = new ListItemElement;
@@ -355,12 +426,16 @@ package flashx.textLayout.conversion
 			return rslt;
 		}
 		
+		/**
+		 * Extract text format attributes
+		 **/
 		public function extractTextFormatAttributesHelper(curAttrs:Object, importer:TLFormatImporter):Object
 		{
 			return extractAttributesHelper(curAttrs,importer);
 		}
 		
-		/** Parse an SPGE element
+		/** 
+		 * Parse an SPGE element
 		 * 
 		 * @param - importFilter:BaseTextLayoutImporter - parser object
 		 * @param - xmlToParse:XML - the xml describing the TCY Block
@@ -379,7 +454,8 @@ package flashx.textLayout.conversion
 			}
 		}
 
-		/** Parse a TCY Block.
+		/** 
+		 * Parse a TCY Block.
 		 * 
 		 * @param - importFilter:BaseTextLayoutImporter - parser object
 		 * @param - xmlToParse:XML - the xml describing the TCY Block
@@ -399,7 +475,8 @@ package flashx.textLayout.conversion
 		}
 		
 				
-		/** Parse a LinkElement Block.
+		/** 
+		 * Parse a LinkElement Block.
 		 * 
 		 * @param - importFilter:BaseTextLayoutImporter - parser object
 		 * @param - xmlToParse:XML - the xml describing the Link
@@ -456,7 +533,8 @@ package flashx.textLayout.conversion
 		static public function parseListMarkerFormat(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
 		{ parent.listMarkerFormat = TextLayoutImporter(importFilter).createListMarkerFormatDictionaryFromXML(xmlToParse); }
 
-		/** Parse the <div ...> tag and all its children
+		/** 
+		 * Parse the <div ...> tag and all its children
 		 * 
 		 * @param - importFilter:BaseTextLayoutImportFilter - parser object
 		 * @param - xmlToParse:XML - the xml describing the Div
@@ -474,7 +552,8 @@ package flashx.textLayout.conversion
 			}
 		}
 
-		/** Parse a leaf element, the <img ...>  tag.
+		/** 
+		 * Parse a leaf element, the <img ...>  tag.
 		 * 
 		 * @param - importFilter:BaseTextLayoutImporter - parser object
 		 * @param - xmlToParse:XML - the xml describing the InlineGraphic FlowElement
@@ -484,6 +563,115 @@ package flashx.textLayout.conversion
 		{
 			var ilg:InlineGraphicElement = TextLayoutImporter(importFilter).createInlineGraphicFromXML(xmlToParse);
 			importFilter.addChild(parent, ilg);
+		}
+		
+		/** 
+		 * Parse the <table ...> tag and all its children
+		 * 
+		 * @param - importFilter:BaseTextLayoutImportFilter - parser object
+		 * @param - xmlToParse:XML - the xml describing the Table
+		 * @param - parent:FlowBlockElement - the parent of the new Table
+		 */
+		static public function parseTable(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
+		{
+			var tableElement:TableElement = TextLayoutImporter(importFilter).createTableFromXML(xmlToParse);
+			
+			if (importFilter.addChild(parent, tableElement)) 
+			{
+				importFilter.parseFlowGroupElementChildren(xmlToParse, tableElement);
+				
+			}
+		}
+		
+		/** 
+		 * Parse the <tr ...> tag (TableRowElement) and all its children
+		 * 
+		 * @param - importFilter:BaseTextLayoutImportFilter - parser object
+		 * @param - xmlToParse:XML - the xml describing the Table
+		 * @param - parent:FlowBlockElement - the parent of the new Table
+		 */
+		static public function parseTableRow(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
+		{
+			var tableRowElement:TableRowElement = TextLayoutImporter(importFilter).createTableRowFromXML(xmlToParse);
+			var table:TableElement;
+			
+			if (importFilter.addChild(parent, tableRowElement))
+			{
+				
+				importFilter.parseFlowGroupElementChildren(xmlToParse, tableRowElement);
+				
+				table = tableRowElement.getTable();
+				
+				var columnCount:int = tableRowElement.getColumnCount();
+				
+				if (table.numColumns<columnCount) {
+					table.numColumns = columnCount;
+				}
+				
+				table.insertRow(tableRowElement, tableRowElement.mxmlChildren);
+				
+			}
+		}
+		
+		/** 
+		 * Parse the <td ...> or <th ...> tag (TableCellElement) and all its children
+		 * 
+		 * @param - importFilter:BaseTextLayoutImportFilter - parser object
+		 * @param - xmlToParse:XML - the xml describing the Table
+		 * @param - parent:FlowBlockElement - the parent of the new Table
+		 */
+		static public function parseTableCell(importFilter:BaseTextLayoutImporter, xmlToParse:XML, parent:FlowGroupElement):void
+		{
+			var tableCellElement:TableCellElement = TextLayoutImporter(importFilter).createTableCellFromXML(xmlToParse);
+			
+			if (importFilter.addChild(parent, tableCellElement))
+			{
+				importFilter.parseTableCellElementChildren(xmlToParse, tableCellElement);
+			}
+			
+			//tableCellElement.textFlow = getTextFlowContent("test cell");
+			
+			TableRowElement(parent).addCell(tableCellElement);
+			//TableRowElement(parent).getTable().addChild(tableCellElement);
+			//importFilter.parseFlowGroupElementChildren(xmlToParse, tableCellElement);
+			
+			// we can't have a <td> tag w/no children... so, add an empty text flow
+			//if (tableCellElement.numChildren == 0) {
+			//	tableCellElement.addChild(new TextFlow());
+			//}
+				
+		}
+		
+		/**
+		 * Creates default text flow from the text value passed in. Used for table cell text flows. 
+		 * Used for testing. May be removed in the future. 
+		 **/
+		static public function getTextFlowContent(text:String = null, selectable:Boolean = false, editable:Boolean = false):TextFlow {
+			var textFlowContent:TextFlow = new TextFlow();
+			var paragraph:ParagraphElement = new ParagraphElement();
+			var span:SpanElement = new SpanElement();
+			
+			if (text) {
+				span.text = text;
+			}
+			else {
+				span.text = "";
+			}
+			
+			paragraph.backgroundAlpha = 0.2;
+			paragraph.backgroundColor = 0xFF0000;
+			paragraph.addChild(span);
+			
+			if (editable) {
+				//textFlowContent.interactionManager = new EditManager(new UndoManager);
+			}
+			else if (selectable) {
+				//textFlowContent.interactionManager = new SelectionManager();
+			}
+			
+			textFlowContent.addChild(paragraph);
+			
+			return textFlowContent;
 		}
 	}
 }

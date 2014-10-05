@@ -22,6 +22,7 @@ package flashx.textLayout.conversion
 	import flash.utils.getQualifiedClassName;
 	
 	import flashx.textLayout.TextLayoutVersion;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.debug.assert;
 	import flashx.textLayout.elements.Configuration;
 	import flashx.textLayout.elements.ContainerFormattedElement;
@@ -31,34 +32,35 @@ package flashx.textLayout.conversion
 	import flashx.textLayout.elements.LinkElement;
 	import flashx.textLayout.elements.ParagraphFormattedElement;
 	import flashx.textLayout.elements.SpanElement;
+	import flashx.textLayout.elements.TableCellElement;
+	import flashx.textLayout.elements.TableElement;
+	import flashx.textLayout.elements.TableRowElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.elements.TextRange;
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.formats.WhiteSpaceCollapse;
 	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
+
 	use namespace tlf_internal;
 	
-	[ExcludeClass]
 	/** 
-	 * @private 
-	 * Export converter for TextLayout format. 
+	 * Base export converter for TextLayout format. 
 	 */
-	internal class BaseTextLayoutExporter extends ConverterBase implements ITextExporter
-	{	
-		private var _config:ImportExportConfiguration;
+	public class BaseTextLayoutExporter extends ConverterBase implements ITextExporter
+	{
 		private var _rootTag:XML;
 		private var _ns:Namespace;
-				
-		public function BaseTextLayoutExporter(ns:Namespace, rootTag:XML, config:ImportExportConfiguration)
+		
+		public function BaseTextLayoutExporter(ns:Namespace, rootTag:XML, configuration:ImportExportConfiguration)
 		{
-			_config = config;
+			config = configuration;
 			_ns = ns;
 			_rootTag = rootTag;
 		}
 		
-		/** @copy ITextExporter#export()
+		/** 
+		 * @copy ITextExporter#export()
 		 */
 		public function export(source:TextFlow, conversionType:String):Object
 		{
@@ -68,7 +70,9 @@ package flashx.textLayout.conversion
 			return conversionType == ConversionType.STRING_TYPE ? convertXMLToString(result) : result;
 		}
 		
-		/** Export text content of a TextFlow into XFL format.
+		/** 
+		 * Export text content of a TextFlow into XFL format.
+		 * 
 		 * @param source	the text to export
 		 * @return XML	the exported content
 		 */
@@ -89,7 +93,9 @@ package flashx.textLayout.conversion
 			return result;
 		}
 		
-		/** Export text content as a string
+		/** 
+		 * Export text content as a string
+		 * 
 		 * @param xml	the XML to convert
 		 * @return String	the exported content
 		 * @private
@@ -118,7 +124,9 @@ package flashx.textLayout.conversion
 		}
 
 	
-		/** Base functionality for exporting a FlowElement. 
+		/** 
+		 * Base functionality for exporting a FlowElement.
+		 *  
 		 * @param exporter	Root object for the export
 		 * @param flowElement	Element to export
 		 * @return XMLList	XML for the element
@@ -128,14 +136,16 @@ package flashx.textLayout.conversion
 			return exporter.exportFlowElement(flowElement);
 		}
 		
-		/** Overridable worker method for exporting a FlowElement. Creates the XMLList.
+		/** 
+		 * Overridable worker method for exporting a FlowElement. Creates the XMLList.
+		 * 
 		 * @param flowElement	Element to export
 		 * @return XMLList	XML for the element
 		 */
 		protected function exportFlowElement (flowElement:FlowElement):XMLList
 		{
 			var className:String = flash.utils.getQualifiedClassName(flowElement);
-			var elementName:String = _config.lookupName(className);	// NO PMD
+			var elementName:String = config.lookupName(className);	// NO PMD
 			var output:XML = <{elementName}/>;
 			output.setNamespace(_ns);
 			return XMLList(output);
@@ -199,8 +209,10 @@ package flashx.textLayout.conversion
 			}		
 		}  
 		
-		/** Base functionality for exporting a Span. Exports as a FlowElement,
+		/** 
+		 * Base functionality for exporting a Span. Exports as a FlowElement,
 		 * and exports the text of the span.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param span	Element to export
 		 * @return XMLList	XML for the element
@@ -214,7 +226,8 @@ package flashx.textLayout.conversion
 		
 		static private const brRegEx:RegExp = /\u2028/;
 		
-		/** Gets the regex that specifies characters in span text to be replaced with XML elements
+		/** 
+		 * Gets the regex that specifies characters in span text to be replaced with XML elements.
 		 *  Note: Each match is a single character 
 		 */
 		protected function get spanTextReplacementRegex():RegExp
@@ -222,7 +235,8 @@ package flashx.textLayout.conversion
 			return brRegEx;
 		}
 
-		/** Gets the xml element used to represent a character in the export format
+		/** 
+		 * Gets the xml element used to represent a character in the export format
 		 */
 		protected function getSpanTextReplacementXML(ch:String):XML
 		{
@@ -232,8 +246,10 @@ package flashx.textLayout.conversion
 			return breakXML;
 		}
 		
-		/** Base functionality for exporting a FlowGroupElement. Exports as a FlowElement,
+		/** 
+		 * Base functionality for exporting a FlowGroupElement. Exports as a FlowElement,
 		 * and exports the children of a element.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param flowBlockElement	Element to export
 		 * @return XMLList	XML for the element
@@ -241,20 +257,26 @@ package flashx.textLayout.conversion
 		static public function exportFlowGroupElement(exporter:BaseTextLayoutExporter, flowBlockElement:FlowGroupElement):XMLList
 		{
 			var output:XMLList = exportFlowElement(exporter, flowBlockElement);
+			var count:int = flowBlockElement.numChildren;
 			
 			// output each child
-			for(var childIter:int = 0; childIter < flowBlockElement.numChildren; ++childIter)
+			for(var index:int; index < count; ++index)
 			{
-				var flowChild:FlowElement = flowBlockElement.getChildAt(childIter);
+				var flowChild:FlowElement = flowBlockElement.getChildAt(index);
 				var childXML:XMLList = exporter.exportChild(flowChild);
-				if (childXML)
+				
+				if (childXML) {
 					output.appendChild(childXML);
+				}
 			}
+			
 			return output;
 		}
 
-		/** Base functionality for exporting a ParagraphFormattedElement. Exports as a FlowGroupElement,
+		/** 
+		 * Base functionality for exporting a ParagraphFormattedElement. Exports as a FlowGroupElement,
 		 * and exports paragraph attributes.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param flowParagraph	Element to export
 		 * @return XMLList	XML for the element
@@ -264,22 +286,6 @@ package flashx.textLayout.conversion
 			return exporter.exportParagraphFormattedElement(flowParagraph);
 		}
 		
-		/** Overridable worker method for exporting a ParagraphFormattedElement. Creates the XMLList.
-		 * @param flowElement	Element to export
-		 * @return XMLList	XML for the element
-		 */
-		protected function exportParagraphFormattedElement(flowElement:FlowElement):XMLList
-		{
-			var rslt:XMLList = exportFlowElement(flowElement);
-			// output each child
-			for(var childIter:int = 0; childIter < ParagraphFormattedElement(flowElement).numChildren; ++childIter)
-			{
-				var flowChild:FlowElement = ParagraphFormattedElement(flowElement).getChildAt(childIter);
-				rslt.appendChild(exportChild(flowChild));
-			}
-			return rslt;
-		}
-		
 		static public function exportList(exporter:BaseTextLayoutExporter, flowParagraph:ParagraphFormattedElement):XMLList
 		{
 			return exporter.exportList(flowParagraph);
@@ -287,14 +293,17 @@ package flashx.textLayout.conversion
 		
 		protected function exportList(flowElement:FlowElement):XMLList
 		{
-			var rslt:XMLList = exportFlowElement(flowElement);
+			var result:XMLList = exportFlowElement(flowElement);
+			var count:int = FlowGroupElement(flowElement).numChildren;
+			
 			// output each child
-			for(var childIter:int = 0; childIter < FlowGroupElement(flowElement).numChildren; ++childIter)
+			for(var index:int; index < count; ++index)
 			{
-				var flowChild:FlowElement = FlowGroupElement(flowElement).getChildAt(childIter);
-				rslt.appendChild(exportChild(flowChild));
+				var flowChild:FlowElement = FlowGroupElement(flowElement).getChildAt(index);
+				result.appendChild(exportChild(flowChild));
 			}
-			return rslt;
+			
+			return result;
 		}
 		
 		static public function exportListItem(exporter:BaseTextLayoutExporter, flowParagraph:ParagraphFormattedElement):XMLList
@@ -304,18 +313,23 @@ package flashx.textLayout.conversion
 		
 		protected function exportListItem(flowElement:FlowElement):XMLList
 		{
-			var rslt:XMLList = exportFlowElement(flowElement);
+			var result:XMLList = exportFlowElement(flowElement);
+			var count:int = FlowGroupElement(flowElement).numChildren;
+			
 			// output each child
-			for(var childIter:int = 0; childIter < FlowGroupElement(flowElement).numChildren; ++childIter)
+			for(var index:int; index < count; ++index)
 			{
-				var flowChild:FlowElement = FlowGroupElement(flowElement).getChildAt(childIter);
-				rslt.appendChild(exportChild(flowChild));
+				var flowChild:FlowElement = FlowGroupElement(flowElement).getChildAt(index);
+				result.appendChild(exportChild(flowChild));
 			}
-			return rslt;
+			
+			return result;
 		}
 		
-		/** Base functionality for exporting a ContainerFormattedElement. Exports as a ParagraphFormattedElement,
+		/** 
+		 * Base functionality for exporting a ContainerFormattedElement. Exports as a ParagraphFormattedElement,
 		 * and exports container attributes.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param container	Element to export
 		 * @return XMLList	XML for the element
@@ -325,7 +339,9 @@ package flashx.textLayout.conversion
 			return exporter.exportContainerFormattedElement(container);
 		}
 		
-		/** Overridable worker method for exporting a ParagraphFormattedElement. Creates the XMLList.
+		/** 
+		 * Overridable worker method for exporting a ParagraphFormattedElement. Creates the XMLList.
+		 * 
 		 * @param flowElement	Element to export
 		 * @return XMLList	XML for the element
 		 */
@@ -333,9 +349,126 @@ package flashx.textLayout.conversion
 		{
 			return exportParagraphFormattedElement(flowElement);
 		}
-
-		/** Base functionality for exporting a TextFlow. Exports as a ContainerElement,
+		
+		/** 
+		 * Base functionality for exporting a TableElement. Exports as a TableElement,
+		 * and exports table attributes.
+		 * 
+		 * @param exporter	Root object for the export
+		 * @param container	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		static public function exportTableElement(exporter:BaseTextLayoutExporter, table:TableElement):XMLList
+		{
+			return exporter.exportTableElement(table);
+		}
+		
+		/** 
+		 * Overridable worker method for exporting a TableElement. Creates the XMLList.
+		 * 
+		 * @param flowElement	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		protected function exportTableElement(tableElement:TableElement):XMLList
+		{
+			var result:XMLList = exportFlowElement(tableElement);
+			var count:int = tableElement.numRows;
+			
+			// output each child
+			for(var index:int = 0; index < count; ++index)
+			{
+				var flowChild:FlowElement = tableElement.getRowAt(index);
+				result.appendChild(exportChild(flowChild));
+			}
+			
+			return result;
+		}
+		
+		/** 
+		 * Base functionality for exporting a TableRowElement. Exports as a TableRowElement,
+		 * and exports table row attributes.
+		 * 
+		 * @param exporter	Root object for the export
+		 * @param container	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		static public function exportTableRowElement(exporter:BaseTextLayoutExporter, tableRow:TableRowElement):XMLList
+		{
+			return exporter.exportTableRowElement(tableRow);
+		}
+		
+		/** 
+		 * Overridable worker method for exporting a TableRowElement. Creates the XMLList.
+		 * 
+		 * @param flowElement	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		protected function exportTableRowElement(tableRowElement:TableRowElement):XMLList
+		{
+			var result:XMLList = exportFlowElement(tableRowElement);
+			var count:int = tableRowElement.numCells;
+			
+			// output each child
+			for(var index:int; index < count; ++index)
+			{
+				var flowChild:FlowElement = tableRowElement.getCellAt(index);
+				result.appendChild(exportChild(flowChild));
+			}
+			
+			return result;
+		}
+		
+		/** 
+		 * Base functionality for exporting a TableCellElement. Exports as a TableCellElement,
+		 * and exports table cell attributes.
+		 * 
+		 * @param exporter	Root object for the export
+		 * @param container	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		static public function exportTableCellElement(exporter:BaseTextLayoutExporter, tableCell:TableCellElement):XMLList
+		{
+			return exporter.exportTableCellElement(tableCell);
+		}
+		
+		/** 
+		 * Overridable worker method for exporting a TableCellElement. Creates the XMLList.
+		 * 
+		 * @param flowElement	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		protected function exportTableCellElement(tableCellElement:TableCellElement):XMLList
+		{
+			var result:XMLList = exportFlowElement(tableCellElement);
+			
+			return result;
+		}
+		
+		/** 
+		 * Overridable worker method for exporting a ParagraphFormattedElement. Creates the XMLList.
+		 * 
+		 * @param flowElement	Element to export
+		 * @return XMLList	XML for the element
+		 */
+		protected function exportParagraphFormattedElement(flowElement:FlowElement):XMLList
+		{
+			var result:XMLList = exportFlowElement(flowElement);
+			var count:int = ParagraphFormattedElement(flowElement).numChildren;
+			
+			// output each child
+			for(var index:int; index < count; ++index)
+			{
+				var flowChild:FlowElement = ParagraphFormattedElement(flowElement).getChildAt(index);
+				result.appendChild(exportChild(flowChild));
+			}
+			
+			return result;
+		}
+		
+		/** 
+		 * Base functionality for exporting a TextFlow. Exports as a ContainerElement,
 		 * and exports container attributes.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param textFlow	Element to export
 		 * @return XMLList	XML for the element
@@ -344,8 +477,10 @@ package flashx.textLayout.conversion
 		{
 			var output:XMLList = exportContainerFormattedElement(exporter, textFlow);
 			
-			// TextLayout will use PRESERVE on output
-			output.@[TextLayoutFormat.whiteSpaceCollapseProperty.name] = WhiteSpaceCollapse.PRESERVE;
+			if (exporter.config.whiteSpaceCollapse) {
+				// TextLayout will use PRESERVE on output
+				output.@[TextLayoutFormat.whiteSpaceCollapseProperty.name] = exporter.config.whiteSpaceCollapse;
+			}
 			
 			// TextLayout adds version information
 			output.@["version"] = TextLayoutVersion.getVersionString(TextLayoutVersion.CURRENT_VERSION);
@@ -354,8 +489,10 @@ package flashx.textLayout.conversion
 		}
 
 
-		/** Exports the object. It will find the appropriate exporter and use it to 
+		/** 
+		 * Exports the object. It will find the appropriate exporter and use it to 
 		 * export the object.
+		 * 
 		 * @param exporter	Root object for the export
 		 * @param flowElement	Element to export
 		 * @return XMLList	XML for the flowElement
@@ -363,13 +500,15 @@ package flashx.textLayout.conversion
 		public function exportChild(flowElement:FlowElement):XMLList
 		{
 			var className:String = flash.utils.getQualifiedClassName(flowElement);
-			var info:FlowElementInfo = _config.lookupByClass(className);
+			var info:FlowElementInfo = config.lookupByClass(className);
 			if (info != null)
 				return info.exporter(this, flowElement);
 			return null;
 		}
 					
-		/** Helper function to export styles (core or user) in the form of xml attributes or xml children
+		/** 
+		 * Helper function to export styles (core or user) in the form of xml attributes or xml children.
+		 * 
 		 * @param xml object to which attributes/children are added 
 		 * @param sortableStyles an array of objects (xmlName,xmlVal) members that is sorted and exported.
 		 */
@@ -400,7 +539,6 @@ package flashx.textLayout.conversion
 		protected function get formatDescription():Object
 		{
 			return null;
-		}		
-
+		}
 	}
 }

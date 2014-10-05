@@ -25,9 +25,12 @@ package flashx.textLayout.edit
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	
+	import flashx.textLayout.elements.CellCoordinates;
+	import flashx.textLayout.elements.CellRange;
+	import flashx.textLayout.elements.TableElement;
 	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.elements.TextRange;
+	import flashx.textLayout.formats.TextLayoutFormat;
 
 	/** 
 	 * The ISelectionManager interface defines the interface for handling text selection.
@@ -64,6 +67,23 @@ package flashx.textLayout.edit
 		function get textFlow():TextFlow;
 		function set textFlow(flow:TextFlow):void;
 		
+		function get currentTable():TableElement;
+		function set currentTable(table:TableElement):void;
+		function hasCellRangeSelection():Boolean;
+		
+		function selectCellRange(anchorCoords:CellCoordinates,activeCoords:CellCoordinates):void;
+		
+		function getCellRange():CellRange;
+		function setCellRange(range:CellRange):void;
+
+		/** Anchor point of the current cell selection, as coordinates within the table. */
+		function get anchorCellPosition():CellCoordinates;
+		function set anchorCellPosition(value:CellCoordinates):void;
+		
+		/** Active end of the current cell selection, as coordinates within the table. */
+		function get activeCellPosition():CellCoordinates;
+		function set activeCellPosition(value:CellCoordinates):void;
+
 		/** 
 		 * The text position of the start of the selection, as an offset from the start of the text flow.
 		 *  
@@ -113,6 +133,33 @@ package flashx.textLayout.edit
 		 */
 		function selectAll() : void
 		
+		/**
+		 * Selects the last position in the entire flow.
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+ 		 * @langversion 3.0
+		 */
+		function selectLastPosition() : void
+		
+		/**
+		 * Selects the first position in the entire flow.
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+ 		 * @langversion 3.0
+		 */
+		function selectFirstPosition() : void
+
+		/**
+		 * Removes any selection from the text flow
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function deselect() : void
+
 		/** 
 		 * The anchor point of the selection. 
 		 * 
@@ -140,7 +187,7 @@ package flashx.textLayout.edit
 		function get activePosition() : int;
 		
 		/**
-		 * Indicates whether there is a selection. 
+		 * Indicates whether there is a text selection. 
 		 * 
 		 * <p>Returns <code>true</code> if there is either a range selection or a point selection. 
 		 * By default, when a selection manager is first set up, there is no selection (the start and end are -1).</p>
@@ -152,6 +199,34 @@ package flashx.textLayout.edit
  		 * @langversion 3.0
 		 */
 		function hasSelection():Boolean;
+
+		/**
+		 * Indicates whether there is a text or cell selection. 
+		 * 
+		 * <p>Returns <code>true</code> if there is either a range selection or a point selection. 
+		 * By default, when a selection manager is first set up, there is no selection (the start and end are -1).</p>
+		 * 
+		 * @includeExample examples\SelectionManager_hasSelection.as -noswf
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function hasAnySelection():Boolean;
+
+		/**
+		 * Indicates the type of selection. 
+		 * 
+		 * <p>The <code>selectionType</code> describes the kind of selection. 
+		 * It can either be <code>SelectionType.TEXT</code> or <code>SelectionType.CELLS</code>
+		 * 
+		 * @see flashx.textLayout.edit.SelectionType
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get selectionType() : String;
 		
 		/**
 		 * Indicates whether the selection covers a range of text.
@@ -201,6 +276,14 @@ package flashx.textLayout.edit
 		 */	
 		function refreshSelection():void;
 
+		/** 
+		 * Clears the selection shapes. 
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+ 		 * @langversion 3.0
+		 */	
+		function clearSelection():void;
 
 		/** 
 		 * Gives the focus to the first container in the selection.
@@ -249,6 +332,19 @@ package flashx.textLayout.edit
  		 * @langversion 3.0
 		 */
 		function get currentSelectionFormat():SelectionFormat;
+
+		/** 
+		 * The current Cell SelectionFormat object.
+		 * 
+		 * <p>The current cell SelectionFormat object is chosen from the SelectionFormat objects assigned to the 
+		 * <code>unfocusedCellSelectionFormat</code>, <code>inactiveCellSelectionFormat</code> and <code>focusedCellSelectionFormat</code> 
+		 * properties based on the current state of the <code>windowActive</code> and <code>focused</code> properties.</p> 
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get currentCellSelectionFormat():SelectionFormat;
 
 		/**
 		 * Gets the character format attributes that are common to all characters in the specified text range or current selection.
@@ -346,7 +442,38 @@ package flashx.textLayout.edit
 		 */		 		 
 		 function get inactiveSelectionFormat():SelectionFormat;
 		 function set inactiveSelectionFormat(val:SelectionFormat):void;		 		 
-		
+
+		 /**
+		  * The SelectionFormat object used to draw cell selections in a focused container. 
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  */		 
+		 function get focusedCellSelectionFormat():SelectionFormat;
+		 function set focusedCellSelectionFormat(val:SelectionFormat):void;
+		 
+		 /**
+		  * The SelectionFormat object used to draw cell selections when they are not in a focused container, but are in
+		  * the active window.
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  */		 		 
+		 function get unfocusedCellSelectionFormat():SelectionFormat;
+		 function set unfocusedCellSelectionFormat(val:SelectionFormat):void;
+		 
+		 /**
+		  * The SelectionFormat object used to draw cell selections when they are not in the active window.
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  */		 		 
+		 function get inactiveCellSelectionFormat():SelectionFormat;
+		 function set inactiveCellSelectionFormat(val:SelectionFormat):void;		 		 
+
 		/**
 		 * Executes any pending FlowOperations. 
 		 * 
@@ -379,6 +506,25 @@ package flashx.textLayout.edit
  	 	 * @langversion 3.0
 		 */
 		function notifyInsertOrDelete(absolutePosition:int, length:int):void		 
-		 	
+		 
+		/**
+		 * The ISelectionManager object used to for cell selections nested within the TextFlow managed by this ISelectionManager.
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */		 		 
+		function get subManager():ISelectionManager;
+		function set subManager(value:ISelectionManager):void;
+		
+		/**
+		 * The ISelectionManager object used to manage the parent TextFlow of this ISelectionManager (i.e. for cell ISelectionManagers).
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */		 		 
+		function get superManager():ISelectionManager;
+		function set superManager(value:ISelectionManager):void;
 	}
 }

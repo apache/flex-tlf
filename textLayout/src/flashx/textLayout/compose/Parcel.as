@@ -31,8 +31,8 @@ package flashx.textLayout.compose
 
 	use namespace tlf_internal;
 		
-	[ExcludeClass]
-	/** Helper class for implementations of IParcelList
+	/** 
+	 * Helper class for implementations of IParcelList
 	 * 
 	 * @private
 	 */

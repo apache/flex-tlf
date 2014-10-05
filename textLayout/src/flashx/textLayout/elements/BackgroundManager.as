@@ -32,6 +32,7 @@ package flashx.textLayout.elements
 	import flashx.textLayout.compose.ParcelList;
 	import flashx.textLayout.compose.StandardFlowComposer;
 	import flashx.textLayout.compose.TextFlowLine;
+	import flashx.textLayout.compose.TextFlowTableBlock;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.container.TextContainerManager;
 	import flashx.textLayout.debug.assert;
@@ -45,7 +46,6 @@ package flashx.textLayout.elements
 	
 	use namespace tlf_internal;
 	
-	[ExcludeClass]
 	/** @private Manages bounds calculation and rendering of backgroundColor character format. */
 	public class BackgroundManager
 	{
@@ -109,6 +109,34 @@ package flashx.textLayout.elements
 			}
 		}
 		
+		public static function collectTableBlock(_textFlow:TextFlow,block:TextFlowTableBlock,controller:ContainerController):void
+		{
+			// add block rect for each cell in table block
+			
+			var bb:BackgroundManager;
+			var r:Rectangle;
+			var composer:IFlowComposer;
+
+			var cells:Vector.<TableCellElement> = block.getTableCells();
+			for each(var cell:TableCellElement in cells){
+				if(BackgroundManager.hasBorderOrBackground(cell))
+				{
+					if(!_textFlow.backgroundManager)
+						_textFlow.getBackgroundManager();
+					bb = _textFlow.backgroundManager;
+
+					bb.addBlockElement(cell);
+
+					var row:TableRowElement = cell.getRow();
+					r = new Rectangle(cell.x, cell.y + block.y, cell.width, row.composedHeight);
+					bb.addBlockRect(cell, r, controller);
+
+				}
+			}
+			block.y;
+			
+		}
+		
 		public static function collectBlock(_textFlow:TextFlow, elem:FlowGroupElement, _parcelList:ParcelList = null, tableComposeNotFromBeginning:Boolean = false, tableOutOfView:Boolean = false):void
 		{
 			var bb:BackgroundManager;
@@ -118,61 +146,8 @@ package flashx.textLayout.elements
 
 			if(elem)
 			{
-				//The height of TableDataCellElement can only be identified after all the cells in the row are composed.
-				//So, pick it out of the common process 
-				if(elem is TableRowElement)
-				{
-					var tabRow:TableRowElement = elem as TableRowElement;
-					//for table cells
-					var cell:TableDataCellElement;
-					var cellParcel:Parcel;
-					for(var cIdx:Number = 0; cIdx < elem.numChildren; cIdx++)
-					{
-						cell = elem.getChildAt(cIdx) as TableDataCellElement;
-						if(BackgroundManager.hasBorderOrBackground(cell) || BackgroundManager.hasBorderOrBackground(elem))
-						{
-							//mark the paragraph that has border or background
-							if(!_textFlow.backgroundManager)
-								_textFlow.getBackgroundManager();
-							bb = _textFlow.backgroundManager;
-							
-							//BackgroundManager should not be null here
-							CONFIG::debug { assert(_textFlow.backgroundManager != null ,"BackgroundManager should not be null"); }
-							
-							bb.addBlockElement(cell);
-							
-							cellParcel = _parcelList.getParcelAt(cell.parcelIndex);
-							if(cellParcel)
-							{
-								r = new Rectangle(cell.x, cell.y, cell.width, tabRow.height);
-								bb.addBlockRect(cell, r, cellParcel.controller);
-							}
-						}
-					}
-					
-					//for table rows
-					/*if(BackgroundManager.hasBorderOrBackground(elem))
-					{
-						//mark the paragraph that has border or background
-						if(!_textFlow.backgroundManager)
-							_textFlow.getBackgroundManager();
-						bb = _textFlow.backgroundManager;
-						
-						//BackgroundManager should not be null here
-						CONFIG::debug { assert(_textFlow.backgroundManager != null ,"BackgroundManager should not be null"); }
-						
-						bb.addBlockElement(elem);
-						
-						var parentTable:TableElement = elem.parent as TableElement;
-						var rowParcel:Parcel = _parcelList.getParcelAt(tabRow.parcelIndex);
-						if(parentTable && rowParcel){
-							r = new Rectangle(parentTable.x + rowParcel.x, tabRow.y + rowParcel.y, parentTable.computedWidth, tabRow.height);
-							bb.addBlockRect(elem, r, rowParcel.controller);
-						}
-					}*/
-				}
-				//for the other elements
-				else if(BackgroundManager.hasBorderOrBackground(elem))
+
+				if(BackgroundManager.hasBorderOrBackground(elem))
 				{
 					//mark the paragraph that has border or background
 					if(!_textFlow.backgroundManager)
@@ -189,61 +164,9 @@ package flashx.textLayout.elements
 					{
 						if(elem is TableElement)
 						{
+							// Do we need to do anything for table elements? Not sure...
 							var tab:TableElement = elem as TableElement;
-							var parcel:Parcel;
-							if(tab.numAcrossParcels == 0)
-							{
-								r = new Rectangle();
-								parcel = _parcelList.getParcelAt(tab.originParcelIndex);
-								if(parcel)
-								{
-									if(tableComposeNotFromBeginning)
-									{
-										r.x = parcel.x;
-										r.y = parcel.y;
-									}
-									else
-									{
-										r.x = tab.x;
-										r.y = tab.y;
-									}
-									r.width = tab.computedWidth;
-									r.height = tab.height;
-									bb.addBlockRect(elem, r, parcel.controller);
-								}
-							}else
-							{
-								for(var tIdx:Number = 0; tIdx <= tab.numAcrossParcels; tIdx++)
-								{
-									r = new Rectangle();
-									parcel = _parcelList.getParcelAt(tab.originParcelIndex + tIdx);
-									if(parcel)
-									{
-										if(tIdx == 0 && !tableComposeNotFromBeginning)
-										{
-											r.x = tab.x;
-											r.y = tab.y;
-											r.width = tab.computedWidth;
-											r.height = tab.heightArray[tIdx];
-											bb.addBlockRect(elem, r, parcel.controller, BackgroundManager.BOTTOM_EXCLUDED);
-										}else if (tIdx == tab.numAcrossParcels && !tableOutOfView)
-										{
-											r.x = parcel.x + tab.computedFormat.marginLeft;
-											r.y = parcel.y;
-											r.width = tab.computedWidth;
-											r.height = tab.totalRowDepth;
-											bb.addBlockRect(elem, r, parcel.controller, BackgroundManager.TOP_EXCLUDED);
-										}else
-										{
-											r.x = parcel.x + tab.computedFormat.marginLeft;
-											r.y = parcel.y;
-											r.width = tab.computedWidth;
-											r.height = tab.heightArray[tIdx];
-											bb.addBlockRect(elem, r, parcel.controller, BackgroundManager.TOP_AND_BOTTOM_EXCLUDED);
-										}
-									}
-								}
-							}
+
 						}
 						else //for elements like ParagraphElement, DivElement, ListItemElement, ListElement, TextFlow
 						{	
@@ -461,8 +384,9 @@ package flashx.textLayout.elements
 					//draw background
 					if(style.backgroundColor != BackgroundColor.TRANSPARENT)
 					{
-						g.lineStyle(0, style.backgroundColor, style.backgroundAlpha, true);
-						g.beginFill(style.backgroundColor);
+						// The value 0 indicates hairline thickness; 
+						g.lineStyle(NaN, style.backgroundColor, style.backgroundAlpha, true);
+						g.beginFill(style.backgroundColor, style.backgroundAlpha);
 						g.drawRect(rec.x, rec.y, rec.width, rec.height);
 						g.endFill();
 					}
@@ -577,8 +501,9 @@ package flashx.textLayout.elements
 							//draw background
 							if(style.backgroundColor != BackgroundColor.TRANSPARENT)
 							{
-								g.lineStyle(0, style.backgroundColor, style.backgroundAlpha, true);
-								g.beginFill(style.backgroundColor);
+								// The value 0 indicates hairline thickness; NaN removes line
+								g.lineStyle(NaN, style.backgroundColor, style.backgroundAlpha, true);
+								g.beginFill(style.backgroundColor, style.backgroundAlpha);
 								g.drawRect(rec.x, rec.y, rec.width, rec.height);
 								g.endFill();
 							}
@@ -618,7 +543,11 @@ package flashx.textLayout.elements
 				//draw background for span	
 				for(var childIdx:int = 0; childIdx<controller.textLines.length; ++childIdx)
 				{
-					var tl:TextLine = controller.textLines[childIdx];
+					var line:* = controller.textLines[childIdx];
+					// skip TextFlowTableBlocks
+					if(!(line is TextLine))
+						continue;
+					var tl:TextLine = line;
 					var entry:Array = _lineDict[tl];
 		
 					if (entry)

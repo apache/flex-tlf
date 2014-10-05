@@ -57,6 +57,7 @@ package flashx.textLayout
 		import flashx.textLayout.edit.ISelectionManager; ISelectionManager;
 		import flashx.textLayout.edit.SelectionFormat; SelectionFormat;
 		import flashx.textLayout.edit.SelectionState; SelectionState;
+		import flashx.textLayout.edit.SelectionType; SelectionType;
 		
 		import flashx.textLayout.elements.SubParagraphGroupElementBase; SubParagraphGroupElementBase;
 		import flashx.textLayout.elements.BreakElement; BreakElement;
@@ -87,7 +88,7 @@ package flashx.textLayout
 		import flashx.textLayout.elements.TableBodyElement; TableBodyElement;
 		import flashx.textLayout.elements.TableColElement; TableColElement;
 		import flashx.textLayout.elements.TableColGroupElement; TableColGroupElement;
-		import flashx.textLayout.elements.TableDataCellElement; TableDataCellElement;
+		import flashx.textLayout.elements.TableCellElement; TableCellElement;
 		import flashx.textLayout.elements.TableRowElement; TableRowElement;
 		import flashx.textLayout.elements.TCYElement; TCYElement;
 		import flashx.textLayout.elements.TextFlow; TextFlow;

@@ -20,8 +20,10 @@ package flashx.textLayout.edit
 {
     import flash.desktop.Clipboard;
     import flash.desktop.ClipboardFormats;
+    import flash.display.BitmapData;
     import flash.display.DisplayObject;
     import flash.display.InteractiveObject;
+    import flash.display.Shape;
     import flash.display.Stage;
     import flash.errors.IllegalOperationError;
     import flash.events.ContextMenuEvent;
@@ -31,8 +33,10 @@ package flashx.textLayout.edit
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.events.TextEvent;
+    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.text.engine.TextBlock;
     import flash.text.engine.TextLine;
     import flash.text.engine.TextLineValidity;
     import flash.text.engine.TextRotation;
@@ -40,14 +44,20 @@ package flashx.textLayout.edit
     import flash.ui.Keyboard;
     import flash.ui.Mouse;
     import flash.ui.MouseCursor;
+    import flash.ui.MouseCursorData;
+    import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
     
     import flashx.textLayout.compose.IFlowComposer;
     import flashx.textLayout.compose.TextFlowLine;
+    import flashx.textLayout.compose.TextFlowTableBlock;
     import flashx.textLayout.container.ColumnState;
     import flashx.textLayout.container.ContainerController;
     import flashx.textLayout.debug.Debugging;
     import flashx.textLayout.debug.assert;
+    import flashx.textLayout.elements.CellContainer;
+    import flashx.textLayout.elements.CellCoordinates;
+    import flashx.textLayout.elements.CellRange;
     import flashx.textLayout.elements.Configuration;
     import flashx.textLayout.elements.FlowElement;
     import flashx.textLayout.elements.FlowLeafElement;
@@ -55,7 +65,9 @@ package flashx.textLayout.edit
     import flashx.textLayout.elements.IConfiguration;
     import flashx.textLayout.elements.InlineGraphicElement;
     import flashx.textLayout.elements.ParagraphElement;
-    import flashx.textLayout.elements.TableDataCellElement;
+    import flashx.textLayout.elements.TableBlockContainer;
+    import flashx.textLayout.elements.TableCellElement;
+    import flashx.textLayout.elements.TableColElement;
     import flashx.textLayout.elements.TableElement;
     import flashx.textLayout.elements.TableRowElement;
     import flashx.textLayout.elements.TextFlow;
@@ -122,23 +134,325 @@ package flashx.textLayout.edit
      * @langversion 3.0
      */
     public class SelectionManager implements ISelectionManager
-    {       
+    {
+		static tlf_internal var useTableSelectionCursors:Boolean = false;
+		/**
+		 * Cursor for selection of table
+		 **/
+		public static var SelectTable:String = "selectTable";
+		
+		/**
+		 * Cursor for selection of table row
+		 **/
+		public static var SelectTableRow:String = "selectTableRow";
+		
+		/**
+		 * Cursor for selection of table column
+		 **/
+		public static var SelectTableColumn:String = "selectTableColumn";
+		
         private var _focusedSelectionFormat:SelectionFormat;
         private var _unfocusedSelectionFormat:SelectionFormat;
         private var _inactiveSelectionFormat:SelectionFormat;
+		private var _focusedCellSelectionFormat:SelectionFormat;
+		private var _unfocusedCellSelectionFormat:SelectionFormat;
+		private var _inactiveCellSelectionFormat:SelectionFormat;
         private var _selFormatState:String = SelectionFormatState.UNFOCUSED;
         private var _isActive:Boolean;
         
         /** The TextFlow of the selection. */
         private var _textFlow:TextFlow;
+		
+		protected var _subManager:ISelectionManager;
+		protected var _superManager:ISelectionManager;
+		
+		private var _currentTable:TableElement;
+		
+		// this should probably be produced dynamically rather than keep a reference.
+		private var _cellRange:CellRange;
+		
+		//TODO the following functions need proper comments and should be moved to a logical location within the class.
+		
+		public function get currentTable():TableElement
+		{
+			return _currentTable;
+		}
+		public function set currentTable(table:TableElement):void
+		{
+			_currentTable = table;
+		}
+		
+		public function hasCellRangeSelection():Boolean
+		{
+			if (!_currentTable) {
+				return false;
+			}
+			
+			//we should really check the anchorCellPosition and activeCellPosition instead
+			if (!_cellRange) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		/**
+		 * Select a table cell text flow
+		 **/
+		public function selectCellTextFlow(cell:TableCellElement):void {
+			
+			if (cell && cell.table) {
+				var selectionManager:SelectionManager = cell.textFlow.interactionManager as SelectionManager;
+				
+				clear();
+				
+				if (selectionManager) {
+					selectionManager.currentTable = cell.table;
+					selectionManager.selectAll();
+					
+					// this seems to be required to work but it should not be
+					selectionManager.setFocus(); 
+				}
+			}
+		}
+		
+		/**
+		 * Select a table cell. 
+		 **/
+		public function selectCell(cell:TableCellElement):void {
+			var beginCoordinates:CellCoordinates;
+			var endCoordinates:CellCoordinates;
+			
+			if (cell) {
+				beginCoordinates = new CellCoordinates(cell.rowIndex, cell.colIndex);
+				endCoordinates = new CellCoordinates(cell.rowIndex, cell.colIndex);
+				
+				if (beginCoordinates.isValid()) {
+					selectCellRange(beginCoordinates, endCoordinates);
+				}
+			}
+		}
+		
+		/**
+		 * Select table cells at the specified index.
+		 **/
+		public function selectCellAt(table:TableElement, rowIndex:int, colIndex:int):void {
+			var cell:TableCellElement = table.getCellAt(rowIndex, colIndex);
+			
+			if (cell) {
+				selectCell(cell);
+			}
+		}
+		
+		/**
+		 * Select table cells at the specified index
+		 **/
+		public function selectCells(cells:Vector.<TableCellElement>):void {
+			var startX:int = int.MAX_VALUE;
+			var startY:int = int.MAX_VALUE;
+			var endX:int = int.MIN_VALUE;
+			var endY:int = int.MIN_VALUE;
+			var cell:TableCellElement;
+			var table:TableElement;
+			for each(cell in cells)
+			{
+				if(cell)
+				{
+					if(table == null)
+						table = cell.getTable();
+					
+					var col:int = cell.colIndex;
+					var row:int = cell.rowIndex;
+					if(col < startX)
+						startX = col;
+					if(col > endX)
+						endX = col;
+					if(row < startY)
+						startY = row;
+					if(row > endY)
+						endY = row;
+				}
+			}
+			if(startX <= endX && startY <= endY)
+				selectCellRange(
+					new CellCoordinates(startY,startX,table),
+					new CellCoordinates(endY,endX,table)
+				);
+		}
+		
+		/**
+		 * Select the specified table row. 
+		 **/
+		public function selectRow(row:TableRowElement):void {
+			var beginCoordinates:CellCoordinates;
+			var endCoordinates:CellCoordinates;
+			
+			if (row) {
+				beginCoordinates = new CellCoordinates(row.rowIndex, 0);
+				endCoordinates = new CellCoordinates(row.rowIndex, row.numCells);
+				
+				if (beginCoordinates.isValid() && endCoordinates.isValid()) {
+					selectCellRange(beginCoordinates, endCoordinates);
+				}
+			}
+		}
+		
+		/**
+		 * Select a table row at the specified index
+		 **/
+		public function selectRowAt(table:TableElement, index:int):void {
+			var row:TableRowElement = table ? table.getRowAt(index) : null;
+			
+			if (row) {
+				selectRow(row);
+			}
+		}
+		
+		/**
+		 * Selects the table rows provided
+		 **/
+		public function selectRows(rows:Array):void {
+			var cells:Vector.<TableCellElement> = new Vector.<TableCellElement>();
+			var table:TableElement;
+			var cell:TableCellElement;
+			
+			if (rows && rows.length) {
+				
+				for (var i:int;i<rows.length;i++) 
+				{
+					var row:TableRowElement = rows[i] as TableRowElement;
+					
+					if (row)
+					{
+						for each(cell in row.cells)
+						cells.push(cell);
+					}
+				}
+				
+				selectCells(cells);
+			}
+		}
+		
+		/**
+		 * Select a table column. 
+		 **/
+		public function selectColumn(column:TableColElement):void {
+			var table:TableElement = column.table;
+			
+			if (column && table) {
+				selectCells(table.getCellsForColumn(column));
+			}
+		}
+		
+		/**
+		 * Select a table column at the specified index 
+		 **/
+		public function selectColumnAt(table:TableElement, index:int):void {
+			var column:TableColElement = table.getColumnAt(index);
+			
+			if (column && table) {
+				return selectColumn(column);
+			}
+		}
+		
+		/**
+		 * Selects the table columns provided
+		 **/
+		public function selectColumns(columns:Array):void {
+			var cells:Vector.<TableCellElement> = new Vector.<TableCellElement>();
+			var cell:TableCellElement;
+			
+			if (columns && columns.length) {
+				
+				for (var i:int;i<columns.length;i++) 
+				{
+					var column:TableColElement = columns[i] as TableColElement;
+					
+					if (column)
+					{
+						for each(cell in column.cells)
+							cells.push(cell);
+					}
+					
+				}
+				
+				selectCells(cells);
+			}
+		}
+		
+		/**
+		 * Select all cells in a table. 
+		 **/
+		public function selectTable(table:TableElement):void {
+			
+			if (table)
+			{
+				var startCoords:CellCoordinates = new CellCoordinates(0,0,table);
+				var endCoords:CellCoordinates = new CellCoordinates(table.numRows-1,table.numColumns-1,table);
+				selectCellRange(startCoords,endCoords);
+			}
+			
+		}
+		
+		/**
+		 * Select a range of table cells. 
+		 **/
+		public function selectCellRange(anchorCoords:CellCoordinates, activeCoords:CellCoordinates):void
+		{
+			var blocks:Vector.<TextFlowTableBlock>;
+			var block:TextFlowTableBlock;
+			var controller:ContainerController;
+			
+			if (selectionType == SelectionType.TEXT) {
+				clear();
+			}
+			clearCellSelections();
+			
+			if (anchorCoords && activeCoords) {
+				_cellRange = new CellRange(_currentTable, anchorCoords, activeCoords);
+				activeCellPosition = activeCoords;
+				blocks = _currentTable.getTableBlocksInRange(anchorCoords, activeCoords);
+				
+				for each(block in blocks) {
+					block.controller.clearSelectionShapes();
+					block.controller.addCellSelectionShapes(currentCellSelectionFormat.rangeColor, block, anchorCoords, activeCoords);
+				}
+				if(subManager)
+				{
+					subManager.selectRange(-1,-1);
+					subManager = null;
+				}
+			}
+			else
+			{
+				_cellRange = null;
+				activeCellPosition.column = -1;
+				activeCellPosition.row = -1;
+			}
+			selectionChanged();
+		}
+		
+		public function getCellRange():CellRange
+		{
+			// not really a good implementation. We'll fix this later
+			return _cellRange;
+		}
+		public function setCellRange(range:CellRange):void
+		{
+			selectCellRange(range.anchorCoordinates,range.activeCoordinates);
+			//_cellRange = range;
+			// do something about actually drawing the selection.
+		}
         
         // current range of selection
         /** Anchor point of the current selection, as an index into the TextFlow. */
         private var anchorMark:Mark;
         /** Active end of the current selection, as an index into the TextFlow. */
         private var activeMark:Mark;
-        
-        // used to save pending attributes at a point selection
+        private var _anchorCellPosition:CellCoordinates;
+		private var _activeCellPosition:CellCoordinates;
+
+		// used to save pending attributes at a point selection
         private var _pointFormat:ITextLayoutFormat;
         /** 
          * The format that will be applied to inserted text. 
@@ -190,6 +504,8 @@ package flashx.textLayout.edit
             _textFlow = null;
             anchorMark = createMark();
             activeMark = createMark();
+			anchorCellPosition = createCellMark();
+			activeCellPosition = createCellMark();
             _pointFormat = null;
             _isActive = false;
             CONFIG::debug 
@@ -197,7 +513,12 @@ package flashx.textLayout.edit
                 this.id = smCount.toString();
                 smCount++;
             }
+			
+			Mouse.registerCursor(SelectTable, createSelectTableCursor());
+			Mouse.registerCursor(SelectTableRow, createSelectTableRowCursor());
+			Mouse.registerCursor(SelectTableColumn, createSelectTableColumnCursor());
         }
+		
         /**
          * @copy ISelectionManager#getSelectionState()
          * 
@@ -211,7 +532,10 @@ package flashx.textLayout.edit
          */
         public function getSelectionState():SelectionState
         {
-            return new SelectionState(_textFlow, anchorMark.position, activeMark.position, pointFormat);
+			if(subManager)
+				return subManager.getSelectionState();
+			
+            return new SelectionState(_textFlow, anchorMark.position, activeMark.position, pointFormat, _cellRange);
         }
                 
         /**
@@ -238,8 +562,45 @@ package flashx.textLayout.edit
          * @langversion 3.0
          */
         public function hasSelection():Boolean
-        { return anchorMark.position != -1; }
+        {
+			return selectionType == SelectionType.TEXT;
+		}
 
+		/**
+		 *  @copy ISelectionManager#hasAnySelection()
+		 * 
+		 * @includeExample examples\SelectionManager_hasSelection.as -noswf
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function hasAnySelection():Boolean
+		{
+			return selectionType != SelectionType.NONE;
+		}
+
+		/**
+		 * Indicates the type of selection. 
+		 * 
+		 * <p>The <code>selectionType</code> describes the kind of selection. 
+		 * It can either be <code>SelectionType.TEXT</code> or <code>SelectionType.CELLS</code>
+		 * 
+		 * @see flashx.textLayout.edit.SelectionType
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get selectionType() : String
+		{
+			if(anchorMark.position != -1)
+				return SelectionType.TEXT;
+			else if(anchorCellPosition.isValid())
+				return SelectionType.CELLS;
+			
+			return SelectionType.NONE;
+		}
         /** 
          *  @copy ISelectionManager#isRangeSelection()
          * 
@@ -277,6 +638,8 @@ package flashx.textLayout.edit
                     flushPendingOperations();
                 
                 clear();
+				clearCellSelections();
+				_cellRange = null;
                 
                 // If we switch into read-only mode, make sure the cursor isn't showing a text selection IBeam
                 if (!value) // see Watson 2637162
@@ -348,7 +711,29 @@ package flashx.textLayout.edit
             }
             return focusedSelectionFormat;
          }
-         
+
+		 /**
+		  *  @copy ISelectionManager#currentCellSelectionFormat
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  * 
+		  * @see flashx.textLayout.edit.SelectionFormat
+		  */
+		 public function get currentCellSelectionFormat():SelectionFormat
+		 { 
+			 if (_selFormatState == SelectionFormatState.UNFOCUSED)
+			 {
+				 return unfocusedCellSelectionFormat;
+			 }
+			 else if (_selFormatState == SelectionFormatState.INACTIVE)
+			 {
+				 return inactiveCellSelectionFormat;
+			 }
+			 return focusedCellSelectionFormat;
+		 }
+
         /**
          *  @copy ISelectionManager#focusedSelectionFormat
          * 
@@ -420,7 +805,79 @@ package flashx.textLayout.edit
          { 
             return _inactiveSelectionFormat ? _inactiveSelectionFormat : (_textFlow ? _textFlow.configuration.inactiveSelectionFormat : null);
          }       
-         
+
+		 /**
+		  *  @copy ISelectionManager#focusedCellSelectionFormat
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  * 
+		  * @see flashx.textLayout.edit.SelectionFormat
+		  */
+		 public function set focusedCellSelectionFormat(val:SelectionFormat):void
+		 { 
+			 _focusedCellSelectionFormat = val;
+			 if (this._selFormatState == SelectionFormatState.FOCUSED)
+				 refreshSelection();
+		 }
+		 
+		 /**
+		  * @private - docs on setter
+		  */
+		 public function get focusedCellSelectionFormat():SelectionFormat
+		 { 
+			 return _focusedCellSelectionFormat ? _focusedCellSelectionFormat : (_textFlow ? _textFlow.configuration.focusedSelectionFormat : null);
+		 }       
+		 
+		 /**
+		  *  @copy ISelectionManager#unfocusedCellSelectionFormat
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  * 
+		  * @see flashx.textLayout.edit.SelectionFormat
+		  */
+		 public function set unfocusedCellSelectionFormat(val:SelectionFormat):void
+		 { 
+			 _unfocusedCellSelectionFormat = val;
+			 if (this._selFormatState == SelectionFormatState.UNFOCUSED)
+				 refreshSelection();
+		 }          
+		 
+		 /**
+		  *  @private - docs on setter
+		  */
+		 public function get unfocusedCellSelectionFormat():SelectionFormat
+		 { 
+			 return _unfocusedCellSelectionFormat ? _unfocusedCellSelectionFormat : (_textFlow ? _textFlow.configuration.unfocusedSelectionFormat : null);
+		 }
+		 
+		 /**
+		  *  @copy ISelectionManager#inactiveCellSelectionFormat
+		  * 
+		  * @playerversion Flash 10
+		  * @playerversion AIR 1.5
+		  * @langversion 3.0
+		  * 
+		  * @see flashx.textLayout.edit.SelectionFormat
+		  */
+		 public function set inactiveCellSelectionFormat(val:SelectionFormat):void
+		 { 
+			 _inactiveCellSelectionFormat = val;
+			 if (this._selFormatState == SelectionFormatState.INACTIVE)
+				 refreshSelection();
+		 }          
+		 
+		 /**
+		  * @private - docs on setter
+		  */
+		 public function get inactiveCellSelectionFormat():SelectionFormat
+		 { 
+			 return _inactiveCellSelectionFormat ? _inactiveCellSelectionFormat : (_textFlow ? _textFlow.configuration.inactiveSelectionFormat : null);
+		 }       
+		 
          /** @private - returns the selectionFormatState.  @see flashx.textLayout.edit.SelectionFormatState */
          tlf_internal function get selectionFormatState():String
          { return _selFormatState; }
@@ -584,11 +1041,17 @@ package flashx.textLayout.edit
          */
         public function selectAll() : void
         {
-            selectRange(0, int.MAX_VALUE);
+			if(subManager)
+				subManager.selectAll();
+			else
+			{
+				var lastSelectablePos:int = (_textFlow.textLength > 0) ? _textFlow.textLength - 1 : 0;
+				selectRange(0, lastSelectablePos);
+			}
         }
         
         /** 
-         *  @copy ISelectionManager#selectRange
+         * @copy ISelectionManager#selectRange
          * 
          * @includeExample examples\SelectionManager_selectRange.as -noswf
          * 
@@ -601,22 +1064,76 @@ package flashx.textLayout.edit
         public function selectRange(anchorPosition:int, activePosition:int) : void
         {
             flushPendingOperations();
+			
+			if(subManager)
+				subManager.selectRange(-1,-1);
             
             // anchor and active can be in any order
             // TODO: range check and clamp anchor,active
             if (anchorPosition != anchorMark.position || activePosition != activeMark.position)
             {   
                 clearSelectionShapes();
+				clearCellSelections();
+				_cellRange = null;
                     
-                internalSetSelection(_textFlow, anchorPosition, activePosition);
+                internalSetSelection(_textFlow, anchorPosition, activePosition, _pointFormat);
                 
                 // selection changed
-                selectionChanged();     
+                selectionChanged();
                 
                 allowOperationMerge = false;
             }
         }
-        
+		
+		/** 
+		 * @copy ISelectionManager#selectFirstPosition
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 * @see flashx.textLayout.compose.IFlowComposer
+		 */
+		public function selectFirstPosition():void
+		{
+			selectRange(0, 0);
+		}
+		
+		/** 
+		 * @copy ISelectionManager#selectLastPosition
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 * @see flashx.textLayout.compose.IFlowComposer
+		 */
+		public function selectLastPosition():void
+		{
+			selectRange(int.MAX_VALUE, int.MAX_VALUE);
+		}
+
+		/** 
+		 * @copy ISelectionManager#deselect
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 * 
+		 * @see flashx.textLayout.compose.IFlowComposer
+		 */
+		public function deselect():void
+		{
+			if (hasAnySelection())
+			{
+				clearSelectionShapes();
+				clearCellSelections();
+				addSelectionShapes();
+			}
+			selectRange(-1,-1);
+			_cellRange = null;
+		}
+
         private function internalSetSelection(root:TextFlow,anchorPosition:int,activePosition:int,format:ITextLayoutFormat = null) : void
         {
             _textFlow = root;
@@ -627,6 +1144,8 @@ package flashx.textLayout.edit
                 anchorPosition = -1;
                 activePosition = -1;
             }
+			else if(subManager)
+				subManager = null;
             
             var lastSelectablePos:int = (_textFlow.textLength > 0) ? _textFlow.textLength - 1 : 0;
             
@@ -645,7 +1164,8 @@ package flashx.textLayout.edit
         //  trace("Selection ", anchorMark, "to", activeMark.position);
         }       
         
-        /** Clear any active selections.
+        /** 
+		 * Clear any active selections.
          */
         private function clear(): void
         {
@@ -659,7 +1179,32 @@ package flashx.textLayout.edit
                 allowOperationMerge = false;
             }
         }
-        
+        /**
+		 * Clear any cell selections
+		 * */
+		private function clearCellSelections():void
+		{
+			var blocks:Vector.<TextFlowTableBlock>;
+			var block:TextFlowTableBlock;
+			var controller:ContainerController;
+			
+			if (_cellRange) {
+				blocks = _cellRange.table.getTableBlocksInRange(_cellRange.anchorCoordinates, _cellRange.activeCoordinates);
+				
+				for each (block in blocks) {
+					if (controller != block.controller) {
+						block.controller.clearSelectionShapes();
+					}
+					
+					controller = block.controller;
+				}
+				
+			}
+			if(block)
+				block.controller.clearSelectionShapes();
+			
+			//_cellRange = null;
+		}
         private function addSelectionShapes():void
         {
             if (_textFlow.flowComposer)
@@ -677,7 +1222,7 @@ package flashx.textLayout.edit
                     {
                         _textFlow.flowComposer.getControllerAt(containerIter++).addSelectionShapes(currentSelectionFormat, absoluteStart, absoluteEnd);
                     }
-                } 
+                }
             }
         }
         
@@ -693,22 +1238,39 @@ package flashx.textLayout.edit
                 }
             }
         }
-        
-        /** 
-         *  @copy ISelectionManager#refreshSelection()
-         * 
-         * @playerversion Flash 10
-         * @playerversion AIR 1.5
-         * @langversion 3.0
-        */
-        public function refreshSelection(): void
-        {
-            if (hasSelection())
-            {
-                clearSelectionShapes();
-                addSelectionShapes();
-            }
-        }
+		
+		/** 
+		 *  @copy ISelectionManager#refreshSelection()
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function refreshSelection(): void
+		{
+			if (hasAnySelection())
+			{
+				clearSelectionShapes();
+				clearCellSelections();
+				addSelectionShapes();
+			}
+		}
+		
+		/** 
+		 *  @copy ISelectionManager#clearSelection()
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function clearSelection(): void
+		{
+			if (hasAnySelection())
+			{
+				clearSelectionShapes();
+				clearCellSelections();
+			}
+		}
         
         /** Verifies that the selection is in a legal state. @private */
         CONFIG::debug public function debugCheckSelectionManager():int
@@ -745,7 +1307,12 @@ package flashx.textLayout.edit
                 _pointFormat = null;
             
             if (doDispatchEvent && _textFlow)
-                textFlow.dispatchEvent(new SelectionEvent(SelectionEvent.SELECTION_CHANGE, false, false, hasSelection() ? getSelectionState() : null));
+			{
+				if(textFlow.parentElement && textFlow.parentElement.getTextFlow())
+					textFlow.parentElement.getTextFlow().dispatchEvent(new SelectionEvent(SelectionEvent.SELECTION_CHANGE, false, false, hasSelection() ? getSelectionState() : null));
+				else
+					textFlow.dispatchEvent(new SelectionEvent(SelectionEvent.SELECTION_CHANGE, false, false, hasSelection() ? getSelectionState() : null));
+			}
         }
 
         // TODO: this routine could be much more efficient - instead of iterating over all lines in the TextFlow it should iterate over 
@@ -771,11 +1338,14 @@ package flashx.textLayout.edit
             //get the nearest column so we can ignore lines which aren't in the column we're looking for.
             //if we don't do this, we won't be able to select across column boundaries.
             var nearestColIdx:int = locateNearestColumn(controller, localX, localY, textFlow.computedFormat.blockProgression,textFlow.computedFormat.direction);
+
+			var prevLineBounds:Rectangle = null;
+			var previousLineIndex:int = -1;
+
+			/*
 			//For the table feature, we are trying to make sure if the current point is in the table and which cell it is in
-			var nearestCell:TableDataCellElement = locateNearestCell(controller, localX, localY, textFlow.computedFormat.blockProgression,textFlow.computedFormat.direction);
+			var nearestCell:TableCellElement = locateNearestCell(controller, localX, localY, textFlow.computedFormat.blockProgression,textFlow.computedFormat.direction);
             
-            var prevLineBounds:Rectangle = null;
-            var previousLineIndex:int = -1;
 			
 			if(nearestCell)
 			{
@@ -790,7 +1360,7 @@ package flashx.textLayout.edit
 					return cellPara.getAbsoluteStart() + cellPara.textLength - 1;
 				}
 			}
-            
+            */
             var lastLineIndexInColumn:int = -1;
             
             // Matching TextFlowLine and TextLine - they are not necessarily valid
@@ -845,6 +1415,7 @@ package flashx.textLayout.edit
                     //current line,. Otherwise, if the click's perpendicular coordinate is below the mid point between the current
                     //line or below it, then we want to use the line below (ie the previous line, but logically the one after the current)
                     var inPrevLine:Boolean = midPerpCoor != -1 && (isTTB ? perpCoor < midPerpCoor : perpCoor > midPerpCoor);
+					/*
 					if(rtline.paragraph.isInTable())
 					{
 						//if rtline is the last line of the cell and the isPrevLine is true, find the cell of the column in next row
@@ -852,10 +1423,10 @@ package flashx.textLayout.edit
 						if ( inPrevLine && testIndex != lastLineIndexInColumn )
 						{
 							var rtPara:ParagraphElement = rtline.paragraph;
-							var rtCell:TableDataCellElement = rtPara.getTableDataCellElement();
+							var rtCell:TableCellElement = rtPara.getParentCellElement();
 							//get the last element of the cell
 							var lastElement:FlowElement = rtCell.getLastLeaf();
-							var rtLastTbLine:TextFlowLine = lastElement.getParagraph().getTextBlock().lastLine.userData;
+							var rtLastTbLine:TextFlowLine = lastElement ? lastElement.getParagraph().getTextBlock().lastLine.userData : null;
 							if( rtline == rtLastTbLine )
 							{
 								//temproray codes, need to be updated when the column apis are ready
@@ -864,7 +1435,7 @@ package flashx.textLayout.edit
 								var nextRow:TableRowElement = rtRow.getNextSibling() as TableRowElement;
 								if ( nextRow && rtCell )
 								{
-									var nextCell:TableDataCellElement = nextRow.getChildAt(rtCell.colIndex) as TableDataCellElement;
+									var nextCell:TableCellElement = nextRow.getChildAt(rtCell.colIndex) as TableCellElement;
 									lineIndex = textFlow.flowComposer.findLineIndexAtPosition(nextCell.getFirstLeaf().getParagraph().getAbsoluteStart());
 								}
 							}
@@ -875,6 +1446,7 @@ package flashx.textLayout.edit
 							lineIndex = testIndex;
 					}
 					else
+					*/
                     	lineIndex = inPrevLine && testIndex != lastLineIndexInColumn ? testIndex+1 : testIndex;
 					break;
                 }
@@ -895,79 +1467,87 @@ package flashx.textLayout.edit
                 
             //Get a valid textLine -- check to make sure line is valid, regenerate if necessary, make sure it has correct container relative coordinates
             var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(lineIndex);
-            var textLine:TextLine = textFlowLine.getTextLine(true);
-            
-            // adjust localX,localY to be relative to the textLine.  
-            // Can't use localToGlobal/globalToLocal because textLine may not be on the display list due to virtualization
-            // we may need to bring this back if textline's can be rotated or placed by any mechanism other than a translation
-            // but then we'll need to provisionally place a virtualized TextLine in its parent container
-            localX -= textLine.x;
-            localY -= textLine.y;
-            /* var localPoint:Point = DisplayObject(controller.container).localToGlobal(new Point(localX,localY));
-            localPoint = textLine.globalToLocal(localPoint);
-            localX = localPoint.x;
-            localY = localPoint.y; */
-            
-            
-            var startOnNextLineIfNecessary:Boolean = false;
-            
-            var lastAtom:int = -1;
-            if (isDirectionRTL) {
-                lastAtom = textLine.atomCount - 1;
-            } else {
-                if ((textFlowLine.absoluteStart + textFlowLine.textLength) >= textFlowLine.paragraph.getAbsoluteStart() + textFlowLine.paragraph.textLength) {
-                    if (textLine.atomCount > 1) lastAtom = textLine.atomCount - 2;
-                } else {
-                    var lastLinePosInPar:int = textFlowLine.absoluteStart + textFlowLine.textLength - 1;
-                    var lastChar:String = textLine.textBlock.content.rawText.charAt(lastLinePosInPar);
-                    if (lastChar == " ") {
-                        if (textLine.atomCount > 1) lastAtom = textLine.atomCount - 2;
-                    } else {
-                        startOnNextLineIfNecessary = true;
-                        if (textLine.atomCount > 0) lastAtom = textLine.atomCount - 1;
-                    }
-                }
-            }
-            var lastAtomRect:Rectangle = (lastAtom > 0) ? textLine.getAtomBounds(lastAtom) : new Rectangle(0, 0, 0, 0);
-                        
-            if (!isTTB)
-            {
-                if (localX < 0)
-                    localX = 0;
-                else if (localX > (lastAtomRect.x + lastAtomRect.width))
-                {
-                    if (startOnNextLineIfNecessary) 
-                        return textFlowLine.absoluteStart + textFlowLine.textLength - 1;
-                    if (lastAtomRect.x + lastAtomRect.width > 0)
-                        localX = lastAtomRect.x + lastAtomRect.width;
-                }
-            }
-            else
-            {   
-                if (localY < 0) 
-                    localY = 0;
-                else if (localY > (lastAtomRect.y + lastAtomRect.height))
-                {
-                    if (startOnNextLineIfNecessary) 
-                        return textFlowLine.absoluteStart + textFlowLine.textLength - 1;    
-                    if (lastAtomRect.y + lastAtomRect.height > 0)
-                        localY = lastAtomRect.y + lastAtomRect.height;
-                }
-            }
-            
-			result = computeSelectionIndexInLine(textFlow, textLine, localX, localY);
+			if(textFlowLine is TextFlowTableBlock)
+			{
+				result = TextFlowTableBlock(textFlowLine).absoluteStart;
+			}
+			else
+			{
+				var textLine:TextLine = textFlowLine.getTextLine(true);
+				
+				// adjust localX,localY to be relative to the textLine.  
+				// Can't use localToGlobal/globalToLocal because textLine may not be on the display list due to virtualization
+				// we may need to bring this back if textline's can be rotated or placed by any mechanism other than a translation
+				// but then we'll need to provisionally place a virtualized TextLine in its parent container
+				localX -= textLine.x;
+				localY -= textLine.y;
+				/* var localPoint:Point = DisplayObject(controller.container).localToGlobal(new Point(localX,localY));
+				localPoint = textLine.globalToLocal(localPoint);
+				localX = localPoint.x;
+				localY = localPoint.y; */
+				
+				
+				var startOnNextLineIfNecessary:Boolean = false;
+				
+				var lastAtom:int = -1;
+				if (isDirectionRTL) {
+					lastAtom = textLine.atomCount - 1;
+				} else {
+					if ((textFlowLine.absoluteStart + textFlowLine.textLength) >= textFlowLine.paragraph.getAbsoluteStart() + textFlowLine.paragraph.textLength) {
+						if (textLine.atomCount > 1) lastAtom = textLine.atomCount - 2;
+					} else {
+						var lastLinePosInPar:int = textFlowLine.absoluteStart + textFlowLine.textLength - 1;
+						var lastChar:String = textLine.textBlock.content.rawText.charAt(lastLinePosInPar);
+						if (lastChar == " ") {
+							if (textLine.atomCount > 1) lastAtom = textLine.atomCount - 2;
+						} else {
+							startOnNextLineIfNecessary = true;
+							if (textLine.atomCount > 0) lastAtom = textLine.atomCount - 1;
+						}
+					}
+				}
+				var lastAtomRect:Rectangle = (lastAtom > 0) ? textLine.getAtomBounds(lastAtom) : new Rectangle(0, 0, 0, 0);
+				
+				if (!isTTB)
+				{
+					if (localX < 0)
+						localX = 0;
+					else if (localX > (lastAtomRect.x + lastAtomRect.width))
+					{
+						if (startOnNextLineIfNecessary) 
+							return textFlowLine.absoluteStart + textFlowLine.textLength - 1;
+						if (lastAtomRect.x + lastAtomRect.width > 0)
+							localX = lastAtomRect.x + lastAtomRect.width;
+					}
+				}
+				else
+				{   
+					if (localY < 0) 
+						localY = 0;
+					else if (localY > (lastAtomRect.y + lastAtomRect.height))
+					{
+						if (startOnNextLineIfNecessary) 
+							return textFlowLine.absoluteStart + textFlowLine.textLength - 1;    
+						if (lastAtomRect.y + lastAtomRect.height > 0)
+							localY = lastAtomRect.y + lastAtomRect.height;
+					}
+				}
+				
+				result = computeSelectionIndexInLine(textFlow, textLine, localX, localY);
+			}
+
             // trace("computeSelectionIndexInContainer:(",origX,origY,")",textFlow.flowComposer.getControllerIndex(controller).toString(),lineIndex.toString(),result.toString());
             return result != -1 ? result : firstCharVisible + length;   
         }
-		
-		static private function locateNearestCell(container:ContainerController, localX:Number, localY:Number, wm:String, direction:String):TableDataCellElement
+		/*
+		static private function locateNearestCell(container:ContainerController, localX:Number, localY:Number, wm:String, direction:String):TableCellElement
 		{
 			var cellIdx:int = 0;
 			//if we only have 1 column, no need to perform calculation...
 			var columnState:ColumnState = container.columnState;
 			
 			var isFound:Boolean = false;
-			var curCell:TableDataCellElement = null;
+			var curCell:TableCellElement = null;
 			
 			//we need to compare the current column to the nextColmn
 			while(cellIdx < columnState.cellCount - 1)
@@ -984,7 +1564,7 @@ package flashx.textLayout.edit
 			}
 			return isFound? curCell : null;
 		}
-        
+        */
         static private function locateNearestColumn(container:ContainerController, localX:Number, localY:Number, wm:String, direction:String):int
         {
             var colIdx:int = 0;
@@ -1141,9 +1721,8 @@ package flashx.textLayout.edit
             else  // Left to right case, right is "end" unicode
                 paraSelectionIdx = leanRight ? textLine.getAtomTextBlockEndIndex(elemIdx) : textLine.getAtomTextBlockBeginIndex(elemIdx);
 
-            //we again need to do some fixup here.  Unfortunately, we don't have the index into the paragraph until
-            
-            return rtline.paragraph.getAbsoluteStart() + paraSelectionIdx;
+			//we again need to do some fixup here.  Unfortunately, we don't have the index into the paragraph until
+            return rtline.paragraph.getTextBlockAbsoluteStart(textLine.textBlock) + paraSelectionIdx;
         }
         
         static private function checkForDisplayed(container:DisplayObject):Boolean
@@ -1164,6 +1743,142 @@ package flashx.textLayout.edit
             return false;   // not on the stage
 
         }
+		/** @private - find a controller and adjusts the x and y values of localPoint if necessary */
+		private static function findController(textFlow:TextFlow, target:Object, currentTarget:Object, localPoint:Point):ContainerController
+		{
+			var localX:Number = localPoint.x;
+			var localY:Number = localPoint.y;
+			var controller:ContainerController;
+			var containerPoint:Point; // scratch
+			
+			var globalPoint:Point = DisplayObject(target).localToGlobal(new Point(localX, localY));
+
+			for (var idx:int = 0; idx < textFlow.flowComposer.numControllers; idx++)
+			{
+				var testController:ContainerController = textFlow.flowComposer.getControllerAt(idx); 
+				if (testController.container == target || testController.container == currentTarget)
+				{
+					controller = testController;
+					break;
+				}
+			}
+			if (controller)
+			{   
+				if (target != controller.container)
+				{
+					containerPoint = DisplayObject(controller.container).globalToLocal(globalPoint);
+					localPoint.x = containerPoint.x;
+					localPoint.y = containerPoint.y;
+				}
+				return controller;         
+			} 
+			
+			//the point is someplace else on stage.  Map the target 
+			//to the textFlow.container.
+			CONFIG::debug { assert(textFlow.flowComposer && textFlow.flowComposer.numControllers,"findController: invalid textFlow"); }
+			
+			
+			
+			// result of the search
+			var controllerCandidate:ContainerController = null;
+			var candidateLocalX:Number;
+			var candidateLocalY:Number;
+			var relDistance:Number = Number.MAX_VALUE;
+			
+			for (var containerIndex:int = 0; containerIndex < textFlow.flowComposer.numControllers; containerIndex++)
+			{
+				var curContainerController:ContainerController = textFlow.flowComposer.getControllerAt(containerIndex);
+				
+				// displayed??
+				if (!checkForDisplayed(curContainerController.container as DisplayObject))
+					continue;
+				
+				// handle measured containers??
+				var bounds:Rectangle = curContainerController.getContentBounds();
+				var containerWidth:Number = isNaN(curContainerController.compositionWidth) ? curContainerController.getTotalPaddingLeft()+bounds.width : curContainerController.compositionWidth;
+				var containerHeight:Number = isNaN(curContainerController.compositionHeight) ? curContainerController.getTotalPaddingTop()+bounds.height : curContainerController.compositionHeight;
+				
+				containerPoint = DisplayObject(curContainerController.container).globalToLocal(globalPoint);
+				
+				// remove scrollRect effects for the distance test but add it back in for the result
+				var adjustX:Number = 0;
+				var adjustY:Number = 0;
+				
+				if (curContainerController.hasScrollRect)
+				{
+					containerPoint.x -= (adjustX = curContainerController.container.scrollRect.x);
+					containerPoint.y -= (adjustY = curContainerController.container.scrollRect.y);
+				}
+				
+				if ((containerPoint.x >= 0) && (containerPoint.x <= containerWidth) &&
+					(containerPoint.y >= 0) && (containerPoint.y <= containerHeight))
+				{
+					controllerCandidate = curContainerController;
+					candidateLocalX = containerPoint.x+adjustX;
+					candidateLocalY = containerPoint.y+adjustY;
+					break;
+				}
+				
+				// figure minimum distance of containerPoint to curContainerController - 8 cases
+				var relDistanceX:Number = 0;
+				var relDistanceY:Number = 0;
+				
+				if (containerPoint.x < 0)
+				{
+					relDistanceX = containerPoint.x;
+					if (containerPoint.y < 0)
+						relDistanceY = containerPoint.y;
+					else if (containerPoint.y > containerHeight)
+						relDistanceY = containerPoint.y-containerHeight;
+				}
+				else if (containerPoint.x > containerWidth)
+				{
+					relDistanceX = containerPoint.x-containerWidth;
+					if (containerPoint.y < 0)
+						relDistanceY = containerPoint.y;
+					else if (containerPoint.y > containerHeight)
+						relDistanceY = containerPoint.y-containerHeight;
+				}
+				else if (containerPoint.y < 0)
+					relDistanceY = -containerPoint.y;
+				else
+					relDistanceY = containerPoint.y-containerHeight;
+				var tempDist:Number = relDistanceX*relDistanceX + relDistanceY*relDistanceY;    // could do sqrt but why bother - there is no Math.hypot function
+				if (tempDist <= relDistance)
+				{
+					relDistance = tempDist;
+					controllerCandidate = curContainerController;
+					candidateLocalX = containerPoint.x+adjustX;
+					candidateLocalY = containerPoint.y+adjustY;
+				}
+			}
+			localPoint.x = candidateLocalX;
+			localPoint.y = candidateLocalY;
+			return controllerCandidate;
+
+		}
+		/** @private - given a target and location compute the CellCoordinates */
+		static tlf_internal function computeCellCoordinates(textFlow:TextFlow, target:Object, currentTarget:Object, localX:Number, localY:Number):CellCoordinates
+		{
+			var rslt:CellCoordinates;
+			var containerPoint:Point; // scratch
+			
+
+			if (target is TextLine)
+				return null;
+			if(target is CellContainer)
+			{
+				var cell:TableCellElement = (target as CellContainer).element;
+				return new CellCoordinates(cell.rowIndex, cell.colIndex, cell.getTable());
+			}
+			var localPoint:Point = new Point(localX, localY);
+			var controller:ContainerController = findController(textFlow, target, currentTarget, localPoint);
+			if(!controller)
+				return null;
+			
+			return controller.findCellAtPosition(localPoint);
+		}
+
         /** @private - given a target and location compute the selectionIndex */
         static tlf_internal function computeSelectionIndex(textFlow:TextFlow, target:Object, currentTarget:Object, localX:Number,localY:Number):int
         {           
@@ -1196,112 +1911,9 @@ package flashx.textLayout.edit
                 rslt = computeSelectionIndexInLine(textFlow, TextLine(target), localX, localY);
             else
             {
-                var controller:ContainerController;
-                for (var idx:int = 0; idx < textFlow.flowComposer.numControllers; idx++)
-                {
-                    var testController:ContainerController = textFlow.flowComposer.getControllerAt(idx); 
-                    if (testController.container == target || testController.container == currentTarget)
-                    {
-                        controller = testController;
-                        break;
-                    }
-                }
-                if (controller)
-                {   
-                    if (target != controller.container)
-                    {
-                        containerPoint = DisplayObject(target).localToGlobal(new Point(localX, localY));
-                        containerPoint = DisplayObject(controller.container).globalToLocal(containerPoint);
-                        localX = containerPoint.x;
-                        localY = containerPoint.y;
-                    }
-                    rslt = computeSelectionIndexInContainer(textFlow, controller, localX, localY);          
-                } 
-                else 
-                {
-                    //the point is someplace else on stage.  Map the target 
-                    //to the textFlow.container.
-                    CONFIG::debug { assert(textFlow.flowComposer && textFlow.flowComposer.numControllers,"computeSelectionIndex: invalid textFlow"); }
-                    
-                    
-                    // result of the search
-                    var controllerCandidate:ContainerController = null;
-                    var candidateLocalX:Number;
-                    var candidateLocalY:Number;
-                    var relDistance:Number = Number.MAX_VALUE;
-                    
-                    for (var containerIndex:int = 0; containerIndex < textFlow.flowComposer.numControllers; containerIndex++)
-                    {
-                        var curContainerController:ContainerController = textFlow.flowComposer.getControllerAt(containerIndex);
-                        
-                        // displayed??
-                        if (!checkForDisplayed(curContainerController.container as DisplayObject))
-                            continue;
-
-                        // handle measured containers??
-                        var bounds:Rectangle = curContainerController.getContentBounds();
-                        var containerWidth:Number = isNaN(curContainerController.compositionWidth) ? curContainerController.getTotalPaddingLeft()+bounds.width : curContainerController.compositionWidth;
-                        var containerHeight:Number = isNaN(curContainerController.compositionHeight) ? curContainerController.getTotalPaddingTop()+bounds.height : curContainerController.compositionHeight;
-                        
-                        containerPoint = DisplayObject(target).localToGlobal(new Point(localX, localY));
-                        containerPoint = DisplayObject(curContainerController.container).globalToLocal(containerPoint);
-                        
-                        // remove scrollRect effects for the distance test but add it back in for the result
-                        var adjustX:Number = 0;
-                        var adjustY:Number = 0;
-                        
-                        if (curContainerController.hasScrollRect)
-                        {
-                            containerPoint.x -= (adjustX = curContainerController.container.scrollRect.x);
-                            containerPoint.y -= (adjustY = curContainerController.container.scrollRect.y);
-                        }
-                        
-                        if ((containerPoint.x >= 0) && (containerPoint.x <= containerWidth) &&
-                            (containerPoint.y >= 0) && (containerPoint.y <= containerHeight))
-                        {
-                            controllerCandidate = curContainerController;
-                            candidateLocalX = containerPoint.x+adjustX;
-                            candidateLocalY = containerPoint.y+adjustY;
-                            break;
-                        }
-                        
-                        // figure minimum distance of containerPoint to curContainerController - 8 cases
-                        var relDistanceX:Number = 0;
-                        var relDistanceY:Number = 0;
-
-                        if (containerPoint.x < 0)
-                        {
-                            relDistanceX = containerPoint.x;
-                            if (containerPoint.y < 0)
-                                relDistanceY = containerPoint.y;
-                            else if (containerPoint.y > containerHeight)
-                                relDistanceY = containerPoint.y-containerHeight;
-                        }
-                        else if (containerPoint.x > containerWidth)
-                        {
-                            relDistanceX = containerPoint.x-containerWidth;
-                            if (containerPoint.y < 0)
-                                relDistanceY = containerPoint.y;
-                            else if (containerPoint.y > containerHeight)
-                                relDistanceY = containerPoint.y-containerHeight;
-                        }
-                        else if (containerPoint.y < 0)
-                            relDistanceY = -containerPoint.y;
-                        else
-                            relDistanceY = containerPoint.y-containerHeight;
-                        var tempDist:Number = relDistanceX*relDistanceX + relDistanceY*relDistanceY;    // could do sqrt but why bother - there is no Math.hypot function
-                        if (tempDist <= relDistance)
-                        {
-                            relDistance = tempDist;
-                            controllerCandidate = curContainerController;
-                            candidateLocalX = containerPoint.x+adjustX;
-                            candidateLocalY = containerPoint.y+adjustY;
-                        }
-                    }
-
-
-                    rslt = controllerCandidate ? computeSelectionIndexInContainer(textFlow, controllerCandidate, candidateLocalX, candidateLocalY) : -1;
-                }
+				var localPoint:Point = new Point(localX,localY);
+                var controller:ContainerController = findController(textFlow, target, currentTarget, localPoint);
+				rslt = controller ? computeSelectionIndexInContainer(textFlow, controller, localPoint.x, localPoint.y) : -1;
             }
             
             if (rslt >= textFlow.textLength)
@@ -1339,7 +1951,50 @@ package flashx.textLayout.edit
          */ 
         public function mouseDownHandler(event:MouseEvent):void
         {
-            handleMouseEventForSelection(event, event.shiftKey);
+			if(subManager)
+				subManager.selectRange(-1,-1);
+			
+			var cell:TableCellElement = _textFlow.parentElement as TableCellElement;
+			var coords:CellCoordinates;
+			if(!cell)
+				coords = computeCellCoordinates(textFlow,event.target,event.currentTarget,event.localX, event.localY);
+			if(cell || coords)
+			{
+				if(coords)
+					cell = currentTable.findCell(coords);
+				
+				superManager = cell.getTextFlow().interactionManager;
+				if(event.shiftKey && cell.getTable() == superManager.currentTable)
+				{
+					// expand cell selection if applicable
+					coords = new CellCoordinates(cell.rowIndex,cell.colIndex);
+					if(
+						!CellCoordinates.areEqual(coords,superManager.anchorCellPosition) ||
+						superManager.activeCellPosition.isValid()
+					){
+						superManager.selectCellRange(superManager.anchorCellPosition,coords);
+						superManager.subManager = null;
+						allowOperationMerge = false;
+						event.stopPropagation();
+						return;
+					}
+				}
+				if(superManager == this)
+				{
+					if(cell.textFlow.interactionManager)
+					{
+						cell.textFlow.interactionManager.mouseDownHandler(event);
+					}
+					return;
+				}
+				superManager.currentTable = cell.getTable();
+				superManager.deselect();
+				//superManager.setSelectionState(new SelectionState(superManager.textFlow,-1,-1) );
+				superManager.anchorCellPosition.column = cell.colIndex;
+				superManager.anchorCellPosition.row = cell.rowIndex;
+				superManager.subManager = this;
+			}
+            handleMouseEventForSelection(event, event.shiftKey, cell != null);
         }
         
         /**
@@ -1348,17 +2003,56 @@ package flashx.textLayout.edit
          * @playerversion AIR 1.5
          * @langversion 3.0
          */ 
-        public function mouseMoveHandler(event:MouseEvent):void
-        {
+        public function mouseMoveHandler(event:MouseEvent):void {
             var wmode:String = textFlow.computedFormat.blockProgression;            
-            if (wmode != BlockProgression.RL) 
-                setMouseCursor(MouseCursor.IBEAM);          
+			
+			if (wmode != BlockProgression.RL) {
+                setMouseCursor(MouseCursor.IBEAM);
+			}
+			
+			
             if (event.buttonDown)
-                handleMouseEventForSelection(event, true);
+			{
+				var cell:TableCellElement = _textFlow.parentElement as TableCellElement;
+				
+				// if the event is owned by a cell, we need to check if the mouse is now above another cell to select a cell range.
+				if (cell) {
+					
+					do {
+						var cellCoords:CellCoordinates = new CellCoordinates(cell.rowIndex, cell.colIndex, cell.getTable());
+						var coords:CellCoordinates = computeCellCoordinates(cell.getTextFlow(), event.target, event.currentTarget, event.localX, event.localY);
+						if(!coords)
+							break;
+						if(CellCoordinates.areEqual(cellCoords, coords) &&
+							(!superManager.activeCellPosition.isValid() || CellCoordinates.areEqual(coords, superManager.activeCellPosition))
+						)
+							break;
+						if(coords.table != cellCoords.table)
+							break;
+						
+						superManager = cell.getTextFlow().interactionManager;
+						if(
+							!CellCoordinates.areEqual(coords, superManager.activeCellPosition)
+						){
+							allowOperationMerge = false;
+							superManager.selectCellRange(superManager.anchorCellPosition, coords);
+							event.stopPropagation();
+							return;
+						}
+
+						
+					}while(0);
+				}
+				if(superManager && superManager.getCellRange())
+					return;
+				
+				handleMouseEventForSelection(event, true, _textFlow.parentElement != null);
+
+			}
         }
         
         /** @private */
-        tlf_internal function handleMouseEventForSelection(event:MouseEvent, allowExtend:Boolean):void
+        tlf_internal function handleMouseEventForSelection(event:MouseEvent, allowExtend:Boolean,stopPropogate:Boolean=false):void
         {
             var startSelectionActive:Boolean = hasSelection();
             
@@ -1371,6 +2065,8 @@ package flashx.textLayout.edit
                     addSelectionShapes();
             }       
             allowOperationMerge = false;
+			if(stopPropogate)
+				event.stopPropagation();
         }
         
         /** 
@@ -1479,10 +2175,60 @@ package flashx.textLayout.edit
         {
             _mouseOverSelectionArea = true;
             var wmode:String = textFlow.computedFormat.blockProgression;
-            if (wmode != BlockProgression.RL) 
-                setMouseCursor(MouseCursor.IBEAM);  
-            else 
-                setMouseCursor(MouseCursor.AUTO);                               
+			
+            if (wmode != BlockProgression.RL) {
+				var cell:TableCellElement = _textFlow.parentElement as TableCellElement;
+				
+				// set the cursor if around the edge of the table
+				if (cell) {
+					var leftEdge:int = 5;
+					var topEdge:int = 5;
+					var globalPoint:Point = new Point(event.stageX, event.stageY);
+					var cellContainer:CellContainer = event.currentTarget as CellContainer;
+					var point:Point;
+					
+					if (cellContainer) {
+						var cellContainerPoint:Point = cellContainer.localToGlobal(new Point);
+						point = globalPoint.subtract(cellContainerPoint);
+					}
+					if(useTableSelectionCursors)
+					{
+						// set cursor for row, table or column
+						if (cell.colIndex==0 && point.x<leftEdge && point.y>topEdge)
+						{
+							event.stopPropagation();
+							event.stopImmediatePropagation();
+							setMouseCursor(SelectTableRow);
+						}
+						else if (cell.rowIndex==0 && cell.colIndex==0 &&
+							point.x<leftEdge && point.y<topEdge)
+						{
+							event.stopPropagation();
+							event.stopImmediatePropagation();
+							setMouseCursor(SelectTable);
+						}
+						else if (cell.rowIndex==0 && point.x>leftEdge && point.y<topEdge)
+						{
+							event.stopPropagation();
+							event.stopImmediatePropagation();
+							setMouseCursor(SelectTableColumn);
+						}
+						else {
+							setMouseCursor(MouseCursor.IBEAM);
+						}
+						
+					}
+					else {
+						setMouseCursor(MouseCursor.IBEAM);
+					}
+				}
+				else {
+                	setMouseCursor(MouseCursor.IBEAM);
+				}
+			}
+            else {
+                setMouseCursor(MouseCursor.AUTO);
+			}
         }
 
         /** 
@@ -1873,6 +2619,9 @@ package flashx.textLayout.edit
             }
             else if (event.keyCode == Keyboard.ESCAPE)
                 handleKeyEvent(event);
+			if(_textFlow.parentElement)
+				event.stopPropagation();
+			
         }
 
         /** 
@@ -2098,9 +2847,26 @@ package flashx.textLayout.edit
         {
             var idx:int = marks.indexOf(mark);
             if (idx != -1)
-                marks.splice(idx,idx+1);
+                marks.splice(idx,1);
         }
-        
+
+		private var cellMarks:Array = [];
+		
+		/** @private */
+		tlf_internal function createCellMark():CellCoordinates
+		{
+			var mark:CellCoordinates = new CellCoordinates(-1,-1);
+			cellMarks.push(mark);
+			return mark;
+		}
+		/** @private */
+		tlf_internal function removeCellMark(mark:CellCoordinates):void
+		{
+			var idx:int = cellMarks.indexOf(mark);
+			if (idx != -1)
+				marks.splice(idx,1);
+		}
+
         /** 
          * @copy ISelectionManager#notifyInsertOrDelete()
          * 
@@ -2126,5 +2892,138 @@ package flashx.textLayout.edit
                 }
             }
         }
+
+		/**
+		 * The ISelectionManager object used to for cell selections nested within the TextFlow managed by this ISelectionManager.
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */		 		 
+		public function get subManager():ISelectionManager
+		{
+			return _subManager;
+		}
+		public function set subManager(value:ISelectionManager):void
+		{
+			if(_subManager)
+				_subManager.selectRange(-1,-1);
+			_subManager = value;
+		}
+		/**
+		 * The ISelectionManager object used to manage the parent TextFlow of this ISelectionManager (i.e. for cell ISelectionManagers).
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */		 		 
+
+		public function get superManager():ISelectionManager
+		{
+			return _superManager;
+		}
+
+		public function set superManager(value:ISelectionManager):void
+		{
+			_superManager = value;
+		}
+
+		/** Anchor point of the current cell selection, as coordinates within the table. */
+		public function get anchorCellPosition():CellCoordinates
+		{
+			return _anchorCellPosition;
+		}
+		public function set anchorCellPosition(value:CellCoordinates):void
+		{
+			_anchorCellPosition = value;
+		}
+
+		/** Active end of the current cell selection, as coordinates within the table. */
+		public function get activeCellPosition():CellCoordinates
+		{
+			return _activeCellPosition;
+		}
+		public function set activeCellPosition(value:CellCoordinates):void
+		{
+			_activeCellPosition = value;
+		}
+		
+		public var selectTableCursorPoints:Vector.<Number> = new <Number>[1,3, 11,3, 11,0, 12,0, 16,4, 12,8, 11,8, 11,5, 1,5, 1,3];
+		public var selectTableCursorDrawCommands:Vector.<int> = new <int>[1,2,2,2,2,2,2,2,2,2];
+		
+		
+		/**
+		 * Create a select table cursor
+		 */
+		public function createSelectTableCursor():MouseCursorData {
+			var cursorData:Vector.<BitmapData> = new Vector.<BitmapData>();
+			var cursorShape:Shape = new Shape();
+			cursorShape.graphics.beginFill(0x0, 1);
+			cursorShape.graphics.lineStyle(0, 0xFFFFFF, 1, true);
+			cursorShape.graphics.drawPath( selectTableCursorDrawCommands, selectTableCursorPoints);
+			cursorShape.graphics.endFill();
+			var transformer:Matrix = new Matrix();
+			var cursorFrame:BitmapData = new BitmapData(32, 32, true, 0);
+			var angle:int = 8;
+			var rotation:Number = 0.785398163;
+			transformer.translate(-angle,-angle);
+			transformer.rotate(rotation);
+			transformer.translate(angle, angle);
+			cursorFrame.draw(cursorShape, transformer);
+			cursorData.push(cursorFrame);
+			var mouseCursorData:MouseCursorData = new MouseCursorData();
+			mouseCursorData.data = cursorData;
+			mouseCursorData.hotSpot = new Point(16, 10);
+			mouseCursorData.frameRate = 1;
+			return mouseCursorData;
+		}
+		
+		/**
+		 * Create a select row cursor
+		 */
+		public function createSelectTableRowCursor():MouseCursorData {
+			var cursorData:Vector.<BitmapData> = new Vector.<BitmapData>();
+			var cursorShape:Shape = new Shape();
+			cursorShape.graphics.beginFill(0x0, 1);
+			cursorShape.graphics.lineStyle(0, 0xFFFFFF, 1, true);
+			cursorShape.graphics.drawPath(selectTableCursorDrawCommands, selectTableCursorPoints);
+			cursorShape.graphics.endFill();
+			var transformer:Matrix = new Matrix();
+			var cursorFrame:BitmapData = new BitmapData(32, 32, true, 0);
+			cursorFrame.draw(cursorShape, transformer);
+			cursorData.push(cursorFrame);
+			var mouseCursorData:MouseCursorData = new MouseCursorData();
+			mouseCursorData.data = cursorData;
+			mouseCursorData.hotSpot = new Point(16, 4);
+			mouseCursorData.frameRate = 1;
+			return mouseCursorData;
+		}
+		
+		/**
+		 * Create a select table column cursor
+		 */
+		public function createSelectTableColumnCursor():MouseCursorData {
+			var cursorData:Vector.<BitmapData> = new Vector.<BitmapData>();
+			var cursorShape:Shape = new Shape();
+			cursorShape.graphics.beginFill(0x0, 1 );
+			cursorShape.graphics.lineStyle(0, 0xFFFFFF, 1, true );
+			cursorShape.graphics.drawPath(selectTableCursorDrawCommands, selectTableCursorPoints);
+			cursorShape.graphics.endFill();
+			var transformer:Matrix = new Matrix();
+			var cursorFrame:BitmapData = new BitmapData(32, 32, true, 0);
+			var angle:int = 16;
+			var rotation:Number = 0.785398163;
+			transformer.translate(-angle,-angle);
+			transformer.rotate(rotation * 2);
+			transformer.translate(angle, angle);
+			cursorFrame.draw(cursorShape, transformer);
+			cursorData.push(cursorFrame);
+			var mouseCursorData:MouseCursorData = new MouseCursorData();
+			mouseCursorData.data = cursorData;
+			mouseCursorData.hotSpot = new Point(28, 16);
+			mouseCursorData.frameRate = 1;
+			return mouseCursorData;
+		}
+
     }
 }

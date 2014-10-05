@@ -20,13 +20,37 @@ package flashx.textLayout.elements
 {
 	import flash.display.Sprite;
 	
-	public class CellContainer extends Sprite
+	//import mx.core.IIMESupport;
+	
+	public class CellContainer extends Sprite// implements IIMESupport
 	{
-		public var userData:Object=null;
-		
-		public function CellContainer()
+		private var _imeMode:String;
+		private var _enableIME:Boolean;
+		public var element:TableCellElement;
+
+		public function CellContainer(imeEnabled:Boolean = true)
 		{
-			super();
+			_enableIME = imeEnabled;
+		}
+		
+		public function get enableIME():Boolean
+		{
+			return false;
+		}
+		
+		public function set enableIME(value:Boolean):void
+		{
+			_enableIME = value;
+		}
+		
+		public function get imeMode():String
+		{
+			return _imeMode;
+		}
+		
+		public function set imeMode(value:String):void
+		{
+			_imeMode = value;
 		}
 	}
 }

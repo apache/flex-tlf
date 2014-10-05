@@ -463,7 +463,7 @@ package flashx.textLayout.factory
 				charPosition = line.getAtomTextBlockEndIndex(atomIndex);
 			}
 			
-			line.flushAtomData();
+			// line.flushAtomData(); // Warning: Now does nothing
 			return charPosition;
 		}
 		
