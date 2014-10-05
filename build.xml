@@ -64,8 +64,8 @@
 	<taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
     <taskdef resource="flexUnitTasks.tasks">
         <classpath>
-            <fileset dir="${FLEX_HOME}">
-                <include name="lib/flexUnitTasks-4.2.0-20140317.jar" />
+            <fileset dir="${basedir}">
+                <include name="ant/flexUnitTasks.jar" />
             </fileset>
         </classpath>
     </taskdef>
@@ -303,7 +303,7 @@
 			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
 			
 			<!-- External swcs -->
-			<external-library-path dir="${automation_core.dir}/libs/" includes="flexunit.swc" 		append="true"/>
+			<external-library-path dir="${basedir}/libs/" includes="flexunit.swc" 		append="true"/>
 			<static-link-runtime-shared-libraries/>
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
@@ -319,7 +319,7 @@
 			<library-path/>
 			<external-library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
 			<external-library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" 	append="true"/>
-			<external-library-path dir="${automation_core.dir}/libs" includes="flexunit.swc" 		append="true"/>
+			<external-library-path dir="${basedir}/libs" includes="flexunit.swc" 		append="true"/>
 
 			<!-- External swcs -->
 			
@@ -351,9 +351,9 @@
 			<library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
 			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" 	append="true"/>
 			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_tests.swc" 	append="true"/>
-			<library-path dir="${automation_apps.dir}/libs" includes="flexunit.swc" 		append="true"/>
-            <library-path dir="${automation_apps.dir}/libs" includes="flexunit-uilistener.swc" 		append="true"/>
-            <library-path dir="${automation_apps.dir}/libs" includes="flexunit-cilistener.swc" 		append="true"/>
+			<library-path dir="${basedir}/libs" includes="flexunit.swc" 		append="true"/>
+            <library-path dir="${basedir}/libs" includes="flexunit-uilistener.swc" 		append="true"/>
+            <library-path dir="${basedir}/libs" includes="flexunit-cilistener.swc" 		append="true"/>
 
 			<!-- External swcs -->
 			<library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->

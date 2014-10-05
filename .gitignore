@@ -27,7 +27,6 @@ gen
 
 #Apache Flex Projects
 lib/
-libs/
 in/
 swfobject/
 ide/
@@ -101,9 +100,7 @@ _ReSharper*/
 *.com
 *.exe
 *.class
-*.jar
 *.swf
-*.swc
 
 #Compressed Files
 *.zip
