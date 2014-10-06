@@ -30,11 +30,13 @@ package flashx.textLayout.edit
 	import flashx.textLayout.elements.ParagraphElement;
 	import flashx.textLayout.elements.SpanElement;
 	import flashx.textLayout.elements.SubParagraphGroupElementBase;
+	import flashx.textLayout.elements.TableLeafElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.formats.Float;
 	import flashx.textLayout.formats.ITextLayoutFormat;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
+	import flashx.textLayout.elements.TableElement;
 	
 	use namespace tlf_internal;
 
@@ -69,10 +71,15 @@ package flashx.textLayout.edit
 			{
 				// If we're at the start a span, go to the previous span in the same paragraph, and insert at the end of it
 				if (paraSelBegIdx == sibling.getElementRelativeStart(paragraph))
-					sibling = FlowLeafElement(sibling).getPreviousLeaf(paragraph);	
-				siblingIndex = sibling.parent.getChildIndex(sibling) + 1;
+					sibling = FlowLeafElement(sibling).getPreviousLeaf(paragraph);
+				if(sibling is TableLeafElement)
+					siblingIndex = sibling.parent.parent.getChildIndex(sibling.parent) + 1;
+				else
+					siblingIndex = sibling.parent.getChildIndex(sibling) + 1;
 			}
 			var insertParent:FlowGroupElement = sibling.parent;
+			if(insertParent is TableElement)
+				insertParent = insertParent.parent;
 			
 			// If we are adding text to the start or end of a link, it doesn't allow the insertion to group with the link.
 			// So in that case, we will insert to the element beside the position that is *not* part of the link.

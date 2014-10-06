@@ -352,6 +352,8 @@ package flashx.textLayout.elements
 		tlf_internal override function createContentAsGroup(pos:int=0):GroupElement
 		{
 			var tb:TextBlock = getTextBlockAtPosition(pos);
+			if(!tb)
+				tb = getTextBlockAtPosition(pos-1);
 			var group:GroupElement = tb.content as GroupElement;
 			if (!group)
 			{
@@ -467,14 +469,12 @@ package flashx.textLayout.elements
 			{
 				if(chldrn[i] is TableElement)
 				{
-					if(chldrn[i].parentRelativeStart == pos)
-						return [chldrn[i]];
 					if(chldrn[i].parentRelativeStart < pos)
 					{
 						retVal.length = 0;
 						continue;
 					}
-					if(chldrn[i].parentRelativeStart > pos)
+					if(chldrn[i].parentRelativeStart >= pos)
 						break;
 				}
 				retVal.push(chldrn[i]);		
@@ -487,7 +487,15 @@ package flashx.textLayout.elements
 		{
 			var relativeStart:int = child.getElementRelativeStart(this);
 			var tb:TextBlock = getTextBlockAtPosition(relativeStart);
-			if (getTextBlocks().length == 0 || !tb)
+			if(!tb)
+				tb = getTextBlockAtPosition(relativeStart-1);
+			
+			if(!tb)
+			{
+				child.releaseContentElement();
+				return;
+			}
+			if (getTextBlocks().length == 0)
 			{
 				child.releaseContentElement();
 				createTextBlock();	// does the whole tree

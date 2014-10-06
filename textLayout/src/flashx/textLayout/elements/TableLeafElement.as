@@ -115,6 +115,11 @@ package flashx.textLayout.elements
 		{
 			return _table.getParagraph();
 		}
+		
+		override public function getElementRelativeStart(ancestorElement:FlowElement):int
+		{
+			return _table.getElementRelativeStart(ancestorElement);
+		}
 
 	}
 }
