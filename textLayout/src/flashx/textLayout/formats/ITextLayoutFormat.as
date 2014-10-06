@@ -1161,6 +1161,62 @@ package flashx.textLayout.formats
 		function get borderBottomColor():*;
 
 		/**
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get borderLeftPriority():*;
+		
+		/**
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get borderRightPriority():*;
+		
+		/**
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get borderTopPriority():*;
+		
+		/**
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get borderBottomPriority():*;
+
+		/**
 		 * left margin in pixels(adopts default value if undefined during cascade).
 		 * <p>Legal values are numbers from -8000 to 8000 and FormatValue.INHERIT.</p>
 		 * <p>Default value is undefined indicating not set.</p>
@@ -1245,7 +1301,7 @@ package flashx.textLayout.formats
 		 * @langversion 3.0
 		 */
 		function get cellPadding():*;
-
+		
 		/**
 		 * Width of table element specifies the desired width of the entire table and is intended for visual user agents. When the value is a percentage value, the value is relative to the user agent's available horizontal space.
 		 * <p>Legal values as a number are from 0 to 8000.</p>
@@ -1277,6 +1333,36 @@ package flashx.textLayout.formats
 		 * @langversion 3.0
 		 */
 		function get tableColumnWidth():*;
+		
+		/**
+		 * Minimum height of a table cell. If there is no maximum, the cell will grow in height to fit the content. Minimum and maximum of the same values will give the cell a fixed height.
+		 * <p>Legal values as a number are from 2 to 10000.</p>
+		 * <p>Legal values include FormatValue.INHERIT.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will have a value of 2.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get minCellHeight():*;
+		
+		/**
+		 * Maximum height of a table cell. If there is no maximum, the cell will grow in height to fit the content. Minimum and maximum of the same values will give the cell a fixed height.
+		 * <p>Legal values as a number are from 2 to 10000.</p>
+		 * <p>Legal values include FormatValue.INHERIT.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will have a value of 2.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		function get maxCellHeight():*;
 
 		/**
 		 * frame specifies which sides of the frame surrounding a table will be visible. Possible values:

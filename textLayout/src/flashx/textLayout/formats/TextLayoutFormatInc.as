@@ -1837,6 +1837,98 @@
 		}
 
 		/**
+ 		* TextLayoutFormat:
+ 		* Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+ 		* <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+ 		* <p>Default value is undefined indicating not set.</p>
+ 		* <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+ 		* 
+ 		* @throws RangeError when set value is not within range for this property
+ 		* 
+ 		* @playerversion Flash 10
+ 		* @playerversion AIR 1.5
+ 		* @langversion 3.0
+ 		*/
+		public function get borderLeftPriority():*
+		{
+			return _format ? _format.borderLeftPriority : undefined;
+		}
+		public function set borderLeftPriority(value:*):void
+		{ 
+			writableTextLayoutFormat().borderLeftPriority = value;
+			formatChanged();
+		}
+
+		/**
+		 * TextLayoutFormat:
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get borderRightPriority():*
+		{
+			return  _format ? _format.borderRightPriority : undefined;
+		}
+		public function set borderRightPriority(value:*):void
+		{
+			writableTextLayoutFormat().borderRightPriority = value;
+			formatChanged();
+		}
+		
+		/**
+		 * TextLayoutFormat:
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get borderTopPriority():*
+		{
+			return  _format ? _format.borderTopPriority : undefined;
+		}
+		public function set borderTopPriority(value:*):void
+		{
+			writableTextLayoutFormat().borderTopPriority = value;
+			formatChanged();
+		}
+		
+		/**
+		 * TextLayoutFormat:
+		 * Specifies the priority when drawing cell boundaries. When settings between two adjacent cells conflict, the border with the higher priority wins. If the priorities are equal, the latter of the two cells takes priority.
+		 * <p>Legal values are any rational number. Conflicts are resolved with the properties of the higher number being drawn.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will inherit, and default to 0.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get borderBottomPriority():*
+		{
+			return  _format ? _format.borderBottomPriority : undefined;
+		}
+		public function set borderBottomPriority(value:*):void
+		{
+			writableTextLayoutFormat().borderBottomPriority = value;
+			formatChanged();
+		}
+
+		/**
 		 * TextLayoutFormat:
 		 * left margin in pixels(adopts default value if undefined during cascade).
 		 * <p>Legal values are numbers from -8000 to 8000 and FormatValue.INHERIT.</p>
@@ -1849,6 +1941,7 @@
 		 * @playerversion AIR 1.5
 		 * @langversion 3.0
 		 */
+
 		public function get marginLeft():*
 		{
 			return _format ? _format.marginLeft : undefined;
@@ -2023,6 +2116,54 @@
 		public function set tableColumnWidth(tableColumnWidthValue:*):void
 		{
 			writableTextLayoutFormat().tableColumnWidth = tableColumnWidthValue;
+			formatChanged();
+		}
+
+		/**
+		 * TextLayoutFormat:
+		 * Minimum height of a table cell. If there is no maximum, the cell will grow in height to fit the content. Minimum and maximum of the same values will give the cell a fixed height.
+		 * <p>Legal values as a number are from 2 to 10000.</p>
+		 * <p>Legal values include FormatValue.INHERIT.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will have a value of 2.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get minCellHeight():*
+		{
+			return _format ? _format.minCellHeight : undefined;
+		}
+		public function set minCellHeight(value:*):void
+		{
+			writableTextLayoutFormat().minCellHeight = value;
+			formatChanged();
+		}
+		
+		/**
+		 * TextLayoutFormat:
+		 * Maximum height of a table cell. If there is no maximum, the cell will grow in height to fit the content. Minimum and maximum of the same values will give the cell a fixed height.
+		 * <p>Legal values as a number are from 2 to 10000.</p>
+		 * <p>Legal values include FormatValue.INHERIT.</p>
+		 * <p>Default value is undefined indicating not set.</p>
+		 * <p>If undefined during the cascade this property will have a value of 2.</p>
+		 * 
+		 * @throws RangeError when set value is not within range for this property
+		 * 
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+		 * @langversion 3.0
+		 */
+		public function get maxCellHeight():*
+		{
+			return _format ? _format.maxCellHeight : undefined;
+		}
+		public function set maxCellHeight(value:*):void
+		{
+			writableTextLayoutFormat().maxCellHeight = value;
 			formatChanged();
 		}
 
