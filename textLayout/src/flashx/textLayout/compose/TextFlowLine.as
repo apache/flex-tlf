@@ -1386,7 +1386,9 @@ package flashx.textLayout.compose
 			
 			// 8-31-14 Do we need to adjust this for paras with multiple textBlocks? 
 			//get the absolute start of the paragraph.  Calculation is expensive, so just do this once.
-			var paraAbsStart:int = _para.getAbsoluteStart();
+			//var paraAbsStart:int = _para.getAbsoluteStart();
+			var textLine:TextLine = getTextLine();
+			var paraAbsStart:int = _para.getTextBlockAbsoluteStart(textLine.textBlock);
 			
 			//if the indexes are identical and are equal to the start of the line, then
 			//don't draw anything.  This prevents a bar being drawn on a following line when
@@ -1420,7 +1422,6 @@ package flashx.textLayout.compose
 			selectionCache.begIdx = begIdx;
 			selectionCache.endIdx = endIdx;
 			
-			var textLine:TextLine = getTextLine();
 			var heightAndAdj:Array = getRomanSelectionHeightAndVerticalAdjustment(prevLine, nextLine);
 			calculateSelectionBounds(textLine, drawRects, begIdx, endIdx, blockProgression, heightAndAdj);
 			

@@ -1,9 +1,12 @@
 package flashx.textLayout.compose
 {
 	
+	import flash.display.DisplayObject;
+	import flash.display.Shape;
 	import flash.text.engine.TextLine;
 	
 	import flashx.textLayout.container.ContainerController;
+	import flashx.textLayout.edit.SelectionFormat;
 	import flashx.textLayout.elements.CellContainer;
 	import flashx.textLayout.elements.CellCoordinates;
 	import flashx.textLayout.elements.ParagraphElement;
@@ -209,6 +212,11 @@ package flashx.textLayout.compose
 		public override function get textHeight():Number
 		{
 			return _textHeight;
+		}
+		
+		tlf_internal override function hiliteBlockSelection(selObj:Shape, selFormat:SelectionFormat, container:DisplayObject, begIdx:int, endIdx:int, prevLine:TextFlowLine, nextLine:TextFlowLine):void
+		{
+			// do nothing for now...
 		}
 
 	}
