@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestConfig;
 
@@ -69,12 +67,6 @@ package UnitTest.Tests
             // Note: These must correspond to a Watson product area (case-sensitive)
             metaData.productArea = "Text Container";
             markup = getTestMarkup();
-        }
-
-        public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
-        {
-            var testCaseClass:Class = ContainerTypeTest;
-            VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
         }
 
         [Before]

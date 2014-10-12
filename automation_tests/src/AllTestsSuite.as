@@ -25,10 +25,14 @@ package
     import UnitTest.Tests.AllEventTest;
     import UnitTest.Tests.AllParaAttributeTest;
     import UnitTest.Tests.AttributeTest;
+    import UnitTest.Tests.BoundsAndAlignmentTest;
     import UnitTest.Tests.BoxTest;
     import UnitTest.Tests.CompositionTest;
     import UnitTest.Tests.ContainerAttributeTest;
     import UnitTest.Tests.ContainerTypeTest;
+    import UnitTest.Tests.CrossContainerTest;
+    import UnitTest.Tests.ElementOperationTest;
+    import UnitTest.Tests.EventOverrideTest;
     import UnitTest.Tests.FloatTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
@@ -50,7 +54,10 @@ package
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
         public var containerAttributeTest:ContainerAttributeTest;
-
+        public var boundsAndAlignmentTest:BoundsAndAlignmentTest;
+        public var crossContainerTest:CrossContainerTest;
+        public var elementOperationTest:ElementOperationTest;
+        public var eventOverrideTest:EventOverrideTest;
     }
 
 }
