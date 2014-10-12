@@ -31,6 +31,8 @@ package
         import UnitTest.Validation.FlowElementMouseEventValidator; FlowElementMouseEventValidator;
         import UnitTest.Validation.EventValidator; EventValidator;
         import UnitTest.Validation.UpdateCompleteEventValidator; UpdateCompleteEventValidator;
+        import UnitTest.Fixtures.TestEditManager; TestEditManager;
+        import UnitTest.Fixtures.MeasureConstants; MeasureConstants;
 
 		/*import UnitTest.ExtendedClasses.TestDescriptor; TestDescriptor;
 		import UnitTest.ExtendedClasses.TestSuiteExtended; TestSuiteExtended;

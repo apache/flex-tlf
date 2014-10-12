@@ -34,7 +34,6 @@ package UnitTest.ExtendedClasses
     import flash.display.IBitmapDrawable;
     import flash.display.Sprite;
     import flash.utils.ByteArray;
-    import flash.utils.getTimer;
 
     import flashx.textLayout.container.ContainerController;
     import flashx.textLayout.container.ScrollPolicy;
