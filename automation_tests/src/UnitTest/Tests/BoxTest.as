@@ -76,31 +76,6 @@ package UnitTest.Tests
             metaData.productArea = "Text Composition";
         }
 
-        /*  public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
-         {
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "paddingAndMarginOnDiv", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "negativePaddingAndMarginOnDiv", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "verticalSpaceCollapse", testConfig, null));
-
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingStart", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingEnd", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingBeforeAndAfter", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingStartStrikeAndUnderline", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingEndStrikeAndUnderline", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "ilgMarginsAndPaddingBeforeAndAfterStrikeAndUnderline", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "floatMarginsAndPaddingLeftAndRight", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "floatMarginsAndPaddingUpAndDown", testConfig, null));
-
-
-         // We only need one version of these tests, they supply their own markup
-         if (testConfig.writingDirection[0] == BlockProgression.TB && testConfig.writingDirection[1] == Direction.LTR)
-         {
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "textFlowPadding", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "rlPaddingOnDiv", testConfig, null));
-         ts.addTestDescriptor(new TestDescriptor(BoxTest, "boundsWithPadding", testConfig, null));
-         }
-         }    */
-
         [Before]
         override public function setUpTest():void
         {
@@ -154,28 +129,7 @@ package UnitTest.Tests
                 format.paddingRight = totalRight;
                 format.paddingBottom = totalBottom;
             }
-            /*	if (verticalText)		FOR WHEN MARGINS ARE TURNED BACK ON
-             {
-             format.marginLeft = totalBottom / 2;
-             format.paddingLeft = totalBottom / 2;
-             format.marginTop = totalLeft / 2;
-             format.paddingTop = totalLeft / 2;
-             format.marginRight = totalTop / 2;
-             format.paddingRight = totalTop / 2;
-             format.marginBottom = totalRight / 2;
-             format.paddingBottom = totalRight / 2;
-             }
-             else
-             {
-             format.marginLeft = totalLeft / 2;
-             format.paddingLeft = totalLeft / 2;
-             format.marginTop = totalTop / 2;
-             format.paddingTop = totalTop / 2;
-             format.marginRight = totalRight / 2;
-             format.paddingRight = totalRight / 2;
-             format.marginBottom = totalBottom / 2;
-             format.paddingBottom = totalBottom / 2;
-             } */
+
             element.format = format;
         }
 
@@ -549,9 +503,6 @@ package UnitTest.Tests
             var columnRect:Rectangle = controller.columnState.getColumnAt(tfl.columnIndex);
 
             // Check that graphic leaves a margin on the left side, so its not right up against the container edge
-            //	var globalInlinePt:Point = ilg.graphic.localToGlobal(new Point(0, 0));
-            //	var inlinePt:Point = controller.container.globalToLocal(globalInlinePt);
-            //	var inlineBBox:Rectangle = new Rectangle(inlinePt.x, inlinePt.y, ilg.elementWidth, ilg.elementHeight);
             var inlineBBox:Rectangle = new Rectangle(floatHolder.x, floatHolder.y, ilg.elementWidth, ilg.elementHeight);
 
             if (float == Float.LEFT)

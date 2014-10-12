@@ -30,7 +30,6 @@ package UnitTest.Tests
     import flash.events.EventDispatcher;
     import flash.events.IEventDispatcher;
     import flash.geom.Rectangle;
-    import flash.text.engine.TextLine;
 
     import flashx.textLayout.compose.StandardFlowComposer;
     import flashx.textLayout.container.ContainerController;
@@ -38,8 +37,6 @@ package UnitTest.Tests
     import flashx.textLayout.conversion.TextConverter;
     import flashx.textLayout.edit.EditManager;
     import flashx.textLayout.edit.IEditManager;
-    import flashx.textLayout.elements.FlowLeafElement;
-    import flashx.textLayout.elements.InlineGraphicElement;
     import flashx.textLayout.elements.InlineGraphicElementStatus;
     import flashx.textLayout.elements.TextFlow;
     import flashx.textLayout.events.StatusChangeEvent;
@@ -47,9 +44,7 @@ package UnitTest.Tests
     import flashx.textLayout.factory.TextFlowTextLineFactory;
     import flashx.textLayout.formats.BlockProgression;
     import flashx.textLayout.formats.Direction;
-    import flashx.textLayout.formats.TextAlign;
     import flashx.textLayout.formats.TextLayoutFormat;
-    import flashx.textLayout.formats.VerticalAlign;
 
     import mx.containers.Canvas;
 
@@ -61,7 +56,6 @@ package UnitTest.Tests
     {
         // Creation Types
         private static const USE_FLOW:String = "textFlow";
-        private static const USE_FACTORY_STRING:String = "factoryStr";
         private static const USE_FACTORY_FLOW:String = "factoryTF";
 
         private static var textAlignArray:Array = ["left", "center", "right", "start", "end" ];
@@ -110,11 +104,6 @@ package UnitTest.Tests
             ]
         ];
 
-        private const logicalWidth:Number = 400;
-        private const logicalHeight:Number = 400;
-
-        private var w:Number = 210;
-        private var h:Number = 40;
         private var width:Number;
         private var height:Number;
 
@@ -127,7 +116,6 @@ package UnitTest.Tests
         // bounds and format of last sprite for comparison function
         private var compareBounds:Rectangle;
 
-        private var fFactBounds:Rectangle;
         private var tFlowBounds:Rectangle;
 
         private var notReadyGraphicsCount:int;
@@ -171,14 +159,6 @@ package UnitTest.Tests
             var labelFormat:TextLayoutFormat = new TextLayoutFormat();
             labelFormat.fontSize = 12;
             labelFactory.spanFormat = labelFormat;
-
-          /*  testData = <TestCase>
-                <TestData name="measureType">{measureType}</TestData>
-                <TestData name="lineBreak">{lineBreak}</TestData>
-                <TestData name="id">{methodName}-{measureType}-{lineBreak}</TestData>
-                <TestData name="verticalAlign">{verticalAlign}</TestData>
-                <TestData name="textAlign">{textAlign}</TestData>
-            </TestCase>; */
         }
 
         [AfterClass]
@@ -211,8 +191,9 @@ package UnitTest.Tests
 
         /********************** Tests Start Here ***************************/
 
-        [Test(dataProvider="data")]
-        public function simpleMultiParagraph(measureType:Object):void
+        [Test]
+        [Ignore]
+        public function simpleMultiParagraph():void
         {
             // This is a subset of simple.xml
             // Exposed Watson bug 2559210
@@ -224,6 +205,21 @@ package UnitTest.Tests
             runSingleTest(markup, insertText);
         }
 
+        [Test]
+        [Ignore]
+        public function simpleMultiParagraphNoTextIndent():void
+        {
+            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
+            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
+                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
+                    '</flow:TextFlow>';
+
+            runSingleTest(markup);
+        }
+
+        [Test]
+        [Ignore]
         public function longSimpleMultiParagraph():void
         {
             // This is a longer version of simple.xml, so the text overflows the visible area and scrolls
@@ -241,17 +237,8 @@ package UnitTest.Tests
             runSingleTest(markup, insertText);
         }
 
-        public function simpleMultiParagraphNoTextIndent():void
-        {
-            // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
-            var markup:String = '<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontSize="14" paddingTop="4" paddingLeft="4" fontFamily="Times New Roman">' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>There are many </flow:span><flow:span fontStyle="italic">such</flow:span><flow:span> lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.</flow:span></flow:p>' +
-                    '<flow:p paragraphSpaceAfter="15"><flow:span>The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed.</flow:span></flow:p>' +
-                    '</flow:TextFlow>';
-
-            runSingleTest(markup);
-        }
-
+        [Test]
+        [Ignore]
         public function simpleMultiParagraphNegTextIndent():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -263,6 +250,8 @@ package UnitTest.Tests
             runSingleTest(markup);
         }
 
+        [Test]
+        [Ignore]
         public function simpleWithPaddingTopLeft():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -274,6 +263,8 @@ package UnitTest.Tests
             runSingleTest(markup);
         }
 
+        [Test]
+        [Ignore]
         public function simpleWithPaddingBottomRight():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -312,39 +303,6 @@ package UnitTest.Tests
 
         // end of IEventDispatcher functions
 
-        private function setUpMeasureType(measureObj:Object):void
-        {
-            width = logicalWidth;
-            height = logicalHeight;
-
-            switch (measureObj.measureType)
-            {
-                case MeasureConstants.MEASURE_BOTH:
-                    width = NaN;
-                    height = NaN;
-                    break;
-
-                case MeasureConstants.MEASURE_WIDTH:
-                    width = NaN;
-                    break;
-
-                case MeasureConstants.MEASURE_HEIGHT:
-                    height = NaN;
-                    break;
-            }
-
-            if (_blockProgression == BlockProgression.RL)		// swap coordinates if we're vertical
-            {
-                var tmp:Number = width;
-                width = height;
-                height = tmp;
-
-                tmp = w;
-                w = h;
-                h = tmp;
-            }
-        }
-
         private function insertText(textFlow:TextFlow):void
         {
             textFlow.interactionManager = editManager;
@@ -363,59 +321,6 @@ package UnitTest.Tests
                 testCanvas = Canvas(TestDisplayObject);
                 testCanvas.rawChildren.addChild(sprite);
             }
-        }
-
-        private function clearCanvas():void
-        {
-            TestDisplayObject = testApp.getDisplayObject();
-            if (TestDisplayObject)
-            {
-                testCanvas = Canvas(TestDisplayObject);
-                while (testCanvas.rawChildren.numChildren > 0)
-                    testCanvas.rawChildren.removeChildAt(0);
-            }
-        }
-
-        // These tests run flow &  textFlowfactory creation types (they don't work on string factory)
-        private static var testsToRunOnFlowAndTFFactory:Array = [
-            "simpleMultiParagraph",
-            "simpleMultiParagraphNoTextIndent",
-            "simpleWithPaddingTopLeft",
-            "simpleWithPaddingBottomRight",
-            "simpleMultiParagraphNegTextIndent",
-            "longSimpleMultiParagraph",
-        ];
-
-        private function createDefaultTextLayoutFormat():TextLayoutFormat
-        {
-            var format:TextLayoutFormat = new TextLayoutFormat();
-            format.fontFamily = "Arial";
-            format.fontSize = 20;
-            format.direction = _direction;
-            format.blockProgression = _blockProgression;
-            return format;
-        }
-
-        private function createTextFlow(markup:String):TextFlow
-        {
-            if (markup.length <= 0 || markup.charAt(0) != "<")
-                return TextConverter.importToFlow(markup, TextConverter.PLAIN_TEXT_FORMAT);
-
-            var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
-            var flowNotReadyGraphicsCount:int = 0;
-
-            // check for inlines
-            for (var leaf:FlowLeafElement = textFlow.getFirstLeaf(); leaf != null; leaf = leaf.getNextLeaf())
-                if (leaf is InlineGraphicElement && InlineGraphicElement(leaf).status != InlineGraphicElementStatus.READY)
-                    flowNotReadyGraphicsCount++;
-            if (flowNotReadyGraphicsCount != 0)
-            {
-                textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, statusChangeHandler, false, 0, true);
-                textFlow.flowComposer.addController(new ContainerController(new Sprite()));	// add dummy controller so we get status change events
-                textFlow.flowComposer.updateAllControllers();
-                notReadyGraphicsCount += flowNotReadyGraphicsCount;
-            }
-            return textFlow;
         }
 
         // Track the completion of loading inlines, dispatch a completion event when its done
@@ -447,47 +352,6 @@ package UnitTest.Tests
                     assertTrue("unexpected StatusChangeEvent status: " + event.status, false);
                     break;
             }
-        }
-
-        private function addTextFactoryFromFlowSprite(x:Number, y:Number, width:Number, height:Number, textFlow:TextFlow):Sprite
-        {
-            // trace("addTextFactoryFromFlowSprite",x,y,width,height,textAlign,verticalAlign,lineBreak);
-
-            var factorySprite:Sprite = new Sprite();
-            factorySprite.x = x;
-            factorySprite.y = y;
-
-            addToCanvas(factorySprite);
-
-            textFlowFactory.compositionBounds = new Rectangle(0, 0, width ? width : NaN, height ? height : NaN);
-
-            textFlowFactory.createTextLines(callback, textFlow);
-            clearCanvas();
-            addToCanvas(factorySprite);
-
-            function callback(tl:TextLine):void
-            {
-                factorySprite.addChild(tl);
-            }
-
-            // composition bounds in black
-            // contentBounds in red
-            // put it in another sprite on top
-            sprite = new Sprite();
-            sprite.x = x;
-            sprite.y = y;
-            addToCanvas(sprite);
-
-            compareBounds = textFlowFactory.getContentBounds();
-            var g:Graphics = sprite.graphics;
-            drawCircle(g, 0xff00, 0, 0, 3);
-            strokeRect(g, 1, 0x0, 0, 0, width, height);
-            strokeRect(g, 1, 0xFF0000, compareBounds.left, compareBounds.top, compareBounds.width, compareBounds.height);
-            // trace("addTextFactoryFromFlowSprite is running");
-            fFactBounds = textFlowFactory.getContentBounds();
-
-            // trace("bounds",sFactBounds);
-            return factorySprite;
         }
 
         private function addTextFlowSprite(parentSprite:Sprite, x:Number, y:Number, width:Number, height:Number, textFlow:TextFlow):Sprite
@@ -557,100 +421,6 @@ package UnitTest.Tests
             g.drawCircle(x, y, radius);
             g.endFill();
         }
-
-
-        private function validateContentBounds(s:Sprite, contentBounds:Rectangle, marginOfError:Number):void
-        {
-            // Check that the content bounds includes all the places within the container that have text
-            s.graphics.clear();
-            var bbox:Rectangle = s.getBounds(s);
-
-            // The content bounds should always include the inked bounds, or be very close to it. In practice, how far it may be off by is proportional to the text size.
-            assertTrue("contentBounds left doesn't match sprite inked bounds", contentBounds.left <= bbox.left || Math.abs(contentBounds.left - bbox.left) < marginOfError);
-            assertTrue("contentBounds top doesn't match sprite inked bounds", contentBounds.top <= bbox.top || Math.abs(contentBounds.top - bbox.top) < marginOfError);
-            assertTrue("contentBounds right doesn't match sprite inked bounds", contentBounds.right >= bbox.right || Math.abs(contentBounds.right - bbox.right) < marginOfError);
-            assertTrue("contentBounds bottom doesn't match sprite inked bounds", contentBounds.bottom >= bbox.bottom || Math.abs(contentBounds.bottom - bbox.bottom) < marginOfError);
-        }
-
-        private function validateAlignment(verticalAlign:String, textAlign:String, textFlow:TextFlow, compositionBounds:Rectangle, contentBounds:Rectangle, expectContentsToFit:Boolean, marginOfError:Number):void
-        {
-            // Check that the text was put in the appropriate area of the container, given the vertical & horizontal alignment values
-            if (expectContentsToFit)
-            {
-                assertTrue("contents expected to fit, but overflow in height", contentBounds.height <= compositionBounds.height || contentBounds.height - compositionBounds.height < 1);
-                assertTrue("contents expected to fit, but overflow in width", contentBounds.width <= compositionBounds.width || contentBounds.width - compositionBounds.width < 1);
-            }
-
-            // Resolve direction dependent alignment
-            if (textAlign == TextAlign.START)
-                textAlign = textFlow.computedFormat.direction == Direction.LTR ? TextAlign.LEFT : TextAlign.RIGHT;
-            if (textAlign == TextAlign.END)
-                textAlign = textFlow.computedFormat.direction == Direction.RTL ? TextAlign.LEFT : TextAlign.RIGHT;
-
-            // Swap alignment values for validate call if text is rotated (vertical text)
-            if (_blockProgression == BlockProgression.RL)
-            {
-                var originalTextAlign:String = textAlign;
-                switch (verticalAlign)
-                {
-                    case VerticalAlign.TOP:
-                        textAlign = TextAlign.RIGHT;
-                        break;
-                    case VerticalAlign.MIDDLE:
-                        textAlign = TextAlign.CENTER;
-                        break;
-                    case VerticalAlign.BOTTOM:
-                        textAlign = TextAlign.LEFT;
-                        break;
-                    default:
-                        break;
-                }
-                switch (originalTextAlign)
-                {
-                    case TextAlign.LEFT:
-                        verticalAlign = VerticalAlign.TOP;
-                        break;
-                    case TextAlign.CENTER:
-                        verticalAlign = VerticalAlign.MIDDLE;
-                        break;
-                    case TextAlign.RIGHT:
-                        verticalAlign = VerticalAlign.BOTTOM;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            switch (verticalAlign)
-            {
-                case VerticalAlign.TOP:
-                    assertTrue("Vertical alignment top - content not at top", Math.abs(contentBounds.top - compositionBounds.top) < marginOfError);
-                    break;
-                case VerticalAlign.MIDDLE:
-                    assertTrue("Vertical alignment middle - content not at middle", Math.abs(Math.abs(contentBounds.top - compositionBounds.top) - Math.abs(contentBounds.bottom - compositionBounds.bottom)) < marginOfError);
-                    break;
-                case VerticalAlign.BOTTOM:
-                    assertTrue("Vertical alignment bottom - content not at bottom", Math.abs(contentBounds.bottom - compositionBounds.bottom) < marginOfError);
-                    break;
-                default:
-                    break;
-            }
-            switch (textAlign)
-            {
-                case TextAlign.LEFT:
-                    assertTrue("Horizontal alignment left - content not at left", Math.abs(contentBounds.left - compositionBounds.left) < marginOfError);
-                    break;
-                case TextAlign.CENTER:
-                    assertTrue("Horizontal alignment center - content not at center", Math.abs(Math.abs(contentBounds.left - compositionBounds.left) - Math.abs(contentBounds.right - compositionBounds.right)) < marginOfError);
-                    break;
-                case TextAlign.RIGHT:
-                    assertTrue("Horizontal alignment right - content not at right", Math.abs(contentBounds.right - compositionBounds.right) < marginOfError);
-                    break;
-                default:
-                    break;
-            }
-        }
-
 
         /** Run a single markup description in vertical alignment (top, middle, bottom) * horizontal alignment (left, center, right) in
          * both the full compose using ContainerController and a TextFlow Factory case. Compare the results to make sure the text falls
