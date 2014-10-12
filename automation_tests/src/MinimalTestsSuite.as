@@ -19,13 +19,13 @@
 package
 {
 
-    import UnitTest.Tests.AccessibilityMethodsTest;
+    import UnitTest.Tests.FactoryImportTest;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class MinimalTestsSuite
     {
-        public var accessibilityMethodsTest:AccessibilityMethodsTest;
+        public var factoryImportTest:FactoryImportTest;
     }
 
 }

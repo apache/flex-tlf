@@ -33,7 +33,9 @@ package
     import UnitTest.Tests.CrossContainerTest;
     import UnitTest.Tests.ElementOperationTest;
     import UnitTest.Tests.EventOverrideTest;
+    import UnitTest.Tests.FactoryImportTest;
     import UnitTest.Tests.FloatTest;
+    import UnitTest.Tests.FlowModelTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
 
@@ -41,6 +43,7 @@ package
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class AllTestsSuite
     {
+        public var factoryImportTest:FactoryImportTest;
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
         public var allChartAttributeTest:AllCharAttributeTest;
         public var allContAttirbuteTest:AllContAttributeTest;
@@ -58,6 +61,7 @@ package
         public var crossContainerTest:CrossContainerTest;
         public var elementOperationTest:ElementOperationTest;
         public var eventOverrideTest:EventOverrideTest;
+        public var flowModelTest:FlowModelTest;
     }
 
 }
