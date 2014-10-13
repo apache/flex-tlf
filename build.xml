@@ -388,6 +388,6 @@
 	</target>
 
     <target name="flexunnit_tests">
-        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="false" verbose="true" />
+        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="true" verbose="true" />
     </target>
 </project>
