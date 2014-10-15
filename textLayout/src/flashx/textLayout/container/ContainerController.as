@@ -514,7 +514,7 @@ package flashx.textLayout.container
 				if (_rootElement)
 					formatChanged();
 
-				if (_container && Configuration.playerEnablesSpicyFeatures)
+				if (Configuration.playerEnablesSpicyFeatures)
 					_container["needsSoftKeyboard"] = (interactionManager && interactionManager.editingMode == EditingMode.READ_WRITE);
 			}
 		}
@@ -924,7 +924,7 @@ package flashx.textLayout.container
 			}
 
 			// Called when the bounds have changed and they now exceed the composition area, to see if we need to attach a mouse wheel listener for scrolling
-			if (textFlow && _container && !_minListenersAttached)
+			if (textFlow && !_minListenersAttached)
 			{
 				var needToScroll:Boolean = !measuring && newHeight > visibleHeight;
 				if (needToScroll != _mouseWheelListenerAttached)
@@ -1536,44 +1536,41 @@ package flashx.textLayout.container
 			if ((_minListenersAttached || _mouseWheelListenerAttached) && attachTransparentBackground)
 			{
 				var s:Sprite = _container;
-				if (s)
-				{
-					if (justClear)
-					{
-						s.graphics.clear();
-						CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
-						_transparentBGX = _transparentBGY = _transparentBGWidth = _transparentBGHeight = NaN;
-					}
-					else
-					{		
-						var bgwidth:Number = _measureWidth ? _contentWidth : _compositionWidth;
-						var bgheight:Number = _measureHeight ? _contentHeight : _compositionHeight;
-						
-						var adjustHorizontalScroll:Boolean = effectiveBlockProgression == BlockProgression.RL && _horizontalScrollPolicy != ScrollPolicy.OFF;
-						var bgx:Number = adjustHorizontalScroll ? _xScroll - bgwidth : _xScroll;
-						var bgy:Number = _yScroll;
-						
-						CONFIG::debug { assert(!isNaN(bgx) && !isNaN(bgy) && !isNaN(bgwidth) && ! isNaN(bgheight),"Bad background rectangle"); }
-						
-						if (bgx != _transparentBGX || bgy != _transparentBGY || bgwidth != _transparentBGWidth || bgheight != _transparentBGHeight)
-						{
-							s.graphics.clear();
-							CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
-							if (bgwidth != 0 && bgheight != 0 )
-							{
-								s.graphics.beginFill(0, 0);
-								s.graphics.drawRect(bgx, bgy, bgwidth, bgheight);
-								s.graphics.endFill();
-								CONFIG::debug { Debugging.traceFTECall(null,s,"drawTransparentBackground",bgx, bgy, bgwidth, bgheight); }
-							}
-							_transparentBGX = bgx;
-							_transparentBGY = bgy;
-							_transparentBGWidth = bgwidth;
-							_transparentBGHeight = bgheight;
-						}
-					}
-				}
-			} 
+                if (justClear)
+                {
+                    s.graphics.clear();
+                    CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
+                    _transparentBGX = _transparentBGY = _transparentBGWidth = _transparentBGHeight = NaN;
+                }
+                else
+                {
+                    var bgwidth:Number = _measureWidth ? _contentWidth : _compositionWidth;
+                    var bgheight:Number = _measureHeight ? _contentHeight : _compositionHeight;
+
+                    var adjustHorizontalScroll:Boolean = effectiveBlockProgression == BlockProgression.RL && _horizontalScrollPolicy != ScrollPolicy.OFF;
+                    var bgx:Number = adjustHorizontalScroll ? _xScroll - bgwidth : _xScroll;
+                    var bgy:Number = _yScroll;
+
+                    CONFIG::debug { assert(!isNaN(bgx) && !isNaN(bgy) && !isNaN(bgwidth) && ! isNaN(bgheight),"Bad background rectangle"); }
+
+                    if (bgx != _transparentBGX || bgy != _transparentBGY || bgwidth != _transparentBGWidth || bgheight != _transparentBGHeight)
+                    {
+                        s.graphics.clear();
+                        CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
+                        if (bgwidth != 0 && bgheight != 0 )
+                        {
+                            s.graphics.beginFill(0, 0);
+                            s.graphics.drawRect(bgx, bgy, bgwidth, bgheight);
+                            s.graphics.endFill();
+                            CONFIG::debug { Debugging.traceFTECall(null,s,"drawTransparentBackground",bgx, bgy, bgwidth, bgheight); }
+                        }
+                        _transparentBGX = bgx;
+                        _transparentBGY = bgy;
+                        _transparentBGWidth = bgwidth;
+                        _transparentBGHeight = bgheight;
+                    }
+                }
+			}
 		}
 		
 		/** @private */
@@ -1592,7 +1589,7 @@ package flashx.textLayout.container
 			// We have to tell the Player to bring up the soft keyboard on a
 			// keyboard edit gesture. Note that needsSoftKeyboard is new with 10.2, so 
 			// have to check for it. This is a change to the container, but unavoidable
-			if (_container && Configuration.playerEnablesSpicyFeatures)
+			if (Configuration.playerEnablesSpicyFeatures)
 				_container["needsSoftKeyboard"] = (interactionManager && interactionManager.editingMode == EditingMode.READ_WRITE);
 		}
 		
@@ -1608,18 +1605,14 @@ package flashx.textLayout.container
 			{
 				_minListenersAttached = true;
 				
-				if (_container)
-				{
-					_container.addEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
-					_container.addEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
+                _container.addEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
+                _container.addEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
 
-					attachTransparentBackgroundForHit(false);
-					
-					// If the container already has focus, we have to attach all listeners
-					if (_container.stage && _container.stage.focus == _container)
-						attachAllListeners();
-					
-				}
+                attachTransparentBackgroundForHit(false);
+
+                // If the container already has focus, we have to attach all listeners
+                if (_container.stage && _container.stage.focus == _container)
+                    attachAllListeners();
 			}
 		}
 		
@@ -1688,20 +1681,17 @@ package flashx.textLayout.container
 		{
 			if (_minListenersAttached)
 			{
-				if (_container)
-				{
-					_container.removeEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
-					_container.removeEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
-					
-					if(_allListenersAttached)
-					{
-						removeInteractionHandlers();				
-						removeContextMenu();
-						
-						attachTransparentBackgroundForHit(true);
-						_allListenersAttached = false;
-					}
-				}
+                _container.removeEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
+                _container.removeEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
+
+                if(_allListenersAttached)
+                {
+                    removeInteractionHandlers();
+                    removeContextMenu();
+
+                    attachTransparentBackgroundForHit(true);
+                    _allListenersAttached = false;
+                }
 				_minListenersAttached = false;
 			}
 			removeMouseWheelListener();
@@ -1714,11 +1704,8 @@ package flashx.textLayout.container
 			{
 				CONFIG::debug { assert(_minListenersAttached,"Bad call to attachAllListeners - won't detach"); }
 				_allListenersAttached = true;
-				if (_container)
-				{
-					attachContextMenu();
-					attachInteractionHandlers();
-				}
+                attachContextMenu();
+                attachInteractionHandlers();
 			}
 		}
 		
