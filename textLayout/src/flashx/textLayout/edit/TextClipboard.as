@@ -179,9 +179,9 @@ package flashx.textLayout.edit
 					textScrap = new TextScrap(textFlow);
 				
 				/** Hint to the scrap about whether text is plain or formatted. If not set, scrap will inspect text for attributes. */
-				if (format == TextConverter.PLAIN_TEXT_FORMAT)
+				if (format == TextConverter.PLAIN_TEXT_FORMAT && textScrap)
 					textScrap.setPlainText(true);
-				else if (format == TextConverter.TEXT_LAYOUT_FORMAT)
+				else if (format == TextConverter.TEXT_LAYOUT_FORMAT && textScrap)
 					textScrap.setPlainText(false);
 				
 				// Backwards compatibility: check for older scrap format
