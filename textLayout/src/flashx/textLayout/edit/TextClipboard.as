@@ -175,14 +175,15 @@ package flashx.textLayout.edit
 			{
 				importer.useClipboardAnnotations = true;
 				var textFlow:TextFlow = importer.importToFlow(textOnClipboard);
-				if (textFlow)
+				if (textFlow) {
 					textScrap = new TextScrap(textFlow);
-				
-				/** Hint to the scrap about whether text is plain or formatted. If not set, scrap will inspect text for attributes. */
-				if (format == TextConverter.PLAIN_TEXT_FORMAT && textScrap)
-					textScrap.setPlainText(true);
-				else if (format == TextConverter.TEXT_LAYOUT_FORMAT && textScrap)
-					textScrap.setPlainText(false);
+					
+					/** Hint to the scrap about whether text is plain or formatted. If not set, scrap will inspect text for attributes. */
+					if (format == TextConverter.PLAIN_TEXT_FORMAT)
+						textScrap.setPlainText(true);
+					else if (format == TextConverter.TEXT_LAYOUT_FORMAT)
+						textScrap.setPlainText(false);
+				}
 				
 				// Backwards compatibility: check for older scrap format
 				if (!textScrap && format == TextConverter.TEXT_LAYOUT_FORMAT)
