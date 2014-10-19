@@ -194,6 +194,7 @@
      </target>
 
 	<target name="testApps" description="Builds TLF test application">
+        <echo>testApps jvm.args: ${jvm.args}</echo>
 		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/flowCss.css" 
 				keep-generated-actionscript="false"
 				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
