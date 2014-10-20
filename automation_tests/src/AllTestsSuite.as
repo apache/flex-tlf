@@ -36,6 +36,7 @@ package
     import UnitTest.Tests.FactoryImportTest;
     import UnitTest.Tests.FloatTest;
     import UnitTest.Tests.FlowModelTest;
+    import UnitTest.Tests.GeneralFunctionsTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
 
@@ -62,6 +63,7 @@ package
         public var elementOperationTest:ElementOperationTest;
         public var eventOverrideTest:EventOverrideTest;
         public var flowModelTest:FlowModelTest;
+        public var generalFunctionsTest:GeneralFunctionsTest;
     }
 
 }

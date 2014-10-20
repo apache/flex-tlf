@@ -1112,7 +1112,8 @@ package flashx.textLayout.utils
 			if (range.absoluteEnd >= flowComposer.damageAbsoluteStart - 1)
 			{
 				clampToFit(range, flowComposer.damageAbsoluteStart - 1);
-				return true;
+				return false;
+				//return true;
 			}
 			if (flowComposer && flowComposer.numControllers)
 			{
