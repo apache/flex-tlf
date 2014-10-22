@@ -408,6 +408,25 @@ package flashx.textLayout.elements
 		}
 		
 		/**
+		 * Convenience method for checking if table has merged cells
+		 * 
+		 */
+		public function hasMergedCells():Boolean
+		{
+			var cell:TableCellElement;
+			var child:*;
+			if(mxmlChildren == null)
+				return false;
+			for each(child in mxmlChildren)
+			{
+				cell = child as TableCellElement;
+				if( cell && (cell.columnSpan > 1 || cell.rowSpan > 1) )
+					return true;
+			}
+			return false;
+		}
+		
+		/**
 		 * Inserts a column at the end of the table. If a column is not provided one is created. 
 		 * 
 		 * @see addColumn
@@ -1441,6 +1460,9 @@ package flashx.textLayout.elements
 			return _tableBlocks;
 		}
 		
+		/**
+		 * Returns a vector of the table blocks in the specified cell range.
+		 **/
 		public function getTableBlocksInRange(start:CellCoordinates,end:CellCoordinates):Vector.<TextFlowTableBlock>
 		{
 			var coords:CellCoordinates = start.clone();

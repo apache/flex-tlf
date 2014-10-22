@@ -54,10 +54,13 @@ package flashx.textLayout.elements
 				return null;
 			if (coords.row < 0)
 				coords.row = 0;
-			if (coords.row >= _table.numRows)
-				coords.row = _table.numRows-1;
 			if (coords.column < 0)
 				coords.column = 0;
+			if(_table == null)
+				return coords;
+			
+			if (coords.row >= _table.numRows)
+				coords.row = _table.numRows-1;
 			if (coords.column >= _table.numColumns)
 				coords.column = _table.numColumns-1;
 			return coords;
