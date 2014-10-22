@@ -27,6 +27,7 @@ package flashx.textLayout.container
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
+    import flash.events.IEventDispatcher;
 	import flash.events.IMEEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -1770,6 +1771,29 @@ package flashx.textLayout.container
 			return createDefaultContextMenu();
 		}
 		
+        public function dispose():void
+        {
+            stopMouseSelectionScrolling();
+            clearSelectionShapes();
+            setRootElement(null);
+        }
+
+        private function stopMouseSelectionScrolling(containerRoot:IEventDispatcher = null):void
+        {
+            if(_scrollTimer)
+            {
+                _scrollTimer.stop();
+                _scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
+
+                if(!containerRoot)
+                    containerRoot = getContainerRoot();
+
+                if(containerRoot)
+                    containerRoot.removeEventListener(MouseEvent.MOUSE_UP, scrollTimerHandler);
+
+                _scrollTimer = null;
+            }
+        }
 		/** @private */
 		tlf_internal function scrollTimerHandler(event:Event):void
 		{
@@ -1785,19 +1809,12 @@ package flashx.textLayout.container
 			// We're listening for MOUSE_UP so we can cancel autoscrolling
 			if (event is MouseEvent)
 			{
-				_scrollTimer.stop();
-				_scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
+				stopMouseSelectionScrolling(event.currentTarget as IEventDispatcher);
 				CONFIG::debug { assert(_container.stage ==  null || getContainerRoot() == event.currentTarget,"scrollTimerHandler bad target"); }
-				event.currentTarget.removeEventListener(MouseEvent.MOUSE_UP, scrollTimerHandler);
-				_scrollTimer = null;
 			}
 			else if (!event)
 			{
-				_scrollTimer.stop();
-				_scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
-				if (getContainerRoot())
-					getContainerRoot().removeEventListener(	MouseEvent.MOUSE_UP, scrollTimerHandler);	
-				_scrollTimer = null;
+                stopMouseSelectionScrolling();
 			}
 			else if (_container.stage)
 			{

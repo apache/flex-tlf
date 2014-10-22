@@ -185,8 +185,7 @@ package flashx.textLayout.compose
 		  	var cont:ContainerController;
 			for each (cont in _controllerList)
 			{
-				cont.clearSelectionShapes();
-				cont.setRootElement(null);
+				cont.dispose();
 			}
 		}
 		
