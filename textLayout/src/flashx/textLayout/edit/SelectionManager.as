@@ -1961,7 +1961,7 @@ package flashx.textLayout.edit
 			if(cell || coords)
 			{
 				if(coords)
-					cell = currentTable.findCell(coords);
+					cell = coords.table.findCell(coords);
 				
 				superManager = cell.getTextFlow().interactionManager;
 				if(event.shiftKey && cell.getTable() == superManager.currentTable)
