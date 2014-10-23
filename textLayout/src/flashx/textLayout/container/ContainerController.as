@@ -18,71 +18,67 @@
 ////////////////////////////////////////////////////////////////////////////////
 package flashx.textLayout.container 
 {
-	import flash.display.BlendMode;
-	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	import flash.display.InteractiveObject;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.ContextMenuEvent;
-	import flash.events.Event;
-	import flash.events.FocusEvent;
+    import flash.display.BlendMode;
+    import flash.display.DisplayObject;
+    import flash.display.DisplayObjectContainer;
+    import flash.display.Shape;
+    import flash.display.Sprite;
+    import flash.events.ContextMenuEvent;
+    import flash.events.Event;
+    import flash.events.FocusEvent;
     import flash.events.IEventDispatcher;
-	import flash.events.IMEEvent;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
-	import flash.events.TextEvent;
-	import flash.events.TimerEvent;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.text.engine.TextBlock;
-	import flash.text.engine.TextLine;
-	import flash.text.engine.TextLineValidity;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuClipboardItems;
-	import flash.utils.Dictionary;
-	import flash.utils.Timer;
-	
-	import flashx.textLayout.compose.FloatCompositionData;
-	import flashx.textLayout.compose.FlowComposerBase;
-	import flashx.textLayout.compose.FlowDamageType;
-	import flashx.textLayout.compose.IFlowComposer;
-	import flashx.textLayout.compose.TextFlowLine;
-	import flashx.textLayout.compose.TextLineRecycler;
-	import flashx.textLayout.debug.Debugging;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.edit.EditingMode;
-	import flashx.textLayout.edit.IInteractionEventHandler;
-	import flashx.textLayout.edit.ISelectionManager;
-	import flashx.textLayout.edit.SelectionFormat;
-	import flashx.textLayout.elements.BackgroundManager;
-	import flashx.textLayout.elements.Configuration;
-	import flashx.textLayout.elements.ContainerFormattedElement;
-	import flashx.textLayout.elements.FlowElement;
-	import flashx.textLayout.elements.FlowLeafElement;
-	import flashx.textLayout.elements.FlowValueHolder;
-	import flashx.textLayout.elements.InlineGraphicElement;
-	import flashx.textLayout.elements.LinkElement;
-	import flashx.textLayout.elements.ParagraphElement;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.events.FlowElementMouseEvent;
-	import flashx.textLayout.events.FlowElementMouseEventManager;
-	import flashx.textLayout.events.ModelChange;
-	import flashx.textLayout.events.ScrollEvent;
-	import flashx.textLayout.events.ScrollEventDirection;
-	import flashx.textLayout.events.TextLayoutEvent;
-	import flashx.textLayout.events.UpdateCompleteEvent;
-	import flashx.textLayout.formats.BlockProgression;
-	import flashx.textLayout.formats.Float;
-	import flashx.textLayout.formats.FormatValue;
-	import flashx.textLayout.formats.ITextLayoutFormat;
-	import flashx.textLayout.formats.TextLayoutFormat;
-	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
-	import flashx.textLayout.utils.Twips;
-	
-	use namespace tlf_internal;
+    import flash.events.IMEEvent;
+    import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
+    import flash.events.TextEvent;
+    import flash.events.TimerEvent;
+    import flash.geom.Matrix;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import flash.text.engine.TextBlock;
+    import flash.text.engine.TextLine;
+    import flash.text.engine.TextLineValidity;
+    import flash.ui.ContextMenu;
+    import flash.ui.ContextMenuClipboardItems;
+    import flash.utils.Dictionary;
+    import flash.utils.Timer;
+
+    import flashx.textLayout.compose.FloatCompositionData;
+    import flashx.textLayout.compose.FlowDamageType;
+    import flashx.textLayout.compose.IFlowComposer;
+    import flashx.textLayout.compose.TextFlowLine;
+    import flashx.textLayout.compose.TextLineRecycler;
+    import flashx.textLayout.debug.Debugging;
+    import flashx.textLayout.debug.assert;
+    import flashx.textLayout.edit.EditingMode;
+    import flashx.textLayout.edit.IInteractionEventHandler;
+    import flashx.textLayout.edit.ISelectionManager;
+    import flashx.textLayout.edit.SelectionFormat;
+    import flashx.textLayout.elements.BackgroundManager;
+    import flashx.textLayout.elements.Configuration;
+    import flashx.textLayout.elements.ContainerFormattedElement;
+    import flashx.textLayout.elements.FlowElement;
+    import flashx.textLayout.elements.FlowLeafElement;
+    import flashx.textLayout.elements.FlowValueHolder;
+    import flashx.textLayout.elements.InlineGraphicElement;
+    import flashx.textLayout.elements.ParagraphElement;
+    import flashx.textLayout.elements.TCYElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.events.FlowElementMouseEventManager;
+    import flashx.textLayout.events.ModelChange;
+    import flashx.textLayout.events.ScrollEvent;
+    import flashx.textLayout.events.ScrollEventDirection;
+    import flashx.textLayout.events.TextLayoutEvent;
+    import flashx.textLayout.events.UpdateCompleteEvent;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.formats.Float;
+    import flashx.textLayout.formats.FormatValue;
+    import flashx.textLayout.formats.ITextLayoutFormat;
+    import flashx.textLayout.formats.TextLayoutFormat;
+    import flashx.textLayout.tlf_internal;
+    import flashx.textLayout.utils.Twips;
+
+    use namespace tlf_internal;
 	
 	/** 
 	 * The ContainerController class defines the relationship between a TextFlow object and a container.
@@ -1425,7 +1421,7 @@ package flashx.textLayout.container
 				if (blockProgression == BlockProgression.RL)
 				{
 					var leafElement:FlowLeafElement = _rootElement.getTextFlow().findLeaf(start);
-					isTCY =  leafElement.getParentByType(flashx.textLayout.elements.TCYElement) != null;
+					isTCY =  leafElement.getParentByType(TCYElement) != null;
 				}
 				
 				var minAtomIndex:int = textLine.atomCount;
@@ -1786,10 +1782,14 @@ package flashx.textLayout.container
                 _scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
 
                 if(!containerRoot)
+                {
                     containerRoot = getContainerRoot();
+                }
 
                 if(containerRoot)
+                {
                     containerRoot.removeEventListener(MouseEvent.MOUSE_UP, scrollTimerHandler);
+                }
 
                 _scrollTimer = null;
             }
@@ -4745,8 +4745,9 @@ package flashx.textLayout.container
 		
 		CONFIG::debug
 		{
-			import flash.system.Capabilities;
-			// OLD style calculation - lets make sure its the same.  
+            import flash.system.Capabilities;
+
+            // OLD style calculation - lets make sure its the same.
 			static private var tempLineHolder:Sprite = new Sprite();
 			
 			/** @private */
@@ -4913,8 +4914,9 @@ package flashx.textLayout.container
 	}
 	
 }
-import flash.events.MouseEvent;
+
 import flash.display.InteractiveObject;
+import flash.events.MouseEvent;
 
 class PsuedoMouseEvent extends MouseEvent
 {

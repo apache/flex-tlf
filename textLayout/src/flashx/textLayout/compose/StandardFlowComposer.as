@@ -17,25 +17,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 package flashx.textLayout.compose
-{	
-	import flash.display.Sprite;
-	import flash.system.Capabilities;
-	import flash.text.engine.TextLine;
-	
-	import flashx.textLayout.accessibility.TextAccImpl;
-	import flashx.textLayout.container.ContainerController;
-	import flashx.textLayout.container.ScrollPolicy;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.edit.ISelectionManager;
-	import flashx.textLayout.elements.BackgroundManager;
-	import flashx.textLayout.elements.ContainerFormattedElement;
-	import flashx.textLayout.elements.ParagraphElement;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.events.CompositionCompleteEvent;
-	import flashx.textLayout.formats.BlockProgression;
-	import flashx.textLayout.tlf_internal;
+{
+    import flash.display.Sprite;
+    import flash.system.Capabilities;
 
-	use namespace tlf_internal;
+    import flashx.textLayout.accessibility.TextAccImpl;
+    import flashx.textLayout.container.ContainerController;
+    import flashx.textLayout.container.ScrollPolicy;
+    import flashx.textLayout.debug.assert;
+    import flashx.textLayout.edit.ISelectionManager;
+    import flashx.textLayout.elements.BackgroundManager;
+    import flashx.textLayout.elements.ContainerFormattedElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.events.CompositionCompleteEvent;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.tlf_internal;
+
+    use namespace tlf_internal;
 	
 	/** 
 	* The StandardFlowComposer class provides a standard composer and container manager. 
@@ -89,7 +87,7 @@ package flashx.textLayout.compose
 		public function StandardFlowComposer()
 		{
 			super();
-			_controllerList = new Array();
+			_controllerList = [];
 			_composing = false;
 		}
 
@@ -212,7 +210,7 @@ package flashx.textLayout.compose
 				// attach accessibility to the containers
 				// Why only the first container?  There are workflows that this will fail
 				// for example: a pagination workflow that has a composed chain of containers but only displays one at a time.
-				if (textFlow.configuration.enableAccessibility && flash.system.Capabilities.hasAccessibility)
+				if (textFlow.configuration.enableAccessibility && Capabilities.hasAccessibility)
 				{
 					var firstContainer:Sprite = getControllerAt(0).container;
 					if (firstContainer)
@@ -265,7 +263,7 @@ package flashx.textLayout.compose
 			}
 			else
 			{
-				controller.setRootElement(_rootElement)
+				controller.setRootElement(_rootElement);
 				var curContainer:Sprite = controller.container;
 				if (curContainer)
 					curContainer.focusRect = false;
@@ -538,7 +536,7 @@ package flashx.textLayout.compose
 		 * 
 		 * <p>If the contents of any container is changed, the method returns <code>true</code>.</p>
 		 * 
-		 * @param controllerIndex index of the last container to update (by default updates all containers)
+		 * @param index index of the last container to update (by default updates all containers)
 		 * @return <code>true</code>, if anything changed.
 		 *
 		 * @playerversion Flash 10
@@ -578,7 +576,7 @@ package flashx.textLayout.compose
 		 * containing the specified text flow position.</p>
 		 * 
 		 * @param absolutePosition Specifies the position in the text flow of the container to receive focus.
-		 * @param preferPrevious If true and the position is before the first character in a container, sets focus to the end of 
+		 * @param leanLeft If true and the position is before the first character in a container, sets focus to the end of
 		 *  the previous container.
 		 * 
 		 * @see flash.display.Stage#focus
