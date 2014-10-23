@@ -18,7 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestConfig;
 
