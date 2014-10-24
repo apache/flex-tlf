@@ -578,7 +578,7 @@ package flashx.textLayout.container
 					hadPreviousSelection = true;
 					
 					//preserve the selection state [bug #2931406 from Flex SDK]
-					if (_preserveSelectionOnSetText)
+					if (_preserveSelectionOnSetText && text)
                     {
                         oldAnchorPosition = Math.min(_textFlow.interactionManager.anchorPosition, text.length);
                         oldActivePosition = Math.min(_textFlow.interactionManager.activePosition, text.length);
