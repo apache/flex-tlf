@@ -26,7 +26,7 @@
     <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
 	<property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
 	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
-	
+    <echo>Minimal test is set ${minimalTests}</echo>
 
 	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
 	<property name="flex.locale" value="en_US"/>
@@ -363,7 +363,6 @@
 			</fileset>
 		</copy>
 	</target>
-
     <target name="flexunnit_tests">
         <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="true" verbose="true" />
     </target>
