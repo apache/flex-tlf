@@ -27,6 +27,7 @@ package flashx.textLayout.elements
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
+	import flashx.textLayout.compose.FlowDamageType;
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.edit.EditManager;
@@ -90,26 +91,52 @@ package flashx.textLayout.elements
 		}
 
 		public function isDamaged():Boolean {
-			return _damaged;
+			return _damaged || (_textFlow && _textFlow.flowComposer.isDamaged(_textFlow.textLength));
 		}
 		
+		private var _savedPaddingTop:Number = 0;
+		private var _savedPaddingBottom:Number = 0;
+		private var _savedPaddingLeft:Number = 0;
+		private var _savedPaddingRight:Number = 0;
+		
 		public function compose():Boolean {
+			
+			var pt:Number = getEffectivePaddingTop();
+			var pb:Number = getEffectivePaddingBottom();
+			var pl:Number = getEffectivePaddingLeft();
+			var pr:Number = getEffectivePaddingRight();
+
+			if(pt != _savedPaddingTop)
+			{
+				_controller.paddingTop = _savedPaddingTop = pt;
+			}
+			if(pb != _savedPaddingBottom)
+			{
+				_controller.paddingBottom = _savedPaddingBottom = pb;
+			}
+			if(pl != _savedPaddingLeft)
+			{
+				_controller.paddingLeft = _savedPaddingLeft = pl;
+			}
+			if(pr != _savedPaddingRight)
+			{
+				_controller.paddingRight = _savedPaddingRight = pr;
+			}
+
 			var table:TableElement = getTable();
-			width = 0;
+			
+			_damaged = false;
+			
+			var compWidth:Number = 0;
 			for(var i:int=0;i<columnSpan;i++)
 			{
 				if (table && table.getColumnAt(colIndex+i)) {
-					width += table.getColumnAt(colIndex+i).columnWidth;
+					compWidth += table.getColumnAt(colIndex+i).columnWidth;
 				}
 				
 			}
-			
-			_damaged = false;
-			_controller.paddingTop = getEffectivePaddingTop();
-			_controller.paddingBottom = getEffectivePaddingBottom();
-			_controller.paddingLeft = getEffectivePaddingLeft();
-			_controller.paddingRight = getEffectivePaddingRight();
-			
+			width = compWidth;
+
 			if (_textFlow && _textFlow.flowComposer) {
 				return _textFlow.flowComposer.compose();
 			}

@@ -3248,7 +3248,8 @@ package flashx.textLayout.container
 			{
 				// We only updated some of the lines. Remove the old versions off the end, and add in the new ones from _linesInView
 				_shapeChildren.length = shapeChildrenStartIdx;		// truncate
-				_shapeChildren = _shapeChildren.concat(_linesInView);	// append _linesInView to end of _shapeChildren
+				//_shapeChildren = _shapeChildren.concat(_linesInView);	// append _linesInView to end of _shapeChildren
+				_shapeChildren = _shapeChildren.concat(newShapeChildren);	// append _linesInView to end of _shapeChildren
 				_linesInView.length = 0;	// truncate
 			}
 			else
