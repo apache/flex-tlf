@@ -349,6 +349,7 @@
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
 			<define name="CONFIG::release" 			value="${rel}"/>
+            <define name="CONFIG::minimaltests" value="${minimalTests}"/>
 		</mxmlc>
 		<html-wrapper title="VellumUnit" file="VellumUnit.html" 
 		            application="VellumUnit" 

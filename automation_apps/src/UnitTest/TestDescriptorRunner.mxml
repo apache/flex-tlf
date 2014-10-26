@@ -35,14 +35,12 @@
             core.addListener(new CIListener());
             core.addListener(testRunner);
 
-            if (isMinimalTests)
-            {
+            CONFIG::minimaltests {
                 core.run(new MinimalTestsSuite());
+                return;
             }
-            else
-            {
-                core.run(new AllTestsSuite());
-            }
+
+            core.run(new AllTestsSuite());
         }
         ]]>
 	</fx:Script>
