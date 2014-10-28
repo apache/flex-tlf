@@ -534,6 +534,7 @@ package flashx.textLayout.elements
 				}
 				if(colIdx < numColumns){
 					addChildAt(cellIdx++,cell);
+					cell.damage();
 				}
 			}
 			return true;

@@ -3203,6 +3203,11 @@ package flashx.textLayout.container
 					childIdx++;
 					newIdx++;
 					oldIdx++;
+					if(newChild is TableBlockContainer)
+					{
+						// update the contents in case cells were added or removed. (There might be a more efficient way to do this, but this works.)
+						(newChild as TableBlockContainer).userData.updateCompositionShapes();
+					}
 					continue;
 				}
 				var newChildIdx:int = _shapeChildren.indexOf(newChild);
