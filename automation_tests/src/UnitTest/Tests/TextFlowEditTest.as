@@ -18,155 +18,170 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestDescriptor;
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
-	import UnitTest.ExtendedClasses.VellumTestCase;
-	import UnitTest.Fixtures.TestConfig;
+    import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestConfig;
 
-	import flash.events.*;
+    import flashx.textLayout.edit.*;
+    import flashx.textLayout.elements.FlowElement;
+    import flashx.textLayout.elements.FlowGroupElement;
+    import flashx.textLayout.elements.InlineGraphicElement;
+    import flashx.textLayout.elements.ParagraphElement;
 
-	import flashx.textLayout.*;
-	import flashx.textLayout.edit.*;
-	import flashx.textLayout.elements.FlowElement;
-	import flashx.textLayout.elements.FlowGroupElement;
-	import flashx.textLayout.elements.InlineGraphicElement;
-	import flashx.textLayout.elements.ParagraphElement;
-
-	import mx.utils.LoaderUtil;
+    import mx.utils.LoaderUtil;
 
     import org.flexunit.asserts.assertTrue;
 
     public class TextFlowEditTest extends VellumTestCase
-	{
-		public function TextFlowEditTest(methodName:String, testID:String, testConfig:TestConfig, testXML:XML = null)
-		{
-			super(methodName, testID, testConfig);
+    {
+        public function TextFlowEditTest()
+        {
+            super("", "TextFlowEditTest", TestConfig.getInstance())
 
-			// Note: These must correspond to a Watson product area (case-sensitive)
-			metaData.productArea = "Editing";
-		}
+            metaData = {};
+            // Note: These must correspond to a Watson product area (case-sensitive)
+            metaData.productArea = "Editing";
+        }
 
-		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
-		{
-			ts.addTestDescriptor (new TestDescriptor (TextFlowEditTest, "simulateClipboardTest", testConfig ) ); //HBS
-			ts.addTestDescriptor (new TestDescriptor (TextFlowEditTest, "addChildTest", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (TextFlowEditTest, "removeChildTest", testConfig ) );
-   		}
+        [Before]
+        override public function setUpTest():void
+        {
+            super.setUpTest();
+        }
 
-  		// Returns the string from begIdx through and including endIdx
-   		private function getText( begIdx:int, endIdx:int ): String
-   		{
-   			var outString:String = "";
+        [After]
+        override public function tearDownTest():void
+        {
+            super.tearDownTest();
+        }
 
-   			for ( var x:int = begIdx; x < endIdx; x++ )
-   			{
-   				outString += SelManager.textFlow.getCharAtPosition(x);
-   			}
+        [Test]
+        /**
+         * Tests FlowGroupElement's addChild and addChildAt on TextFlow
+         */
+        public function addChildTest():void
+        {
+            var origLength:int = SelManager.textFlow.textLength;
+            var firstPara:FlowElement = SelManager.textFlow.getChildAt(0).deepCopy();
 
-   			return outString;
-   		}
+            // Test addChild
+            SelManager.textFlow.removeChildAt(0);
+            var flowLength:int = SelManager.textFlow.textLength;
+            var tempPara:FlowElement = SelManager.textFlow.getChildAt(0).deepCopy();
+            SelManager.textFlow.addChild(tempPara);
+            flowLength *= 2;
+            assertTrue("addChild failed on textFlow",
+                    flowLength == SelManager.textFlow.textLength);
 
-  		// Tests FlowGroupElement's addChild and addChildAt on TextFlow
-  		public function addChildTest():void
-  		{
-  			var origLength:int = SelManager.textFlow.textLength;
-  			var firstPara:FlowElement = SelManager.textFlow.getChildAt(0).deepCopy();
+            // Try to add an already added element this should simply replace it
+            SelManager.textFlow.addChild(tempPara);
+            assertTrue("readdChild failed on textFlow",
+                    flowLength == SelManager.textFlow.textLength && tempPara.parent == SelManager.textFlow && tempPara == SelManager.textFlow.getChildAt(SelManager.textFlow.numChildren - 1));
 
-  			// Test addChild
-  			SelManager.textFlow.removeChildAt(0);
-  			var flowLength:int = SelManager.textFlow.textLength;
-  			var tempPara:FlowElement = SelManager.textFlow.getChildAt(0).deepCopy();
-  			SelManager.textFlow.addChild(tempPara);
-  			flowLength *= 2;
-  			assertTrue( "addChild failed on textFlow",
-  						flowLength == SelManager.textFlow.textLength );
+            // Test addChildAt
+            SelManager.textFlow.addChildAt(1, firstPara);
+            SelManager.textFlow.removeChildAt(2);
+            assertTrue("addChildAt failed on textFlow",
+                    origLength == SelManager.textFlow.textLength);
+            assertTrue("addChildAt failed to place child at correct position",
+                    getText(0, 7) == "The man");
+        }
 
-			// Try to add an already added element this should simply replace it
- 			SelManager.textFlow.addChild(tempPara);
-  			assertTrue( "readdChild failed on textFlow",
-  						flowLength == SelManager.textFlow.textLength && tempPara.parent == SelManager.textFlow && tempPara == SelManager.textFlow.getChildAt(SelManager.textFlow.numChildren-1));
+        [Test]
+        /**
+         * Tests FlowGroupElement's removeChild and removeChildAt on TextFlow
+         */
+        public function removeChildTest():void
+        {
+            SelManager.textFlow.removeChildAt(0);
+            assertTrue("Removing first child paragraph failed",
+                    SelManager.textFlow.getChildAt(1) == null);
 
-			// Test addChildAt
-  			SelManager.textFlow.addChildAt(1,firstPara);
-  			SelManager.textFlow.removeChildAt(2);
-  			assertTrue( "addChildAt failed on textFlow",
-  						origLength == SelManager.textFlow.textLength );
-  			assertTrue ( "addChildAt failed to place child at correct position",
-  						 getText(0,7) == "The man" );
-  		}
+            SelManager.selectRange(25, 25);
+            SelManager.insertInlineGraphic(LoaderUtil.createAbsoluteURL(baseURL, "../../test/testFiles/assets/gremlin.jpg"), 20, 20);
 
-  		// Tests FlowGroupElement's removeChild and removeChildAt on TextFlow
-  		public function removeChildTest():void
-  		{
-  			SelManager.textFlow.removeChildAt(0);
-  			assertTrue( "Removing first child paragraph failed",
-  						SelManager.textFlow.getChildAt(1) == null );
+            var paraElem:FlowGroupElement = SelManager.textFlow.getChildAt(0) as ParagraphElement;
+            var imgElem:FlowElement = paraElem.getChildAt(paraElem.findChildIndexAtPosition(25));
+            assertTrue("Expected InlineImageElement not found", imgElem is InlineGraphicElement);
+            paraElem.removeChild(imgElem);
 
-  			SelManager.selectRange(25,25);
-  			SelManager.insertInlineGraphic(LoaderUtil.createAbsoluteURL(baseURL,"../../test/testFiles/assets/gremlin.jpg"), 20, 20 );
+            assertTrue("FlowGroupElement method removeChild failed to remove InlineGraphic",
+                    !(paraElem.getChildAt(
+                            paraElem.findChildIndexAtPosition(25))
+                            is InlineGraphicElement))
 
-  			var paraElem:FlowGroupElement = SelManager.textFlow.getChildAt(0) as ParagraphElement;
-  			var imgElem:FlowElement = paraElem.getChildAt(paraElem.findChildIndexAtPosition(25));
-  			assertTrue("Expected InlineImageElement not found", imgElem is InlineGraphicElement );
-  			paraElem.removeChild(imgElem);
+            // Try to remove an element that isn't here
+            var gotError:Boolean = false;
+            try
+            {
+                SelManager.textFlow.removeChild(imgElem);
+            }
+            catch (e:ArgumentError)
+            {
+                gotError = true;
+            }
 
-  			assertTrue("FlowGroupElement method removeChild failed to remove InlineGraphic",
-  						!(paraElem.getChildAt(
-							paraElem.findChildIndexAtPosition(25))
-								is InlineGraphicElement) )
+            assertTrue("Removing invalid child element failed to throw error",
+                    gotError);
+        }
 
-  			// Try to remove an element that isn't here
-  			var gotError:Boolean = false;
-  			try
-  			{
-  				SelManager.textFlow.removeChild(imgElem);
-  			}
-  			catch ( e:ArgumentError )
-  			{
-  				gotError = true;
-  			}
+        [Test]
+        /**
+         * Selects the characters between the 10th and 50th characters and does a cut.  It then
+         * does an undo, redo, and another undo of the cut operation.
+         * Verifies that there is the correct amount of characters on the clipboard after the cut operation.
+         * Verifies that the correct amount of characters are left in the document after the cut operation.
+         * Verifies that the correct amount of characters are left in the doucment after undoing the cut operation.
+         * Verifies that the correct amount of characters are left in the document after redoing the cut operation.
+         * Verifies that the correct amount of characters are left in the document after re-undoing the cut operation.
+         */
+        public function simulateClipboardTest():void  //HBS
+        {
+            var startIndx:int = 10;
+            var endIndx:int = 50;
 
-  			assertTrue( "Removing invalid child element failed to throw error",
-  						gotError );
-  		}
+            SelManager.selectRange(startIndx, endIndx);
+            var initLength:uint = SelManager.textFlow.textLength;
+            var peudoClipboard:TextScrap = SelManager.cutTextScrap();
+            var endLength:uint = SelManager.textFlow.textLength;
+            assertTrue("Text length is incorrect after a cut operation", endLength == initLength - (endIndx - startIndx));
 
-		/**
-		 * Selects the characters between the 10th and 50th characters and does a cut.  It then
-		 * does an undo, redo, and another undo of the cut operation.
-		 * Verifies that there is the correct amount of characters on the clipboard after the cut operation.
-		 * Verifies that the correct amount of characters are left in the document after the cut operation.
-		 * Verifies that the correct amount of characters are left in the doucment after undoing the cut operation.
-		 * Verifies that the correct amount of characters are left in the document after redoing the cut operation.
-		 * Verifies that the correct amount of characters are left in the document after re-undoing the cut operation.
-		 */
-		public function simulateClipboardTest():void  //HBS
-		{
-			var startIndx:int = 10;
-			var endIndx:int = 50;
+            SelManager.undo();
+            var afterUndoLength:uint = SelManager.textFlow.textLength;
+            assertTrue("Text length is incorrect after undoing a cut operation", afterUndoLength == initLength);
 
-			SelManager.selectRange(startIndx,endIndx);
-			var initLength:uint = SelManager.textFlow.textLength;
-			var peudoClipboard:TextScrap = SelManager.cutTextScrap();
-			var endLength:uint = SelManager.textFlow.textLength;
-			assertTrue("Text length is incorrect after a cut operation", endLength == initLength - (endIndx - startIndx) );
+            //everything is ok so far if we get down here.  Now, redo the undo operation and
+            //make suer the flow goes back to the endLength
 
-			SelManager.undo();
-			var afterUndoLength:uint = SelManager.textFlow.textLength;
-			assertTrue("Text length is incorrect after undoing a cut operation", afterUndoLength == initLength);
+            SelManager.redo();
+            var afterRedoLength:uint = SelManager.textFlow.textLength;
+            assertTrue("Text length is incorrect after redoing a cut operation", afterRedoLength == endLength);
 
-			//everything is ok so far if we get down here.  Now, redo the undo operation and
-			//make suer the flow goes back to the endLength
+            //everything is ok so far if we get down here.  Now, do an undo again to get
+            //the doc back to it's original state so that we can go on with tests.
 
-			SelManager.redo();
-			var afterRedoLength:uint = SelManager.textFlow.textLength;
-			assertTrue("Text length is incorrect after redoing a cut operation", afterRedoLength == endLength);
+            SelManager.undo();
+            afterUndoLength = SelManager.textFlow.textLength;
+            assertTrue("Text length is incorrect after undoing a cut operation", afterUndoLength == initLength);
+        }
 
-			//everything is ok so far if we get down here.  Now, do an undo again to get
-			//the doc back to it's original state so that we can go on with tests.
 
-			SelManager.undo();
-			afterUndoLength = SelManager.textFlow.textLength;
-			assertTrue("Text length is incorrect after undoing a cut operation", afterUndoLength == initLength);
-		}
-	}
+        /**
+         * Returns the string from begIdx through and including endIdx
+         *
+         * @param begIdx
+         * @param endIdx
+         * @return
+         */
+        private function getText(begIdx:int, endIdx:int):String
+        {
+            var outString:String = "";
+
+            for (var x:int = begIdx; x < endIdx; x++)
+            {
+                outString += SelManager.textFlow.getCharAtPosition(x);
+            }
+
+            return outString;
+        }
+    }
 }

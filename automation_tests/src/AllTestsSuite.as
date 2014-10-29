@@ -39,6 +39,9 @@ package
     import UnitTest.Tests.GeneralFunctionsTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
+    import UnitTest.Tests.TextFlowEditTest;
+    import UnitTest.Tests.UndoRedoTest;
+    import UnitTest.Tests.WritingModeTest;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
@@ -64,6 +67,9 @@ package
         public var eventOverrideTest:EventOverrideTest;
         public var flowModelTest:FlowModelTest;
         public var generalFunctionsTest:GeneralFunctionsTest;
+        public var writingModeTest:WritingModeTest;
+        public var undoRedoTest:UndoRedoTest;
+        public var textFlowEditTest:TextFlowEditTest;
     }
 
 }

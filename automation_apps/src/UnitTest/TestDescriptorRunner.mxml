@@ -26,9 +26,8 @@
 
         private var core:FlexUnitCore;
 
-        public function startTest(isMinimalTests:Boolean = false):void
+        public function startTest():void
         {
-
             core = new FlexUnitCore();
             core.addUncaughtErrorListener( systemManager.loaderInfo );
             core.addListener(new RunListener());
