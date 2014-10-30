@@ -653,7 +653,7 @@ package flashx.textLayout.elements
 				}
 			}
 			//merge terminator span to previous if possible
-			if(_terminatorSpan.textLength == 1)
+			if(_terminatorSpan && _terminatorSpan.textLength == 1)
 			{
 				var prev:FlowLeafElement = _terminatorSpan.getPreviousLeaf(this);
 				if(prev && prev is SpanElement)
