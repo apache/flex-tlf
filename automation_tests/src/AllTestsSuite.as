@@ -39,6 +39,7 @@ package
     import UnitTest.Tests.GeneralFunctionsTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
+    import UnitTest.Tests.TabTest;
     import UnitTest.Tests.TextFlowEditTest;
     import UnitTest.Tests.UndoRedoTest;
     import UnitTest.Tests.WritingModeTest;
@@ -70,6 +71,7 @@ package
         public var writingModeTest:WritingModeTest;
         public var undoRedoTest:UndoRedoTest;
         public var textFlowEditTest:TextFlowEditTest;
+        public var tabTest:TabTest;
     }
 
 }
