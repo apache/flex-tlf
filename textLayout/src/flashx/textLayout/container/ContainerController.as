@@ -18,30 +18,67 @@
 ////////////////////////////////////////////////////////////////////////////////
 package flashx.textLayout.container 
 {
-	import flash.display.BlendMode;
-	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	import flash.display.InteractiveObject;
-	import flash.display.Shape;
-	import flash.display.Sprite;
-	import flash.events.ContextMenuEvent;
-	import flash.events.Event;
-	import flash.events.FocusEvent;
-	import flash.events.IMEEvent;
-	import flash.events.KeyboardEvent;
-	import flash.events.MouseEvent;
-	import flash.events.TextEvent;
-	import flash.events.TimerEvent;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.text.engine.TextBlock;
-	import flash.text.engine.TextLine;
-	import flash.text.engine.TextLineValidity;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuClipboardItems;
-	import flash.utils.Dictionary;
-	import flash.utils.Timer;
+    import flash.display.BlendMode;
+    import flash.display.DisplayObject;
+    import flash.display.DisplayObjectContainer;
+    import flash.display.Shape;
+    import flash.display.Sprite;
+    import flash.events.ContextMenuEvent;
+    import flash.events.Event;
+    import flash.events.FocusEvent;
+    import flash.events.IEventDispatcher;
+    import flash.events.IMEEvent;
+    import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
+    import flash.events.TextEvent;
+    import flash.events.TimerEvent;
+    import flash.geom.Matrix;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import flash.text.engine.TextBlock;
+    import flash.text.engine.TextLine;
+    import flash.text.engine.TextLineValidity;
+    import flash.ui.ContextMenu;
+    import flash.ui.ContextMenuClipboardItems;
+    import flash.utils.Dictionary;
+    import flash.utils.Timer;
+
+    import flashx.textLayout.compose.FloatCompositionData;
+    import flashx.textLayout.compose.FlowDamageType;
+    import flashx.textLayout.compose.IFlowComposer;
+    import flashx.textLayout.compose.TextFlowLine;
+    import flashx.textLayout.compose.TextLineRecycler;
+    import flashx.textLayout.debug.Debugging;
+    import flashx.textLayout.debug.assert;
+    import flashx.textLayout.edit.EditingMode;
+    import flashx.textLayout.edit.IInteractionEventHandler;
+    import flashx.textLayout.edit.ISelectionManager;
+    import flashx.textLayout.edit.SelectionFormat;
+    import flashx.textLayout.elements.BackgroundManager;
+    import flashx.textLayout.elements.Configuration;
+    import flashx.textLayout.elements.ContainerFormattedElement;
+    import flashx.textLayout.elements.FlowElement;
+    import flashx.textLayout.elements.FlowLeafElement;
+    import flashx.textLayout.elements.FlowValueHolder;
+    import flashx.textLayout.elements.InlineGraphicElement;
+    import flashx.textLayout.elements.ParagraphElement;
+    import flashx.textLayout.elements.TCYElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.events.FlowElementMouseEventManager;
+    import flashx.textLayout.events.ModelChange;
+    import flashx.textLayout.events.ScrollEvent;
+    import flashx.textLayout.events.ScrollEventDirection;
+    import flashx.textLayout.events.TextLayoutEvent;
+    import flashx.textLayout.events.UpdateCompleteEvent;
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.formats.Float;
+    import flashx.textLayout.formats.FormatValue;
+    import flashx.textLayout.formats.ITextLayoutFormat;
+    import flashx.textLayout.formats.TextLayoutFormat;
+    import flashx.textLayout.tlf_internal;
+    import flashx.textLayout.utils.Twips;
+
+    use namespace tlf_internal;
 	
 	import flashx.textLayout.compose.FloatCompositionData;
 	import flashx.textLayout.compose.FlowComposerBase;
@@ -522,7 +559,7 @@ package flashx.textLayout.container
 				if (_rootElement)
 					formatChanged();
 
-				if (_container && Configuration.playerEnablesSpicyFeatures)
+				if (Configuration.playerEnablesSpicyFeatures)
 					_container["needsSoftKeyboard"] = (interactionManager && interactionManager.editingMode == EditingMode.READ_WRITE);
 			}
 		}
@@ -945,7 +982,7 @@ package flashx.textLayout.container
 			}
 
 			// Called when the bounds have changed and they now exceed the composition area, to see if we need to attach a mouse wheel listener for scrolling
-			if (textFlow && _container && !_minListenersAttached)
+			if (textFlow && !_minListenersAttached)
 			{
 				var needToScroll:Boolean = !measuring && newHeight > visibleHeight;
 				if (needToScroll != _mouseWheelListenerAttached)
@@ -1445,7 +1482,7 @@ package flashx.textLayout.container
 				if (blockProgression == BlockProgression.RL)
 				{
 					var leafElement:FlowLeafElement = _rootElement.getTextFlow().findLeaf(start);
-					isTCY =  leafElement.getParentByType(flashx.textLayout.elements.TCYElement) != null;
+					isTCY =  leafElement.getParentByType(TCYElement) != null;
 				}
 				
 				var minAtomIndex:int = textLine.atomCount;
@@ -1557,44 +1594,41 @@ package flashx.textLayout.container
 			if ((_minListenersAttached || _mouseWheelListenerAttached) && attachTransparentBackground)
 			{
 				var s:Sprite = _container;
-				if (s)
-				{
-					if (justClear)
-					{
-						s.graphics.clear();
-						CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
-						_transparentBGX = _transparentBGY = _transparentBGWidth = _transparentBGHeight = NaN;
-					}
-					else
-					{		
-						var bgwidth:Number = _measureWidth ? _contentWidth : _compositionWidth;
-						var bgheight:Number = _measureHeight ? _contentHeight : _compositionHeight;
-						
-						var adjustHorizontalScroll:Boolean = effectiveBlockProgression == BlockProgression.RL && _horizontalScrollPolicy != ScrollPolicy.OFF;
-						var bgx:Number = adjustHorizontalScroll ? _xScroll - bgwidth : _xScroll;
-						var bgy:Number = _yScroll;
-						
-						CONFIG::debug { assert(!isNaN(bgx) && !isNaN(bgy) && !isNaN(bgwidth) && ! isNaN(bgheight),"Bad background rectangle"); }
-						
-						if (bgx != _transparentBGX || bgy != _transparentBGY || bgwidth != _transparentBGWidth || bgheight != _transparentBGHeight)
-						{
-							s.graphics.clear();
-							CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
-							if (bgwidth != 0 && bgheight != 0 )
-							{
-								s.graphics.beginFill(0, 0);
-								s.graphics.drawRect(bgx, bgy, bgwidth, bgheight);
-								s.graphics.endFill();
-								CONFIG::debug { Debugging.traceFTECall(null,s,"drawTransparentBackground",bgx, bgy, bgwidth, bgheight); }
-							}
-							_transparentBGX = bgx;
-							_transparentBGY = bgy;
-							_transparentBGWidth = bgwidth;
-							_transparentBGHeight = bgheight;
-						}
-					}
-				}
-			} 
+                if (justClear)
+                {
+                    s.graphics.clear();
+                    CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
+                    _transparentBGX = _transparentBGY = _transparentBGWidth = _transparentBGHeight = NaN;
+                }
+                else
+                {
+                    var bgwidth:Number = _measureWidth ? _contentWidth : _compositionWidth;
+                    var bgheight:Number = _measureHeight ? _contentHeight : _compositionHeight;
+
+                    var adjustHorizontalScroll:Boolean = effectiveBlockProgression == BlockProgression.RL && _horizontalScrollPolicy != ScrollPolicy.OFF;
+                    var bgx:Number = adjustHorizontalScroll ? _xScroll - bgwidth : _xScroll;
+                    var bgy:Number = _yScroll;
+
+                    CONFIG::debug { assert(!isNaN(bgx) && !isNaN(bgy) && !isNaN(bgwidth) && ! isNaN(bgheight),"Bad background rectangle"); }
+
+                    if (bgx != _transparentBGX || bgy != _transparentBGY || bgwidth != _transparentBGWidth || bgheight != _transparentBGHeight)
+                    {
+                        s.graphics.clear();
+                        CONFIG::debug { Debugging.traceFTECall(null,s,"clearTransparentBackground()"); }
+                        if (bgwidth != 0 && bgheight != 0 )
+                        {
+                            s.graphics.beginFill(0, 0);
+                            s.graphics.drawRect(bgx, bgy, bgwidth, bgheight);
+                            s.graphics.endFill();
+                            CONFIG::debug { Debugging.traceFTECall(null,s,"drawTransparentBackground",bgx, bgy, bgwidth, bgheight); }
+                        }
+                        _transparentBGX = bgx;
+                        _transparentBGY = bgy;
+                        _transparentBGWidth = bgwidth;
+                        _transparentBGHeight = bgheight;
+                    }
+                }
+			}
 		}
 		
 		/** @private */
@@ -1613,7 +1647,7 @@ package flashx.textLayout.container
 			// We have to tell the Player to bring up the soft keyboard on a
 			// keyboard edit gesture. Note that needsSoftKeyboard is new with 10.2, so 
 			// have to check for it. This is a change to the container, but unavoidable
-			if (_container && Configuration.playerEnablesSpicyFeatures)
+			if (Configuration.playerEnablesSpicyFeatures)
 				_container["needsSoftKeyboard"] = (interactionManager && interactionManager.editingMode == EditingMode.READ_WRITE);
 		}
 		
@@ -1629,18 +1663,14 @@ package flashx.textLayout.container
 			{
 				_minListenersAttached = true;
 				
-				if (_container)
-				{
-					_container.addEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
-					_container.addEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
+                _container.addEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
+                _container.addEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
 
-					attachTransparentBackgroundForHit(false);
-					
-					// If the container already has focus, we have to attach all listeners
-					if (_container.stage && _container.stage.focus == _container)
-						attachAllListeners();
-					
-				}
+                attachTransparentBackgroundForHit(false);
+
+                // If the container already has focus, we have to attach all listeners
+                if (_container.stage && _container.stage.focus == _container)
+                    attachAllListeners();
 			}
 		}
 		
@@ -1709,20 +1739,17 @@ package flashx.textLayout.container
 		{
 			if (_minListenersAttached)
 			{
-				if (_container)
-				{
-					_container.removeEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
-					_container.removeEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
-					
-					if(_allListenersAttached)
-					{
-						removeInteractionHandlers();				
-						removeContextMenu();
-						
-						attachTransparentBackgroundForHit(true);
-						_allListenersAttached = false;
-					}
-				}
+                _container.removeEventListener(FocusEvent.FOCUS_IN, requiredFocusInHandler);
+                _container.removeEventListener(MouseEvent.MOUSE_OVER, requiredMouseOverHandler);
+
+                if(_allListenersAttached)
+                {
+                    removeInteractionHandlers();
+                    removeContextMenu();
+
+                    attachTransparentBackgroundForHit(true);
+                    _allListenersAttached = false;
+                }
 				_minListenersAttached = false;
 			}
 			removeMouseWheelListener();
@@ -1735,11 +1762,8 @@ package flashx.textLayout.container
 			{
 				CONFIG::debug { assert(_minListenersAttached,"Bad call to attachAllListeners - won't detach"); }
 				_allListenersAttached = true;
-				if (_container)
-				{
-					attachContextMenu();
-					attachInteractionHandlers();
-				}
+                attachContextMenu();
+                attachInteractionHandlers();
 			}
 		}
 		
@@ -1804,6 +1828,33 @@ package flashx.textLayout.container
 			return createDefaultContextMenu();
 		}
 		
+        public function dispose():void
+        {
+            stopMouseSelectionScrolling();
+            clearSelectionShapes();
+            setRootElement(null);
+        }
+
+        private function stopMouseSelectionScrolling(containerRoot:IEventDispatcher = null):void
+        {
+            if(_scrollTimer)
+            {
+                _scrollTimer.stop();
+                _scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
+
+                if(!containerRoot)
+                {
+                    containerRoot = getContainerRoot();
+                }
+
+                if(containerRoot)
+                {
+                    containerRoot.removeEventListener(MouseEvent.MOUSE_UP, scrollTimerHandler);
+                }
+
+                _scrollTimer = null;
+            }
+        }
 		/** @private */
 		tlf_internal function scrollTimerHandler(event:Event):void
 		{
@@ -1819,19 +1870,12 @@ package flashx.textLayout.container
 			// We're listening for MOUSE_UP so we can cancel autoscrolling
 			if (event is MouseEvent)
 			{
-				_scrollTimer.stop();
-				_scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
+				stopMouseSelectionScrolling(event.currentTarget as IEventDispatcher);
 				CONFIG::debug { assert(_container.stage ==  null || getContainerRoot() == event.currentTarget,"scrollTimerHandler bad target"); }
-				event.currentTarget.removeEventListener(MouseEvent.MOUSE_UP, scrollTimerHandler);
-				_scrollTimer = null;
 			}
 			else if (!event)
 			{
-				_scrollTimer.stop();
-				_scrollTimer.removeEventListener(TimerEvent.TIMER, scrollTimerHandler);
-				if (getContainerRoot())
-					getContainerRoot().removeEventListener(	MouseEvent.MOUSE_UP, scrollTimerHandler);	
-				_scrollTimer = null;
+                stopMouseSelectionScrolling();
 			}
 			else if (_container.stage)
 			{
@@ -4959,8 +5003,9 @@ package flashx.textLayout.container
 		
 		CONFIG::debug
 		{
-			import flash.system.Capabilities;
-			// OLD style calculation - lets make sure its the same.  
+            import flash.system.Capabilities;
+
+            // OLD style calculation - lets make sure its the same.
 			static private var tempLineHolder:Sprite = new Sprite();
 			
 			/** @private */
@@ -5150,8 +5195,9 @@ package flashx.textLayout.container
 	}
 	
 }
-import flash.events.MouseEvent;
+
 import flash.display.InteractiveObject;
+import flash.events.MouseEvent;
 
 class PsuedoMouseEvent extends MouseEvent
 {

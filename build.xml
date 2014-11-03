@@ -26,7 +26,7 @@
     <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
 	<property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
 	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
-	
+    <echo>Minimal test is set ${minimalTests}</echo>
 
 	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
 	<property name="flex.locale" value="en_US"/>
@@ -194,30 +194,6 @@
      </target>
 
 	<target name="testApps" description="Builds TLF test application">
-		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/flowCss.css" 
-				keep-generated-actionscript="false"
-				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-			<library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
-			<library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_ui.swc" append="true"/>
-			<library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_editBar.swc" append="true"/>
-			
-			<!-- <library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/> --><!-- for Flex SDK 4.0 -->
-			<library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="flex4.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="flex4_rb.swc" append="true"/> 
-			<static-link-runtime-shared-libraries/>
-		</mxmlc>
-
 		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/Flow.mxml" 
 				keep-generated-actionscript="false"
 				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
@@ -373,6 +349,7 @@
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
 			<define name="CONFIG::release" 			value="${rel}"/>
+            <define name="CONFIG::minimaltests" value="${minimalTests}"/>
 		</mxmlc>
 		<html-wrapper title="VellumUnit" file="VellumUnit.html" 
 		            application="VellumUnit" 
@@ -386,8 +363,7 @@
 			</fileset>
 		</copy>
 	</target>
-
     <target name="flexunnit_tests">
-        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="false" verbose="true" />
+        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="true" verbose="true" />
     </target>
 </project>

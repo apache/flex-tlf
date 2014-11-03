@@ -161,7 +161,7 @@
              Font.registerFont(arialFontRoundedMTBold);     */
         }
 
-        private function loadAndRunTests(isMinimialTests:Boolean = false):void
+        private function loadAndRunTests():void
         {
             var config:TestConfig = TestConfig.getInstance();
             config.baseURL = normalizedURL;
@@ -188,7 +188,7 @@
 
             testRunDate = MakeMySQLDate(new Date());
 
-            testRunner.startTest(isMinimialTests);
+            testRunner.startTest();
         }
 
         private var xmlRoot:XML = null;
@@ -353,9 +353,6 @@
         private function startRangeTests():void
         {
             useTestSelectDialog = true;	// we select the range in the XML for this dialog
-            /* if (testXMLStore == null)
-             FileRepository.readFile(normalizedURL, "../../test/testSuites.xml", onSuiteFileRead, onSuiteFileReadError, onSuiteFileSecurityError, true);
-             else    */
             loadAndRunTests();
         }
 

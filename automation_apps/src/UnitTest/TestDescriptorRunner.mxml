@@ -26,23 +26,20 @@
 
         private var core:FlexUnitCore;
 
-        public function startTest(isMinimalTests:Boolean = false):void
+        public function startTest():void
         {
-
             core = new FlexUnitCore();
             core.addUncaughtErrorListener( systemManager.loaderInfo );
             core.addListener(new RunListener());
             core.addListener(new CIListener());
             core.addListener(testRunner);
 
-            if (isMinimalTests)
-            {
+            CONFIG::minimaltests {
                 core.run(new MinimalTestsSuite());
+                return;
             }
-            else
-            {
-                core.run(new AllTestsSuite());
-            }
+
+            core.run(new AllTestsSuite());
         }
         ]]>
 	</fx:Script>

@@ -25,18 +25,30 @@ package
     import UnitTest.Tests.AllEventTest;
     import UnitTest.Tests.AllParaAttributeTest;
     import UnitTest.Tests.AttributeTest;
+    import UnitTest.Tests.BoundsAndAlignmentTest;
     import UnitTest.Tests.BoxTest;
     import UnitTest.Tests.CompositionTest;
     import UnitTest.Tests.ContainerAttributeTest;
     import UnitTest.Tests.ContainerTypeTest;
+    import UnitTest.Tests.CrossContainerTest;
+    import UnitTest.Tests.ElementOperationTest;
+    import UnitTest.Tests.EventOverrideTest;
+    import UnitTest.Tests.FactoryImportTest;
     import UnitTest.Tests.FloatTest;
+    import UnitTest.Tests.FlowModelTest;
+    import UnitTest.Tests.GeneralFunctionsTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
+    import UnitTest.Tests.TabTest;
+    import UnitTest.Tests.TextFlowEditTest;
+    import UnitTest.Tests.UndoRedoTest;
+    import UnitTest.Tests.WritingModeTest;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class AllTestsSuite
     {
+        public var factoryImportTest:FactoryImportTest;
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
         public var allChartAttributeTest:AllCharAttributeTest;
         public var allContAttirbuteTest:AllContAttributeTest;
@@ -50,7 +62,16 @@ package
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
         public var containerAttributeTest:ContainerAttributeTest;
-
+        public var boundsAndAlignmentTest:BoundsAndAlignmentTest;
+        public var crossContainerTest:CrossContainerTest;
+        public var elementOperationTest:ElementOperationTest;
+        public var eventOverrideTest:EventOverrideTest;
+        public var flowModelTest:FlowModelTest;
+        public var generalFunctionsTest:GeneralFunctionsTest;
+        public var writingModeTest:WritingModeTest;
+        public var undoRedoTest:UndoRedoTest;
+        public var textFlowEditTest:TextFlowEditTest;
+        public var tabTest:TabTest;
     }
 
 }
