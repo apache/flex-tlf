@@ -481,6 +481,7 @@ package flashx.textLayout.elements
 				if(rowIdx < numRows){
 					addChildAt(cellIdx,cell);
 				}
+				rowIdx++;
 			}
 
 
