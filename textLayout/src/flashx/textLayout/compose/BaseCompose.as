@@ -548,6 +548,8 @@ package flashx.textLayout.compose
 			var curTableBlock:TextFlowTableBlock = tableElement.getFirstBlock();
 			curTableBlock.clear();
 			curTableBlock.y = _parcelList.totalDepth;
+			var adjustTop:Number = isNaN(_lastLineDescent) ? 0 : _lastLineDescent;
+			curTableBlock.y += adjustTop;
 			curTableBlock.x = _lineSlug.leftMargin;
 			var lineOffset:Number = (_curParaFormat.direction == Direction.LTR) ? _lineSlug.leftMargin : _lineSlug.rightMargin;
 			curTableBlock.initialize(_curParaElement, _lineSlug.width, lineOffset-_parcelList.insideListItemMargin, tableElement.getAbsoluteStart(),1);
@@ -1073,6 +1075,9 @@ package flashx.textLayout.compose
 			var result:Boolean = true;
 			var textLine:TextLine;
 			
+			var spaceBefore:Number;
+			var spaceCarried:Number;
+			
 			var leftMargin:Number;
 			var rightMargin:Number;
 			
@@ -1124,6 +1129,18 @@ package flashx.textLayout.compose
 				var curChild:FlowElement = _curParaElement.getChildAt(_curParaElement.findChildIndexAtPosition(_curElementStart - _curParaStart));
 				if(curChild is TableElement)
 				{
+					// Space before does not apply to the first line, unless LeadingModel.BOX is used
+					// Space carried never applies to the first line
+					spaceBefore = isNaN(_curParaElement.computedFormat.paragraphSpaceBefore) ? 0 : _curParaElement.computedFormat.paragraphSpaceBefore;
+					spaceBefore  = _atColumnStart ? 0 : spaceBefore;
+					spaceCarried = _atColumnStart ? 0 : _paragraphSpaceCarried;
+					if (spaceBefore != 0 || spaceCarried != 0)
+						_parcelList.addTotalDepth(Math.max(spaceBefore, spaceCarried));
+					
+					_paragraphSpaceCarried = 0;
+					if (_verticalSpaceCarried != 0)
+						_verticalSpaceCarried = 0;
+					
 					if(!composeTableElement(curChild as TableElement, _curElementStart))
 						return false;
 					
@@ -1215,8 +1232,8 @@ package flashx.textLayout.compose
 				
 				// Space before does not apply to the first line, unless LeadingModel.BOX is used
 				// Space carried never applies to the first line
-				var spaceBefore:Number  = _atColumnStart && (_curParaFormat.leadingModel != LeadingModel.BOX) ? 0 : _curLine.spaceBefore;
-				var spaceCarried:Number = _atColumnStart ? 0 : _paragraphSpaceCarried;
+				spaceBefore  = _atColumnStart && (_curParaFormat.leadingModel != LeadingModel.BOX) ? 0 : _curLine.spaceBefore;
+				spaceCarried = _atColumnStart ? 0 : _paragraphSpaceCarried;
 				if (spaceBefore != 0 || spaceCarried != 0)
 					_parcelList.addTotalDepth(Math.max(spaceBefore, spaceCarried));
 				
