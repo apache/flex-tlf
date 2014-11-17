@@ -335,7 +335,8 @@ package flashx.textLayout.compose
 		protected override function composeNextLine():TextLine
 		{			
 			// mjzhang: this code adds for recompose a table row, we need to recorrect _curLineIndex parameter based on _curElementStart and _curElementOffset.
-			_curLineIndex = _flowComposer.findLineIndexAtPosition(_curElementStart + _curElementOffset);
+			//Harbs: I don't see a need for this now that I changed the table logic.
+			//_curLineIndex = _flowComposer.findLineIndexAtPosition(_curElementStart + _curElementOffset);
 			
 			CONFIG::debug { assert(_curLineIndex == _flowComposer.findLineIndexAtPosition(_curElementStart + _curElementOffset),"bad _curLineIndex"); }
 
@@ -345,7 +346,6 @@ package flashx.textLayout.compose
 			// width in fitLineToParcel to make sure it fits at the (possibly changed) line height.
 			var startCompose:int = _curElementStart + _curElementOffset - _curParaStart;
 			var line:TextFlowLine = _curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[_curLineIndex] : null;
-			
 			var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
 			// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
 			// starting the next line.
@@ -422,7 +422,7 @@ package flashx.textLayout.compose
 				if (fitLineToParcel(textLine, !useExistingLine, numberLine))
 					break;	// we have a good line
 				_curLine = null;	// keep looking
-				if (_parcelList.atEnd() || _parcelList.currentParcel.isTableParcel)
+				if (_parcelList.atEnd())
 				{
 					popInsideListItemMargins(numberLine);
 					return null;
@@ -451,7 +451,7 @@ package flashx.textLayout.compose
 			var textLine:TextLine = super.createTextLine(targetWidth, allowEmergencyBreaks);
 			
 			if (textLine)
-	 			textLine.doubleClickEnabled = true;		// allow line to be the target oif a double click event
+	 			textLine.doubleClickEnabled = true;		// allow line to be the target of a double click event
 			else
 				_curLine = null;
  			

@@ -43,7 +43,6 @@ package flashx.textLayout.compose
 		public var width:Number;
 		public var height:Number;
 		public var logicalWidth:Number;
-		public var isTableParcel:Boolean;
 
 		private var _controller:ContainerController;
 		private var _columnIndex:int;
@@ -73,7 +72,6 @@ package flashx.textLayout.compose
 			this.height = height;
 			this.logicalWidth = verticalText ? height : width;
 			this._verticalText = verticalText; 
-			this.isTableParcel = false;
 			
 			_controller   = controller;
 			_columnIndex  =  columnIndex;

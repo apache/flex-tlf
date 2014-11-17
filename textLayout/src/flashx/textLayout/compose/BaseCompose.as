@@ -775,9 +775,6 @@ package flashx.textLayout.compose
 				}
 				
 				var nextParcel:Parcel = parcelList.getParcelAt(parcelList.currentParcelIndex + 1);
-				if ( parcelList.currentParcel.isTableParcel
-					&& ((nextParcel && nextParcel.isTableParcel) || parcelList.currentParcelIndex == parcelList.numParcels()-1))
-					_correctTextLength = true;
 		
 				advanceToNextParcel();
 				_correctTextLength = false;
@@ -1124,8 +1121,6 @@ package flashx.textLayout.compose
 				// do table here?
 				//_curElementStart == _curParaStart
 				//			var startCompose:int = _curElementStart + _curElementOffset - _curParaStart;
-				var c1:Object = _curParaElement.findChildIndexAtPosition(_curElementOffset);
-				var c2:Object = _curParaElement.findChildIndexAtPosition(_curElementStart);
 				var curChild:FlowElement = _curParaElement.getChildAt(_curParaElement.findChildIndexAtPosition(_curElementStart - _curParaStart));
 				if(curChild is TableElement)
 				{
@@ -2041,7 +2036,7 @@ package flashx.textLayout.compose
 				for (;;)
 				{
 					advanceToNextParcel();
-					if (!_curLine || _parcelList.atEnd() || _parcelList.currentParcel.isTableParcel)
+					if (!_curLine || _parcelList.atEnd())
 						return false;
 					if (_parcelList.getLineSlug(_lineSlug,0, 1, _textIndent, _curParaFormat.direction == Direction.LTR))
 					{
@@ -2704,15 +2699,14 @@ package flashx.textLayout.compose
 				{
 					if (oldController == null && _startController)
 						clearControllers(_startController, newController);
-					else if ( ! _curParcel.isTableParcel )
+					else
 						clearControllers(oldController, newController);
 				}
 				if (newController)
 				{
 					CONFIG::debug 
 					{ 
-						if ( ! newParcel.isTableParcel )
-							assert(!oldController || newController.absoluteStart == oldController.absoluteStart + oldController.textLength, "newController not yet set up");
+						assert(!oldController || newController.absoluteStart == oldController.absoluteStart + oldController.textLength, "newController not yet set up");
 					}
 					if (oldController)		// advance the start pos to the next controller if newController isn't the first controller
 						_startComposePosition = newController.absoluteStart;
