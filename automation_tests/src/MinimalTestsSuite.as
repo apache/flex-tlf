@@ -19,13 +19,13 @@
 package
 {
 
-    import UnitTest.Tests.ContainerTypeTest;
+    import UnitTest.Tests.FloatTest;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class MinimalTestsSuite
     {
-        public var containerTypeTest:ContainerTypeTest;
+        public var floatTest:FloatTest;
     }
 
 }
