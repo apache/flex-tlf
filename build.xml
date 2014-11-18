@@ -50,6 +50,7 @@
 
 	<property name="dbg" value="false"/>
 	<property name="rel" value="true"/>
+    <property name="flexdebug" value="${flexdebug}"/>
 
 	<condition property="digest" value="false" else="true">
 		<istrue value="${debug}"/>
@@ -97,6 +98,7 @@
 			<static-link-runtime-shared-libraries/>
 			<define name="CONFIG::debug" value="${dbg}"/>
 			<define name="CONFIG::release" value="${rel}"/>
+            <compiler.debug>${flexdebug}</compiler.debug>
 		</compc>
      </target>
 
@@ -110,6 +112,7 @@
             <arg value="+source.dir=textLayout" />
 			<define name="CONFIG::debug" value="${dbg}"/>
 			<define name="CONFIG::release" value="${rel}"/>
+            <compiler.debug>${flexdebug}</compiler.debug>
 		</compc>
      </target>
 
@@ -169,13 +172,14 @@
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
 			<define name="CONFIG::release" 			value="${rel}"/>
+            <compiler.debug>${flexdebug}</compiler.debug>
 		</compc>
      </target>
 
 	<target name="textLayout_ui" description="Builds textLayout_ui.swc">		
 		<compc fork="${forkValue}" output="${output.dir}/apps/testApps/bin/textLayout_ui.swc" 
 			include-classes="${textLayout.namespace}.UiClasses,bxf.BxfClasses" compute-digest="${digest}">
-			<source-path path-element="${textLayout_ui.dir}/src"/>	
+			<source-path path-element="${textLayout_ui.dir}/src"/>
 			<jvmarg line="${jvm.args}"/>
 			<library-path/>
 			
@@ -190,12 +194,13 @@
 
 			<define name="CONFIG::debug" 			value="${dbg}"/>
 			<define name="CONFIG::release" 			value="${rel}"/>
+            <compiler.debug>${flexdebug}</compiler.debug>
 		</compc>
      </target>
 
 	<target name="testApps" description="Builds TLF test application">
 		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/Flow.mxml" 
-				keep-generated-actionscript="false"
+				keep-generated-actionscript="false" debug="${flexdebug}"
 				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
 			
 			<default-size width="1100" height="550" />
@@ -225,7 +230,7 @@
 
 	<target name="asTestApp" description="build a single application in asTestApp" if="output">
 		<mxmlc fork="${forkValue}"
-			file="${asTestApps.dir}/src/${output}.as"
+			file="${asTestApps.dir}/src/${output}.as" debug="${flexdebug}"
 			output="${output.dir}/apps/asTestApps/bin/${output}.swf">
 			<source-path path-element="${asTestApps.dir}/src"/>
 			<jvmarg line="${jvm.args}"/>
@@ -319,7 +324,8 @@
 	</target>
 
 	<target name="automation_apps" description="Builds the automation test application">
-		<mxmlc fork="${forkValue}" 	file="${automation_apps.dir}/src/VellumUnit.mxml" 
+		<mxmlc fork="${forkValue}" 	file="${automation_apps.dir}/src/VellumUnit.mxml"
+               debug="${flexdebug}"
 				output="${output.dir}/apps/automation_apps/bin/VellumUnit.swf">
 			<jvmarg line="${jvm.args}"/>
 			<library-path/>
