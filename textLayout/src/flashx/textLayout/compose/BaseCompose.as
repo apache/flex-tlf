@@ -515,7 +515,23 @@ package flashx.textLayout.compose
 		{
 			//TODO: remove any old existing cells in the _parcelList.currentParcel.controller from the position of the table and on.
 			// need to figure out the accounting needed for that.
+
+			// Space before does not apply to the first line, unless LeadingModel.BOX is used
+			// Space carried never applies to the first line
+			if(_curLine && _curLine.paragraph == _curParaElement)
+				var spaceBefore:Number = 0;
+			else
+				spaceBefore = isNaN(_curParaElement.computedFormat.paragraphSpaceBefore) ? 0 : _curParaElement.computedFormat.paragraphSpaceBefore;
 			
+			spaceBefore  = _atColumnStart ? 0 : spaceBefore;
+			var spaceCarried:Number = _atColumnStart ? 0 : _paragraphSpaceCarried;
+			if (spaceBefore != 0 || spaceCarried != 0)
+				_parcelList.addTotalDepth(Math.max(spaceBefore, spaceCarried));
+			
+			_paragraphSpaceCarried = 0;
+			if (_verticalSpaceCarried != 0)
+				_verticalSpaceCarried = 0;
+
 			// get a slug...
 			_parcelList.getLineSlug(_lineSlug, 0, 1, _textIndent, _curParaFormat.direction == Direction.LTR);
 			
@@ -1075,8 +1091,6 @@ package flashx.textLayout.compose
 			var result:Boolean = true;
 			var textLine:TextLine;
 			
-			var spaceBefore:Number;
-			var spaceCarried:Number;
 			
 			var leftMargin:Number;
 			var rightMargin:Number;
@@ -1129,17 +1143,6 @@ package flashx.textLayout.compose
 				var curChild:FlowElement = _curParaElement.getChildAt(_curParaElement.findChildIndexAtPosition(_curElementStart - _curParaStart));
 				if(curChild is TableElement)
 				{
-					// Space before does not apply to the first line, unless LeadingModel.BOX is used
-					// Space carried never applies to the first line
-					spaceBefore = isNaN(_curParaElement.computedFormat.paragraphSpaceBefore) ? 0 : _curParaElement.computedFormat.paragraphSpaceBefore;
-					spaceBefore  = _atColumnStart ? 0 : spaceBefore;
-					spaceCarried = _atColumnStart ? 0 : _paragraphSpaceCarried;
-					if (spaceBefore != 0 || spaceCarried != 0)
-						_parcelList.addTotalDepth(Math.max(spaceBefore, spaceCarried));
-					
-					_paragraphSpaceCarried = 0;
-					if (_verticalSpaceCarried != 0)
-						_verticalSpaceCarried = 0;
 					
 					if(!composeTableElement(curChild as TableElement, _curElementStart))
 						return false;
@@ -1232,8 +1235,8 @@ package flashx.textLayout.compose
 				
 				// Space before does not apply to the first line, unless LeadingModel.BOX is used
 				// Space carried never applies to the first line
-				spaceBefore  = _atColumnStart && (_curParaFormat.leadingModel != LeadingModel.BOX) ? 0 : _curLine.spaceBefore;
-				spaceCarried = _atColumnStart ? 0 : _paragraphSpaceCarried;
+				var spaceBefore:Number  = _atColumnStart && (_curParaFormat.leadingModel != LeadingModel.BOX) ? 0 : _curLine.spaceBefore;
+				var spaceCarried:Number = _atColumnStart ? 0 : _paragraphSpaceCarried;
 				if (spaceBefore != 0 || spaceCarried != 0)
 					_parcelList.addTotalDepth(Math.max(spaceBefore, spaceCarried));
 				
