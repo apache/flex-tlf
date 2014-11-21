@@ -222,9 +222,9 @@ package flashx.textLayout.elements
 				return;
 			}
 			var tbs:Vector.<TextBlock> = getTextBlocks();
-			for each(var tb_:TextBlock in tbs)
+			for each(var textBlock:TextBlock in tbs)
 			{
-				releaseTextBlockInternal(tb_);
+				releaseTextBlockInternal(textBlock);
 			}
 			//_textBlock = null;
 			if (_computedFormat)
