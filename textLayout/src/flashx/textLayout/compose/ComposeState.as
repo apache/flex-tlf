@@ -347,11 +347,14 @@ package flashx.textLayout.compose
 			var startCompose:int = _curElementStart + _curElementOffset - _curParaStart;
 			var line:TextFlowLine = _curLineIndex < _flowComposer.numLines ? (_flowComposer as StandardFlowComposer).lines[_curLineIndex] : null;
 			var useExistingLine:Boolean = line && (!line.isDamaged() || line.validity == FlowDamageType.GEOMETRY);
-			// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
-			// starting the next line.
-			if (useExistingLine && line.textLength > 0 &&
-				line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
-				useExistingLine = false;
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+			{
+				// if the line ends with a hyphen, don't use existing line because the player seems to mis-handle
+				// starting the next line.
+				if (useExistingLine && line.textLength > 0 &&
+					line.paragraph.getCharCodeAtPosition(line.absoluteStart + line.textLength - 1) == 0xAD)
+					useExistingLine = false;
+			}
 			var numberLine:TextLine;
 			
 			// create numberLine if in a listElement

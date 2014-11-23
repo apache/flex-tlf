@@ -1390,8 +1390,6 @@ package flashx.textLayout.compose
 
 			_curLine.initialize(_curParaElement, targetWidth, lineOffset-_parcelList.insideListItemMargin, _curLineStart, textLine.rawTextLength, textLine);
 			CONFIG::debug { assert(_curLine.targetWidth == targetWidth,"Bad targetWidth"); }
-
-			_curLineStart += _curLine.textLength;
 			return textLine;
 		}
 		
@@ -1415,6 +1413,7 @@ package flashx.textLayout.compose
 		/** Called when we are finished composing a line, and it is committed. Handler for derived classes to override default behavior.  */
 		protected function endLine(textLine:TextLine):void	// No PMD
 		{
+			_curLineStart += _curLine.textLength;
 			_contentCommittedExtent = Math.max(_contentCommittedExtent, _workingContentExtent);
 			_contentCommittedHeight = Math.max(_contentCommittedHeight, _workingContentHeight);
 			_contentLogicalExtent = Math.max(_contentLogicalExtent, _workingContentLogicalExtent);
