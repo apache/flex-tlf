@@ -14,362 +14,301 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project name="tlf" default="main" basedir=".">
-
-    <property file="${basedir}/env.properties"/>
-    <property environment="env"/>
-	<property file="${basedir}/build.properties"/>
-    <!-- Specify a FLEX_HOME in local.properties or
+  <property file="${basedir}/env.properties"/>
+  <property environment="env"/>
+  <property file="${basedir}/build.properties"/>
+  <!-- Specify a FLEX_HOME in local.properties or
          Override on cmd line with -D=FLEX_HOME=path. -->
-	<!--<property file="${basedir}/local.properties"/>-->
-    <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
-	<property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
-	<echo>FLEX_HOME is ${FLEX_HOME}</echo>
-    <echo>Minimal test is set ${minimalTests}</echo>
-
-	<property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
-	<property name="flex.locale" value="en_US"/>
-
-	<property name="output.dir" value="bin"/>
-	<property name="output.docs" value="${FLEX_HOME}/tempDoc"/>
-	<property name="project.uri" value="library://ns.adobe.com/flashx/textLayout"/>
-	<property name="compc.jvm.args" value="-Xmx384m" />
-	<property name="textLayout.namespace" value="flashx.textLayout"/>
-	
-	<property name="asTestApps.dir" value="${basedir}/asTestApps"/>
-	<property name="textLayout.dir" value="${basedir}/textLayout"/>
-	<property name="textLayout_editBar.dir" value="${basedir}/sdk/samples/flex/textLayout_editBar"/>
-	<property name="textLayout_ui.dir" value="${basedir}/sdk/samples/flex/textLayout_ui"/>
-	<property name="testApps.dir" value="${basedir}/testApps"/>
-
-	<property name="automation_core.dir" value="${basedir}/automation_core"/>
-	<property name="automation_tests.dir" value="${basedir}/automation_tests"/>
-	<property name="automation_apps.dir" value="${basedir}/automation_apps"/>
-	<property name="test.dir" value="${basedir}/test"/>
-
-	<property name="dbg" value="false"/>
-	<property name="rel" value="true"/>
-    <property name="flexdebug" value="${flexdebug}"/>
-
-	<condition property="digest" value="false" else="true">
-		<istrue value="${debug}"/>
-	</condition>
-
-    <!-- for Flex tags suchs as mxmlc and compc -->
-    <path id="flexTasks.path">
-        <fileset dir="${FLEX_HOME}">
-            <include name="lib/flexTasks.jar" />
-        </fileset>
-    </path>
-	<taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
-    <taskdef resource="flexUnitTasks.tasks">
-        <classpath>
-            <fileset dir="${basedir}">
-                <include name="ant/flexUnitTasks.jar" />
-            </fileset>
-        </classpath>
-    </taskdef>
-
-	<target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps, flexunnit_tests" description="Clean build of TLF component and associated applications"/>
-	<target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
-
-	<target name="clean" description="Cleans all SWCs and SWFs">
-		<delete failonerror="false">
-			<fileset dir="${output.dir}">
+  <!--<property file="${basedir}/local.properties"/>-->
+  <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
+  <property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
+  <echo>FLEX_HOME is ${FLEX_HOME}</echo>
+  <echo>Minimal test is set ${minimalTests}</echo>
+  <property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
+  <property name="flex.locale" value="en_US"/>
+  <property name="output.dir" value="bin"/>
+  <property name="output.docs" value="${FLEX_HOME}/tempDoc"/>
+  <property name="project.uri" value="library://ns.adobe.com/flashx/textLayout"/>
+  <property name="compc.jvm.args" value="-Xmx384m"/>
+  <property name="textLayout.namespace" value="flashx.textLayout"/>
+  <property name="asTestApps.dir" value="${basedir}/asTestApps"/>
+  <property name="textLayout.dir" value="${basedir}/textLayout"/>
+  <property name="textLayout_editBar.dir" value="${basedir}/sdk/samples/flex/textLayout_editBar"/>
+  <property name="textLayout_ui.dir" value="${basedir}/sdk/samples/flex/textLayout_ui"/>
+  <property name="testApps.dir" value="${basedir}/testApps"/>
+  <property name="automation_core.dir" value="${basedir}/automation_core"/>
+  <property name="automation_tests.dir" value="${basedir}/automation_tests"/>
+  <property name="automation_apps.dir" value="${basedir}/automation_apps"/>
+  <property name="test.dir" value="${basedir}/test"/>
+  <property name="dbg" value="false"/>
+  <property name="rel" value="true"/>
+  <property name="flexdebug" value="${flexdebug}"/>
+  <condition property="digest" value="false" else="true">
+    <istrue value="${debug}"/>
+  </condition>
+  <!-- for Flex tags suchs as mxmlc and compc -->
+  <path id="flexTasks.path">
+    <fileset dir="${FLEX_HOME}">
+      <include name="lib/flexTasks.jar"/>
+    </fileset>
+  </path>
+  <taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
+  <taskdef resource="flexUnitTasks.tasks">
+    <classpath>
+      <fileset dir="${basedir}">
+        <include name="ant/flexUnitTasks.jar"/>
+      </fileset>
+    </classpath>
+  </taskdef>
+  <target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps, flexunnit_tests" description="Clean build of TLF component and associated applications"/>
+  <target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
+  <target name="clean" description="Cleans all SWCs and SWFs">
+    <delete failonerror="false">
+      <fileset dir="${output.dir}">
 			</fileset>
-		</delete>
-        <delete dir="${basedir}/bin"/>
-        <delete file="${basedir}/bundles.properties"/>
-	</target>
-
-	<target name="textLayout" description="Compiles textLayout.swc">
-   		<compc fork="true"
-			   output="${output.dir}/textLayout.swc"
-			   compute-digest="true"
-			   include-classes="flashx.textLayout.CoreClasses flashx.textLayout.EditClasses flashx.textLayout.ConversionClasses">
-			<jvmarg line="${compc.jvm.args}"/>
-			<keep-as3-metadata>IMXMLObject</keep-as3-metadata>
-			<include-namespaces uri="${project.uri}"/>
-			<namespace uri="${project.uri}" manifest="${textLayout.dir}/manifest.xml"/>
-			<source-path path-element="${textLayout.dir}/src"/>
-			<library-path/>
-			<include-file name="manifest.xml" path="${textLayout.dir}/manifest.xml"/>
-			<static-link-runtime-shared-libraries/>
-			<define name="CONFIG::debug" value="${dbg}"/>
-			<define name="CONFIG::release" value="${rel}"/>
-            <compiler.debug>${flexdebug}</compiler.debug>
-		</compc>
-     </target>
-
-	<target name="textLayout_flex" description="Compiles textLayout.swc for Flex SDK">
-   		<compc fork="true"
-			   output="${output.dir}/textLayout.swc">
-			<jvmarg line="${compc.jvm.args}"/>
-            <load-config filename="compile-config.xml" />
-            <arg value="+playerglobal.version=${playerglobal.version}" />
-            <arg value="+env.PLAYERGLOBAL_HOME=${env.PLAYERGLOBAL_HOME}" />
-            <arg value="+source.dir=textLayout" />
-			<define name="CONFIG::debug" value="${dbg}"/>
-			<define name="CONFIG::release" value="${rel}"/>
-            <compiler.debug>${flexdebug}</compiler.debug>
-		</compc>
-     </target>
-
-	<target name="documentation" depends="textLayout" description="Updates textLayout.swc with ASDoc XML">
-		<condition property="asdoc.jvm.args" value="-Xmx384m">
-			<os family="windows"/>
-		</condition>
-		<condition property="asdoc.jvm.args" value="-Xmx512m">
-			<os family="mac"/>
-		</condition>
-		<condition property="asdoc.jvm.args" value="-Xmx512m">
-			<os family="unix"/>
-		</condition>
-		
-		<delete failonerror="false">
-			<fileset dir="${output.docs}">
-				<include name="validation_errors.log"/>
-			</fileset>
-		</delete>
-		
-		<!-- builds ASDoc XML -->
-		<delete dir="${output.docs}\tempdita" failonerror="false" includeEmptyDirs="true"/>
-		<asdoc output="${output.docs}" lenient="false" failonerror="true" keep-xml="true" skip-xsl="true" fork="true">
-			<doc-classes class="flashx.textLayout.CoreClasses"/>
-			<doc-classes class="flashx.textLayout.EditClasses"/>
-			<doc-classes class="flashx.textLayout.ConversionClasses"/>
-		    <compiler.source-path path-element="src"/>
-			<external-library-path dir="${output.dir}/textLayout.swc"/>
-		    <doc-namespaces uri="${project.uri}"/>
-		    <namespace uri="${project.uri}" manifest="manifest.xml"/>
-		    <jvmarg line="${asdoc.jvm.args}"/>
-			<static-link-runtime-shared-libraries/>
-			<define name="CONFIG::debug" value="${dbg}"/>
-			<define name="CONFIG::release" value="${rel}"/>
-    	</asdoc>
-		
-		<available file="${output.docs}/validation_errors.log" property="asdoc.errors"/>
-		<fail if="asdoc.errors" message="ASDoc Errors"/>
-	</target>
-
-	<target name="textLayout_editBar" description="Builds textLayout_editBar.swc">		
-		<compc fork="${forkValue}" output="${output.dir}/apps/testApps/bin/textLayout_editBar.swc" 
-			include-classes="EditBarClasses" compute-digest="${digest}">
-			<source-path path-element="${textLayout_editBar.dir}/src"/>	
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
- 			<external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
-			
-			<!-- <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/> --><!-- for Flex SDK 4.0 -->
-			<external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<static-link-runtime-shared-libraries/>
-
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-            <compiler.debug>${flexdebug}</compiler.debug>
-		</compc>
-     </target>
-
-	<target name="textLayout_ui" description="Builds textLayout_ui.swc">		
-		<compc fork="${forkValue}" output="${output.dir}/apps/testApps/bin/textLayout_ui.swc" 
-			include-classes="${textLayout.namespace}.UiClasses,bxf.BxfClasses" compute-digest="${digest}">
-			<source-path path-element="${textLayout_ui.dir}/src"/>
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
- 			<external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
-			<static-link-runtime-shared-libraries/>
-
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-            <compiler.debug>${flexdebug}</compiler.debug>
-		</compc>
-     </target>
-
-	<target name="testApps" description="Builds TLF test application">
-		<mxmlc fork="${forkValue}" 	file="${testApps.dir}/src/Flow.mxml" 
-				keep-generated-actionscript="false" debug="${flexdebug}"
-				output="${output.dir}/apps/automation_apps/bin/Flow.swf">
-			
-			<default-size width="1100" height="550" />
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-			<library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
-			<library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_ui.swc" append="true"/>
-			<library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_editBar.swc" append="true"/>
-			<!-- <library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/> --><!-- for Flex SDK 4.0 -->
-			<library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/> <!-- for Flex SDK 4.5 -->
-			
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
-			<static-link-runtime-shared-libraries/>
-			
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-		</mxmlc>
-	</target>
-
-	<target name="asTestApp" description="build a single application in asTestApp" if="output">
-		<mxmlc fork="${forkValue}"
-			file="${asTestApps.dir}/src/${output}.as" debug="${flexdebug}"
-			output="${output.dir}/apps/asTestApps/bin/${output}.swf">
-			<source-path path-element="${asTestApps.dir}/src"/>
-			<jvmarg line="${jvm.args}"/>
-			
-			<default-size width="1100" height="550" />
-
-			<library-path/>
-			<library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="flex4.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="flex4_rb.swc" append="true"/>
-			<static-link-runtime-shared-libraries/>
-
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-		</mxmlc>
-	</target>
-
-	<target name="asTestApps" description="builds some applications in asTestApps">
-		<antcall target="asTestApp">
-			<param name="output" value="ExplicitFormField"/>
-		</antcall>
-		<antcall target="asTestApp">
-			<param name="output" value="TCMTestFocus2"/>
-		</antcall>	
-		<antcall target="asTestApp">
-			<param name="output" value="AliceScroll"/>
-		</antcall>	
-		<antcall target="asTestApp">
-			<param name="output" value="KeyLogger"/>
-		</antcall>	
-		<antcall target="asTestApp">
-			<param name="output" value="OpHammer"/>
-		</antcall>
-	</target>
-
-	<target name="automation_core" description="Builds the automation_core.swc">
-		<compc fork="${forkValue}" output="${output.dir}/apps/automation_apps/bin/automation_core.swc" 
-			include-classes="AutomationCoreClasses">
-			<source-path path-element="${automation_core.dir}/src"/>
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-			<external-library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			
-			<!-- External swcs -->
-			<external-library-path dir="${basedir}/libs/" includes="flexunit.swc" 		append="true"/>
-			<static-link-runtime-shared-libraries/>
-
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-		</compc>
-	</target>
-
-	<target name="automation_tests" description="Builds the automation_tests.swc">
-		<compc fork="${forkValue}" output="${output.dir}/apps/automation_apps/bin/automation_tests.swc" 
-			include-classes="AutomationTestClasses">
-			<source-path path-element="${automation_tests.dir}/src"/>
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-			<external-library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
-			<external-library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" 	append="true"/>
-			<external-library-path dir="${basedir}/libs" includes="flexunit.swc" 		append="true"/>
-
-			<!-- External swcs -->
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/> 
-			<external-library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/> 
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/> 
-
-
-			<static-link-runtime-shared-libraries/>
-	
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-		</compc>
-	</target>
-
-	<target name="automation_apps" description="Builds the automation test application">
-		<mxmlc fork="${forkValue}" 	file="${automation_apps.dir}/src/VellumUnit.mxml"
-               debug="${flexdebug}"
-				output="${output.dir}/apps/automation_apps/bin/VellumUnit.swf">
-			<jvmarg line="${jvm.args}"/>
-			<library-path/>
-
-			<library-path dir="${output.dir}" includes="textLayout.swc" 		append="true"/>
-			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" 	append="true"/>
-			<library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_tests.swc" 	append="true"/>
-			<library-path dir="${basedir}/libs" includes="flexunit.swc" 		append="true"/>
-            <library-path dir="${basedir}/libs" includes="flexunit-uilistener.swc" 		append="true"/>
-            <library-path dir="${basedir}/libs" includes="flexunit-cilistener.swc" 		append="true"/>
-
-			<!-- External swcs -->
-			<library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/><!-- for Flex SDK 4.5 -->
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/> <!-- for Flex SDK 4.5 -->
-			
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/> 
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
-			<library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/>
-            <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="textLayout_rb.swc" append="true"/>
-
-            <static-link-runtime-shared-libraries/>
-
-			<define name="CONFIG::debug" 			value="${dbg}"/>
-			<define name="CONFIG::release" 			value="${rel}"/>
-            <define name="CONFIG::minimaltests" value="${minimalTests}"/>
-		</mxmlc>
-		<html-wrapper title="VellumUnit" file="VellumUnit.html" 
-		            application="VellumUnit" 
-					swf="VellumUnit" 
-					width="1100" 
-		            height="800"
-		            output="${output.dir}/apps/automation_apps/bin" />
-		<copy todir="${output.dir}/apps/test">
-			<fileset dir="${test.dir}">
-				<include name="**/*.*"/>
-			</fileset>
-		</copy>
-	</target>
-    <target name="flexunnit_tests">
-        <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="true" verbose="true" />
-    </target>
+    </delete>
+    <delete dir="${basedir}/bin"/>
+    <delete file="${basedir}/bundles.properties"/>
+  </target>
+  <target name="textLayout" description="Compiles textLayout.swc">
+    <compc fork="true" output="${output.dir}/textLayout.swc" compute-digest="true" include-classes="flashx.textLayout.CoreClasses flashx.textLayout.EditClasses flashx.textLayout.ConversionClasses">
+      <jvmarg line="${compc.jvm.args}"/>
+      <keep-as3-metadata>IMXMLObject</keep-as3-metadata>
+      <include-namespaces uri="${project.uri}"/>
+      <namespace uri="${project.uri}" manifest="${textLayout.dir}/manifest.xml"/>
+      <source-path path-element="${textLayout.dir}/src"/>
+      <library-path/>
+      <include-file name="manifest.xml" path="${textLayout.dir}/manifest.xml"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+      <compiler.debug>${flexdebug}</compiler.debug>
+    </compc>
+  </target>
+  <target name="textLayout_flex" description="Compiles textLayout.swc for Flex SDK">
+    <compc fork="true" output="${output.dir}/textLayout.swc">
+      <jvmarg line="${compc.jvm.args}"/>
+      <load-config filename="compile-config.xml"/>
+      <arg value="+playerglobal.version=${playerglobal.version}"/>
+      <arg value="+env.PLAYERGLOBAL_HOME=${env.PLAYERGLOBAL_HOME}"/>
+      <arg value="+source.dir=textLayout"/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+      <compiler.debug>${flexdebug}</compiler.debug>
+    </compc>
+  </target>
+  <target name="documentation" depends="textLayout" description="Updates textLayout.swc with ASDoc XML">
+    <condition property="asdoc.jvm.args" value="-Xmx384m">
+      <os family="windows"/>
+    </condition>
+    <condition property="asdoc.jvm.args" value="-Xmx512m">
+      <os family="mac"/>
+    </condition>
+    <condition property="asdoc.jvm.args" value="-Xmx512m">
+      <os family="unix"/>
+    </condition>
+    <delete failonerror="false">
+      <fileset dir="${output.docs}">
+        <include name="validation_errors.log"/>
+      </fileset>
+    </delete>
+    <!-- builds ASDoc XML -->
+    <delete dir="${output.docs}\tempdita" failonerror="false" includeEmptyDirs="true"/>
+    <asdoc output="${output.docs}" lenient="false" failonerror="true" keep-xml="true" skip-xsl="true" fork="true">
+      <doc-classes class="flashx.textLayout.CoreClasses"/>
+      <doc-classes class="flashx.textLayout.EditClasses"/>
+      <doc-classes class="flashx.textLayout.ConversionClasses"/>
+      <compiler.source-path path-element="src"/>
+      <external-library-path dir="${output.dir}/textLayout.swc"/>
+      <doc-namespaces uri="${project.uri}"/>
+      <namespace uri="${project.uri}" manifest="manifest.xml"/>
+      <jvmarg line="${asdoc.jvm.args}"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+    </asdoc>
+    <available file="${output.docs}/validation_errors.log" property="asdoc.errors"/>
+    <fail if="asdoc.errors" message="ASDoc Errors"/>
+  </target>
+  <target name="textLayout_editBar" description="Builds textLayout_editBar.swc">
+    <compc fork="${forkValue}" output="${output.dir}/apps/testApps/bin/textLayout_editBar.swc" include-classes="EditBarClasses" compute-digest="${digest}">
+      <source-path path-element="${textLayout_editBar.dir}/src"/>
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <!-- <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/> -->
+      <!-- for Flex SDK 4.0 -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+      <compiler.debug>${flexdebug}</compiler.debug>
+    </compc>
+  </target>
+  <target name="textLayout_ui" description="Builds textLayout_ui.swc">
+    <compc fork="${forkValue}" output="${output.dir}/apps/testApps/bin/textLayout_ui.swc" include-classes="${textLayout.namespace}.UiClasses,bxf.BxfClasses" compute-digest="${digest}">
+      <source-path path-element="${textLayout_ui.dir}/src"/>
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+      <compiler.debug>${flexdebug}</compiler.debug>
+    </compc>
+  </target>
+  <target name="testApps" description="Builds TLF test application">
+    <mxmlc fork="${forkValue}" file="${testApps.dir}/src/Flow.mxml" keep-generated-actionscript="false" debug="${flexdebug}" output="${output.dir}/apps/automation_apps/bin/Flow.swf">
+      <default-size width="1100" height="550"/>
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_ui.swc" append="true"/>
+      <library-path dir="${output.dir}/apps/testApps/bin" includes="textLayout_editBar.swc" append="true"/>
+      <!-- <library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/> -->
+      <!-- for Flex SDK 4.0 -->
+      <library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+    </mxmlc>
+  </target>
+  <target name="asTestApp" description="build a single application in asTestApp" if="output">
+    <mxmlc fork="${forkValue}" file="${asTestApps.dir}/src/${output}.as" debug="${flexdebug}" output="${output.dir}/apps/asTestApps/bin/${output}.swf">
+      <source-path path-element="${asTestApps.dir}/src"/>
+      <jvmarg line="${jvm.args}"/>
+      <default-size width="1100" height="550"/>
+      <library-path/>
+      <library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="flex.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="flex4.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="flex4_rb.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+    </mxmlc>
+  </target>
+  <target name="asTestApps" description="builds some applications in asTestApps">
+    <antcall target="asTestApp">
+      <param name="output" value="ExplicitFormField"/>
+    </antcall>
+    <antcall target="asTestApp">
+      <param name="output" value="TCMTestFocus2"/>
+    </antcall>
+    <antcall target="asTestApp">
+      <param name="output" value="AliceScroll"/>
+    </antcall>
+    <antcall target="asTestApp">
+      <param name="output" value="KeyLogger"/>
+    </antcall>
+    <antcall target="asTestApp">
+      <param name="output" value="OpHammer"/>
+    </antcall>
+  </target>
+  <target name="automation_core" description="Builds the automation_core.swc">
+    <compc fork="${forkValue}" output="${output.dir}/apps/automation_apps/bin/automation_core.swc" include-classes="AutomationCoreClasses">
+      <source-path path-element="${automation_core.dir}/src"/>
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <!-- External swcs -->
+      <external-library-path dir="${basedir}/libs/" includes="flexunit.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+    </compc>
+  </target>
+  <target name="automation_tests" description="Builds the automation_tests.swc">
+    <compc fork="${forkValue}" output="${output.dir}/apps/automation_apps/bin/automation_tests.swc" include-classes="AutomationTestClasses">
+      <source-path path-element="${automation_tests.dir}/src"/>
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <external-library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" append="true"/>
+      <external-library-path dir="${basedir}/libs" includes="flexunit.swc" append="true"/>
+      <!-- External swcs -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <external-library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+    </compc>
+  </target>
+  <target name="automation_apps" description="Builds the automation test application">
+    <mxmlc fork="${forkValue}" file="${automation_apps.dir}/src/VellumUnit.mxml" debug="${flexdebug}" output="${output.dir}/apps/automation_apps/bin/VellumUnit.swf">
+      <jvmarg line="${jvm.args}"/>
+      <library-path/>
+      <library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
+      <library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_core.swc" append="true"/>
+      <library-path dir="${output.dir}/apps/automation_apps/bin" includes="automation_tests.swc" append="true"/>
+      <library-path dir="${basedir}/libs" includes="flexunit.swc" append="true"/>
+      <library-path dir="${basedir}/libs" includes="flexunit-uilistener.swc" append="true"/>
+      <library-path dir="${basedir}/libs" includes="flexunit-cilistener.swc" append="true"/>
+      <!-- External swcs -->
+      <library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="mx_rb.swc" append="true"/>
+      <!-- for Flex SDK 4.5 -->
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="spark.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="sparkskins.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/libs/" includes="utilities.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="framework_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="rpc_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="spark_rb.swc" append="true"/>
+      <library-path dir="${flex.sdk.frameworks}/locale/${flex.locale}/" includes="textLayout_rb.swc" append="true"/>
+      <static-link-runtime-shared-libraries/>
+      <define name="CONFIG::debug" value="${dbg}"/>
+      <define name="CONFIG::release" value="${rel}"/>
+      <define name="CONFIG::minimaltests" value="${minimalTests}"/>
+    </mxmlc>
+    <html-wrapper title="VellumUnit" file="VellumUnit.html" application="VellumUnit" swf="VellumUnit" width="1100" height="800" output="${output.dir}/apps/automation_apps/bin"/>
+    <copy todir="${output.dir}/apps/test">
+      <fileset dir="${test.dir}">
+        <include name="**/*.*"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="flexunnit_tests">
+    <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps/bin" haltonfailure="true" verbose="true"/>
+  </target>
 </project>
