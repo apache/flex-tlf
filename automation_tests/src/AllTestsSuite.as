@@ -59,7 +59,7 @@ package
         public var compositionTest:CompositionTest;
         public var containerTypeTest:ContainerTypeTest;
         public var floatTest:FloatTest;
-        public var operationTest:OperationTest;
+       // public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
         public var containerAttributeTest:ContainerAttributeTest;
         public var boundsAndAlignmentTest:BoundsAndAlignmentTest;
