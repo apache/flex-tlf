@@ -476,7 +476,10 @@ package flashx.textLayout.elements
 				}
 				cellIdx = getCellIndex(rowIdx,idx);
 				if(cellIdx < 0)
-					cellIdx = numChildren;
+				{
+					cellIdx = getCellIndex(rowIdx,idx-1);
+					cellIdx++;
+				}
 				
 				if(rowIdx < numRows){
 					addChildAt(cellIdx,cell);
