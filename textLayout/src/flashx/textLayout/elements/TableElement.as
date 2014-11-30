@@ -517,7 +517,6 @@ package flashx.textLayout.elements
 			row.composedHeight = row.computedFormat.minCellHeight;
 			row.isMaxHeight = row.computedFormat.minCellHeight == row.computedFormat.maxCellHeight;
 
-			var blockedCoords:Vector.<CellCoords> = getBlockedCoords(idx);
 			var cellIdx:int = getCellIndex(idx,0);
 			if(cellIdx < 0)
 				cellIdx = numChildren;
@@ -526,20 +525,26 @@ package flashx.textLayout.elements
 			
 			if (cells==null) cells = [];
 			
-			// create more cells 
-			while(cells.length < numColumns){
+			var cell:TableCellElement;
+			// create more cells while tracking occupied columns of merged cells
+			var occupiedColumns:int = 0;
+			for each(cell in cells)
+				occupiedColumns += cell.columnSpan;
+
+			while(occupiedColumns < numColumns)
+			{
 				cells.push(new TableCellElement());
+				occupiedColumns++;
 			}
 			
-			for each(var cell:TableCellElement in cells){
-				while(blockedCoords.length && blockedCoords[0].column == colIdx){
-					colIdx++;
-					blockedCoords.shift();
-				}
-				if(colIdx < numColumns){
+			for each(cell in cells)
+			{
+				if(colIdx < numColumns)
+				{
 					addChildAt(cellIdx++,cell);
 					cell.damage();
 				}
+				colIdx += (cell.columnSpan-1);
 			}
 			return true;
 		}
