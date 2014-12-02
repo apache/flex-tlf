@@ -991,7 +991,8 @@ package flashx.textLayout.elements
 				parent.replaceChildren(myidx+1,myidx+1,newSibling);
 			}
 
-			newSibling.normalizeRange(0,newSibling.textLength);
+			// This causes errors in operations that assume zero children. Normalizing makes this assumption not valid.
+			//newSibling.normalizeRange(0,newSibling.textLength);
 			return newSibling;
 		}
 
