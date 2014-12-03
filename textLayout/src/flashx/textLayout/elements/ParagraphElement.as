@@ -627,9 +627,10 @@ package flashx.textLayout.elements
 			var newLastLeaf:FlowLeafElement = getLastLeaf();
 			if (_terminatorSpan != newLastLeaf)
 			{
+				if(_terminatorSpan)
+					_terminatorSpan.removeParaTerminator();
 				if (newLastLeaf && _terminatorSpan)
 				{
-					_terminatorSpan.removeParaTerminator();
 					if(_terminatorSpan.textLength == 0)
 					{
 						var termIdx:int = getChildIndex(_terminatorSpan);
@@ -637,20 +638,24 @@ package flashx.textLayout.elements
 					}
 					this._terminatorSpan = null;
 				}
-				
-				if (newLastLeaf is SpanElement)
+				if(newLastLeaf)
 				{
-					(newLastLeaf as SpanElement).addParaTerminator();
-					this._terminatorSpan = newLastLeaf as SpanElement;
+					if (newLastLeaf is SpanElement)
+					{
+						(newLastLeaf as SpanElement).addParaTerminator();
+						this._terminatorSpan = newLastLeaf as SpanElement;
+					}
+					else
+					{
+						var s:SpanElement = new SpanElement();
+						super.replaceChildren(numChildren,numChildren,s);
+						s.format = newLastLeaf ? newLastLeaf.format : _terminatorSpan.format;
+						s.addParaTerminator();
+						this._terminatorSpan = s;
+					}
 				}
 				else
-				{
-					var s:SpanElement = new SpanElement();
-					super.replaceChildren(numChildren,numChildren,s);
-					s.format = newLastLeaf ? newLastLeaf.format : _terminatorSpan.format;
-					s.addParaTerminator();
-					this._terminatorSpan = s;
-				}
+					_terminatorSpan = null;
 			}
 			//merge terminator span to previous if possible
 			if(_terminatorSpan && _terminatorSpan.textLength == 1)
