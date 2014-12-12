@@ -218,7 +218,7 @@ package flashx.textLayout.edit
 		 * Indicates the type of selection. 
 		 * 
 		 * <p>The <code>selectionType</code> describes the kind of selection. 
-		 * It can either be <code>SelectionType.TEXT</code> or <code>SelectionType.CELLS</code>
+		 * It can either be <code>SelectionType.TEXT</code> or <code>SelectionType.CELLS</code></p>
 		 * 
 		 * @see flashx.textLayout.edit.SelectionType
 		 * 
