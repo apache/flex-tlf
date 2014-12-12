@@ -801,9 +801,9 @@ package flashx.textLayout.elements
 			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
 			var tbStart:int = getTextBlockStart(tb);
 			var textBlockPos:int = relativePosition - tbStart;
-			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+            var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens && tl != null)
 			{
-				var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(textBlockPos);
                 //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 var isRTL:Boolean = tl.getAtomBidiLevel(currentAtomIndex) == 1;
@@ -895,9 +895,9 @@ package flashx.textLayout.elements
 			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
 			var tbStart:int = getTextBlockStart(tb);
 			var textBlockPos:int = relativePosition - tbStart;
-			if (ContainerController.tlf_internal::usesDiscretionaryHyphens)
+            var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
+			if (ContainerController.tlf_internal::usesDiscretionaryHyphens && tl != null)
 			{
-				var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
 				var currentAtomIndex:int = tl.getAtomIndexAtCharIndex(textBlockPos);
                 //trace("relpos", relativePosition, "atomIndex", currentAtomIndex);
                 var isRTL:Boolean = tl.getAtomBidiLevel(currentAtomIndex) == 1;
