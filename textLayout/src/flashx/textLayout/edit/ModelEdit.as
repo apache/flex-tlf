@@ -383,7 +383,8 @@ class InternalSplitFGEMemento extends BaseMemento implements IMemento
 		prevSibling.replaceChildren(prevSibling.numChildren,prevSibling.numChildren,target.mxmlChildren);
 		
 		// paragraphs only - watch out for trailing empty spans that need to be removed
-		if (prevSibling is ParagraphElement && lastLeaf.textLength == 0)
+		// Harbs 12-24-14 Added check that lastLeaf still exists in the paragraph
+		if (prevSibling is ParagraphElement && lastLeaf.parent && lastLeaf.textLength == 0)
 			prevSibling.removeChild(lastLeaf);
 		
 		// debugCheckTextFlow("After InternalSplitFGEMemento.undo");

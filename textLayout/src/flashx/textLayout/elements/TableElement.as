@@ -1556,6 +1556,10 @@ package flashx.textLayout.elements
 			column.table = this;
 			return column;
 		}
+		tlf_internal override function normalizeRange(normalizeStart:uint,normalizeEnd:uint):void
+		{
+			
+		}
 	}
 }
 class CellCoords
