@@ -624,6 +624,13 @@ package flashx.textLayout.elements
 		/** @private */
 		tlf_internal function ensureTerminatorAfterReplace():void
 		{
+			//lose reference to terminator if it was removed or not a direct child.
+			if(_terminatorSpan && _terminatorSpan.parent != this)
+			{
+				_terminatorSpan.removeParaTerminator();
+				_terminatorSpan = null;
+			}
+			
 			var newLastLeaf:FlowLeafElement = getLastLeaf();
 			if (_terminatorSpan != newLastLeaf)
 			{
@@ -661,7 +668,7 @@ package flashx.textLayout.elements
 			if(_terminatorSpan && _terminatorSpan.textLength == 1)
 			{
 				var prev:FlowLeafElement = _terminatorSpan.getPreviousLeaf(this);
-				if(prev && prev is SpanElement)
+				if(prev && prev.parent == this && prev is SpanElement)
 				{
 					_terminatorSpan.removeParaTerminator();
 					termIdx = getChildIndex(_terminatorSpan);
