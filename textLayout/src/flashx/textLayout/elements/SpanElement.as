@@ -76,7 +76,7 @@ package flashx.textLayout.elements
 		/** @private */
 		override tlf_internal function createContentElement():void
 		{
-			if (_blockElement)
+			if (_blockElement && _blockElement.textBlock)
 				return;
 			
 			computedFormat;	// BEFORE creating the element

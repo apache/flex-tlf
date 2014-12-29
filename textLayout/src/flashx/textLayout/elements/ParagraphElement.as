@@ -535,6 +535,10 @@ package flashx.textLayout.elements
 				CONFIG::debug { Debugging.traceFTECall(gc,null,"new Vector.<ContentElement>") }
 				gc.push(block);
 				CONFIG::debug { Debugging.traceFTECall(null,gc,"push",block); }
+				// If elements in the middle (i.e. ones in the process of being added) were missed, the idx can be too high.
+				// The missed ones will be inserted later.
+				if(idx > group.elementCount)
+					idx = group.elementCount;
 				group.replaceElements(idx,idx,gc);
 				CONFIG::debug { Debugging.traceFTECall(null,group,"replaceElements",idx,idx,gc); }
 			}
@@ -581,7 +585,7 @@ package flashx.textLayout.elements
 				if(_terminatorSpan)
 				{
 					var termIdx:int = getChildIndex(_terminatorSpan);
-					if(termIdx !=0 && _terminatorSpan.textLength == 1)
+					if(termIdx > 0 && _terminatorSpan.textLength == 1)
 					{
 						super.replaceChildren(termIdx, termIdx+1);
 						_terminatorSpan = null;
