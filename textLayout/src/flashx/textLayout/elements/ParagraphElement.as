@@ -585,7 +585,7 @@ package flashx.textLayout.elements
 				if(_terminatorSpan)
 				{
 					var termIdx:int = getChildIndex(_terminatorSpan);
-					if(termIdx > 0 && _terminatorSpan.textLength == 1)
+					if(termIdx > 0 && termIdx < beginChildIndex && _terminatorSpan.textLength == 1)
 					{
 						super.replaceChildren(termIdx, termIdx+1);
 						_terminatorSpan = null;
