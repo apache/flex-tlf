@@ -525,7 +525,7 @@ package UnitTest.Tests
          }
          ***/
 
-        [Test]
+        [Ignore][Test]
         /**
          * automate a end TAB bug test.  When End Tab has a long string value, it didn't display correctly. It is a Player bug.
          */
