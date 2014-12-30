@@ -1801,7 +1801,7 @@ package UnitTest.Tests
             var textFlowLine:TextFlowLine = SelManager.textFlow.flowComposer.getLineAt(2);
             var canvas:Canvas = Canvas(testApp.getDisplayObject());
             var textLineBounds:Rectangle = textFlowLine.getTextLine().getBounds(canvas);
-            assertTrue("Paragraph3's top value should be 87.55.", textLineBounds.top == 87.55);
+            assertTrue("Paragraph3's top value should be 87.55.", Math.abs(textLineBounds.top - 87.55) < 0.001);
         }
 
         //Fix bug 2869747  using TextFlow.flowComposer and ContainerController, displayed text is incorrectly masked
