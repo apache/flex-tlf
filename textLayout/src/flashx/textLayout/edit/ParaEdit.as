@@ -123,7 +123,7 @@ package flashx.textLayout.edit
 					}
 				}
 				var nextLeaf:FlowLeafElement = paragraph.findLeaf(paraSelBegIdx);
-				if(nextLeaf && nextLeaf.textLength == 1 && nextLeaf == paragraph.terminatorSpan)
+				if(nextLeaf && nextLeaf.textLength == 1 && nextLeaf.parent == insertParent && nextLeaf == paragraph.terminatorSpan)
 				{
 					// use the terminator span instead of inserting a new one.
 					newSpan = SpanElement(nextLeaf);
