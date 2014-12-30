@@ -674,12 +674,7 @@ package flashx.textLayout.elements
 				var prev:FlowLeafElement = _terminatorSpan.getPreviousLeaf(this);
 				if(prev && prev.parent == this && prev is SpanElement)
 				{
-					_terminatorSpan.removeParaTerminator();
-					termIdx = getChildIndex(_terminatorSpan);
-					super.replaceChildren(termIdx, termIdx+1);
-					s = prev as SpanElement;
-					s.addParaTerminator();
-					this._terminatorSpan = s;
+					_terminatorSpan.mergeToPreviousIfPossible();
 				}
 			}
 		}
