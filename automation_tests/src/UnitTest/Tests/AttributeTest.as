@@ -709,7 +709,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function setFontSizeOutOfBounds():void
         {
             try
@@ -720,7 +719,7 @@ package UnitTest.Tests
             {
 
             }
-            assertTrue("font size was set to 999", (getFontSize() == 999));
+            assertTrue("font size was set to 999", (getFontSize() != 999));
         }
 
         private function setFontSize(size:Number):void
