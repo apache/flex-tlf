@@ -48,13 +48,13 @@ package UnitTest.Tests
         public override function setUpTest():void
         {
             super.setUpTest();
-
+			TestData.overrideEditManager = "true";
             if (TestData.overrideEditManager == "true")
             {
                 var testManager:EditManager = new TestEditManager(new UndoManager());
                 SelManager.textFlow.interactionManager = testManager;
                 SelManager = testManager;
-                SelManager.selectRange(0, 0);
+				SelManager.selectAll();
             }
         }
 
@@ -72,7 +72,6 @@ package UnitTest.Tests
         /************** TESTS USING DERIVED EDITMANAGER **************************************************/
 
         [Test]
-        [Ignore]
         public function keyDownDerivedTest():void
         {
             SelManager.insertText("StillHere");
@@ -93,7 +92,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function mouseDownDerivedTest():void
         {
             var kEvent:MouseEvent = new MouseEvent(MouseEvent.MOUSE_DOWN, true, false, 0, 0);
@@ -106,7 +104,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function mouseMoveDerivedTest():void
         {
             (SelManager as TestEditManager).mouseMoved = false;
@@ -123,7 +120,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function textEventDerivedTest():void
         {
             // Send 'a' string
@@ -137,7 +133,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function focusInDerivedTest():void
         {
             var kEvent:FocusEvent = new FocusEvent(FocusEvent.FOCUS_IN);
@@ -150,7 +145,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function focusOutDerivedTest():void
         {
             var kEvent:FocusEvent = new FocusEvent(FocusEvent.FOCUS_OUT);
@@ -163,7 +157,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function activateDerivedTest():void
         {
             var kEvent:Event = new Event(Event.ACTIVATE);
@@ -176,7 +169,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function deactivateDerivedTest():void
         {
             var kEvent:Event = new Event(Event.DEACTIVATE);
@@ -189,7 +181,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function deleteNextDerivedTest():void
         {
             (SelManager as TestEditManager).useDefaultKeyDown = true;
@@ -206,7 +197,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function deletePreviousDerivedTest():void
         {
             (SelManager as TestEditManager).useDefaultKeyDown = true;
@@ -223,7 +213,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function deleteNextWordDerivedTest():void
         {
             (SelManager as TestEditManager).useDefaultKeyDown = true;
@@ -240,7 +229,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function deletePreviousWordDerivedTest():void
         {
             (SelManager as TestEditManager).useDefaultKeyDown = true;
