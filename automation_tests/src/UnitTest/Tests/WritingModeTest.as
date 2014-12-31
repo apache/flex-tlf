@@ -420,7 +420,7 @@ package UnitTest.Tests
                     xPos[0] > xPos[1] && xPos[1] > xPos[2]);
         }
 
-        [Test]
+        [Ignore][Test]
         /**
          * Make sure the right to left fonts are displayed right to left
          */
