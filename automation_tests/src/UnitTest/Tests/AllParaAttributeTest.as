@@ -234,7 +234,6 @@ package UnitTest.Tests
          * This builds testcases for properties in attributes in description that are Enumerated types types.  A testcase is generated
          * for each possible enumerated value
          */
-        [Ignore]
         [Test]
         public function testAllEnumProps():void
         {
