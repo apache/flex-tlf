@@ -104,8 +104,8 @@ package UnitTest.Tests
             ]
         ];
 
-        private var width:Number;
-        private var height:Number;
+        private var width:Number = 100;
+        private var height:Number = 100;
 
         private var _blockProgression:String;
         private var _direction:String;
@@ -192,7 +192,6 @@ package UnitTest.Tests
         /********************** Tests Start Here ***************************/
 
         [Test]
-        [Ignore]
         public function simpleMultiParagraph():void
         {
             // This is a subset of simple.xml
@@ -206,7 +205,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function simpleMultiParagraphNoTextIndent():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -219,7 +217,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function longSimpleMultiParagraph():void
         {
             // This is a longer version of simple.xml, so the text overflows the visible area and scrolls
@@ -238,7 +235,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function simpleMultiParagraphNegTextIndent():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -251,7 +247,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function simpleWithPaddingTopLeft():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
@@ -264,7 +259,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         public function simpleWithPaddingBottomRight():void
         {
             // This is a subset of simple.xml, and has NO first line indent applied to the paragraphs.
