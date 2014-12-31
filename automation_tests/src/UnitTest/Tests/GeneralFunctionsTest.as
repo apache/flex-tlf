@@ -486,7 +486,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         /**
          * Sets the insertion point at 0, then generates the "40" keyboard event
          * and verifies that the cursor is on the second line.
@@ -509,7 +508,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         /**
          * Sets the insertion point at the last char, then generates the "38" keyboard event
          * and verifies that the cursor is on the second to last line.
@@ -1136,7 +1134,6 @@ package UnitTest.Tests
         }
 
         [Test]
-        [Ignore]
         /**
          * Generate errors and make sure we get the right string
          */
