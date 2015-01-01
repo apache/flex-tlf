@@ -220,12 +220,14 @@ package UnitTest.Tests
             var afterFirstVisibleLine:int = afterPosition[0];
             var afterLastVisibleLine:int = afterPosition[1];
 
+			var linesMatch:Boolean = afterFirstVisibleLine == beforeFirstVisibleLine + numberOfLines;
+			var almostMatch:Boolean = afterFirstVisibleLine == beforeFirstVisibleLine + numberOfLines - 1;
+			//added -1 because a line can be partially visible
             // Check that we did scroll forward, and check that some text that was visible before is still visible.
-            assertTrue("scrollMultipleLines didn't advance scroll correctly", afterFirstVisibleLine == beforeFirstVisibleLine + numberOfLines);
+            assertTrue("scrollMultipleLines didn't advance scroll correctly", (linesMatch || almostMatch));
         }
 
         [Test]
-        [Ignore]
         public function scrollMultipleLinesTest():void
         {
             pageForwardOrBackwardByLines(26);
