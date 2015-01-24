@@ -34,7 +34,7 @@ package
 		import UnitTest.PerformanceTests.VellumWordTests; VellumWordTests;
                                                             */
 		import AllTestsSuite; AllTestsSuite;
-        //import MinimalTestsSuite; MinimalTestsSuite; -- removed because its only test was FloatTest which used some questionable IP as an icon
+        import MinimalTestsSuite; MinimalTestsSuite;
        // import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
 		/*import UnitTest.Tests.AllAttributeTest; AllAttributeTest;
 		import UnitTest.Tests.AllCharAttributeTest; AllCharAttributeTest;
