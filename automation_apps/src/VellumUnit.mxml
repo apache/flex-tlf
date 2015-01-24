@@ -113,8 +113,8 @@
             "tableExample.xml",
             "asknot.xml",
             "empty.xml",
-            "sampleArabic.xml",
-            "aliceExcerpt.xml"
+            "sampleArabic.xml"/*,
+            "aliceExcerpt.xml" removed because it contained questionable ip */
         ];
 
         public var reportXMLResults:Boolean = false;
