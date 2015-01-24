@@ -52,13 +52,13 @@ package
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
         public var allChartAttributeTest:AllCharAttributeTest;
         public var allContAttirbuteTest:AllContAttributeTest;
-        public var allEventTest:AllEventTest;
+        //public var allEventTest:AllEventTest; --  -- removed because it uses questionable IP for an icon.
         public var allParagraphAttributeTest:AllParaAttributeTest;
         public var attributeTest:AttributeTest;
         public var boxTest:BoxTest;
         public var compositionTest:CompositionTest;
         public var containerTypeTest:ContainerTypeTest;
-        public var floatTest:FloatTest;
+        //public var floatTest:FloatTest; -- removed because it uses questionable IP for an icon.
         public var operationTest:OperationTest;
         public var scrollingTest:ScrollingTest;
         public var containerAttributeTest:ContainerAttributeTest;
