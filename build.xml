@@ -222,11 +222,9 @@
     <antcall target="asTestApp">
       <param name="output" value="TCMTestFocus2"/>
     </antcall>
-    <!-- disabled because it was using some invalid IP
     <antcall target="asTestApp">
       <param name="output" value="AliceScroll"/>
     </antcall>
-     -->
     <antcall target="asTestApp">
       <param name="output" value="KeyLogger"/>
     </antcall>
