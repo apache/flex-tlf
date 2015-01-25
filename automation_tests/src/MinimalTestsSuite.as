@@ -18,14 +18,24 @@
 ////////////////////////////////////////////////////////////////////////////////
 package
 {
+	import UnitTest.Tests.ContainerAttributeTest;
 
-    import UnitTest.Tests.FloatTest;
+	//import UnitTest.Tests.AllEventTest;
+
+	//import UnitTest.Tests.CompositionTest;
+
+//    import UnitTest.Tests.OperationTest;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class MinimalTestsSuite
     {
-        public var floatTest:FloatTest;
+        //public var floatTest:FloatTest;
+        //public var operationTest:OperationTest;
+		//public var compTest:CompositionTest;
+		//public var allEventTest:AllEventTest;
+		public var containerAttTest:ContainerAttributeTest;
+		
     }
 
 }
