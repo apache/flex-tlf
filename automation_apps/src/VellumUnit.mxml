@@ -132,35 +132,6 @@
             currentlyUsedMemory = Math.round(System.totalMemory / 1000000);
         }
 
-        /**
-         * Loads Arial font
-         */
-        private function loadEmbeddedFont(baseURL:String):void
-        {
-            var fontLoader:Loader = new Loader();
-            fontLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoadEmbeddedFont);
-            fontLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, handleLoadEmbeddedFontIOError);
-            fontLoader.load(new URLRequest(LoaderUtil.createAbsoluteURL(baseURL, "../../test/testFiles/assets/ARIAL_FONT.swf")));
-        }
-
-        private function handleLoadEmbeddedFontIOError(evtObj:IOErrorEvent):void
-        {
-            trace("Unable to load Arial Font.");
-        }
-
-
-        private function handleLoadEmbeddedFont(evtObj:Event):void
-        {
-            /*var arialFont:Class = evtObj.target.applicationDomain.getDefinition("Arial_DF4");
-             Font.registerFont(arialFont);
-             var arialFontBlack:Class = evtObj.target.applicationDomain.getDefinition("Arial_Black_DF4");
-             Font.registerFont(arialFontBlack);
-             var arialFontNarrow:Class = evtObj.target.applicationDomain.getDefinition("Arial_Narrow_DF4");
-             Font.registerFont(arialFontNarrow);
-             var arialFontRoundedMTBold:Class = evtObj.target.applicationDomain.getDefinition("Arial_Rounded_MT_Bold_DF4");
-             Font.registerFont(arialFontRoundedMTBold);     */
-        }
-
         private function loadAndRunTests():void
         {
             var config:TestConfig = TestConfig.getInstance();
@@ -381,9 +352,6 @@
                 FileRepository.readFile(normalizedURL, "../../test/testFiles/markup/tlf/" + xmlFileNameList[i],
                         onXmlFileListLoadComplete, onXmlFileListError, onXmlFileListSecurityError);
             }
-
-            // Load Arial Font SWF to Embed it in the application.
-            loadEmbeddedFont(normalizedURL);
         }
 
         private function onXmlFileListLoadComplete(event:Event):void
