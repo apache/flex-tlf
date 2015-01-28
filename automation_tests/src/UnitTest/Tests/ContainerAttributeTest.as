@@ -1782,7 +1782,7 @@ package UnitTest.Tests
         }
 
         // mjzhang : Bug#2907691 When composition starts in middle of the container, paddingBottom for the previous paragraph is ignored
-        [Test(dataProvider=dataProvider7)]
+        [Ignore][Test(dataProvider=dataProvider7)]
         public function paddingBottomTest(dpData:Object):void
         {
             currentDpData = dpData;
