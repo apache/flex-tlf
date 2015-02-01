@@ -48,6 +48,7 @@ package
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class AllTestsSuite
     {
+		[TestCase(order=1)]
         public var generalFunctionsTest:GeneralFunctionsTest;
         public var factoryImportTest:FactoryImportTest;
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
