@@ -50,28 +50,51 @@ package
     {
 		[TestCase(order=1)]
         public var generalFunctionsTest:GeneralFunctionsTest;
+		[TestCase(order=2)]
         public var factoryImportTest:FactoryImportTest;
+		[TestCase(order=3)]
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
+		[TestCase(order=4)]
         public var allChartAttributeTest:AllCharAttributeTest;
+		[TestCase(order=5)]
         public var allContAttirbuteTest:AllContAttributeTest;
+		[TestCase(order=6)]
         public var allEventTest:AllEventTest;
+		[TestCase(order=7)]
         public var allParagraphAttributeTest:AllParaAttributeTest;
+		[TestCase(order=8)]
         public var attributeTest:AttributeTest;
+		[TestCase(order=9)]
         public var boxTest:BoxTest;
+		[TestCase(order=10)]
         public var compositionTest:CompositionTest;
+		[TestCase(order=11)]
         public var containerTypeTest:ContainerTypeTest;
+		[TestCase(order=12)]
         public var floatTest:FloatTest;
+		[TestCase(order=13)]
         public var operationTest:OperationTest;
+		[TestCase(order=14)]
         public var scrollingTest:ScrollingTest;
+		[TestCase(order=15)]
         public var containerAttributeTest:ContainerAttributeTest;
+		[TestCase(order=16)]
         public var boundsAndAlignmentTest:BoundsAndAlignmentTest;
+		[TestCase(order=17)]
         public var crossContainerTest:CrossContainerTest;
+		[TestCase(order=18)]
         public var elementOperationTest:ElementOperationTest;
+		[TestCase(order=19)]
         public var eventOverrideTest:EventOverrideTest;
+		[TestCase(order=20)]
         public var flowModelTest:FlowModelTest;
+		[TestCase(order=21)]
         public var writingModeTest:WritingModeTest;
+		[TestCase(order=22)]
         public var undoRedoTest:UndoRedoTest;
+		[TestCase(order=23)]
         public var textFlowEditTest:TextFlowEditTest;
+		[TestCase(order=24)]
         public var tabTest:TabTest;
     }
 
