@@ -89,7 +89,7 @@ package UnitTest.Tests
                     getText(0, 9) == "StillHere");
 
             assertTrue("Keyboard event override was not executed",
-                    getAllText() == "StillHereKEYDOW");
+                    getAllText() == "StillHereKEYDOWN");
         }
 
         [Test]
