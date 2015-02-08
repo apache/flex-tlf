@@ -29,6 +29,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
+    [TestCase(order=19)]
     public class EventOverrideTest extends VellumTestCase
     {
         public function EventOverrideTest()
@@ -88,7 +89,7 @@ package UnitTest.Tests
                     getText(0, 9) == "StillHere");
 
             assertTrue("Keyboard event override was not executed",
-                    getAllText() == "StillHereKEYDOWN");
+                    getAllText() == "StillHereKEYDOW");
         }
 
         [Test]

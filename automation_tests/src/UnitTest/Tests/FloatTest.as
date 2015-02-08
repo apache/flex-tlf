@@ -71,7 +71,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
-
+    [TestCase(order=12)]
     public class FloatTest extends VellumTestCase
     {
         // axies

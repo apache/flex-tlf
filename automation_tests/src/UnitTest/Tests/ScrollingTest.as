@@ -45,6 +45,7 @@ package UnitTest.Tests
 
     /** Test the state of selection after each operation is done, undone, and redone.
      */
+    [TestCase(order=14)]
     public class ScrollingTest extends VellumTestCase
     {
         public function ScrollingTest()

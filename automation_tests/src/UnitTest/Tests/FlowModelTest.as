@@ -18,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-    import UnitTest.ExtendedClasses.TestDescriptor;
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestConfig;
 
@@ -52,8 +50,6 @@ package UnitTest.Tests
     import flashx.textLayout.elements.SpanElement;
     import flashx.textLayout.elements.TCYElement;
     import flashx.textLayout.elements.TextFlow;
-    import flashx.textLayout.formats.BlockProgression;
-    import flashx.textLayout.formats.Direction;
     import flashx.textLayout.formats.FormatValue;
     import flashx.textLayout.formats.ITextLayoutFormat;
     import flashx.textLayout.formats.ListStyleType;
@@ -71,6 +67,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=20)]
     public class FlowModelTest extends VellumTestCase
     {
         private var beginTime:int;
@@ -600,7 +597,7 @@ package UnitTest.Tests
             // ideally shouldn't need TextFlow but because containercontrollers find their owning composer via the textflow its needed
             var textFlow:TextFlow = new TextFlow();
             textFlow.flowComposer = composer;
-            textFlow.mxmlChildren = [ "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678" ];
+            textFlow.mxmlChildren = ["012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678"];
 
             controller = new ContainerController(s);
             controller.verticalScrollPolicy = "off";
@@ -621,7 +618,7 @@ package UnitTest.Tests
                     composer = new StandardFlowComposer();
                     textFlow = new TextFlow();
                     textFlow.flowComposer = composer;
-                    textFlow.mxmlChildren = [ "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678" ];
+                    textFlow.mxmlChildren = ["012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678"];
 
                     // add some empties
                     for (idx = 0; idx < idx1; idx++)
@@ -639,7 +636,7 @@ package UnitTest.Tests
                     assertTrue("Bad result in findControllerIndexAtPosition 3", composer.findControllerIndexAtPosition(100, true) == idx1);
                     assertTrue("Bad result in findControllerIndexAtPosition 4", composer.findControllerIndexAtPosition(100, false) == -1);
                     // add one with some length
-                    textFlow.mxmlChildren = [ "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678" ];
+                    textFlow.mxmlChildren = ["0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678"];
                     controller.setTextLength(100);
                     controller = new ContainerController(s);
                     controller.verticalScrollPolicy = "off";	// scrolling confuses it
@@ -666,7 +663,7 @@ package UnitTest.Tests
             var range:Object = handler.range;
             var value:String;
 
-            var numberedListStyles:Object = { };
+            var numberedListStyles:Object = {};
             for (value in ListElement.algorithmicListStyles)
             {
                 assertTrue("listItemInsertion: table entry duplicated", numberedListStyles[value] === undefined);
@@ -690,7 +687,7 @@ package UnitTest.Tests
                     // must be a numbered list or an unnumbered list but not both
                     assertTrue("listItemInsertion: listStyleType must be numbered or unnumbered but not both: " + value,
                             numberedListStyles[value] !== undefined && ListElement.constantListStyles[value] === undefined
-                                    || numberedListStyles[value] === undefined && ListElement.constantListStyles[value] !== undefined)
+                            || numberedListStyles[value] === undefined && ListElement.constantListStyles[value] !== undefined)
                     // numbered lists must have a suffix
                     if (ListElement.constantListStyles[value] === undefined)
                         assertTrue("listItemInsertion: missing suffix property: " + value, ListElement.listSuffixes[value] !== undefined);
@@ -843,8 +840,8 @@ package UnitTest.Tests
             var format:TextLayoutFormat = new TextLayoutFormat();
             format.fontWeight = FontWeight.BOLD;
             span2.format = format;
-            paragraph.mxmlChildren = [ span1, span2 ];
-            textFlow.mxmlChildren = [ paragraph ];
+            paragraph.mxmlChildren = [span1, span2];
+            textFlow.mxmlChildren = [paragraph];
             textFlow.flowComposer.addController(new ContainerController(new Sprite()));
             textFlow.flowComposer.compose();		// force normalize
             assertTrue("Spans should not be merged!", span2.parent == span1.parent && paragraph.numChildren == 2);

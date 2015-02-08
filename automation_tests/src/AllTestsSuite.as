@@ -44,10 +44,11 @@ package
     import UnitTest.Tests.UndoRedoTest;
     import UnitTest.Tests.WritingModeTest;
 
-    [Suite]
+    [Suite(order=1)]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class AllTestsSuite
     {
+        public var generalFunctionsTest:GeneralFunctionsTest;
         public var factoryImportTest:FactoryImportTest;
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
         public var allChartAttributeTest:AllCharAttributeTest;
@@ -67,7 +68,6 @@ package
         public var elementOperationTest:ElementOperationTest;
         public var eventOverrideTest:EventOverrideTest;
         public var flowModelTest:FlowModelTest;
-        public var generalFunctionsTest:GeneralFunctionsTest;
         public var writingModeTest:WritingModeTest;
         public var undoRedoTest:UndoRedoTest;
         public var textFlowEditTest:TextFlowEditTest;

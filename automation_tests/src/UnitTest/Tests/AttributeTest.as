@@ -57,6 +57,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=8)]
     public class AttributeTest extends VellumTestCase
     {
         public function AttributeTest()

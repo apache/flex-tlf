@@ -54,7 +54,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
-
+    [TestCase(order=9)]
     public class BoxTest extends VellumTestCase
     {
         private var _textFlow:TextFlow;

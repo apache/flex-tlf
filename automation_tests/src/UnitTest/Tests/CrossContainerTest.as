@@ -43,6 +43,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=17)]
     public class CrossContainerTest extends VellumTestCase
     {
         // Members

@@ -52,6 +52,7 @@ package UnitTest.Tests
     use namespace tlf_internal;
 
 
+    [TestCase(order=10)]
     [RunWith("org.flexunit.runners.Parameterized")]
     public class CompositionTest extends VellumTestCase
     {

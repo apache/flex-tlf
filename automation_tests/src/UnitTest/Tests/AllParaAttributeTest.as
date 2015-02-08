@@ -24,9 +24,7 @@ package UnitTest.Tests
 
     import flashx.textLayout.elements.FlowLeafElement;
     import flashx.textLayout.elements.ParagraphElement;
-
     import flashx.textLayout.elements.TextFlow;
-
     import flashx.textLayout.formats.Category;
     import flashx.textLayout.formats.FormatValue;
     import flashx.textLayout.formats.TextLayoutFormat;
@@ -42,6 +40,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=7)]
     public class AllParaAttributeTest extends AllAttributeTest
     {
         public function AllParaAttributeTest()

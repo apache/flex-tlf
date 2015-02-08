@@ -18,7 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestConfig;
     import UnitTest.Fixtures.TestEditManager;
@@ -39,6 +38,7 @@ package UnitTest.Tests
 
     /** Test the state of selection after each operation is done, undone, and redone.
      */
+    [TestCase(order=22)]
     public class UndoRedoTest extends VellumTestCase
     {
         private var container:Sprite;

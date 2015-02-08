@@ -18,35 +18,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestDescriptor;
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
-	import UnitTest.ExtendedClasses.VellumTestCase;
-	import UnitTest.Fixtures.TestConfig;
-	
-	import flash.display.DisplayObject;
-	import flash.display.Sprite;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
-	
-	import flashx.textLayout.container.ContainerController;
-	import flashx.textLayout.container.ScrollPolicy;
-	import flashx.textLayout.container.TextContainerManager;
-	import flashx.textLayout.edit.EditManager;
-	import flashx.textLayout.edit.SelectionState;
-	import flashx.textLayout.elements.BackgroundManager;
-	import flashx.textLayout.elements.FlowElement;
-	import flashx.textLayout.elements.ParagraphElement;
-	import flashx.textLayout.elements.SpanElement;
-	import flashx.textLayout.elements.TableDataCellElement;
-	import flashx.textLayout.elements.TableElement;
-	import flashx.textLayout.elements.TableRowElement;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.tlf_internal;
-	
-	import mx.containers.Canvas;
+    import UnitTest.ExtendedClasses.TestDescriptor;
+    import UnitTest.ExtendedClasses.TestSuiteExtended;
+    import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestConfig;
+
+    import flash.display.Sprite;
+    import flash.utils.getDefinitionByName;
+
+    import flashx.textLayout.container.ContainerController;
+    import flashx.textLayout.container.ScrollPolicy;
+    import flashx.textLayout.container.TextContainerManager;
+    import flashx.textLayout.edit.EditManager;
+    import flashx.textLayout.edit.SelectionState;
+    import flashx.textLayout.elements.BackgroundManager;
+    import flashx.textLayout.elements.FlowElement;
+    import flashx.textLayout.elements.ParagraphElement;
+    import flashx.textLayout.elements.SpanElement;
+    import flashx.textLayout.elements.TableElement;
+    import flashx.textLayout.elements.TableRowElement;
+    import flashx.textLayout.elements.TextFlow;
+    import flashx.textLayout.tlf_internal;
+
+    import mx.containers.Canvas;
 
     import org.flexunit.asserts.assertTrue;
 
+    //	import flashx.textLayout.elements.TableDataCellElement;
     use namespace tlf_internal;
 	
 	public class TableBackgroundTest extends VellumTestCase
@@ -390,7 +388,7 @@ package UnitTest.Tests
 									 cellBackgroundColor:* = "transparent", tableBorderWidth:int = 0, tableBorderColor:* = "transparent", tableBackgroundColor:* = "transparent"):TableElement
 		{
 			_tab = new TableElement();
-			_tab.initTableElement(row, col);
+		//	_tab.initTableElement(row, col);
 			_tab.setBorderWidth(tableBorderWidth);
 			_tab.cellSpacing = cellspacing;
 			if(tableBorderColor is uint)
@@ -402,21 +400,21 @@ package UnitTest.Tests
 				_tab.addChild(tableRow);
 				for(var c:int = 0; c < col; c++)
 				{
-					var cell:TableDataCellElement = new TableDataCellElement();
+				/*	var cell:TableDataCellElement = new TableDataCellElement();
 					cell.addChild(createParagraph());
 					cell.setBorderWidth(cellBorderWidth);
 					if(cellBorderColor is uint)
 						cell.setBorderColor(cellBorderColor);
 					cell.backgroundColor = cellBackgroundColor;
-					tableRow.addChild(cell);
+					tableRow.addChild(cell);   */
 				}
 			}
 			
-			for ( var i:uint = 0; i < _tab.column; i ++ )
+		/*	for ( var i:uint = 0; i < _tab.column; i ++ )
 			{
 				_tab.setColumnWidth(i, widths[i]);
 			}
-			
+			     */
 			return _tab;
 		}
 		private function insertParagraph(num:int):void

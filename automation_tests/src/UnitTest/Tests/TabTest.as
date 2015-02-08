@@ -31,6 +31,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
+    [TestCase(order=24)]
     public class TabTest extends VellumTestCase
     {
         public function TabTest()

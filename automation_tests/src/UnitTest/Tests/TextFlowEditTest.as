@@ -31,6 +31,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
+    [TestCase(order=23)]
     public class TextFlowEditTest extends VellumTestCase
     {
         public function TextFlowEditTest()

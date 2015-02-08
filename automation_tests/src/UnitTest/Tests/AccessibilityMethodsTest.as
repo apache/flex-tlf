@@ -48,6 +48,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=3)]
     public class AccessibilityMethodsTest extends VellumTestCase
     {
         private var textFlow:TextFlow;

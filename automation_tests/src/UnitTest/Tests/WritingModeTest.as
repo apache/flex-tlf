@@ -29,6 +29,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
+    [TestCase(order=21)]
     public class WritingModeTest extends VellumTestCase
     {
         public function WritingModeTest()

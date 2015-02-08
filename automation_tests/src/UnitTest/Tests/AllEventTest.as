@@ -67,6 +67,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=6)]
     public class AllEventTest extends VellumTestCase
     {
         [Embed(source="../../../../test/testFiles/assets/smiley.gif")]

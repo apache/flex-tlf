@@ -49,6 +49,7 @@ package UnitTest.Tests
     import org.flexunit.asserts.assertTrue;
     import org.flexunit.asserts.fail;
 
+    [TestCase(order=11)]
     public class ContainerTypeTest extends VellumTestCase
     {
         private var TestCanvas:Canvas = null;

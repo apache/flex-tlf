@@ -42,6 +42,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
+    [TestCase(order=18)]
     public class ElementOperationTest extends VellumTestCase
     {
         private static const listItemMarkup:String = "<TextFlow xmlns='http://ns.adobe.com/textLayout/2008'><list listStylePosition='inside'><li><p textAlign='left'><span fontWeight='bold'>item</span></p></li></list></TextFlow>";

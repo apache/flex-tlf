@@ -51,6 +51,7 @@ package UnitTest.Tests
     import org.flexunit.asserts.assertTrue;
     import org.flexunit.asserts.fail;
 
+    [TestCase(order=16)]
     [RunWith("org.flexunit.runners.Parameterized")]
     public class BoundsAndAlignmentTest extends VellumTestCase implements IEventDispatcher
     {

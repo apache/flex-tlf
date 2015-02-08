@@ -24,7 +24,6 @@ package UnitTest.Tests
 
     import flashx.textLayout.elements.FlowLeafElement;
     import flashx.textLayout.elements.TextFlow;
-
     import flashx.textLayout.formats.Category;
     import flashx.textLayout.formats.FormatValue;
     import flashx.textLayout.formats.TextLayoutFormat;
@@ -33,14 +32,14 @@ package UnitTest.Tests
     import flashx.textLayout.property.IntPropertyHandler;
     import flashx.textLayout.property.NumberPropertyHandler;
     import flashx.textLayout.property.PercentPropertyHandler;
-
+    import flashx.textLayout.property.Property;
     import flashx.textLayout.tlf_internal;
 
     import org.flexunit.asserts.assertTrue;
-    import flashx.textLayout.property.Property;
 
     use namespace tlf_internal;
 
+    [TestCase(order=4)]
     public class AllCharAttributeTest extends AllAttributeTest
     {
         public function AllCharAttributeTest()

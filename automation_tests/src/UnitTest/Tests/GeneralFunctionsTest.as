@@ -48,7 +48,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
-
+    [TestCase(order=1)]
     public class GeneralFunctionsTest extends VellumTestCase
     {
         public static const childParentTable:Array =

@@ -53,6 +53,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=15)]
     [RunWith("org.flexunit.runners.Parameterized")]
     public class ContainerAttributeTest extends VellumTestCase
     {

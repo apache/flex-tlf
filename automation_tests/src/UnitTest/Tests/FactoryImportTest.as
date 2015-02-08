@@ -37,6 +37,7 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.fail;
 
+    [TestCase(order=2)]
     public class FactoryImportTest extends VellumTestCase
     {
         private var ItemsToRemove:Array;

@@ -81,6 +81,7 @@ package UnitTest.Tests
 
     /** Test the state of selection after each operation is done, undone, and redone.
      */
+    [TestCase(order=13)]
     public class OperationTest extends VellumTestCase
     {
         private const testFlow:String = "<TextFlow xmlns:flow=\"http://ns.adobe.com/textLayout/2008\" fontSize=\"14\" textIndent=\"15\" paddingTop=\"4\" paddingLeft=\"4\" fontFamily=\"Times New Roman\">" +

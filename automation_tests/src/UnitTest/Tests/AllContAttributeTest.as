@@ -40,6 +40,7 @@ package UnitTest.Tests
 
     use namespace tlf_internal;
 
+    [TestCase(order=5)]
     public class AllContAttributeTest extends AllAttributeTest
     {
         public function AllContAttributeTest()
