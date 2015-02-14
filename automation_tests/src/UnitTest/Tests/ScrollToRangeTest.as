@@ -16,6 +16,14 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// This file contains content from Alice in Wonderland, by Lewis Carroll,
+// now in the public domain.
+//
+////////////////////////////////////////////////////////////////////////////////
+
 package UnitTest.Tests
 {
 	import UnitTest.ExtendedClasses.TestSuiteExtended;
@@ -93,12 +101,16 @@ package UnitTest.Tests
 			testCanvas.rawChildren.addChild(s);
 		}
 		
+		// FIXME needs to be replaced
 		private static var englishText:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">visible word</span>elit.</p>';
 								private static var arabicText:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحرية</span> والعدل.</p>';
 								private static var arabicAndEnglishText:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية<span styleName="scrollToThis">visible word</span>والعدل.</p>';
 								private static var arabicAndEnglishInScrollText1:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> engالحرية</span>والعدل.</p>';
 								private static var arabicAndEnglishInScrollText2:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحريةeng</span>والعدل.</p>';
+		
+		// FIXME needs to be replaced
 		private static var japaneseText:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<span styleName="scrollToThis">にアクセ</span>スする方法について解説します。</p>';
+		// FIXME needs to be replaced
 		private static var japaneseTCYText:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<tcy><span styleName="scrollToThis">0123</span></tcy>スする方法について解説します。</p>';
 		
 		private static var englishTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur  <span styleName="scrollToThis">visible word</span>elit ipsum dolor sit amet, consectetur.</p>';
@@ -107,11 +119,15 @@ package UnitTest.Tests
 								private static var englishEnglishAndArabicSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">eng الحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
 								private static var englishArabicAndEnglishSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحريةeng</span>elit ipsum dolor sit amet, consectetur.</p>';
 								private static var englishEnglishAndArabicSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">engالحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
+								// FIXME needs to be replaced
 								private static var arabicTextLong:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحرية</span> والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
 								private static var arabicAndEnglishTextLong:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية<span styleName="scrollToThis">visible word</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
 								private static var arabicAndEnglishInScrollText1Long:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> engالحرية</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
 								private static var arabicAndEnglishInScrollText2Long:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحريةeng</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
+		
+		// FIXME needs to be replaced
 		private static var japaneseTextLong:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<span styleName="scrollToThis">にアクセ</span>スする方法について解説しますが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセク。</p>';
+		// FIXME needs to be replaced
 		private static var japaneseTCYTextLong:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<tcy><span styleName="scrollToThis">0123</span></tcy>スする方法について解説しまが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクす。</p>';
 
 		
@@ -282,6 +298,7 @@ private static var aliceScrollToSpanText:XML = <TextFlow xmlns="http://ns.adobe.
 	<p>Alice was not a bit hurt, and she jumped up on to her feet in a moment: she looked up, but it was all dark overhead; before her was another long passage, and the White Rabbit was still in sight, hurrying down it. There was not a moment to be lost: away went Alice like the wind, and was just in time to hear it say, as it turned a corner, “Oh my ears and whiskers, how late it's getting!” She was close behind it when she turned the corner, but the Rabbit was no longer to be seen: she found herself in a long, low hall, which was lit up by a row of lamps hanging from the roof.</p>
 	<p>There were doors all round the hall, but they were all locked; and when Alice had been all the way down one side and up the other, trying every door, she walked sadly down the middle, wondering how she was ever to get out again.</p>
 	</TextFlow>;
+// FIXME needs to be replaced
 private static var japaneseParagraphText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
@@ -294,6 +311,7 @@ private static var japaneseParagraphText:XML = <TextFlow xmlns="http://ns.adobe.
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	</TextFlow>
+// FIXME needs to be replaced
 private static var japaneseSpanText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
@@ -349,6 +367,7 @@ private static var aliceScrollToListItemElementText:XML = <TextFlow xmlns="http:
 	<p>There were doors all round the hall, but they were all locked; and when Alice had been all the way down one side and up the other, trying every door, she walked sadly down the middle, wondering how she was ever to get out again.</p>
 	</TextFlow>;
 	//this listElement is similar to japaneseParagraphText
+	// FIXME needs to be replaced
 private static var japaneseListElementText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
@@ -364,6 +383,7 @@ private static var japaneseListElementText:XML = <TextFlow xmlns="http://ns.adob
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	</TextFlow>
 	//this listItemElement is similar to japaneseSpanText
+	// FIXME needs to be replaced
 private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>

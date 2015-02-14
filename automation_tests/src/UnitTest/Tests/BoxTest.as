@@ -16,6 +16,22 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// This file contains the text of the inaugural address made by John F. Kennedy
+// after being sworn in as the thirty-fifth President of the United States on
+// January 20, 1961. This text is in the public domain
+//
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// This file contains content from Ethan Brand by Nathaniel Hawthorne,
+// now in the public domain.
+//
+////////////////////////////////////////////////////////////////////////////////
+
 package UnitTest.Tests
 {
 
@@ -588,6 +604,7 @@ package UnitTest.Tests
         [Test]
         public function textFlowPadding():void		// 2610219
         {
+			// This contains the text of the inaugural address made by John F. Kennedy after being sworn in as the thirty-fifth President of the United States on January 20, 1961. This text is in the public domain.
             var markup:String = '<?xml version="1.0" encoding="utf-8"?>' +
                     '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008" paddingLeft="4" paddingTop="2" columnCount="4" fontSize="18" direction="rtl" textAlign="left">' +
                     '<p><span>Ask Not What Your Country Can Do For You speech</span></p>' +

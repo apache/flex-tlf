@@ -117,6 +117,7 @@
 								<flow:p fontSize="36"><flow:span>“School” is written </flow:span><flow:span fontFamily="Adobe Arabic" locale="ar">مدرسة</flow:span><flow:span> in Arabic, </flow:span><flow:span fontFamily="{ChineseFontName}" locale="zh">學校</flow:span><flow:span> in Chinese, </flow:span><flow:span locale="el">σχολείο</flow:span><flow:span> in Greek, </flow:span><flow:span fontFamily="Adobe Hebrew" locale="he">בֵּית־סֵפֶר</flow:span><flow:span> in Hebrew, </flow:span><flow:span fontFamily="{JapaneseFontName}" locale="ja">学校</flow:span><flow:span> in Japanese, </flow:span><flow:span fontFamily="{KoreanFontName}" locale="ko">학교</flow:span><flow:span> in Korean, </flow:span><flow:span locale="be" fontFamily="Vrinda">স্কুল</flow:span><flow:span> in Bengali, </flow:span><flow:span locale="ru">школа</flow:span><flow:span> in Russian, and </flow:span><flow:span fontFamily="Adobe Thai" locale="th">อาศรม</flow:span><flow:span> in Thai.</flow:span></flow:p>	
 	</flow:TextFlow>
 
+	<!-- FIXME needs to be replaced -->
 	<flow:TextFlow id="udhrFlow" blockProgression="rl" fontSize="36" textAlign="right" direction="rtl" fontFamily="Adobe Arabic" locale="ar" paddingLeft="10" paddingRight="10">
 								<flow:p><flow:span>الإعلان العالمي لحقوق الإنسان</flow:span></flow:p>
 								<flow:p><flow:span>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية والعدل </flow:span><flow:span locale="en" fontFamily="Myriad Pro">English here</flow:span><flow:span>والسلام في العالم.</flow:span></flow:p>

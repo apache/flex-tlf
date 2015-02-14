@@ -114,6 +114,7 @@ package UnitTest.Tests
 			var para1end:int = para1.textLength - 1;
 			SelManager.selectRange(para1end,para1end);
 
+			// TODO check and replace content or add licence
 			var longString:String = "Far be it from me to interrupt such an important " +
 					"discussion, but it's come to my attention that the behavior of " +
 					"line shuffling has yet to be fully investigated within this context. " +

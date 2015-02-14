@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+This file contains content from The Barnsley Manifesto by The Barnsley Chartists, now in the public domain.
 -->
 	<flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontFamily="Times New Roman">
 		<flow:p><flow:a href="The">The</flow:a> <flow:a href="Committee">Committee</flow:a> <flow:a href="appointed">appointed</flow:a> <flow:a href="to">to</flow:a> <flow:a href="carry">carry</flow:a> <flow:a href="into">into</flow:a> <flow:a href="effect">effect</flow:a> <flow:a href="the">the</flow:a> <flow:a href="resolutions">resolutions</flow:a> <flow:a href="which">which</flow:a> <flow:a href="were">were</flow:a> <flow:a href="unanimously">unanimously</flow:a> <flow:a href="and">and</flow:a> <flow:a href="triumphantly">triumphantly</flow:a> <flow:a href="passed">passed</flow:a> <flow:a href="at">at</flow:a> <flow:a href="a">a</flow:a> <flow:a href="very">very</flow:a> <flow:a href="large">large</flow:a> <flow:a href="public">public</flow:a> <flow:a href="meeting">meeting</flow:a> <flow:a href="held">held</flow:a> <flow:a href="in">in</flow:a> <flow:a href="Barnsley">Barnsley</flow:a> <flow:a href="on">on</flow:a> <flow:a href="the">the</flow:a> 10<flow:a href="th">th</flow:a> <flow:a href="of">of</flow:a> <flow:a href="June">June</flow:a>, 1838, <flow:a href="have">have</flow:a> <flow:a href="thought">thought</flow:a> <flow:a href="it">it</flow:a> <flow:a href="advisable">advisable</flow:a> <flow:a href="to">to</flow:a> <flow:a href="address">address</flow:a> <flow:a href="the">the</flow:a> <flow:a href="following">following</flow:a> <flow:a href="observations">observations</flow:a> <flow:a href="to">to</flow:a> <flow:a href="the">the</flow:a> <flow:a href="labouring">labouring</flow:a> <flow:a href="people">people</flow:a> <flow:a href="of">of</flow:a> <flow:a href="Barnsley">Barnsley</flow:a> <flow:a href="and">and</flow:a> <flow:a href="its">its</flow:a> <flow:a href="neighbourhood">neighbourhood</flow:a>, <flow:a href="for">for</flow:a> <flow:a href="the">the</flow:a> <flow:a href="information">information</flow:a> <flow:a href="of">of</flow:a> <flow:a href="those">those</flow:a> <flow:a href="who">who</flow:a> <flow:a href="were">were</flow:a> <flow:a href="not">not</flow:a> <flow:a href="at">at</flow:a> <flow:a href="the">the</flow:a> <flow:a href="meeting">meeting</flow:a>:</flow:p>

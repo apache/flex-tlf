@@ -16,6 +16,14 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// This file contains content from Ethan Brand by Nathaniel Hawthorne,
+// now in the public domain.
+//
+////////////////////////////////////////////////////////////////////////////////
+
 package UnitTest.Tests
 {
     import UnitTest.ExtendedClasses.VellumTestCase;
@@ -331,6 +339,7 @@ package UnitTest.Tests
         public function truncationTest():void
         {
             var bounds:Rectangle = new Rectangle();
+			
             var text:String = 'There are many such lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. ' +
                     'Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers ' +
                     'rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come.';
@@ -340,7 +349,7 @@ package UnitTest.Tests
                     'مدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسة' +
                     'مدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسةمدرسة';
 
-            var accentedText:String = '\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A' +
+			var accentedText:String = '\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A' +
                     '\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A' +
                     '\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A' +
                     '\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A\u0041\u030A' +
