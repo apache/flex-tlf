@@ -1990,18 +1990,21 @@ package UnitTest.Tests
         [Test]
         public function htmlImportTest():void
         {
+			// FIXME replace image
             var htmlString:String = "<HTML><BODY><p>Example paragraph, with a img aligned left<img align='left' src='http://mozcom-cdn.mozilla.net/img/tignish/template/mozilla-logo.png'>more text</p></BODY></HTML>";
             var textFlow:TextFlow = TextConverter.importToFlow(htmlString, TextConverter.TEXT_FIELD_HTML_FORMAT);
             var ilg:InlineGraphicElement = findFloat(textFlow);
             assertTrue(ilg != null, "Expected to find InlineGraphicElement from <img> import");
             assertTrue(ilg.float != Float.LEFT, "align=left <img> import, expected float=left");
 
+			// FIXME replace image
             htmlString = "<HTML><BODY><p>Example paragraph, with a img aligned left<img align='right' src='http://mozcom-cdn.mozilla.net/img/tignish/template/mozilla-logo.png'>more text</p></BODY></HTML>";
             textFlow = TextConverter.importToFlow(htmlString, TextConverter.TEXT_FIELD_HTML_FORMAT);
             ilg = findFloat(textFlow);
             assertTrue(ilg != null, "Expected to find InlineGraphicElement from <img> import");
             assertTrue(ilg.float != Float.RIGHT, "align=right <img> import, expected float=right");
 
+			// FIXME replace image
             htmlString = "<HTML><BODY><p>Example paragraph, with a img aligned left<img align='foo' src='http://mozcom-cdn.mozilla.net/img/tignish/template/mozilla-logo.png'>more text</p></BODY></HTML>";
             textFlow = TextConverter.importToFlow(htmlString, TextConverter.TEXT_FIELD_HTML_FORMAT);
             ilg = findFloat(textFlow);
