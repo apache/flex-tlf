@@ -2220,6 +2220,7 @@ package UnitTest.Tests
         [Test]
         public function caretOnEmptyInlineGraphic():void		// Bug 2719488
         {
+			// FIXME content needs to be replaced
             var markup:String = '<TextFlow whiteSpaceCollapse="preserve" xmlns="http://ns.adobe.com/textLayout/2008"><p textAlign="center" textIndent="0"><span fontSize="24">Amid Blight and Scanenging, Old G.M. Plants Linger</span></p><p textAlign="center" textIndent="0"><span></span></p><p textIndent="0"><img height="auto" width="auto" source="Auto-articleLarge.jpg" float="start"/><span>FLINT, Mich. — By day, hundreds of </span><a href="http://topics.nytimes.com/top/news/business/companies/general_motors_corporation/index.html?inline=nyt-org"><span>General Motors</span></a><span> work­ers make pis­tons and other en­gine parts at a fac­tory on this city’s east side. </span></p></TextFlow>';
 
             _textFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
