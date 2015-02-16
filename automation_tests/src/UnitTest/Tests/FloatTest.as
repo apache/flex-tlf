@@ -17,13 +17,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// This file contains content from Ethan Brand by Nathaniel Hawthorne,
-// now in the public domain.
-//
-////////////////////////////////////////////////////////////////////////////////
-
 package UnitTest.Tests
 {
 
@@ -2409,7 +2402,7 @@ package UnitTest.Tests
             para2.addChild(span);
             textFlowFactory.compositionBounds = new Rectangle(0, 0, 300, 400);
 
-            span.text = "The man who now watched the fire was of a different order, and troubled himself with no thoughts save the very few that were requisite to his business. At frequent intervals, he flung back the clashing weight of the iron door, and, turning his face from the insufferable glare, thrust in huge logs of oak, or stirred the immense brands with a long pole. Sentences removed. lime-kilns in that tract of country, for the purpose of burning the white marble which composes a large part of the substance of the hills. Some of them, built years ago, and long deserted, with weeds growing in the vacant round of the interior, which is open to the sky, and grass and wild-flowers rooting themselves into the chinks of the stones, look already like relics of antiquity, and may yet be overspread with the lichens of centuries to come. Sentences removed.";
+            span.text = "The Apache Flex SDK is the evolution of the popular Adobe Flex SDK. The Apache Flex SDK is an application development framework for easily building Flash based applications for mobile devices, web browsers, and desktop platforms.";
             [Embed(source="../../../../test/testFiles/assets/smiley.gif")] var Smiley:Class;
             pic.source = Smiley;
 
