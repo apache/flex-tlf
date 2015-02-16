@@ -561,7 +561,6 @@ package UnitTest.Tests
             var tf:TextFlow = SelManager.textFlow;
             for (var i:int = 0; i < 15; i++)
             {
-		// FIXME change image content
                 tf.addChild(TextConverter.importToFlow(
                         '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">The Apache Flex SDK is the evolution of the popular Adobe Flex SDK. The Apache Flex SDK is an application development framework for easily building Flash based applications for mobile devices, web browsers, and desktop platforms.<img source="http://flex.apache.org/images/logo_01_fullcolor-sm.png"/> Currently supported platforms</TextFlow>',
                         TextConverter.TEXT_LAYOUT_FORMAT

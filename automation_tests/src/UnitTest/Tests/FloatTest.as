@@ -2219,7 +2219,6 @@ package UnitTest.Tests
         [Test]
         public function caretOnEmptyInlineGraphic():void		// Bug 2719488
         {
-			// FIXME content needs to be replaced
             var markup:String = '<TextFlow whiteSpaceCollapse="preserve" xmlns="http://ns.adobe.com/textLayout/2008"><p textAlign="center" textIndent="0"><span fontSize="24">The Apache Flex SDK is the evolution of the popular Adobe Flex SDK.</span></p><p textAlign="center" textIndent="0"><span></span></p><p textIndent="0"><img height="auto" width="auto" source="http://flex.apache.org/images/logo_01_fullcolor-sm.png" float="start"/><span>The Apache Flex SDK is the evolution of the popular Adobe Flex SDK. </span><a href="http://flex.apache.org/"><span>Linux support is currently experimental and you may run into issues.</span></a><span> The Apache Flex SDK 4.14.0 is a follow up release to version 4.13.0. </span></p></TextFlow>';
 
             _textFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
