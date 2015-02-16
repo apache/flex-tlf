@@ -1583,8 +1583,7 @@ package UnitTest.Tests
 
             // Get image content height which has padding top set
             var textFlow:TextFlow = SelManager.textFlow;
-	    // FIXME replace image/logo content
-            var markup:String = '<TextFlow fontFamily="Arial" fontSize="16" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" whiteSpaceCollapse="preserve" version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008"><p><img paddingTop="-100" paddingLeft="50" height="auto" width="auto" source="http://www.lacitelibreria.info/ambientazione-cite/cite-libreria-logo.png" float="left"/><span fontFamily="Georgia" fontSize="24">La Cité Libreria Cafè</span></p></TextFlow>';
+            var markup:String = '<TextFlow fontFamily="Arial" fontSize="16" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" whiteSpaceCollapse="preserve" version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008"><p><img paddingTop="-100" paddingLeft="50" height="auto" width="auto" source="http://flex.apache.org/images/logo_01_fullcolor-sm.png" float="left"/><span fontFamily="Georgia" fontSize="24">La Cité Libreria Cafè</span></p></TextFlow>';
             var textFlowNew:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
 
             textFlow.addEventListener(StatusChangeEvent.INLINE_GRAPHIC_STATUS_CHANGE, statusChangeHandler);

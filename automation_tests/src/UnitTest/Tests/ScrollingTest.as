@@ -487,13 +487,11 @@ package UnitTest.Tests
 
             for (var i:int = 0; i < 15; i++)
             {
-		// FIXME change image content
                 textFlow.addChild(TextConverter.importToFlow(
-                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx <img source="http://static.v41.skyrock.net/chat/chat20080110/images/smileys/3-blink.png"/> xxxx</TextFlow>',
+                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx <img source="http://flex.apache.org/images/logo_01_fullcolor-sm.png"/> xxxx</TextFlow>',
                         TextConverter.TEXT_LAYOUT_FORMAT
                 ).getChildAt(0));
 
-		// FIXME change image content
                 textFlow.addChild(
                         TextConverter.importToFlow(
                                 '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx</TextFlow>',
@@ -536,10 +534,8 @@ package UnitTest.Tests
             var tf:TextFlow = TextConverter.importToFlow(str, TextConverter.PLAIN_TEXT_FORMAT);
             var flowElem:FlowElement = tf.getChildAt(0);
             textFlow.addChild(flowElem);
-
-	    // FIXME change image content
             textFlow.addChild(TextConverter.importToFlow(
-                    '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"><img source="http://static.v41.skyrock.net/chat/chat20080110/images/smileys/3-blink.png"/> </TextFlow>',
+                    '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"><img source="http://flex.apache.org/images/logo_01_fullcolor-sm.png"/> </TextFlow>',
                     TextConverter.TEXT_LAYOUT_FORMAT
             ).getChildAt(0));
 
@@ -547,9 +543,8 @@ package UnitTest.Tests
             for (var j:int = 0; j < 100; j++)
             {
                 textFlow.addChild(TextConverter.importToFlow("aaa", TextConverter.PLAIN_TEXT_FORMAT).getChildAt(0));
-	    	// FIXME change image content
                 textFlow.addChild(TextConverter.importToFlow(
-                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"><img source="http://static.v41.skyrock.net/chat/chat20080110/images/smileys/3-blink.png"/> </TextFlow>',
+                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"><img source="http://flex.apache.org/images/logo_01_fullcolor-sm.png"/> </TextFlow>',
                         TextConverter.TEXT_LAYOUT_FORMAT
                 ).getChildAt(0));
 
@@ -568,7 +563,7 @@ package UnitTest.Tests
             {
 		// FIXME change image content
                 tf.addChild(TextConverter.importToFlow(
-                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">Alice was beginning to get very tired of sitting by her sister	on the bank, and of having nothing to do: once or twice she had	peeped into the book her sister was reading, but it had no pictures or conversations in it, “and what is the use of a book,” thought Alice “without pictures or conversation?<img source="http://static.v41.skyrock.net/chat/chat20080110/images/smileys/3-blink.png"/> conversation?</TextFlow>',
+                        '<TextFlow xmlns="http://ns.adobe.com/textLayout/2008">The Apache Flex SDK is the evolution of the popular Adobe Flex SDK. The Apache Flex SDK is an application development framework for easily building Flash based applications for mobile devices, web browsers, and desktop platforms.<img source="http://flex.apache.org/images/logo_01_fullcolor-sm.png"/> Currently supported platforms</TextFlow>',
                         TextConverter.TEXT_LAYOUT_FORMAT
                 ).getChildAt(0));
             }
