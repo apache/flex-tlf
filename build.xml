@@ -239,6 +239,7 @@
       <library-path/>
       <external-library-path dir="${output.dir}" includes="textLayout.swc" append="true"/>
       <external-library-path dir="${flex.sdk.frameworks}/libs/mx/" includes="mx.swc" append="true"/>
+        <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="rpc.swc" append="true"/>
       <!-- for Flex SDK 4.5 -->
       <external-library-path dir="${flex.sdk.frameworks}/libs/" includes="framework.swc" append="true"/>
       <!-- External swcs -->

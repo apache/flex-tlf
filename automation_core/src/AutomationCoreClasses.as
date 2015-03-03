@@ -20,6 +20,7 @@ package
 {
  	internal class AutomationCoreClasses
 	{
+        import UnitTest.ExtendedClasses.TestConfigurationLoader; TestConfigurationLoader;
         import UnitTest.ExtendedClasses.VellumTestCase; VellumTestCase;
         import UnitTest.Validation.BoundsChecker; BoundsChecker;
         import UnitTest.Validation.CompositionResults; CompositionResults;
@@ -33,22 +34,7 @@ package
         import UnitTest.Validation.UpdateCompleteEventValidator; UpdateCompleteEventValidator;
         import UnitTest.Fixtures.TestEditManager; TestEditManager;
         import UnitTest.Fixtures.MeasureConstants; MeasureConstants;
-
-		/*import UnitTest.ExtendedClasses.TestDescriptor; TestDescriptor;
-		import UnitTest.ExtendedClasses.TestSuiteExtended; TestSuiteExtended;
-		import UnitTest.ExtendedClasses.VellumPerformanceCase; VellumPerformanceCase;
-
-		import UnitTest.Fixtures.FileRepository; FileRepository;
-		import UnitTest.Fixtures.TestApp; TestApp;
-		import UnitTest.Fixtures.TestConfig; TestConfig;
-		import UnitTest.Fixtures.TestEditManager; TestEditManager;
-
-
-		import UnitTest.Validation.LineSnapshot; LineSnapshot;
-
-		import UnitTest.Validation.XMLSnapshot; XMLSnapshot;     */
-		// Alphabetical list of classes to be included as part of vellum.swc.
-		// This should mirror what's in the .flexLibProperties
+        import UnitTest.Fixtures.TestCaseVo; TestCaseVo;
 	}
 }
 

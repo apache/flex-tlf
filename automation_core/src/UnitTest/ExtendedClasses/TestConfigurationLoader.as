@@ -8,7 +8,6 @@ package UnitTest.ExtendedClasses
 
     import mx.rpc.AsyncToken;
     import mx.rpc.IResponder;
-
     import mx.rpc.http.HTTPService;
     import mx.utils.LoaderUtil;
 
