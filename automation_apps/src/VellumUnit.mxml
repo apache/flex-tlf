@@ -40,7 +40,6 @@
         import flashx.textLayout.elements.TextFlow;
         import flashx.textLayout.tlf_internal;
 
-        import mx.collections.ArrayCollection;
         import mx.managers.SystemManager;
         import mx.managers.systemClasses.MarshallingSupport;
         import mx.utils.LoaderUtil;
@@ -52,11 +51,7 @@
         // import AND instantiate MarshallingSupport.  Enables being loaded as a sub-swf and loading a sub-swf with marshall plan features
         MarshallingSupport;
 
-        private var socket:XMLSocket;
         private var curDialog:Object;
-        //TODO: Remove
-        //  private var treeData:XMLList;
-        private var testCasesList:ArrayCollection;
         private var useTestSelectDialog:Boolean = false;
 
         public var testMachineName:String = "unspecified";
@@ -81,9 +76,6 @@
         private var snapshotStack:Array;
 
         private var curURL:String;
-
-        private var myXMLURL:URLRequest = new URLRequest();
-        private var urlReqSnapShotStore:URLRequest = new URLRequest();
 
         private var curSnapshotTypeToStore:String;
         private var tryToStoreCount:Number = 0;
@@ -337,6 +329,7 @@
         public function handleCreationComplete():void
         {
             normalizedURL = LoaderUtil.normalizeURL(loaderInfo);
+            TestConfig.getInstance().normalizedUrl = normalizedURL;
             // if we're in the AIR runtime, we get app:/VellumUnit.swf instead of
             // a file:/// URL. This checks for that and changes it to file:///
             if (normalizedURL.charAt(0) == "a")

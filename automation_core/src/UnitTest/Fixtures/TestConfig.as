@@ -34,6 +34,9 @@ package UnitTest.Fixtures
 		public var flashVersion:String = Capabilities.version.substr(4,4);
         public var testXMLStore:XML;
 
+        public var testConfigData:XML;
+        public var normalizedUrl:String;
+
 		public function TestConfig(testConfigEnforcer:TestConfigEnforcer)
 		{
             if (testConfigEnforcer == null)
