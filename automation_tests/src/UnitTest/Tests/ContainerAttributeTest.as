@@ -731,9 +731,6 @@ package UnitTest.Tests
             }
             endCounts.length = i;
 
-            var one:int = initCounts.length;
-            var two:int = endCounts.length;
-
             assertTrue("number of lines are not the same after changing writing direction in a square frame",
                     initCounts.length == endCounts.length);
             for (i = 0; i < initCounts.length; i++)
@@ -836,9 +833,6 @@ package UnitTest.Tests
 
             verticalAlign = VerticalAlign.BOTTOM;
             SelManager.flushPendingOperations();
-
-            var t1:int = SelManager.textFlow.flowComposer.findLineAtPosition(1).x;
-            var t2:int = SelManager.textFlow.flowComposer.findLineAtPosition(1).y;
 
             if (TestFrame.textFlow.computedFormat.blockProgression ==
                     BlockProgression.RL
@@ -1126,14 +1120,12 @@ package UnitTest.Tests
                 // Verify test results
                 var textFlow:TextFlow = cb.textFlow;
                 var columnWidthModify:int = columnWidth / 3;
-                trace(textFlow.flowComposer.numLines);
                 for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
                 {
                     var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(j);
                     var textLine:TextLine = textFlowLine.getTextLine();
                     var text:String = textLine.textBlock.content.text;
                     var textLineBounds:Rectangle = textFlowLine.getTextLine().getBounds(cb);
-                    trace(textLineBounds.x, textLineBounds.y, text);
 
                     // Assert for STR1's position
                     if (j == 0)
@@ -1211,14 +1203,12 @@ package UnitTest.Tests
 
                 // Verify test results
                 var textFlow:TextFlow = cb.textFlow;
-                trace(textFlow.flowComposer.numLines);
                 for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
                 {
                     var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(j);
                     var textLine:TextLine = textFlowLine.getTextLine();
                     var text:String = textLine.textBlock.content.text;
                     var textLineBounds:Rectangle = textFlowLine.getTextLine().getBounds(cb);
-                    trace(textLineBounds.x, textLineBounds.y, text);
 
                     // Assert for STR1's position
                     if (j == 0)
@@ -1352,7 +1342,6 @@ package UnitTest.Tests
 
                 // Verify test results
                 var textFlow:TextFlow = cb.textFlow;
-                trace(textFlow.flowComposer.numLines);
                 var bStr2Checked:Boolean = false;
                 var bStr3Checked:Boolean = false;
                 for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
@@ -1361,7 +1350,6 @@ package UnitTest.Tests
                     var textLine:TextLine = textFlowLine.getTextLine();
                     var text:String = textLine.textBlock.content.text;
                     var textLineBounds:Rectangle = textFlowLine.getTextLine().getBounds(cb);
-                    trace(textLineBounds.x, textLineBounds.y, text);
 
                     // Assert for STR1's position
                     if (j == 0)
@@ -1810,8 +1798,7 @@ package UnitTest.Tests
             setUpTest();
 
             var textFlow:TextFlow = SelManager.textFlow;
-            var container:Sprite = new Sprite();
-            container = textFlow.flowComposer.getControllerAt(0).container as Sprite;
+            var container:Sprite = textFlow.flowComposer.getControllerAt(0).container as Sprite;
             textFlow.flowComposer.addController(new ContainerController(container, 200, 100));
             textFlow.flowComposer.updateAllControllers();
             textFlow.flowComposer.removeAllControllers();
@@ -1822,9 +1809,7 @@ package UnitTest.Tests
 
         private function isBetween(item:int, x1:int, x2:int):Boolean
         {
-            if (item >= x1 && item <= x2)
-                return true;
-            return false;
+            return item >= x1 && item <= x2;
         }
     }
 }
