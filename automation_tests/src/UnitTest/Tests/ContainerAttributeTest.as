@@ -707,7 +707,8 @@ package UnitTest.Tests
 
 
             var i:int = 0;
-            for (; i < SelManager.textFlow.flowComposer.numLines; i++)
+            var numLines:int = SelManager.textFlow.flowComposer.numLines;
+            for (; i < numLines; i++)
             {
                 var line:TextFlowLine = SelManager.textFlow.flowComposer.getLineAt(i);
                 if (line.isDamaged())
@@ -722,7 +723,8 @@ package UnitTest.Tests
             var endCounts:Array = new Array(SelManager.textFlow.flowComposer.numLines);
 
             i = 0;
-            for (; i < SelManager.textFlow.flowComposer.numLines; i++)
+            numLines = SelManager.textFlow.flowComposer.numLines;
+            for (; i < numLines; i++)
             {
                 line = SelManager.textFlow.flowComposer.getLineAt(i);
                 if (line.isDamaged())
@@ -731,9 +733,10 @@ package UnitTest.Tests
             }
             endCounts.length = i;
 
+            var initCount:int = initCounts.length;
             assertTrue("number of lines are not the same after changing writing direction in a square frame",
-                    initCounts.length == endCounts.length);
-            for (i = 0; i < initCounts.length; i++)
+                    initCount == endCounts.length);
+            for (i = 0; i < initCount; i++)
             {
                 assertTrue("line length of line " + i + " changed after changing writing direction in a square frame",
                         initCounts[i] == endCounts[i]);
@@ -1120,7 +1123,8 @@ package UnitTest.Tests
                 // Verify test results
                 var textFlow:TextFlow = cb.textFlow;
                 var columnWidthModify:int = columnWidth / 3;
-                for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
+                var numLines:int = textFlow.flowComposer.numLines;
+                for (var j:int = 0; j < numLines; j++)
                 {
                     var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(j);
                     var textLine:TextLine = textFlowLine.getTextLine();
@@ -1203,7 +1207,8 @@ package UnitTest.Tests
 
                 // Verify test results
                 var textFlow:TextFlow = cb.textFlow;
-                for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
+                var numLines:int = textFlow.flowComposer.numLines;
+                for (var j:int = 0; j < numLines; j++)
                 {
                     var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(j);
                     var textLine:TextLine = textFlowLine.getTextLine();
@@ -1344,7 +1349,8 @@ package UnitTest.Tests
                 var textFlow:TextFlow = cb.textFlow;
                 var bStr2Checked:Boolean = false;
                 var bStr3Checked:Boolean = false;
-                for (var j:int = 0; j < textFlow.flowComposer.numLines; j++)
+                var numLines:int = textFlow.flowComposer.numLines;
+                for (var j:int = 0; j < numLines; j++)
                 {
                     var textFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(j);
                     var textLine:TextLine = textFlowLine.getTextLine();
