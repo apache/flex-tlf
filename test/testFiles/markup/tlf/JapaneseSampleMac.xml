@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FIXME needs to be replaced -->
 <flow:TextFlow xmlns:flow="http://ns.adobe.com/textLayout/2008" fontFamily="小塚明朝 Pro L" blockProgression="tb" fontSize="14" textIndent="15" paragraphSpaceAfter="15" paddingTop="4" paddingLeft="4">
-        <flow:p><flow:span>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</flow:span></flow:p>
-		<flow:p><flow:span>OpenType日本語Proフォントに含まれる15,000超のグリフのほぼ半分には、文字コードが割り当てられていません。というのは、Unicodeや他の一般的なコード体系を用いてコードを割り当てる方法が存在しないためです。これは、Proフォントが膨大な数の異体字を含んでいることに起因します。OpenType日本語Standardフォントにもかなりの数の文字コードが割り当てられないグリフが含まれます。これらの文字コードが割り当てられないグリフににアクセスする方法として、グリフ置換による方法と字形パレットを用いる方法とがあります。</flow:span></flow:p>
-		<flow:p><flow:span>InDesign CSやIllustrator CSのようなアプリケーションが多くの高度なタイポグラフィ機能、特にグリフ置換機能をサポートすることによって、文字コードが割り当てられていないグリフにアクセスすることが可能となりました。これらには、JIS78 (JIS C 6226-1978) の異体字（漢字）、JIS83 (JIS X 0208-1983）の異体字（漢字）、その他の異体字（漢字）、修飾付き数字等のグリフ（中丸数字等）、純正の欧文イタリック体、およびその他記号類などが含まれます。このグリフアクセス法は、アプリケーションがOpenTypeのグリフ置換機能をサポートしていることが前提となります。</flow:span></flow:p>
+        <flow:p><flow:span>ApacheのFlex SDKには、人気のAdobeのFlex SDKの進化である。アパッチ Flex SDKには、簡単にフラッシュを構築するためのアプリケーション開発フレームワークである モバイルデバイス、Webブラウザ、およびデスクトップ·プラットフォームのためのベースのアプリケーション。 現在サポートされているプラットフォームは、次のとおりです。</flow:span></flow:p>
+		<flow:p><flow:span>Microsoft Windowsの</flow:span><flow:span>Mac OS Xの</flow:span><flow:span>アップルのiOS</flow:span><flow:span>GoogleのAndroid</flow:span><flow:span>RIMのBlackBerry</flow:span><flow:span>（リナックス</flow:span></flow:p>
+		<flow:p><flow:span>Linuxのサポートは現在実験ですし、問題が発生することがあります。アパッチ Flexプロジェクトは、完全にサポートされているLinuxのリリースを見てみたいが、我々は必要とする そのためには、コミュニティからの助け。あなたができるかどうか助けてください。</flow:span></flow:p>
 </flow:TextFlow>

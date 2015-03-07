@@ -118,14 +118,11 @@
 								<flow:p fontSize="36"><flow:span>“School” is written </flow:span><flow:span fontFamily="Adobe Arabic" locale="ar">مدرسة</flow:span><flow:span> in Arabic, </flow:span><flow:span fontFamily="{ChineseFontName}" locale="zh">學校</flow:span><flow:span> in Chinese, </flow:span><flow:span locale="el">σχολείο</flow:span><flow:span> in Greek, </flow:span><flow:span fontFamily="Adobe Hebrew" locale="he">בֵּית־סֵפֶר</flow:span><flow:span> in Hebrew, </flow:span><flow:span fontFamily="{JapaneseFontName}" locale="ja">学校</flow:span><flow:span> in Japanese, </flow:span><flow:span fontFamily="{KoreanFontName}" locale="ko">학교</flow:span><flow:span> in Korean, </flow:span><flow:span locale="be" fontFamily="Vrinda">স্কুল</flow:span><flow:span> in Bengali, </flow:span><flow:span locale="ru">школа</flow:span><flow:span> in Russian, and </flow:span><flow:span fontFamily="Adobe Thai" locale="th">อาศรม</flow:span><flow:span> in Thai.</flow:span></flow:p>	
 	</flow:TextFlow>
 
-	<!-- FIXME needs to be replaced -->
 	<flow:TextFlow id="udhrFlow" blockProgression="tb" fontSize="36" textAlign="right" direction="rtl" fontFamily="Adobe Arabic" locale="ar" paddingLeft="10" paddingRight="10">
-		 <flow:p><flow:span text="{boundTextSpan}"/></flow:p>
-								<flow:p><flow:span>الإعلان العالمي لحقوق الإنسان</flow:span></flow:p>
-								<flow:p><flow:span>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية والعدل </flow:span><flow:span locale="en" fontFamily="Myriad Pro">English here</flow:span><flow:span>والسلام في العالم.</flow:span></flow:p>
-								<flow:p><flow:span>ولما كان تناسي حقوق الإنسان وازدراؤها قد أفضيا إلى أعمال همجية آذت الضمير الإنساني. </flow:span><flow:span fontFamily="Adobe Hebrew" locale="he" fontSize="48">בֵּית־סֵפֶר</flow:span><flow:span>وكان غاية ما يرنو إليه عامة البشر انبثاق عالم يتمتع فيه الفرد بحرية القول والعقيدة ويتحرر من الفزع والفاقة.</flow:span></flow:p>
-								<flow:p><flow:span>ولما كان من الضروري أن يتولى القانون حماية حقوق الإنسان لكيلا يضطر المرء آخر الأمر إلى التمرد على الاستبداد والظلم.</flow:span></flow:p>
-								<flow:p><flow:span>ولما كانت شعوب الأمم المتحدة قد أكدت في الميثاق من جديد إيمانها بحقوق الإنسان الأساسية وبكرامة الفرد وقدره وبما للرجال والنساء من حقوق متساوية وحزمت أمرها على أن تدفع بالرقي الاجتماعي قدمًا وأن ترفع مستوى الحياة في جو من الحرية أفسح.</flow:span></flow:p>
+		<flow:p><flow:span text="{boundTextSpan}"/></flow:p>	
+		<flow:p><flow:span>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة الأساسية المعتمدة حاليا:</flow:span></flow:p>
+		<flow:p><flow:span>نظام التشغيل Mac OS X</flow:span><flow:span> أبل دائرة الرقابة الداخلية</flow:span><flow:span>جوجل الروبوت</flow:span><flow:span>RIM بلاك بيري</flow:span><flow:span locale="en" fontFamily="Myriad Pro">(Linux)</flow:span></flow:p>
+		<flow:p><flow:span>دعم لينكس هو تجريبي حاليا وكنت قد واجهت القضايا. أباتشي ان مشروع فليكس تود أن ترى بيان لينكس يؤيد تأييدا كاملا، لكننا بحاجة مساعدة من المجتمع من أجل القيام بذلك. الرجاء المساعدة ما إذا كنت تستطيع.</flow:span></flow:p>		
 	</flow:TextFlow>
 
 	</Declarations>

@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  FIXME needs to be replaced
--->
-<TextFlow fontFamily="Adobe Arabic" fontSize="18" textAlign="right" locale="ar" direction="rtl" whiteSpaceCollapse="preserve" xmlns="http://ns.adobe.com/textLayout/2008"><p tabStops="s100" paragraphStartIndent="25" textIndent="25"><span><tab/>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعض [Leading Tab with matching tab stop]</span></p><p tabStops="s100" paragraphStartIndent="25" textIndent="125"><span><tab/>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء [Leading Tab with inapplicable tab stop]</span></p></TextFlow>
+<TextFlow fontFamily="Adobe Arabic" fontSize="18" textAlign="right" locale="ar" direction="rtl" whiteSpaceCollapse="preserve" xmlns="http://ns.adobe.com/textLayout/2008"><p tabStops="s100" paragraphStartIndent="25" textIndent="25"><span><tab/>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. [Leading Tab with matching tab stop]</span></p><p tabStops="s100" paragraphStartIndent="25" textIndent="125"><span><tab/>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. [Leading Tab with inapplicable tab stop]</span></p></TextFlow>

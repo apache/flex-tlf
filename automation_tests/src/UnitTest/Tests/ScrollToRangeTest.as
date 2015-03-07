@@ -101,35 +101,26 @@ package UnitTest.Tests
 			testCanvas.rawChildren.addChild(s);
 		}
 		
-		// FIXME needs to be replaced
 		private static var englishText:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">visible word</span>elit.</p>';
-								private static var arabicText:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحرية</span> والعدل.</p>';
-								private static var arabicAndEnglishText:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية<span styleName="scrollToThis">visible word</span>والعدل.</p>';
-								private static var arabicAndEnglishInScrollText1:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> engالحرية</span>والعدل.</p>';
-								private static var arabicAndEnglishInScrollText2:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحريةeng</span>والعدل.</p>';
-		
-		// FIXME needs to be replaced
-		private static var japaneseText:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<span styleName="scrollToThis">にアクセ</span>スする方法について解説します。</p>';
-		// FIXME needs to be replaced
-		private static var japaneseTCYText:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<tcy><span styleName="scrollToThis">0123</span></tcy>スする方法について解説します。</p>';
+		private static var arabicText:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis">التطبيقات</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishText:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis">visible word</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishInScrollText1:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis"> English العربية</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishInScrollText2:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis"> العربية English</span> المعتمدة حاليا:</p>';
+		private static var japaneseText:String = '<p>ApacheのFlex SDKには、人気のAdobeのFlex SDK<span styleName="scrollToThis">の進</span>化である。</p>';
+		private static var japaneseTCYText:String = '<p>ApacheのFlex SDKには、人気のAdobeのFlex SDK<tcy><span styleName="scrollToThis">の進</span><tcy>化である。</p>';
 		
 		private static var englishTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur  <span styleName="scrollToThis">visible word</span>elit ipsum dolor sit amet, consectetur.</p>';
-								private static var englishArabicSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
-								private static var englishArabicAndEnglishSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحرية eng</span>elit ipsum dolor sit amet, consectetur.</p>';
-								private static var englishEnglishAndArabicSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">eng الحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
-								private static var englishArabicAndEnglishSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحريةeng</span>elit ipsum dolor sit amet, consectetur.</p>';
-								private static var englishEnglishAndArabicSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">engالحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
-								// FIXME needs to be replaced
-								private static var arabicTextLong:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحرية</span> والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
-								private static var arabicAndEnglishTextLong:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس الحرية<span styleName="scrollToThis">visible word</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
-								private static var arabicAndEnglishInScrollText1Long:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> engالحرية</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
-								private static var arabicAndEnglishInScrollText2Long:String = '<p>لمّا كان الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس<span styleName="scrollToThis"> الحريةeng</span>والعدل الاعتراف بالكرامة المتأصلة في جميع أعضاء الأسرة البشرية وبحقوقهم المتساوية الثابتة هو أساس.</p>';
-		
-		// FIXME needs to be replaced
-		private static var japaneseTextLong:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<span styleName="scrollToThis">にアクセ</span>スする方法について解説しますが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセク。</p>';
-		// FIXME needs to be replaced
-		private static var japaneseTCYTextLong:String = '<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフ<tcy><span styleName="scrollToThis">0123</span></tcy>スする方法について解説しまが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクす。</p>';
-
+		private static var englishArabicSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
+		private static var englishArabicAndEnglishSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحرية eng</span>elit ipsum dolor sit amet, consectetur.</p>';
+		private static var englishEnglishAndArabicSpanTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">eng الحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
+		private static var englishArabicAndEnglishSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">الحريةeng</span>elit ipsum dolor sit amet, consectetur.</p>';
+		private static var englishEnglishAndArabicSpanNoSpaceTextLong:String = '<p>Lorem ipsum dolor sit amet, consectetur <span styleName="scrollToThis">engالحرية</span>elit ipsum dolor sit amet, consectetur.</p>';
+		private static var arabicTextLong:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis">التطبيقات</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishTextLong:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis">visible word</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishInScrollText1Long:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis"> English العربية</span> المعتمدة حاليا:</p>';
+		private static var arabicAndEnglishInScrollText2Long:String = '<p>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة <span styleName="scrollToThis"> العربية English</span> المعتمدة حاليا:</p>';
+		private static var japaneseTextLong:String = '<p>ApacheのFlex SDKには、人気のAdobeのFlex SDKの進化である。アパッチ Flex SDKには、簡単にフラッシュを構築するためのアプリケーション開発フレームワークである <span styleName="scrollToThis">モバイルデバイス</span>、Webブラウザ、およびデスクトップ·プラットフォームのためのベースのアプリケーション。 現在サポートされているプラットフォームは、次のとおりです。</:p>';
+		private static var japaneseTCYTextLong:String = '<p>ApacheのFlex SDKには、人気のAdobeのFlex SDKの進化である。アパッチ Flex SDKには、簡単にフラッシュを構築するためのアプリケーション開発フレームワークである <tcy><span styleName="scrollToThis">モバイルデバイス</span></tcy>、Webブラウザ、およびデスクトップ·プラットフォームのためのベースのアプリケーション。 現在サポートされているプラットフォームは、次のとおりです。</:p>';
 		
 		// The following tests all test scrolling to a range that is on a single line. The basic philosphy is to read in a TextFow markup which has text in red, 
 		// with styleName "scrollToThis", find the range, and call scrollToThis to force the red text to be in view. We pass an initial scroll position, and
