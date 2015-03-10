@@ -22,89 +22,89 @@
     xmlns="http://ns.adobe.com/mxml/2009"
     xmlns:s="library://ns.adobe.com/flex/spark" 
     xmlns:mx="library://ns.adobe.com/flex/mx"
-    xmlns:flow="library://ns.adobe.com/flashx/textLayout" 
-	xmlns:flashGeometry="flash.geom.*"
+    xmlns:flow="library://ns.adobe.com/flashx/textLayout"
 	creationComplete="handleCreationComplete()"
 	preinitialize="preinitialize()"
 	resize="handleResize()">
 
     <Script>
     	<![CDATA[
-    	import flashx.textLayout.edit.EditManager;
-    	import flashx.textLayout.container.ContainerController;
-    	//import flashx.textLayout.container.WrapManager;
- 		
-		[Bindable]
-		private var ChineseFontName:String;
-		[Bindable]
-		private var KoreanFontName:String;
-		[Bindable]
-		private var JapaneseFontName:String;
-		
-		private var schoolContainer:Sprite;
-		private var udhrContainer:Sprite;
-		
-		private const insetWidth:Number = 8;
-		private const insetHeight:Number = 8;
+        import flashx.textLayout.container.ContainerController;
+        import flashx.textLayout.edit.EditManager;
 
-		public function handleCreationComplete(): void
-		{
+        //import flashx.textLayout.container.WrapManager;
 
-			schoolContainer = new Sprite();
-			schoolContainer.x = 4;
-			var schoolController:ContainerController = new ContainerController(schoolContainer);
-			schoolFlow.flowComposer.addController(schoolController);
-		//	schoolController.wraps = new WrapManager();
-		//	schoolController.wraps.wraps = [ new Rectangle(0, 150, 144, 178)];
-			textPanel.rawChildren.addChild(schoolContainer);
-			
-			udhrContainer = new Sprite();
-			udhrFlow.flowComposer.addController(new ContainerController(udhrContainer));
-			textPanel.rawChildren.addChild(udhrContainer);
+        [Bindable]
+        private var ChineseFontName:String;
+        [Bindable]
+        private var KoreanFontName:String;
+        [Bindable]
+        private var JapaneseFontName:String;
 
-			schoolFlow.interactionManager = new EditManager();
-			udhrFlow.interactionManager = new EditManager();
+        private var schoolContainer:Sprite;
+        private var udhrContainer:Sprite;
 
-			handleResize();
-		}
+        private const insetWidth:Number = 8;
+        private const insetHeight:Number = 8;
 
-		public function preinitialize(): void
-		{
-			XML.ignoreWhitespace = false;
-			
-			if (Capabilities.os.search("Mac OS") > -1)
-			{
-				ChineseFontName = "宋体";
-				KoreanFontName = "Adobe 명조 Std M";
-				JapaneseFontName = "小塚明朝 Pro L";
-			}
-			else
-			{
-				ChineseFontName = "Adobe Song Std L";
-				KoreanFontName = "Adobe Myungjo Std M";
-				JapaneseFontName = "Kozuka Mincho Pro L";
-			}
-		}
-		
-		public function handleResize(): void
-		{
-			
-			if (!schoolContainer)		// we get resize before creationComplete
-				return;
-				
-			var stageWidth:Number = textPanel.width;
-			var stageHeight:Number = textPanel.height;
-			
-			var compositionWidth:Number = (stageWidth-insetWidth)/2;
-			var compositionHeight:Number = stageHeight - insetHeight;
-			schoolFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+        public function handleCreationComplete():void
+        {
 
-			udhrFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
-			udhrContainer.x = (stageWidth-insetWidth)/2 + insetWidth;
+            schoolContainer = new Sprite();
+            schoolContainer.x = 4;
+            var schoolController:ContainerController = new ContainerController(schoolContainer);
+            schoolFlow.flowComposer.addController(schoolController);
+            //	schoolController.wraps = new WrapManager();
+            //	schoolController.wraps.wraps = [ new Rectangle(0, 150, 144, 178)];
+            textPanel.rawChildren.addChild(schoolContainer);
 
-			schoolFlow.flowComposer.updateAllControllers();
-			udhrFlow.flowComposer.updateAllControllers();
-		}
+            udhrContainer = new Sprite();
+            udhrFlow.flowComposer.addController(new ContainerController(udhrContainer));
+            textPanel.rawChildren.addChild(udhrContainer);
+
+            schoolFlow.interactionManager = new EditManager();
+            udhrFlow.interactionManager = new EditManager();
+
+            handleResize();
+        }
+
+        public function preinitialize():void
+        {
+            XML.ignoreWhitespace = false;
+
+            if (Capabilities.os.search("Mac OS") > -1)
+            {
+                ChineseFontName = "宋体";
+                KoreanFontName = "Adobe 명조 Std M";
+                JapaneseFontName = "小塚明朝 Pro L";
+            }
+            else
+            {
+                ChineseFontName = "Adobe Song Std L";
+                KoreanFontName = "Adobe Myungjo Std M";
+                JapaneseFontName = "Kozuka Mincho Pro L";
+            }
+        }
+
+        public function handleResize():void
+        {
+
+            if (!schoolContainer)		// we get resize before creationComplete
+                return;
+
+            var stageWidth:Number = textPanel.width;
+            var stageHeight:Number = textPanel.height;
+
+            var compositionWidth:Number = (stageWidth - insetWidth) / 2;
+            var compositionHeight:Number = stageHeight - insetHeight;
+            schoolFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+
+            udhrFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+            udhrContainer.x = (stageWidth - insetWidth) / 2 + insetWidth;
+
+            schoolFlow.flowComposer.updateAllControllers();
+            udhrFlow.flowComposer.updateAllControllers();
+        }
         ]]>
     
     </Script>
@@ -118,7 +118,6 @@
 	</flow:TextFlow>
 
 	<flow:TextFlow id="udhrFlow" blockProgression="rl" fontSize="36" textAlign="right" direction="rtl" fontFamily="Adobe Arabic" locale="ar" paddingLeft="10" paddingRight="10">
-		<flow:p><flow:span text="{boundTextSpan}"/></flow:p>	
 		<flow:p><flow:span>وأدوبي فليكس SDK هو تطور SDK أدوبي فليكس شعبية. أباتشي فليكس SDK هو إطار تطوير التطبيقات لبناء فلاش بسهولة التطبيقات المستندة للهواتف النقالة، ومتصفحات الويب، ومنصات سطح المكتب. وتشمل الأنظمة الأساسية المعتمدة حاليا:</flow:span></flow:p>
 		<flow:p><flow:span>نظام التشغيل Mac OS X</flow:span><flow:span> أبل دائرة الرقابة الداخلية</flow:span><flow:span>جوجل الروبوت</flow:span><flow:span>RIM بلاك بيري</flow:span><flow:span locale="en" fontFamily="Myriad Pro">(Linux)</flow:span></flow:p>
 		<flow:p><flow:span>دعم لينكس هو تجريبي حاليا وكنت قد واجهت القضايا. أباتشي ان مشروع فليكس تود أن ترى بيان لينكس يؤيد تأييدا كاملا، لكننا بحاجة مساعدة من المجتمع من أجل القيام بذلك. الرجاء المساعدة ما إذا كنت تستطيع.</flow:span></flow:p>		

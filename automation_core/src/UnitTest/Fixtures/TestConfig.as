@@ -18,11 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Fixtures
 {
-	import flashx.textLayout.formats.BlockProgression;
-	import flashx.textLayout.formats.Direction;
-	import flash.system.Capabilities;
+    import flash.system.Capabilities;
 
-	public class TestConfig
+    import flashx.textLayout.formats.BlockProgression;
+    import flashx.textLayout.formats.Direction;
+
+    public class TestConfig
 	{
         private static var _instance:TestConfig;
 
@@ -34,7 +35,6 @@ package UnitTest.Fixtures
 		public var flashVersion:String = Capabilities.version.substr(4,4);
         public var testXMLStore:XML;
 
-        public var testConfigData:XML;
         public var normalizedUrl:String;
 
 		public function TestConfig(testConfigEnforcer:TestConfigEnforcer)

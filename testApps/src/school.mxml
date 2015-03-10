@@ -22,90 +22,89 @@
     xmlns="http://ns.adobe.com/mxml/2009"
  	xmlns:s="library://ns.adobe.com/flex/spark"
  	xmlns:mx="library://ns.adobe.com/flex/mx"
-    xmlns:flow="library://ns.adobe.com/flashx/textLayout" 
-	xmlns:flashGeometry="flash.geom.*"
+    xmlns:flow="library://ns.adobe.com/flashx/textLayout"
 	creationComplete="handleCreationComplete()"
 	preinitialize="preinitialize()"
 	resize="handleResize()">
 
     <Script>
     	<![CDATA[
-    	import flashx.textLayout.edit.EditManager;
-      import flashx.textLayout.container.ContainerController;
-		
-		[Bindable]
-		private var ChineseFontName:String;
-		[Bindable]
-		private var KoreanFontName:String;
-		[Bindable]
-		private var JapaneseFontName:String;
-		
-			[Bindable]
-			public var boundTextSpan:String;
-			
-		private var schoolContainer:Sprite;
-		private var udhrContainer:Sprite;
-		
-		private const insetWidth:Number = 8;
-		private const insetHeight:Number = 8;
+        import flashx.textLayout.container.ContainerController;
+        import flashx.textLayout.edit.EditManager;
 
-		public function handleCreationComplete(): void
-		{
-			if (Capabilities.os.search("Mac OS") > -1)
-			{
-				ChineseFontName = "宋体";
-				KoreanFontName = "Adobe 명조 Std M";
-				JapaneseFontName = "小塚明朝 Pro L";
-			}
-			else
-			{
-				ChineseFontName = "Adobe Song Std L";
-				KoreanFontName = "Adobe Myungjo Std M";
-				JapaneseFontName = "Kozuka Mincho Pro L";
-			}
-			boundTextSpan = "This span is bound for glory";
- 
-			schoolContainer = new Sprite();
-			schoolContainer.x = 4;
-			var schoolController:ContainerController = new ContainerController(schoolContainer);
-			schoolFlow.flowComposer.addController(schoolController);
-		//	schoolController.wraps = new WrapManager();
-		//	schoolController.wraps.wraps = [ new Rectangle(0, 150, 144, 178)];
-			textPanel.rawChildren.addChild(schoolContainer);
-			
-			udhrContainer = new Sprite();
-			udhrFlow.flowComposer.addController(new ContainerController(udhrContainer));
-			textPanel.rawChildren.addChild(udhrContainer);
+        [Bindable]
+        private var ChineseFontName:String;
+        [Bindable]
+        private var KoreanFontName:String;
+        [Bindable]
+        private var JapaneseFontName:String;
 
-			schoolFlow.interactionManager = new EditManager();
-			udhrFlow.interactionManager = new EditManager();
-			handleResize();
-		}
+        [Bindable]
+        public var boundTextSpan:String;
 
-		public function preinitialize(): void
-		{
-			XML.ignoreWhitespace = false;
-		}
-		
-		public function handleResize(): void
-		{
-			
-			if (!schoolContainer)		// we get resize before creationComplete
-				return;
-				
-			var stageWidth:Number = textPanel.width;
-			var stageHeight:Number = textPanel.height;
-			
-			var compositionWidth:Number = (stageWidth-insetWidth)/2;
-			var compositionHeight:Number = stageHeight - insetHeight;
-			schoolFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+        private var schoolContainer:Sprite;
+        private var udhrContainer:Sprite;
 
-			udhrFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
-			udhrContainer.x = (stageWidth-insetWidth)/2 + insetWidth;
+        private const insetWidth:Number = 8;
+        private const insetHeight:Number = 8;
 
-			schoolFlow.flowComposer.updateAllControllers();
-			udhrFlow.flowComposer.updateAllControllers();
-		}
+        public function handleCreationComplete():void
+        {
+            if (Capabilities.os.search("Mac OS") > -1)
+            {
+                ChineseFontName = "宋体";
+                KoreanFontName = "Adobe 명조 Std M";
+                JapaneseFontName = "小塚明朝 Pro L";
+            }
+            else
+            {
+                ChineseFontName = "Adobe Song Std L";
+                KoreanFontName = "Adobe Myungjo Std M";
+                JapaneseFontName = "Kozuka Mincho Pro L";
+            }
+            boundTextSpan = "This span is bound for glory";
+
+            schoolContainer = new Sprite();
+            schoolContainer.x = 4;
+            var schoolController:ContainerController = new ContainerController(schoolContainer);
+            schoolFlow.flowComposer.addController(schoolController);
+            //	schoolController.wraps = new WrapManager();
+            //	schoolController.wraps.wraps = [ new Rectangle(0, 150, 144, 178)];
+            textPanel.rawChildren.addChild(schoolContainer);
+
+            udhrContainer = new Sprite();
+            udhrFlow.flowComposer.addController(new ContainerController(udhrContainer));
+            textPanel.rawChildren.addChild(udhrContainer);
+
+            schoolFlow.interactionManager = new EditManager();
+            udhrFlow.interactionManager = new EditManager();
+            handleResize();
+        }
+
+        public function preinitialize():void
+        {
+            XML.ignoreWhitespace = false;
+        }
+
+        public function handleResize():void
+        {
+
+            if (!schoolContainer)		// we get resize before creationComplete
+                return;
+
+            var stageWidth:Number = textPanel.width;
+            var stageHeight:Number = textPanel.height;
+
+            var compositionWidth:Number = (stageWidth - insetWidth) / 2;
+            var compositionHeight:Number = stageHeight - insetHeight;
+            schoolFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+
+            udhrFlow.flowComposer.getControllerAt(0).setCompositionSize(compositionWidth, compositionHeight);
+            udhrContainer.x = (stageWidth - insetWidth) / 2 + insetWidth;
+
+            schoolFlow.flowComposer.updateAllControllers();
+            udhrFlow.flowComposer.updateAllControllers();
+        }
         ]]>
     
     </Script>

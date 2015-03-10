@@ -160,11 +160,6 @@ package UnitTest.Tests
             super.tearDownTest();
         }
 
-        [AfterClass]
-        public static function tearItDown():void {
-            TestConfig.getInstance().testConfigData = null;
-        }
-
         private function set columnCount(count:Object):void
         {
             if (testContainer)
