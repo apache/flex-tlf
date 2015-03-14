@@ -88,7 +88,7 @@ package UnitTest.Tests
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var shortTextMouseEventRLLTRTestDp:Array;
 
-        public static var shortTextMouseEventRLLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLLTRTestDp");
+        public static var shortTextMouseEventRLLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLLTRTest");
 
         [DataPoints(loader="shortTextMouseEventRLRTLTestLoader")]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
