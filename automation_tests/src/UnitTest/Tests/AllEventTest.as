@@ -19,9 +19,10 @@
 package UnitTest.Tests
 {
 
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.FileRepository;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
     import UnitTest.Validation.*;
 
@@ -68,12 +69,43 @@ package UnitTest.Tests
     use namespace tlf_internal;
 
     [TestCase(order=6)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class AllEventTest extends VellumTestCase
     {
+        [DataPoints(loader="shortTextMouseEventTBLTRTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var shortTextMouseEventTBLTRTestDp:Array;
+
+        public static var shortTextMouseEventTBLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventTBLTRTest");
+
+        [DataPoints(loader="shortTextMouseEventTBRTLTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var shortTextMouseEventTBRTLTestDp:Array;
+
+        public static var shortTextMouseEventTBRTLTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventTBRTLTest");
+
+        [DataPoints(loader="shortTextMouseEventRLLTRTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var shortTextMouseEventRLLTRTestDp:Array;
+
+        public static var shortTextMouseEventRLLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLLTRTestDp");
+
+        [DataPoints(loader="shortTextMouseEventRLRTLTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var shortTextMouseEventRLRTLTestDp:Array;
+
+        public static var shortTextMouseEventRLRTLTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLRTLTest");
+
+        [DataPoints(loader="flowElementMouseEventTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var flowElementMouseEventTestDp:Array;
+
+        public static var flowElementMouseEventTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "FlowElementMouseEventTest");
+
         [Embed(source="../../../../test/testFiles/assets/smiley.gif")]
         private var embeddedGIF:Class;
 
-        private const textTBLTR:String = "<TextFlow blockProgression='tb' direction='ltr' lineBreak='explicit' version='3.0.0' xmlns='http://ns.adobe.com/textLayout/2008\'><p paddingLeft='15' paragraphSpaceBefore='15' paragraphSpaceAfter='15'><span>MIA - </span><a href='http://www.adobe.com/go/flashplayer' target='_self'><span>MENU</span></a><span> - DEN</span></p></TextFlow>";
+        private var textTBLTR:String = "<TextFlow blockProgression='tb' direction='ltr' lineBreak='explicit' version='3.0.0' xmlns='http://ns.adobe.com/textLayout/2008\'><p paddingLeft='15' paragraphSpaceBefore='15' paragraphSpaceAfter='15'><span>MIA - </span><a href='http://www.adobe.com/go/flashplayer' target='_self'><span>MENU</span></a><span> - DEN</span></p></TextFlow>";
 
         public function AllEventTest():void
         {
@@ -81,16 +113,6 @@ package UnitTest.Tests
             metaData = {};
             // Note: These must correspond to a Watson product area (case-sensitive)
             metaData.productArea = "Text Composition";
-        }
-
-        public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
-        {
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventTBLTR.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventTBRTL.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLLTR.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLRTL.xml");
-            var testCaseClass:Class = AllEventTest;
-            VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
         }
 
         [BeforeClass]
@@ -101,7 +123,6 @@ package UnitTest.Tests
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventTBRTL.xml");
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLLTR.xml");
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLRTL.xml");
-            VellumTestCase.suiteFromXML(AllEventTest, testConfig.testXMLStore, testConfig, null);
         }
 
         [Before]
@@ -114,11 +135,6 @@ package UnitTest.Tests
         override public function tearDownTest():void
         {
             super.tearDownTest();
-        }
-
-        private function beginSelectionEventValidation(target:IEventDispatcher, eventCount:int, validater:Function):void
-        {
-            target.addEventListener(SelectionEvent.SELECTION_CHANGE, validater);
         }
 
         //SelectionEvent Test Cases
@@ -191,7 +207,6 @@ package UnitTest.Tests
             theRects = GeometryUtil.getHighlightBounds(new TextRange(textFlow, SelManager.absoluteStart, SelManager.absoluteEnd));
             theLine = theRects[0].textLine as TextLine;
             rect = theRects[0].rect as Rectangle;
-            tfl = theLine.userData as TextFlowLine;
             var mouseEvent:MouseEvent = new MouseEvent(MouseEvent.MOUSE_DOWN, true, true, rect.x, rect.y, theLine, false, false, false, false);
             validator.reset(new SelectionEvent(SelectionEvent.SELECTION_CHANGE, false, false,
                     new SelectionState(TestFrame.textFlow, 10, 10)));
@@ -417,7 +432,7 @@ package UnitTest.Tests
         {
             var validator:CompositionCompleteEventValidator;
 
-            if (TestFrame.textFlow.blockProgression == "rl")
+            if (TestFrame.textFlow.blockProgression == BlockProgression.RL)
             {
                 validator = new CompositionCompleteEventValidator(TestFrame.textFlow,
                         new CompositionCompleteEvent(CompositionCompleteEvent.COMPOSITION_COMPLETE, false, false, TestFrame.textFlow, 0, 744));
@@ -434,32 +449,31 @@ package UnitTest.Tests
             assertTrue("Expected CompositionCompleEvent showing after font size changing", validator.validate(1));
         }
 
-        [Test]
-        [Ignore]
-        public function ShortTextMouseEventTBLTRTest():void
+        [Test(dataProvider=shortTextMouseEventTBLTRTestDp)]
+        public function ShortTextMouseEventTBLTRTest(dpData:TestCaseVo):void
         {
-            SelManager.textFlow = getTextFlowTBLTR();
+            SelManager.textFlow = getTextFlowTBLTR(dpData);
             ShortTextMouseEventTest();
         }
 
-        [Test]
-        [Ignore]
-        public function ShortTextMouseEventTBRTLTest():void
+        [Test(dataProvider=shortTextMouseEventTBRTLTestDp)]
+        public function ShortTextMouseEventTBRTLTest(dpData:TestCaseVo):void
         {
+            SelManager.textFlow = getTextFlowTBLTR(dpData);
             ShortTextMouseEventTest();
         }
 
-        [Test]
-        [Ignore]
-        public function ShortTextMouseEventRLLTRTest():void
+        [Test(dataProvider=shortTextMouseEventRLLTRTestDp)]
+        public function ShortTextMouseEventRLLTRTest(dpData:TestCaseVo):void
         {
+            SelManager.textFlow = getTextFlowTBLTR(dpData);
             ShortTextMouseEventTest();
         }
 
-        [Test]
-        [Ignore]
-        public function ShortTextMouseEventRLRTLTest():void
+        [Test(dataProvider=shortTextMouseEventRLRTLTestDp)]
+        public function ShortTextMouseEventRLRTLTest(dpData:TestCaseVo):void
         {
+            SelManager.textFlow = getTextFlowTBLTR(dpData);
             ShortTextMouseEventTest();
         }
 
@@ -469,7 +483,6 @@ package UnitTest.Tests
         {
             var validator:FlowElementMouseEventValidator;
             SelManager.selectRange(6, 10);
-            var ttt:String = SelManager.textFlow.getText();
 
             //get the bounds of the link
             var selectionState:SelectionState = SelManager.getSelectionState();
@@ -586,18 +599,18 @@ package UnitTest.Tests
         // 1. link on part of the line
         // 2. link across several lines
         // For now, only covering first line in link
-        [Test]
-        public function FlowElementMouseEventTest():void
+        [Test(dataProvider=flowElementMouseEventTestDp)]
+        public function FlowElementMouseEventTest(dpData:TestCaseVo):void
         {
             var validator:FlowElementMouseEventValidator;
 
             var cc:ContainerController = SelManager.textFlow.flowComposer.getControllerAt(0);
-            if (TestData.id == "FlowElementMouseEventTestScrollingOn")
+            if (dpData.id == "FlowElementMouseEventTestScrollingOn")
             {
                 cc.verticalScrollPolicy = ScrollPolicy.ON;
                 cc.horizontalScrollPolicy = ScrollPolicy.ON;
             }
-            else if (TestData.id == "FlowElementMouseEventTestScrolled")
+            else if (dpData.id == "FlowElementMouseEventTestScrolled")
             {
                 cc.verticalScrollPolicy = ScrollPolicy.ON;
                 cc.horizontalScrollPolicy = ScrollPolicy.ON;
@@ -613,7 +626,6 @@ package UnitTest.Tests
                 assertTrue("Expected to get a scroll event, but didn't", validator1.validate(1));
 
                 // Verify that the direction and delta in the event are correct
-                var scrollEvent:ScrollEvent = validator1.lastEvent as ScrollEvent;
                 validateScrollEvent(validator1.lastEvent as ScrollEvent, originalXScroll, originalYScroll);
 
                 // scroll to a new position, and check that works as expected
@@ -629,7 +641,7 @@ package UnitTest.Tests
             TestFrame.textFlow.flowComposer.updateAllControllers();
 
             var container:DisplayObjectContainer = SelManager.textFlow.flowComposer.getControllerAt(0).container;
-            if (TestData.id == "FlowElementMouseEventTestMeasure")
+            if (dpData.id == "FlowElementMouseEventTestMeasure")
             {
                 container.height = NaN;
                 container.width = NaN;
@@ -714,7 +726,6 @@ package UnitTest.Tests
             assertTrue("Expected to get a scroll event, but didn't", validator.validate(1));
 
             // Verify that the direction and delta in the event are correct
-            var scrollEvent:ScrollEvent = validator.lastEvent as ScrollEvent;
             validateScrollEvent(validator.lastEvent as ScrollEvent, originalXScroll, originalYScroll);
 
             // Now scroll up, and check that works as expected
@@ -752,8 +763,14 @@ package UnitTest.Tests
             textFlow.interactionManager.selectRange(0, textFlow.textLength);
         }
 
-        private function getTextFlowTBLTR():TextFlow
+        private function getTextFlowTBLTR(testCase:TestCaseVo = null):TextFlow
         {
+            if (testCase && testCase.fileName)
+            {
+                var path:String = "../../test/testFiles/markup/tlf/".concat(testCase.fileName);
+                textTBLTR = FileRepository.getFile(TestConfig.getInstance().baseURL, path);
+            }
+
             var configuration:Configuration = TextFlow.defaultConfiguration.clone();
             return TextConverter.importToFlow(textTBLTR, TextConverter.TEXT_LAYOUT_FORMAT, configuration);
         }

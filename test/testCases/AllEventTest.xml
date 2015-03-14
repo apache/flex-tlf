@@ -30,23 +30,15 @@
 <TestCase functionName="CompositionCompleteEventTest"/>
 <TestCase functionName="UpdateCompleteEventTest"/>
 <TestCase functionName="ShortTextMouseEventTBLTRTest">
-		<TestData name="tb_rtl">false</TestData>
-		<TestData name="rl_ltr">false</TestData>
 		<TestData name="fileName">ShortTextMouseEventTBLTR.xml</TestData>
 </TestCase>
 <TestCase functionName="ShortTextMouseEventTBRTLTest">
-		<TestData name="tb_rtl">false</TestData>
-		<TestData name="rl_ltr">false</TestData>
 		<TestData name="fileName">ShortTextMouseEventTBRTL.xml</TestData>
 </TestCase>
 <TestCase functionName="ShortTextMouseEventRLLTRTest">
-		<TestData name="tb_rtl">false</TestData>
-		<TestData name="rl_ltr">false</TestData>
 		<TestData name="fileName">ShortTextMouseEventRLLTR.xml</TestData>
 </TestCase>
 <TestCase functionName="ShortTextMouseEventRLRTLTest">
-		<TestData name="tb_rtl">false</TestData>
-		<TestData name="rl_ltr">false</TestData>
 		<TestData name="fileName">ShortTextMouseEventRLRTL.xml</TestData>
 </TestCase>
 <TestCase functionName="FlowElementMouseEventTest">
