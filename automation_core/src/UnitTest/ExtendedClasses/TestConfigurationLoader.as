@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.ExtendedClasses
 {
+    import UnitTest.Fixtures.FileRepository;
     import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
@@ -31,6 +32,8 @@ package UnitTest.ExtendedClasses
 
     public class TestConfigurationLoader implements IExternalDependencyLoader, IResponder
     {
+        private const TEST_CONTENT_PATH:String = "../../test/testFiles/markup/tlf/";
+
         private var httpService:HTTPService;
         private var token:ExternalDependencyToken;
         private var testName:String;
@@ -81,9 +84,15 @@ package UnitTest.ExtendedClasses
             {
                 var testsData:XMLList = testCase.TestData;
                 var testCaseVo:TestCaseVo = new TestCaseVo(testCase.@functionName);
+                var fileLoaded:Boolean = false;
                 for each (var testData:XML in testsData)
                 {
                     testCaseVo[testData.@name] = testData.toString();
+                    if (testCaseVo.fileName && !fileLoaded)
+                    {
+                        FileRepository.readFile(TestConfig.getInstance().baseURL, TEST_CONTENT_PATH.concat(testCaseVo.fileName), null, fault);
+                        fileLoaded = true;
+                    }
                 }
                 testConfigData.push([testCaseVo]);
             }

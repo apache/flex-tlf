@@ -115,16 +115,6 @@ package UnitTest.Tests
             metaData.productArea = "Text Composition";
         }
 
-        [BeforeClass]
-        public static function setUpClass():void
-        {
-            var testConfig:TestConfig = TestConfig.getInstance();
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventTBLTR.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventTBRTL.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLLTR.xml");
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/ShortTextMouseEventRLRTL.xml");
-        }
-
         [Before]
         override public function setUpTest():void
         {

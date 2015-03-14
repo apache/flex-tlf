@@ -18,8 +18,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.FileRepository;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
     import flash.display.*;
@@ -38,8 +40,15 @@ package UnitTest.Tests
     import org.flexunit.asserts.fail;
 
     [TestCase(order=2)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class FactoryImportTest extends VellumTestCase
     {
+        [DataPoints(loader="importTestLoader")]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var importTestDp:Array;
+
+        public static var importTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/FactoryImportTests.xml", "importTest");
+
         private var ItemsToRemove:Array;
         private var TestCanvas:Canvas = null;
         private var fileForFactory:String;
@@ -50,8 +59,6 @@ package UnitTest.Tests
             super("", "EventOverrideTest", TestConfig.getInstance());
 
             containerType = "custom";
-            fileForFactory = "simple.xml";
-
             metaData = {};
             // Note: These must correspond to a Watson product area (case-sensitive)
             metaData.productArea = "Import/Export";
@@ -79,15 +86,16 @@ package UnitTest.Tests
             super.tearDownTest();
         }
 
-        [Test]
-        public function importTest():void
+        [Test(dataProvider=importTestDp)]
+        public function importTest(dpData:TestCaseVo):void
         {
-            var xmlRoot:XML = FileRepository.getFileAsXML(baseURL, "../../test/testFiles/markup/tlf/" + fileForFactory);
+            var xmlRoot:XML = FileRepository.getFileAsXML(baseURL, "../../test/testFiles/markup/tlf/" + dpData.fileName);
             if (!xmlRoot)
             {
                 fail("File not loaded -- timeout?");
                 return;
             }
+            fileForFactory = dpData.fileName;
             var parser:ITextImporter = testDataImportParser;
             flowFromXML = parser.importToFlow(xmlRoot);
             processInlines(flowFromXML);
