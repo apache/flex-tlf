@@ -106,7 +106,7 @@
 		<TestData name="tb_rtl">false</TestData>
 		<TestData name="rl_ltr">false</TestData>
 	</TestCase-->	
-	<TestCase functionName="DraggingSelectionOneFlowToAnotherTest">
+	<TestCase functionName="draggingSelectionOneFlowToAnotherTest">
 		<TestData name="tb_rtl">false</TestData>
 		<TestData name="rl_ltr">false</TestData>
 		<TestData name="posOfSelection1">3</TestData>	
