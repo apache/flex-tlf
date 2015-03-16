@@ -63,18 +63,6 @@ package UnitTest.Tests
     [RunWith("org.flexunit.runners.Parameterized")]
     public class ContainerTypeTest extends VellumTestCase
     {
-        [DataPoints(loader=singleTextLineLoader)]
-        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
-        public static var singleTextLineDp:Array;
-
-        public static var singleTextLineLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "singleTextLine");
-
-        [DataPoints(loader=tenTextLinesLoader)]
-        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
-        public static var tenTextLinesDp:Array;
-
-        public static var tenTextLinesLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "tenTextLinesDp");
-
         [DataPoints(loader=clickLinkedContainerTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var clickLinkedContainerTestDp:Array;
@@ -93,12 +81,6 @@ package UnitTest.Tests
 
         public static var navigateByLineTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "navigateByLineTest");
 
-        [DataPoints(loader=tenTextLinesStaticLoader)]
-        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
-        public static var tenTextLinesStaticDp:Array;
-
-        public static var tenTextLinesStaticLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "tenTextLinesStatic");
-
         [DataPoints(loader=singleTextLineStaticLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var singleTextLineStaticDp:Array;
@@ -110,6 +92,30 @@ package UnitTest.Tests
         public static var clickMultiLinkedContainerTestDp:Array;
 
         public static var clickMultiLinkedContainerTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "clickMultiLinkedContainerTest");
+
+        [DataPoints(loader=selectionChangeFocusTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var selectionChangeFocusTestDp:Array;
+
+        public static var selectionChangeFocusTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "SelectionChangeFocusTest");
+
+        [DataPoints(loader=draggingSelectionOneFlowToAnotherTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var draggingSelectionOneFlowToAnotherTestDp:Array;
+
+        public static var draggingSelectionOneFlowToAnotherTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "draggingSelectionOneFlowToAnotherTest");
+
+        [DataPoints(loader=containerRecomposeAndConsistenceTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var containerRecomposeAndConsistenceTestDp:Array;
+
+        public static var containerRecomposeAndConsistenceTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "containerRecomposeAndConsistenceTest");
+
+        [DataPoints(loader=autoAndDragScrollingTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var autoAndDragScrollingTestDp:Array;
+
+        public static var autoAndDragScrollingTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "autoAndDragScrollingTest");
 
         private var TestCanvas:Canvas = null;
         private var ItemsToRemove:Array;
@@ -132,6 +138,7 @@ package UnitTest.Tests
         [Before]
         override public function setUpTest():void
         {
+            super.setUpTest();
             cleanUpTestApp();
             ItemsToRemove = [];
             TestDisplayObject = testApp.getDisplayObject();
@@ -154,12 +161,9 @@ package UnitTest.Tests
         /**
          * Have a single TextLine on the canvas instead of a vellum container
          */
-        [Test(dataProvider=singleTextLineDp)]
-        public function singleTextLine(testCaseVo:TestCaseVo):void
+        [Test]
+        public function singleTextLine():void
         {
-            //TODO: Piotr: Not sure what is for bitmapSnapshot but will invastigate soon
-            //TestData.bitmapSnapshot = Boolean(testCaseVo.bitmapSnapshot);
-
             var cf:ElementFormat = new ElementFormat();
             cf.fontSize = 24;
             var fd:FontDescription = new FontDescription("Times New Roman")
@@ -180,11 +184,9 @@ package UnitTest.Tests
         /**
          * Have ten TextLines on the canvas instead of a vellum container
          */
-        [Test(dataProvider=tenTextLinesDp)]
-        public function tenTextLines(testCaseVo:TestCaseVo):void
+        [Test]
+        public function tenTextLines():void
         {
-            TestData.bitmapSnapshot = testCaseVo.bitmapSnapshot;
-
             for (var i:int = 0; i < 10; i++)
             {
                 var cf:ElementFormat = new ElementFormat();
@@ -234,16 +236,16 @@ package UnitTest.Tests
         [Test(dataProvider=singleTextLineStaticDp)]
         public function singleTextLineStatic(testCaseVo:TestCaseVo):void
         {
-            singleTextLine(testCaseVo);
+            singleTextLine();
             TextLine(ItemsToRemove[0]).validity = TextLineValidity.STATIC;
             System.gc();
             System.gc();	//garbage collect at end so we can compare memory usage versus static lines
         }
 
-        [Test(dataProvider=tenTextLinesStaticDp)]
-        public function tenTextLinesStatic(testCaseVo:TestCaseVo):void
+        [Test]
+        public function tenTextLinesStatic():void
         {
-            tenTextLines(testCaseVo);
+            tenTextLines();
             for (var i:int = 0; i < ItemsToRemove.length; i++)
             {
                 TextLine(ItemsToRemove[i]).validity = TextLineValidity.STATIC;
@@ -461,8 +463,8 @@ package UnitTest.Tests
             secondFlow.flowComposer.updateAllControllers();
         }
 
-        [Test]
-        public function SelectionChangeFocusTest():void
+        [Test(dataProvider=selectionChangeFocusTestDp)]
+        public function SelectionChangeFocusTest(testCaseVo:TestCaseVo):void
         {
 
             const firstMarkup:String = "<flow:TextFlow xmlns:flow='http://ns.adobe.com/textLayout/2008'>" +
@@ -476,8 +478,8 @@ package UnitTest.Tests
                     "strange purpose, in days gone by, while the fire in this very kiln was burning.</flow:span>" +
                     "</flow:p>" +
                     "</flow:TextFlow>";
-            var posOfSelection1:int = TestData.posOfSelection1;
-            var posOfSelection2:int = TestData.posOfSelection2;
+            var posOfSelection1:int = testCaseVo.posOfSelection1;
+            var posOfSelection2:int = testCaseVo.posOfSelection2;
 
             TestCanvas.addEventListener(Event.RESIZE, resizeHandler);
 
@@ -767,8 +769,8 @@ package UnitTest.Tests
         /**
          * two text flows, two containers, select from one flow to another
          */
-        [Test]
-        public function DraggingSelectionOneFlowToAnotherTest():void
+        [Test(dataProvider=draggingSelectionOneFlowToAnotherTestDp)]
+        public function draggingSelectionOneFlowToAnotherTest(testCaseVo:TestCaseVo):void
         {
 
             const firstMarkup:String = "<flow:TextFlow xmlns:flow='http://ns.adobe.com/textLayout/2008'>" +
@@ -782,8 +784,8 @@ package UnitTest.Tests
                     "strange purpose, in days gone by, while the fire in this very kiln was burning.</flow:span>" +
                     "</flow:p>" +
                     "</flow:TextFlow>";
-            var posOfSelection1:int = TestData.posOfSelection1;
-            var posOfSelection2:int = TestData.posOfSelection2;
+            var posOfSelection1:int = testCaseVo.posOfSelection1;
+            var posOfSelection2:int = testCaseVo.posOfSelection2;
 
             //create first text flow, import first text, and assign composer
             firstFlow = new TextFlow();
@@ -950,8 +952,8 @@ package UnitTest.Tests
             assertTrue("Container has not been added at corrent position ", w4 == 500);
         }
 
-        [Test]
-        public function containerRecomposeAndConsistenceTest():void
+        [Test(dataProvider=containerRecomposeAndConsistenceTestDp)]
+        public function containerRecomposeAndConsistenceTest(testCaseVo:TestCaseVo):void
         {
             var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
@@ -996,7 +998,7 @@ package UnitTest.Tests
             textFlow.flowComposer.addController(controller5);
             textFlow.flowComposer.updateAllControllers();
 
-            if (TestData.id == "recomposeContainerTest") //to test if container will be re-composed correctly after some container update
+            if (testCaseVo.id == "recomposeContainerTest") //to test if container will be re-composed correctly after some container update
             {
                 //recompose controller3
                 controller3.setCompositionSize(250, 250);
@@ -1011,9 +1013,9 @@ package UnitTest.Tests
                 assertTrue("composeToController returns wrong flag after re-composite.",
                         comp0 == false && comp1 == true && comp2 == true && comp3 == true && comp4 == true);
             }
-            else if (TestData.id == "containerConsistenceTest")
+            else if (testCaseVo.id == "containerConsistenceTest")
             {
-                var posOfSelection:int = TestData.posOfSelection;
+                var posOfSelection:int = testCaseVo.posOfSelection;
                 var tfl:TextFlowLine = textFlow.flowComposer.findLineAtPosition(posOfSelection);
                 var tfl_abs:Number = tfl.absoluteStart;
                 var tfl_textLen:Number = tfl.textLength;
@@ -1058,8 +1060,8 @@ package UnitTest.Tests
             return [firstVisibleLine, lastVisibleLine];
         }
 
-        [Test]
-        public function autoAndDragScrollingTest():void
+        [Test(dataProvider=autoAndDragScrollingTestDp)]
+        public function autoAndDragScrollingTest(testCaseVo:TestCaseVo):void
         {
 
             var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
@@ -1117,7 +1119,7 @@ package UnitTest.Tests
             var beforeLastVisibleLine3:int = beforePosition3[1];
 
             var position3:int = textFlow.textLength - 1;
-            if (TestData.id == "dragScrollingTest")
+            if (testCaseVo.id == "dragScrollingTest")
             {
                 editManager.selectRange(position3 - 20, position3);
                 editManager.setFocus();
