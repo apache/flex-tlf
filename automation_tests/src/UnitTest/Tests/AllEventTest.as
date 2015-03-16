@@ -72,31 +72,31 @@ package UnitTest.Tests
     [RunWith("org.flexunit.runners.Parameterized")]
     public class AllEventTest extends VellumTestCase
     {
-        [DataPoints(loader="shortTextMouseEventTBLTRTestLoader")]
+        [DataPoints(loader=shortTextMouseEventTBLTRTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var shortTextMouseEventTBLTRTestDp:Array;
 
         public static var shortTextMouseEventTBLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventTBLTRTest");
 
-        [DataPoints(loader="shortTextMouseEventTBRTLTestLoader")]
+        [DataPoints(loader=shortTextMouseEventTBRTLTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var shortTextMouseEventTBRTLTestDp:Array;
 
         public static var shortTextMouseEventTBRTLTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventTBRTLTest");
 
-        [DataPoints(loader="shortTextMouseEventRLLTRTestLoader")]
+        [DataPoints(loader=shortTextMouseEventRLLTRTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var shortTextMouseEventRLLTRTestDp:Array;
 
         public static var shortTextMouseEventRLLTRTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLLTRTest");
 
-        [DataPoints(loader="shortTextMouseEventRLRTLTestLoader")]
+        [DataPoints(loader=shortTextMouseEventRLRTLTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var shortTextMouseEventRLRTLTestDp:Array;
 
         public static var shortTextMouseEventRLRTLTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/AllEventTest.xml", "ShortTextMouseEventRLRTLTest");
 
-        [DataPoints(loader="flowElementMouseEventTestLoader")]
+        [DataPoints(loader=flowElementMouseEventTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var flowElementMouseEventTestDp:Array;
 
@@ -440,30 +440,30 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=shortTextMouseEventTBLTRTestDp)]
-        public function ShortTextMouseEventTBLTRTest(dpData:TestCaseVo):void
+        public function ShortTextMouseEventTBLTRTest(testCaseVo:TestCaseVo):void
         {
-            SelManager.textFlow = getTextFlowTBLTR(dpData);
+            SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
             ShortTextMouseEventTest();
         }
 
         [Test(dataProvider=shortTextMouseEventTBRTLTestDp)]
-        public function ShortTextMouseEventTBRTLTest(dpData:TestCaseVo):void
+        public function ShortTextMouseEventTBRTLTest(testCaseVo:TestCaseVo):void
         {
-            SelManager.textFlow = getTextFlowTBLTR(dpData);
+            SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
             ShortTextMouseEventTest();
         }
 
         [Test(dataProvider=shortTextMouseEventRLLTRTestDp)]
-        public function ShortTextMouseEventRLLTRTest(dpData:TestCaseVo):void
+        public function ShortTextMouseEventRLLTRTest(testCaseVo:TestCaseVo):void
         {
-            SelManager.textFlow = getTextFlowTBLTR(dpData);
+            SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
             ShortTextMouseEventTest();
         }
 
         [Test(dataProvider=shortTextMouseEventRLRTLTestDp)]
-        public function ShortTextMouseEventRLRTLTest(dpData:TestCaseVo):void
+        public function ShortTextMouseEventRLRTLTest(testCaseVo:TestCaseVo):void
         {
-            SelManager.textFlow = getTextFlowTBLTR(dpData);
+            SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
             ShortTextMouseEventTest();
         }
 
@@ -590,17 +590,17 @@ package UnitTest.Tests
         // 2. link across several lines
         // For now, only covering first line in link
         [Test(dataProvider=flowElementMouseEventTestDp)]
-        public function FlowElementMouseEventTest(dpData:TestCaseVo):void
+        public function FlowElementMouseEventTest(testCaseVo:TestCaseVo):void
         {
             var validator:FlowElementMouseEventValidator;
 
             var cc:ContainerController = SelManager.textFlow.flowComposer.getControllerAt(0);
-            if (dpData.id == "FlowElementMouseEventTestScrollingOn")
+            if (testCaseVo.id == "FlowElementMouseEventTestScrollingOn")
             {
                 cc.verticalScrollPolicy = ScrollPolicy.ON;
                 cc.horizontalScrollPolicy = ScrollPolicy.ON;
             }
-            else if (dpData.id == "FlowElementMouseEventTestScrolled")
+            else if (testCaseVo.id == "FlowElementMouseEventTestScrolled")
             {
                 cc.verticalScrollPolicy = ScrollPolicy.ON;
                 cc.horizontalScrollPolicy = ScrollPolicy.ON;
@@ -631,7 +631,7 @@ package UnitTest.Tests
             TestFrame.textFlow.flowComposer.updateAllControllers();
 
             var container:DisplayObjectContainer = SelManager.textFlow.flowComposer.getControllerAt(0).container;
-            if (dpData.id == "FlowElementMouseEventTestMeasure")
+            if (testCaseVo.id == "FlowElementMouseEventTestMeasure")
             {
                 container.height = NaN;
                 container.width = NaN;

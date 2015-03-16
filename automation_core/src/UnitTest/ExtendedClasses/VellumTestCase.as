@@ -129,7 +129,7 @@ package UnitTest.ExtendedClasses
 
             // set defaults to some items in TestData - these can be overridden
             // in a specific test case's constructor or in an XML file
-            TestData.bitmapSnapshot = "false";
+            TestData.bitmapSnapshot = false;
             TestData.lineSnapshot = "false";
             TestData.xflSnapshot = "false";
             TestData.minimal = "true";

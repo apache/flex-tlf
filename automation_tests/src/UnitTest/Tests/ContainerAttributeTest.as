@@ -63,49 +63,49 @@ package UnitTest.Tests
     [RunWith("org.flexunit.runners.Parameterized")]
     public class ContainerAttributeTest extends VellumTestCase
     {
-        [DataPoints(loader="checkColumnWidthOnGapChangeTestLoader")]
+        [DataPoints(loader=checkColumnWidthOnGapChangeTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var checkColumnWidthOnGapChangeTestDp:Array;
 
         public static var checkColumnWidthOnGapChangeTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "checkColumnWidthOnGapChangeTest");
 
-        [DataPoints(loader="checkVerticalAlignTopTestLoader")]
+        [DataPoints(loader=checkVerticalAlignTopTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var checkVerticalAlignTopTestDp:Array;
 
         public static var checkVerticalAlignTopTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "checkVerticalAlignTopTest");
 
-        [DataPoints(loader="checkVerticalAlignBottomTestLoader")]
+        [DataPoints(loader=checkVerticalAlignBottomTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var checkVerticalAlignBottomTestDp:Array;
 
         public static var checkVerticalAlignBottomTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "checkVerticalAlignBottomTest");
 
-        [DataPoints(loader="leftPaddingSqueezeTestLoader")]
+        [DataPoints(loader=leftPaddingSqueezeTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var leftPaddingSqueezeTestDp:Array;
 
         public static var leftPaddingSqueezeTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "leftPaddingSqueezeTest");
 
-        [DataPoints(loader="checkVerticalAlignMiddleTestLoader")]
+        [DataPoints(loader=checkVerticalAlignMiddleTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var checkVerticalAlignMiddleTestDp:Array;
 
         public static var checkVerticalAlignMiddleTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "checkVerticalAlignMiddleTest");
 
-        [DataPoints(loader="contentBoundsWithWhitespacesLoader")]
+        [DataPoints(loader=contentBoundsWithWhitespacesLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var contentBoundsWithWhitespacesDp:Array;
 
         public static var contentBoundsWithWhitespacesLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "ContentBoundsWithWhitespaces");
 
-        [DataPoints(loader="hBeamCursorTestLoader")]
+        [DataPoints(loader=hBeamCursorTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var hBeamCursorTestDp:Array;
 
         public static var hBeamCursorTestLoader:TestConfigurationLoader =  new TestConfigurationLoader("../../test/testCases/ContainerAttributeTests.xml", "HBeamCursorTest");
 
-        [DataPoints(loader="topPaddingSqueezeTestLoader")]
+        [DataPoints(loader=topPaddingSqueezeTestLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var topPaddingSqueezeTestDp:Array;
 
@@ -116,7 +116,7 @@ package UnitTest.Tests
         private var outputContainerAttrs:ITextLayoutFormat;
         private var initSize:Point;
 
-        private var currentDpData:Object;
+        private var currentTestCaseVo:TestCaseVo;
 
         public function ContainerAttributeTest()
         {
@@ -142,11 +142,11 @@ package UnitTest.Tests
             columnWidth = FormatValue.AUTO;
             columnCount = FormatValue.AUTO;
 
-            testContainer = currentDpData.testContainer;
-            TestData.bitmapSnapshot = currentDpData.bitmapSnapshot ? "true" : "false";
-            TestData.minimal = currentDpData.minimal ? "true" : "false";
-            writingDirection[0] = currentDpData.rl_ltr == "true" ? BlockProgression.TB : BlockProgression.RL;
-            writingDirection[1] = currentDpData.tb_rtl == "true" ?  Direction.LTR : Direction.RTL;
+            testContainer = currentTestCaseVo.testContainer;
+            TestData.bitmapSnapshot = currentTestCaseVo.bitmapSnapshot ? "true" : "false";
+            TestData.minimal = currentTestCaseVo.minimal ? "true" : "false";
+            writingDirection[0] = currentTestCaseVo.rl_ltr == "true" ? BlockProgression.TB : BlockProgression.RL;
+            writingDirection[1] = currentTestCaseVo.tb_rtl == "true" ?  Direction.LTR : Direction.RTL;
         }
 
         [After]
@@ -366,9 +366,9 @@ package UnitTest.Tests
          * Set and get the firstBaselineOffset string values and test bound of numeric values.
          */
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function checkfirstBaselineOffset(dpData:TestCaseVo):void // KJT
+        public function checkfirstBaselineOffset(testCaseVo:TestCaseVo):void // KJT
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             inputContainerAttrs.firstBaselineOffset = BaselineOffset.ASCENT;
@@ -437,9 +437,9 @@ package UnitTest.Tests
          * Set the column count, then change the column gap and see how the column width changes.
          */
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function checkColumnWidthOnGapChangeTest(dpData:TestCaseVo):void
+        public function checkColumnWidthOnGapChangeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var width:Number = testFrameWidth;
@@ -467,9 +467,9 @@ package UnitTest.Tests
          * Set the column gap, then change the column count to see how the column width changes.
          */
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function checkColumnWidthOnCountChangeTest(dpData:TestCaseVo):void
+        public function checkColumnWidthOnCountChangeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var bp:String = TestFrame.textFlow.computedFormat.blockProgression;
@@ -502,9 +502,9 @@ package UnitTest.Tests
          */
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
         [Ignore]
-        public function checkColumnGapOnWidthChangeTest(dpData:TestCaseVo):void
+        public function checkColumnGapOnWidthChangeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var width:Number = testFrameWidth;
@@ -536,9 +536,9 @@ package UnitTest.Tests
          * NOTE: Currently commented out due to bug 1657149.
          */
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function checkColumnGapOnCountChangeTest(dpData:TestCaseVo):void
+        public function checkColumnGapOnCountChangeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var width:Number = testFrameWidth;
@@ -566,9 +566,9 @@ package UnitTest.Tests
          * then verify that the last line was the line pushed off the screen.
          */
         [Test(dataProvider=topPaddingSqueezeTestDp)]
-        public function topPaddingSqueezeTest(dpData:TestCaseVo):void
+        public function topPaddingSqueezeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var length:int = SelManager.textFlow.flowComposer.numLines;
@@ -596,9 +596,9 @@ package UnitTest.Tests
          * then verify that the last line was the line eaten.
          */
         [Test(dataProvider=topPaddingSqueezeTestDp)]
-        public function bottomPaddingSqueezeTest(dpData:TestCaseVo):void
+        public function bottomPaddingSqueezeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             //FLEX: Why no lines?
@@ -626,9 +626,9 @@ package UnitTest.Tests
          * Increase the left padding until you force the flow to create a new line.
          */
         [Test(dataProvider=leftPaddingSqueezeTestDp)]
-        public function leftPaddingSqueezeTest(dpData:TestCaseVo):void
+        public function leftPaddingSqueezeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var length:int = SelManager.textFlow.flowComposer.numLines;
@@ -651,9 +651,9 @@ package UnitTest.Tests
          * Increase the right padding until you force the flow to create a new line.
          */
         [Test(dataProvider=leftPaddingSqueezeTestDp)]
-        public function rightPaddingSqueezeTest(dpData:TestCaseVo):void
+        public function rightPaddingSqueezeTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var length:int = SelManager.textFlow.flowComposer.numLines;
@@ -673,9 +673,9 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function writingModeBreakTest(dpData:TestCaseVo):void
+        public function writingModeBreakTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             // clear all padding on the textFlow for this test
@@ -742,9 +742,9 @@ package UnitTest.Tests
          * This test exists solely for snapshotting.
          */
         [Test(dataProvider=checkVerticalAlignTopTestDp)]
-        public function checkVerticalAlignTopTest(dpData:TestCaseVo):void
+        public function checkVerticalAlignTopTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var division:int =
@@ -807,9 +807,9 @@ package UnitTest.Tests
          * This test exists solely for snapshotting.
          */
         [Test(dataProvider=checkVerticalAlignBottomTestDp)]
-        public function checkVerticalAlignBottomTest(dpData:Object):void
+        public function checkVerticalAlignBottomTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var division:int =
@@ -869,9 +869,9 @@ package UnitTest.Tests
          * This test exists solely for snapshotting.
          */
         [Test(dataProvider=checkVerticalAlignMiddleTestDp)]
-        public function checkVerticalAlignMiddleTest(dpData:TestCaseVo):void
+        public function checkVerticalAlignMiddleTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var division:int =
@@ -938,9 +938,9 @@ package UnitTest.Tests
          * This test exists solely for snapshotting.
          */
         [Test(dataProvider=checkVerticalAlignTopTestDp)]
-        public function checkVerticalAlignJustifyTest(dpData:TestCaseVo):void
+        public function checkVerticalAlignJustifyTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var division:int =
@@ -1000,9 +1000,9 @@ package UnitTest.Tests
 
         // non-empty flow, check if attribute changed after insertion point at position 0
         [Test(dataProvider=leftPaddingSqueezeTestDp)]
-        public function insertPos0CheckColumnWidthTest(dpData:TestCaseVo):void
+        public function insertPos0CheckColumnWidthTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var bp:String = TestFrame.textFlow.computedFormat.blockProgression;
@@ -1028,9 +1028,9 @@ package UnitTest.Tests
 
         //check if container attribute change after insertion in an empty flow
         [Test(dataProvider=leftPaddingSqueezeTestDp)]
-        public function checkColumnCountEmptyFlowInsertTest(dpData:TestCaseVo):void
+        public function checkColumnCountEmptyFlowInsertTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var width:Number = testFrameWidth;
@@ -1055,9 +1055,9 @@ package UnitTest.Tests
 
         // non-empty flow, check if attribute changed after insertion point at end position
         [Test(dataProvider=leftPaddingSqueezeTestDp)]
-        public function insertAtEndOfFlowCheckColumnGapTest(dpData:TestCaseVo):void
+        public function insertAtEndOfFlowCheckColumnGapTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var bp:String = TestFrame.textFlow.computedFormat.blockProgression;
@@ -1082,9 +1082,9 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnBreakTest(dpData:TestCaseVo):void
+        public function columnBreakTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var TestCanvas:Canvas = myEmptyChilds();
@@ -1167,9 +1167,9 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function containerBreakTest(dpData:TestCaseVo):void
+        public function containerBreakTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var TestCanvas:Canvas = myEmptyChilds();
@@ -1251,45 +1251,45 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnContainerBreakTest0(dpData:TestCaseVo):void
+        public function columnContainerBreakTest0(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             columnContainerBreakTestX(0);
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnContainerBreakTest1000(dpData:Object):void
+        public function columnContainerBreakTest1000(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             columnContainerBreakTestX(1000);
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnContainerBreakTest2000(dpData:Object):void
+        public function columnContainerBreakTest2000(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             columnContainerBreakTestX(2000);
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnContainerBreakTest3000(dpData:Object):void
+        public function columnContainerBreakTest3000(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             columnContainerBreakTestX(3000);
         }
 
         [Test(dataProvider=checkColumnWidthOnGapChangeTestDp)]
-        public function columnContainerBreakTest4000(dpData:TestCaseVo):void
+        public function columnContainerBreakTest4000(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             columnContainerBreakTestX(4000);
@@ -1485,9 +1485,9 @@ package UnitTest.Tests
         // mjzhang : Watson Bug#2841799 When lineBreak="toFit" the contentBounds width does
         // not include the trailing whitespace
         [Test(dataProvider=contentBoundsWithWhitespacesDp)]
-        public function ContentBoundsWithWhitespaces(dpData:TestCaseVo):void
+        public function ContentBoundsWithWhitespaces(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             // This is the switch for calculate whitespace or not regardless lineBreak="toFix".
@@ -1527,9 +1527,9 @@ package UnitTest.Tests
 
         // mjzhang : Bug#2835316 The TextLine is INVALID and cannot be used to access the current state of the TextBlock
         [Test(dataProvider=contentBoundsWithWhitespacesDp)]
-        public function TextSelectAllTest(dpData:TestCaseVo):void
+        public function TextSelectAllTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var textFlow:TextFlow = SelManager.textFlow;
@@ -1562,9 +1562,9 @@ package UnitTest.Tests
 
         // mjzhang : Bug#2898924 TLF reports incorrect content height after composition when floats are used with padding
         [Test(dataProvider=hBeamCursorTestDp)]
-        public function ContentBoundsWithPaddingTest(dpData:TestCaseVo):void
+        public function ContentBoundsWithPaddingTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             // Get image content height which has padding top set
@@ -1607,9 +1607,9 @@ package UnitTest.Tests
         // mjzhang : Bug#2758977 <s:p color="red"/> throws out of range error - can you do color lookup like Flex SDK?
         // Tests all the color options, also test Upper case and bad case(XXX)
         [Test(dataProvider=contentBoundsWithWhitespacesDp)]
-        public function colorPropetyTest(dpData:TestCaseVo):void
+        public function colorPropetyTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var textFlow:TextFlow = SelManager.textFlow;
@@ -1744,9 +1744,9 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=hBeamCursorTestDp)]
-        public function HBeamCursorTest(dpData:TestCaseVo):void
+        public function HBeamCursorTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             SelManager.selectAll();
@@ -1770,9 +1770,9 @@ package UnitTest.Tests
 
         // mjzhang : Bug#2907691 When composition starts in middle of the container, paddingBottom for the previous paragraph is ignored
         [Ignore][Test(dataProvider=hBeamCursorTestDp)]
-        public function paddingBottomTest(dpData:TestCaseVo):void
+        public function paddingBottomTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var textFlow:TextFlow = SelManager.textFlow;
@@ -1793,9 +1793,9 @@ package UnitTest.Tests
 
         //Fix bug 2869747  using TextFlow.flowComposer and ContainerController, displayed text is incorrectly masked
         [Test(dataProvider=checkVerticalAlignMiddleTestDp)]
-        public function scrollRectTest(dpData:TestCaseVo):void
+        public function scrollRectTest(testCaseVo:TestCaseVo):void
         {
-            currentDpData = dpData;
+            currentTestCaseVo = testCaseVo;
             setUpTest();
 
             var textFlow:TextFlow = SelManager.textFlow;

@@ -26,7 +26,9 @@
 
 package UnitTest.Tests
 {
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
     import flash.display.DisplayObject;
@@ -58,8 +60,57 @@ package UnitTest.Tests
     import org.flexunit.asserts.fail;
 
     [TestCase(order=11)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class ContainerTypeTest extends VellumTestCase
     {
+        [DataPoints(loader=singleTextLineLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var singleTextLineDp:Array;
+
+        public static var singleTextLineLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "singleTextLine");
+
+        [DataPoints(loader=tenTextLinesLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var tenTextLinesDp:Array;
+
+        public static var tenTextLinesLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "tenTextLinesDp");
+
+        [DataPoints(loader=clickLinkedContainerTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var clickLinkedContainerTestDp:Array;
+
+        public static var clickLinkedContainerTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "clickLinkedContainerTest");
+
+        [DataPoints(loader=checkContainerAttributesAfterTextInsertionLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var checkContainerAttributesAfterTextInsertionDp:Array;
+
+        public static var checkContainerAttributesAfterTextInsertionLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "checkContainerAttributesAfterTextInsertion");
+
+        [DataPoints(loader=navigateByLineTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var navigateByLineTestDp:Array;
+
+        public static var navigateByLineTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "navigateByLineTest");
+
+        [DataPoints(loader=tenTextLinesStaticLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var tenTextLinesStaticDp:Array;
+
+        public static var tenTextLinesStaticLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "tenTextLinesStatic");
+
+        [DataPoints(loader=singleTextLineStaticLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var singleTextLineStaticDp:Array;
+
+        public static var singleTextLineStaticLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "singleTextLineStatic");
+
+        [DataPoints(loader=clickMultiLinkedContainerTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var clickMultiLinkedContainerTestDp:Array;
+
+        public static var clickMultiLinkedContainerTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ContainerTypeTests.xml", "clickMultiLinkedContainerTest");
+
         private var TestCanvas:Canvas = null;
         private var ItemsToRemove:Array;
         private var hostFormat:TextLayoutFormat;
@@ -103,13 +154,16 @@ package UnitTest.Tests
         /**
          * Have a single TextLine on the canvas instead of a vellum container
          */
-        [Test]
-        public function singleTextLine():void
+        [Test(dataProvider=singleTextLineDp)]
+        public function singleTextLine(testCaseVo:TestCaseVo):void
         {
+            //TODO: Piotr: Not sure what is for bitmapSnapshot but will invastigate soon
+            //TestData.bitmapSnapshot = Boolean(testCaseVo.bitmapSnapshot);
+
             var cf:ElementFormat = new ElementFormat();
-            cf.fontSize = 24
+            cf.fontSize = 24;
             var fd:FontDescription = new FontDescription("Times New Roman")
-            cf.fontDescription = fd
+            cf.fontDescription = fd;
             var te:TextElement = new TextElement("A TextLine on the Canvas", cf);
             var tb:TextBlock = new TextBlock();
             tb.content = te;
@@ -126,13 +180,15 @@ package UnitTest.Tests
         /**
          * Have ten TextLines on the canvas instead of a vellum container
          */
-        [Test]
-        public function tenTextLines():void
+        [Test(dataProvider=tenTextLinesDp)]
+        public function tenTextLines(testCaseVo:TestCaseVo):void
         {
+            TestData.bitmapSnapshot = testCaseVo.bitmapSnapshot;
+
             for (var i:int = 0; i < 10; i++)
             {
                 var cf:ElementFormat = new ElementFormat();
-                cf.fontSize = 24
+                cf.fontSize = 24;
                 var fd:FontDescription = new FontDescription("Times New Roman")
                 cf.fontDescription = fd
                 var te:TextElement = new TextElement("TextLine " + i, cf);
@@ -158,9 +214,9 @@ package UnitTest.Tests
             for (var i:int = 0; i < 100; i++)
             {
                 var cf:ElementFormat = new ElementFormat();
-                cf.fontSize = 2.4
-                var fd:FontDescription = new FontDescription("Times New Roman")
-                cf.fontDescription = fd
+                cf.fontSize = 2.4;
+                var fd:FontDescription = new FontDescription("Times New Roman");
+                cf.fontDescription = fd;
                 var te:TextElement = new TextElement("TextLine " + i, cf);
                 var tb:TextBlock = new TextBlock();
                 tb.content = te;
@@ -175,19 +231,19 @@ package UnitTest.Tests
             System.gc();	//garbage collect at end so we can compare memory usage versus static lines
         }
 
-        [Test]
-        public function singleTextLineStatic():void
+        [Test(dataProvider=singleTextLineStaticDp)]
+        public function singleTextLineStatic(testCaseVo:TestCaseVo):void
         {
-            singleTextLine();
+            singleTextLine(testCaseVo);
             TextLine(ItemsToRemove[0]).validity = TextLineValidity.STATIC;
             System.gc();
             System.gc();	//garbage collect at end so we can compare memory usage versus static lines
         }
 
-        [Test]
-        public function tenTextLinesStatic():void
+        [Test(dataProvider=tenTextLinesStaticDp)]
+        public function tenTextLinesStatic(testCaseVo:TestCaseVo):void
         {
-            tenTextLines();
+            tenTextLines(testCaseVo);
             for (var i:int = 0; i < ItemsToRemove.length; i++)
             {
                 TextLine(ItemsToRemove[i]).validity = TextLineValidity.STATIC;
@@ -208,12 +264,11 @@ package UnitTest.Tests
             System.gc();	//garbage collect at end so we can compare memory usage versus static lines
         }
 
-        [Test]
-        public function clickLinkedContainerTest():void
+        [Test(dataProvider=clickLinkedContainerTestDp)]
+        public function clickLinkedContainerTest(testCaseVo:TestCaseVo):void
         {
-            var posOfSelection:int = TestData.posOfSelection;
+            var posOfSelection:int = testCaseVo.posOfSelection;
             var format:TextLayoutFormat = new TextLayoutFormat();
-            format = new TextLayoutFormat();
             format.paddingLeft = 20;
             format.paddingRight = 20;
             format.paddingTop = 20;
@@ -255,22 +310,22 @@ package UnitTest.Tests
             var mouseX:Number = 0;
             var mouseY:Number = 0;
 
-            if (TestData.id == "clickLeftToLinkedContainer")
+            if (testCaseVo.id == "clickLeftToLinkedContainer")
             {
                 mouseX = bounds.x - 1;
                 mouseY = tl.y;
             }
-            else if (TestData.id == "clickRightToLinkedContainer")
+            else if (testCaseVo.id == "clickRightToLinkedContainer")
             {
                 mouseX = bounds.x + 1;
                 mouseY = tl.y;
             }
-            else if (TestData.id == "clickTopLinkedContainer")
+            else if (testCaseVo.id == "clickTopLinkedContainer")
             {
                 mouseX = bounds.x;
                 mouseY = tl.y - 1;
             }
-            else if (TestData.id == "clickBottomLinkedContainer")
+            else if (testCaseVo.id == "clickBottomLinkedContainer")
             {
                 mouseX = bounds.x;
                 mouseY = tl.y + 1;
@@ -294,8 +349,8 @@ package UnitTest.Tests
         /**
          * linked containers,  check if attribute changed after texts insertion
          */
-        [Test]
-        public function checkContainerAttributesAfterTextInsertion():void
+        [Test(dataProvider=checkContainerAttributesAfterTextInsertionDp)]
+        public function checkContainerAttributesAfterTextInsertion(testCaseVo:TestCaseVo):void
         {
             var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
@@ -324,7 +379,6 @@ package UnitTest.Tests
             editManager.setFocus();
 
             var format:TextLayoutFormat = new TextLayoutFormat();
-            format = new TextLayoutFormat();
             format.paddingLeft = 20;
             format.paddingRight = 20;
             format.paddingTop = 20;
@@ -347,11 +401,11 @@ package UnitTest.Tests
             var firstContEnd:int = firstContStart + firstContLen;
 
             //get the insertion position
-            if (TestData.id == "insertionEndOf1stContainer")
+            if (testCaseVo.id == "insertionEndOf1stContainer")
             {
                 editManager.selectRange(firstContEnd - 1, firstContEnd - 1);
             }
-            else if (TestData.id == "insertionBeginOf2ndContainer")
+            else if (testCaseVo.id == "insertionBeginOf2ndContainer")
             {
                 editManager.selectRange(firstContEnd, firstContEnd);
             }
@@ -477,12 +531,11 @@ package UnitTest.Tests
                     posOfSelection2 == editManager2.activePosition);
         }
 
-        [Test]
-        public function clickMultiLinkedContainerTest():void
+        [Test(dataProvider=clickMultiLinkedContainerTestDp)]
+        public function clickMultiLinkedContainerTest(testCaseVo:TestCaseVo):void
         {
-            var posOfSelection:int = TestData.posOfSelection;
+            var posOfSelection:int = testCaseVo.posOfSelection;
             var format:TextLayoutFormat = new TextLayoutFormat();
-            format = new TextLayoutFormat();
             format.paddingLeft = 20;
             format.paddingRight = 20;
             format.paddingTop = 20;
@@ -535,22 +588,22 @@ package UnitTest.Tests
             var bounds:Rectangle = tl.getAtomBounds(adjustedPosOfSelection);
             var mouseX:Number = 0;
             var mouseY:Number = 0;
-            if (TestData.id == "clickLeftToMultiLinkedContainer")
+            if (testCaseVo.id == "clickLeftToMultiLinkedContainer")
             {
                 mouseX = bounds.x - 1;
                 mouseY = tl.y;
             }
-            else if (TestData.id == "clickRightToMultiLinkedContainer")
+            else if (testCaseVo.id == "clickRightToMultiLinkedContainer")
             {
                 mouseX = bounds.x + 1;
                 mouseY = tl.y;
             }
-            else if (TestData.id == "clickTopMultiLinkedContainer")
+            else if (testCaseVo.id == "clickTopMultiLinkedContainer")
             {
                 mouseX = bounds.x;
                 mouseY = tl.y - 1;
             }
-            else if (TestData.id == "clickBottomMultiLinkedContainer")
+            else if (testCaseVo.id == "clickBottomMultiLinkedContainer")
             {
                 mouseX = bounds.x;
                 mouseY = tl.y + 1;
@@ -577,8 +630,7 @@ package UnitTest.Tests
         public function draggingSelectioinMultiFlows():void
         {
             //create the first text flow, import texts from markups, and assign flow composer to a container
-            var flow_1:TextFlow = new TextFlow();
-            flow_1 = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var flow_1:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             flow_1.flowComposer = new StandardFlowComposer();
             var container_1:Sprite = new Sprite();
             var controller_1:ContainerController = new ContainerController(container_1, 300, 250);
@@ -643,8 +695,7 @@ package UnitTest.Tests
             }
 
             //create the second text flow, import texts from markups, and assign flow composer to a container
-            var flow_2:TextFlow = new TextFlow();
-            flow_2 = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
+            var flow_2:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             flow_2.flowComposer = new StandardFlowComposer();
 
             //Create EditManager to manage edting changes in TextFlow
@@ -776,10 +827,8 @@ package UnitTest.Tests
             var tl2:TextLine = tfl2.getTextLine();
             var bounds2:Rectangle = tl2.getAtomBounds(adjustedPosOfSelection2);
 
-            var mouseX:Number = 0;
-            var mouseY:Number = 0;
-            mouseX = bounds1.x;
-            mouseY = tl1.y;
+            var mouseX:Number = bounds1.x;
+            var mouseY:Number = tl1.y;
 
             // mouse down in first container
             editManager1.setFocus();
@@ -806,7 +855,6 @@ package UnitTest.Tests
         public function addRemoveMulitiLinkedContainerTest():void
         {
             var format:TextLayoutFormat = new TextLayoutFormat();
-            format = new TextLayoutFormat();
             format.paddingLeft = 20;
             format.paddingRight = 20;
             format.paddingTop = 20;
@@ -1069,7 +1117,6 @@ package UnitTest.Tests
             var beforeLastVisibleLine3:int = beforePosition3[1];
 
             var position3:int = textFlow.textLength - 1;
-            var pos_start_container3:int = controller1.textLength + controller2.textLength;
             if (TestData.id == "dragScrollingTest")
             {
                 editManager.selectRange(position3 - 20, position3);
@@ -1089,8 +1136,8 @@ package UnitTest.Tests
 
         }
 
-        [Test]
-        public function navigateByLineTest():void
+        [Test(dataProvider=navigateByLineTestDp)]
+        public function navigateByLineTest(testCaseVo:TestCaseVo):void
         {
             var textFlow:TextFlow = TextConverter.importToFlow(markup, TextConverter.TEXT_LAYOUT_FORMAT);
             textFlow.flowComposer = new StandardFlowComposer();
@@ -1126,22 +1173,22 @@ package UnitTest.Tests
             //try to use previousLine to get to first container and nextLine to get to third container
             var posSecondControllerBegin:int = controller2.absoluteStart;
             var posSecondControllerEnd:int = posSecondControllerBegin + controller2.textLength;
-            if (TestData.id == "navigateByPreviousLine")
+            if (testCaseVo.id == "navigateByPreviousLine")
             {
                 //to get the selection range at beginning of second container then previousLine should go to the first container
                 editManager.selectRange(posSecondControllerBegin, posSecondControllerBegin + 10);
             }
-            else if (TestData.id == "navigateByNextLine")
+            else if (testCaseVo.id == "navigateByNextLine")
             {
                 //to get the selection range at end of second container then nextLine should go to the third container
                 editManager.selectRange(posSecondControllerEnd - 10, posSecondControllerEnd);
             }
             var selRange:SelectionState = editManager.getSelectionState();
-            if (TestData.id == "navigateByPreviousLine")
+            if (testCaseVo.id == "navigateByPreviousLine")
             {
                 NavigationUtil.previousLine(selRange, true);
             }
-            else if (TestData.id == "navigateByNextLine")
+            else if (testCaseVo.id == "navigateByNextLine")
             {
                 NavigationUtil.nextLine(selRange, true);
             }
