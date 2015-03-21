@@ -27,8 +27,10 @@
 package UnitTest.Tests
 {
 
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
     import flash.display.Shape;
@@ -54,8 +56,51 @@ package UnitTest.Tests
     /** Test the state of selection after each operation is done, undone, and redone.
      */
     [TestCase(order=14)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class ScrollingTest extends VellumTestCase
     {
+        [DataPoints(loader=scrollWithInsideListLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var scrollWithInsideListDp:Array;
+
+        public static var scrollWithInsideListLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "scrollWithInsideList");
+
+        [DataPoints(loader=twoColumnsTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var twoColumnsTestDp:Array;
+
+        public static var twoColumnsTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "twoColumnsTest");
+
+        [DataPoints(loader=bug2988852Loader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var bug2988852Dp:Array;
+
+        public static var bug2988852Loader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "bug2988852");
+
+        [DataPoints(loader=bug2819924Case3TestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var bug2819924Case3TestDp:Array;
+
+        public static var bug2819924Case3TestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "bug2819924Case3Test");
+
+        [DataPoints(loader=bug2819924Case2TestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var bug2819924Case2TestDp:Array;
+
+        public static var bug2819924Case2TestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "bug2819924Case2Test");
+
+        [DataPoints(loader=bug2819924Case1TestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var bug2819924Case1TestDp:Array;
+
+        public static var bug2819924Case1TestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "bug2819924Case1Test");
+
+        [DataPoints(loader=largeLastLineLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var largeLastLineDp:Array;
+
+        public static var largeLastLineLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollingTest.xml", "largeLastLine");
+
         public function ScrollingTest()
         {
             //	super(methodName, testID, testConfig, testCaseXML);
@@ -84,6 +129,7 @@ package UnitTest.Tests
         [Before]
         override public function setUpTest():void
         {
+            TestData.fileName = "aliceExcerpt.xml";
             super.setUpTest();
         }
 
@@ -440,9 +486,12 @@ package UnitTest.Tests
             // check rendering - there should be decorations
         }
 
-        [Test]
-        public function scrollWithInsideList():void
+        [Test(dataProvider=scrollWithInsideListDp)]
+        public function scrollWithInsideList(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var textFlow:TextFlow = SelManager.textFlow;
             textFlow.flowComposer.updateAllControllers();
             // now page forward and then back
@@ -460,9 +509,12 @@ package UnitTest.Tests
             return sprite;
         }
 
-        [Test]
-        public function largeLastLine():void		// 2739996
+        [Test(dataProvider=largeLastLineDp)]
+        public function largeLastLine(testCaseVo:TestCaseVo):void		// 2739996
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var textFlow:TextFlow = SelManager.textFlow;
             SelManager.selectRange(textFlow.textLength - 1, textFlow.textLength - 1);
             SelManager.insertInlineGraphic(createFilledSprite(200, 200, 0xff0000), 200, 200, Float.NONE);
@@ -479,9 +531,12 @@ package UnitTest.Tests
         /**
          *  mjzhang : Watson#2819924 Error #1009 in flashx.textLayout.container::ContainerController::updateGraphics()
          */
-        [Test]
-        public function Bug2819924_case1():void
+        [Test(dataProvider=bug2819924Case1TestDp)]
+        public function bug2819924Case1Test(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var textFlow:TextFlow = SelManager.textFlow;
             var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
 
@@ -508,18 +563,24 @@ package UnitTest.Tests
         /**
          * mjzhang : Watson#2819924 Error #1009 in flashx.textLayout.container::ContainerController::updateGraphics()
          */
-        [Test]
-        public function Bug2819924_case2():void
+        [Test(dataProvider=bug2819924Case2TestDp)]
+        public function bug2819924Case2Test(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             SelManager.insertInlineGraphic(singleCT, 600, 400, Float.NONE);
         }
 
         /**
          * mjzhang : Watson#2819924 Error #1009 in flashx.textLayout.container::ContainerController::updateGraphics()  
          */
-        [Test]
-        public function Bug2819924_case3():void
+        [Test(dataProvider=bug2819924Case3TestDp)]
+        public function bug2819924Case3Test(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var textFlow:TextFlow = SelManager.textFlow;
             var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
 
@@ -527,7 +588,7 @@ package UnitTest.Tests
             var i:int = 30;
             while (i > 0)
             {
-                str += i + "\n"
+                str += i + "\n";
                 i--;
             }
 
@@ -555,9 +616,12 @@ package UnitTest.Tests
             textFlow.flowComposer.updateAllControllers();
         }
 
-        [Test]
-        public function bug2988852():void
+        [Test(dataProvider=bug2988852Dp)]
+        public function bug2988852(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var tf:TextFlow = SelManager.textFlow;
             for (var i:int = 0; i < 15; i++)
             {
@@ -589,10 +653,12 @@ package UnitTest.Tests
             }
         }
 
-        [Test]
-        [Ignore]
-        public function twoColumnsTest():void
+        [Test(dataProvider=twoColumnsTestDp)]
+        public function twoColumnsTest(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             var tf:TextFlow = SelManager.textFlow;
             for (var i:int = 0; i < 60; i++)
             {

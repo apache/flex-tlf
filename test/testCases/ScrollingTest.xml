@@ -32,7 +32,7 @@
 <TestCase functionName="previousPageTest"/>
 <TestCase functionName="scrollUpDownLimitTest"/>
 <TestCase functionName="scrollToSelectionAfterParagraphInsertion">
-	<TestData name="testFile">simple.xml</TestData>
+	<TestData name="fileName">simple.xml</TestData>
 	<TestData name="tb_rtl">false</TestData>
 </TestCase>
 	<!-- Disabled, doesn't work on Astro/Squirt -->
@@ -40,42 +40,42 @@
 	<TestData name="bitmapSnapshot">true</TestData>
 </TestCase> 
 <TestCase functionName="scrollWithInsideList">
-    <TestData name="testFile">insideListScroll.xml</TestData>
+    <TestData name="fileName">insideListScroll.xml</TestData>
 	<TestData name="bitmapSnapshot">true</TestData>
 	<TestData name="tb_rtl">false</TestData>
 	<TestData name="rl_ltr">false</TestData>
 </TestCase> 
 <TestCase functionName="largeLastLine">
-    <TestData name="testFile">simple.xml</TestData>
+    <TestData name="fileName">simple.xml</TestData>
 	<TestData name="bitmapSnapshot">false</TestData>
 	<TestData name="tb_rtl">false</TestData>
 	<TestData name="rl_ltr">true</TestData>
 </TestCase> 
-<TestCase functionName="Bug2819924_case1">
-    <TestData name="testFile">simple.xml</TestData>
+<TestCase functionName="bug2819924Case1Test">
+    <TestData name="fileName">simple.xml</TestData>
 	<TestData name="bitmapSnapshot">false</TestData>
 	<TestData name="tb_rtl">false</TestData>
 	<TestData name="rl_ltr">false</TestData>
 </TestCase> 
-<TestCase functionName="Bug2819924_case2">
-    <TestData name="testFile">simple.xml</TestData>
+<TestCase functionName="bug2819924Case2Test">
+    <TestData name="fileName">simple.xml</TestData>
 	<TestData name="bitmapSnapshot">false</TestData>
 	<TestData name="tb_rtl">false</TestData>
 	<TestData name="rl_ltr">false</TestData>
 </TestCase> 
-<TestCase functionName="Bug2819924_case3">
-    <TestData name="testFile">simple.xml</TestData>
+<TestCase functionName="bug2819924Case3Test">
+    <TestData name="fileName">simple.xml</TestData>
 	<TestData name="bitmapSnapshot">false</TestData>
 	<TestData name="tb_rtl">false</TestData>
 	<TestData name="rl_ltr">false</TestData>
 </TestCase> 
 <TestCase functionName="bug2988852">
-    <TestData name="testFile">simple.xml</TestData>
+    <TestData name="fileName">simple.xml</TestData>
 	<TestData name="tb_rtl">true</TestData>
 	<TestData name="rl_ltr">true</TestData>
 </TestCase> 
 <TestCase functionName="twoColumnsTest">
-	<TestData name="testFile">simple.xml</TestData>
+	<TestData name="fileName">simple.xml</TestData>
 	<TestData name="tb_rtl">true</TestData>
 	<TestData name="rl_ltr">true</TestData>
 </TestCase> 

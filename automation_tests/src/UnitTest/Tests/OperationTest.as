@@ -352,7 +352,7 @@ package UnitTest.Tests
         public function deleteNextPageTest():void
         {
             var onePageRange:TextRange = new TextRange(SelManager.textFlow, 1, 5000);
-            var aa:Boolean = NavigationUtil.nextPage(onePageRange);
+            NavigationUtil.nextPage(onePageRange);
             deletePreviousWordFromRange(5000, 10000);
         }
 
@@ -360,7 +360,7 @@ package UnitTest.Tests
         public function deletePreviousPageTest():void
         {
             var onePageRange:TextRange = new TextRange(SelManager.textFlow, 5000, 10000);
-            var aa:Boolean = NavigationUtil.nextPage(onePageRange);
+            NavigationUtil.nextPage(onePageRange);
             deletePreviousWordFromRange(1, 5000);
         }
 
@@ -748,8 +748,6 @@ package UnitTest.Tests
                 callback = true;
                 const cutStart:int = 10;
                 const cutEnd:int = 20;
-                var pasteLength:int = cutEnd - cutStart;
-
                 // Paste into a point selection
                 SelManager.selectRange(cutStart, cutEnd);
                 var scrap:TextScrap = SelManager.cutTextScrap();
@@ -799,7 +797,6 @@ package UnitTest.Tests
 
                 SelManager.textFlow.addEventListener(FlowOperationEvent.FLOW_OPERATION_END, deleteNextCharExceptionTest, false, 0, true);
 
-                var flowLength:int = SelManager.textFlow.textLength;
                 SelManager.selectRange(pastePosition, pastePosition);
                 (SelManager as IEditManager).pasteTextScrap(scrap);
             }
@@ -1096,7 +1093,6 @@ package UnitTest.Tests
         [Ignore]
         public function applyFormatToElementTest():void
         {
-            var textFlow:TextFlow = SelManager.textFlow;
             var format1:TextLayoutFormat = new TextLayoutFormat();
             format1.color = 0xff;
             format1.fontSize = 30;
@@ -1949,7 +1945,7 @@ package UnitTest.Tests
             p1.format = f1;
             p1.addChild(s1);
             var p2:ParagraphElement = new ParagraphElement();
-            var s2:SpanElement = new SpanElement()
+            var s2:SpanElement = new SpanElement();
             s2.text = "two";
             p2.addChild(s2);
             TestFrame.textFlow.replaceChildren(0, 1, p1);
@@ -2051,7 +2047,6 @@ package UnitTest.Tests
             var child:FlowElement;
             var child2:FlowElement;
             var combinationArray:Array;
-            var subrootId:int = 1;
             var parentId:int = 2;
             var targetId:int = 3;
             var childId:int = 4;
@@ -2182,13 +2177,13 @@ package UnitTest.Tests
             {
                 (child as SpanElement).text = "text";
             }
-            return new Array(textFlow, subroot, parent, target, child);
+            return [textFlow, subroot, parent, target, child];
         }
 
         private function checkOperation(combinationArray:Array):void
         {
             var textFlow:TextFlow = combinationArray[0];
-            var subroot:FlowGroupElement = combinationArray[1]
+            var subroot:FlowGroupElement = combinationArray[1];
             var parent:FlowGroupElement = combinationArray[2];
             var target:FlowGroupElement = combinationArray[3];
             var child:FlowElement = combinationArray[4];
@@ -2234,7 +2229,7 @@ package UnitTest.Tests
                     assertTrue(combinedNames + ": fail to undo",
                             subroot.getChildAt(0).id == "2"
                                     && subroot.getChildAt(1).id == "3"
-                                    && (subroot.getChildAt(0) as FlowGroupElement).getChildAt(0).id == "4")
+                                    && (subroot.getChildAt(0) as FlowGroupElement).getChildAt(0).id == "4");
                     //redo
                     editMan.redo();
                     textFlow.flowComposer.updateAllControllers();
@@ -2290,7 +2285,7 @@ package UnitTest.Tests
                     assertTrue(combinedNames + ": fail to undo",
                             subroot.getChildAt(0).id == "2"
                                     && subroot.getChildAt(2).id == "3"
-                                    && (subroot.getChildAt(0) as FlowGroupElement).getChildAt(0).id == "4")
+                                    && (subroot.getChildAt(0) as FlowGroupElement).getChildAt(0).id == "4");
                     //redo
                     editMan.redo();
                     textFlow.flowComposer.updateAllControllers();
@@ -2366,7 +2361,6 @@ package UnitTest.Tests
         [Test]
         public function MoveChildrenOperationTest():void
         {
-            var tf:TextFlow = SelManager.textFlow;
             SelManager.selectAll();
             SelManager.deleteText();
 
@@ -2417,7 +2411,6 @@ package UnitTest.Tests
         [Test]
         public function ApplyFormatOperationTest():void
         {
-            var tf:TextFlow = SelManager.textFlow;
             SelManager.selectAll();
             SelManager.deleteText();
 
