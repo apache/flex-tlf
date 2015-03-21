@@ -18,7 +18,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
     import UnitTest.Fixtures.TestEditManager;
 
@@ -39,8 +41,15 @@ package UnitTest.Tests
     /** Test the state of selection after each operation is done, undone, and redone.
      */
     [TestCase(order=22)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class UndoRedoTest extends VellumTestCase
     {
+        [DataPoints(loader=undoRedoLinkTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var undoRedoLinkTestDp:Array;
+
+        public static var undoRedoLinkTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "undoRedoLinkTest");
+
         private var container:Sprite;
         protected var editManager:TestEditManager;
         protected var undoManager:IUndoManager;
@@ -89,11 +98,10 @@ package UnitTest.Tests
             textFlow = null;
         }
 
-        [Test]
-        public function undoRedoLinkTest():void
+        [Test(dataProvider=undoRedoLinkTestDp)]
+        public function undoRedoLinkTest(testCaseVo:TestCaseVo):void
         {
-            //position > 3 will be in 2nd paragraph, cause error #2549628, no fix for now so the range is set to 3 to let the test case pass
-            var posOfSelection:int = TestData.posOfSelection;
+            var posOfSelection:int = testCaseVo.posOfSelection;
             editManager.selectRange(1, posOfSelection);
             editManager.doOperation(new ApplyLinkOperation(editManager.getSelectionState(), "http://flex.apache.org", "_self", true));
             var resultString:String = editManager.errors;
