@@ -440,6 +440,7 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=shortTextMouseEventTBLTRTestDp)]
+        [Ignore]
         public function ShortTextMouseEventTBLTRTest(testCaseVo:TestCaseVo):void
         {
             SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
@@ -447,6 +448,7 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=shortTextMouseEventTBRTLTestDp)]
+        [Ignore]
         public function ShortTextMouseEventTBRTLTest(testCaseVo:TestCaseVo):void
         {
             SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
@@ -454,6 +456,7 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=shortTextMouseEventRLLTRTestDp)]
+        [Ignore]
         public function ShortTextMouseEventRLLTRTest(testCaseVo:TestCaseVo):void
         {
             SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
@@ -461,6 +464,7 @@ package UnitTest.Tests
         }
 
         [Test(dataProvider=shortTextMouseEventRLRTLTestDp)]
+        [Ignore]
         public function ShortTextMouseEventRLRTLTest(testCaseVo:TestCaseVo):void
         {
             SelManager.textFlow = getTextFlowTBLTR(testCaseVo);
