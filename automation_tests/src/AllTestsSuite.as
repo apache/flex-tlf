@@ -38,6 +38,7 @@ package
     import UnitTest.Tests.FlowModelTest;
     import UnitTest.Tests.GeneralFunctionsTest;
     import UnitTest.Tests.HorizontalScrollingTest;
+    import UnitTest.Tests.ImpliedParagraphTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.TabTest;
@@ -74,6 +75,7 @@ package
         public var textFlowEditTest:TextFlowEditTest;
         public var tabTest:TabTest;
         public var horizontalScrollingTest:HorizontalScrollingTest;
+        public var impliedParagraphTest:ImpliedParagraphTest;
     }
 
 }

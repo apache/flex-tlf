@@ -106,7 +106,7 @@ package UnitTest.Tests
 
         public function HorizontalScrollingTest()
         {
-            super("", "TabTest", TestConfig.getInstance());
+            super("", "HorizontalScrollingTest", TestConfig.getInstance());
 
             metaData = {};
             // Note: These must correspond to a Watson product area (case-sensitive)
