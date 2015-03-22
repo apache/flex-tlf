@@ -39,31 +39,31 @@ package UnitTest.Tests
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var arabicDirectionDp:Array;
 
-        public static var arabicDirectionLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "arabicDirection");
+        public static var arabicDirectionLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/WritingModeTests.xml", "arabicDirection");
 
         [DataPoints(loader=rtlJustificationLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var rtlJustificationDp:Array;
 
-        public static var rtlJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "rtlJustification");
+        public static var rtlJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/WritingModeTests.xml", "rtlJustification");
 
         [DataPoints(loader=romanJustificationLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var romanJustificationDp:Array;
 
-        public static var romanJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "romanJustification");
+        public static var romanJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/WritingModeTests.xml", "romanJustification");
 
         [DataPoints(loader=arabicJustificationLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var arabicJustificationDp:Array;
 
-        public static var arabicJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "arabicJustification");
+        public static var arabicJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/WritingModeTests.xml", "arabicJustification");
 
         [DataPoints(loader=japaneseJustificationLoader)]
         [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
         public static var japaneseJustificationDp:Array;
 
-        public static var japaneseJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "japaneseJustification");
+        public static var japaneseJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/WritingModeTests.xml", "japaneseJustification");
 
         public function WritingModeTest()
         {
@@ -323,8 +323,8 @@ package UnitTest.Tests
             SelManager.selectRange(8, 8);
             SelManager.splitParagraph();
 
-            var xPos:Array = new Array();
-            var yPos:Array = new Array();
+            var xPos:Array = [];
+            var yPos:Array = [];
 
             for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
             {
@@ -363,8 +363,8 @@ package UnitTest.Tests
             SelManager.selectRange(8, 8);
             SelManager.splitParagraph();
 
-            var xPos:Array = new Array();
-            var yPos:Array = new Array();
+            var xPos:Array = [];
+            var yPos:Array = [];
 
             for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
             {
@@ -404,8 +404,8 @@ package UnitTest.Tests
             SelManager.selectRange(8, 8);
             SelManager.splitParagraph();
 
-            var xPos:Array = new Array();
-            var yPos:Array = new Array();
+            var xPos:Array = [];
+            var yPos:Array = [];
 
             for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
             {
@@ -445,8 +445,8 @@ package UnitTest.Tests
             SelManager.selectRange(8, 8);
             SelManager.splitParagraph();
 
-            var xPos:Array = new Array();
-            var yPos:Array = new Array();
+            var xPos:Array = [];
+            var yPos:Array = [];
 
             for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
             {
@@ -473,11 +473,13 @@ package UnitTest.Tests
             TestData.fileName = testCaseVo.fileName;
             super.setUpTest();
 
-            for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
+            var numLines:int = TestFrame.textFlow.flowComposer.numLines;
+            for (var l:int = 0; l < numLines; l++)
             {
                 var testLine:TextLine = SelManager.textFlow.flowComposer.getLineAt(l).getTextLine();
+                var atomCount:int = testLine.atomCount;
 
-                for (var i:int = 1; i < testLine.atomCount; i++)
+                for (var i:int = 1; i < atomCount; i++)
                 {
                     assertTrue("Display direction incorrect on right to left fonts",
                             testLine.getAtomBounds(i).x > testLine.getAtomBounds(i - 1).x);
