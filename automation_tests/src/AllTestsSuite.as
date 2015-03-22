@@ -37,6 +37,7 @@ package
     import UnitTest.Tests.FloatTest;
     import UnitTest.Tests.FlowModelTest;
     import UnitTest.Tests.GeneralFunctionsTest;
+    import UnitTest.Tests.HorizontalScrollingTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.TabTest;
@@ -72,6 +73,7 @@ package
         public var undoRedoTest:UndoRedoTest;
         public var textFlowEditTest:TextFlowEditTest;
         public var tabTest:TabTest;
+        public var horizontalScrollingTest:HorizontalScrollingTest;
     }
 
 }

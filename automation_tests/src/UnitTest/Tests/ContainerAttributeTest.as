@@ -22,6 +22,9 @@ package UnitTest.Tests
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
+    import UnitTest.Helpers.ColumnBreak;
+    import UnitTest.Helpers.ColumnContainerBreak;
+    import UnitTest.Helpers.ContainerBreak;
 
     import flash.display.BitmapData;
     import flash.display.DisplayObject;
