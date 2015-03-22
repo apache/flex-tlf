@@ -36,7 +36,7 @@
 <TestData name="tb_rtl">false</TestData>
 <TestData name="rl_ltr">false</TestData>
 </TestCase>
-<TestCase functionName="TabStopFormatTest">
+<TestCase functionName="tabStopFormatTest">
 <TestData name="fileName">empty.xml</TestData>
 <TestData name="tb_rtl">false</TestData>
 <TestData name="rl_ltr">false</TestData>

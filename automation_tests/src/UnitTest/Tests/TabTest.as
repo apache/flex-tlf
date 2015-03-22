@@ -18,7 +18,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
     import flash.geom.Rectangle;
@@ -32,8 +34,21 @@ package UnitTest.Tests
     import org.flexunit.asserts.assertTrue;
 
     [TestCase(order=24)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class TabTest extends VellumTestCase
     {
+        [DataPoints(loader=endTabLongStringTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var endTabLongStringTestDp:Array;
+
+        public static var endTabLongStringTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/TabTest.xml", "endTabLongStringTest");
+
+        [DataPoints(loader=tabStopFormatTestLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var tabStopFormatTestDp:Array;
+
+        public static var tabStopFormatTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/TabTest.xml", "tabStopFormatTest");
+
         public function TabTest()
         {
             super("", "TabTest", TestConfig.getInstance());
@@ -74,15 +89,13 @@ package UnitTest.Tests
             TestFrame.flowComposer.updateAllControllers();
 
             // get the first line
-            var initialLine:TextLine;
-            initialLine = SelManager.textFlow.flowComposer.getLineAt(0).getTextLine(true);
+            var initialLine:TextLine = SelManager.textFlow.flowComposer.getLineAt(0).getTextLine(true);
 
             //default single tab value
             var tabValue:Number = 50;
 
             //get the position of the second character, "N"
-            var valueAfterTab:Number;
-            valueAfterTab = initialLine.getAtomBounds(1).left;
+            var valueAfterTab:Number = initialLine.getAtomBounds(1).left;
 
             //Check the the correct value is in the tab
             assertTrue("tab should be " + tabValue + " but is " + valueAfterTab, valueAfterTab == tabValue);
@@ -526,12 +539,15 @@ package UnitTest.Tests
          }
          ***/
 
-        [Ignore][Test]
+        [Test(dataProvider=endTabLongStringTestDp)]
         /**
          * automate a end TAB bug test.  When End Tab has a long string value, it didn't display correctly. It is a Player bug.
          */
-        public function endTabLongStringTest():void
+        public function endTabLongStringTest(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             SelManager.selectAll();
             SelManager.deleteText();
             SelManager.insertText("\tAAAAAAA\tBBBBBB");
@@ -553,9 +569,12 @@ package UnitTest.Tests
             assertTrue("end TAB was not displayed when end Tab with long string value.", W != 0);
         }
 
-        [Test]
-        public function TabStopFormatTest():void
+        [Test(dataProvider=tabStopFormatTestDp)]
+        public function tabStopFormatTest(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             SelManager.selectAll();
             SelManager.deleteText();
             SelManager.insertText("1\txxx\txxx\txxx\n2\tyyyyyy\tyyyyyy\tyyyyyy\n3\tzz\tzz\tzz");
@@ -575,7 +594,7 @@ package UnitTest.Tests
             tabStop2.position = 150;
             tabStop3.alignment = TabAlignment.END;
             tabStop3.position = 250;
-            format.tabStops = new Array(tabStop1, tabStop2, tabStop3);
+            format.tabStops = [tabStop1, tabStop2, tabStop3];
             SelManager.textFlow.hostFormat = format;
             SelManager.textFlow.flowComposer.updateAllControllers();
         }
