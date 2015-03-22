@@ -79,7 +79,7 @@ package
         public var horizontalScrollingTest:HorizontalScrollingTest;
         public var impliedParagraphTest:ImpliedParagraphTest;
         public var importApiTest:ImportAPITest;
-        public var KeyboardGestureTest:KeyboardGestureTest;
+        public var keyboardGestureTest:KeyboardGestureTest;
     }
 
 }

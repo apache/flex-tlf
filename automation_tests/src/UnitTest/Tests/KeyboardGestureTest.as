@@ -108,7 +108,7 @@ package UnitTest.Tests
         [BeforeClass]
         public static function setUpClass():void
         {
-            var testConfig = TestConfig.getInstance();
+            var testConfig:TestConfig = TestConfig.getInstance();
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/empty.xml");
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/school.xml");
             FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/tcyTestBase.xml");
