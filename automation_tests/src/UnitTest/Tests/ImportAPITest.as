@@ -443,6 +443,7 @@ package UnitTest.Tests
             );
         }
 
+        [Test]
         public function testMarkupImport():void
         {
             const markup:String = "<TextFlow columnCount='inherit' columnGap='inherit' columnWidth='inherit' lineBreak='inherit' " +
