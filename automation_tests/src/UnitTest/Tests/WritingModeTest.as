@@ -18,7 +18,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
+    import UnitTest.ExtendedClasses.TestConfigurationLoader;
     import UnitTest.ExtendedClasses.VellumTestCase;
+    import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
 
     import flash.display.DisplayObject;
@@ -30,8 +32,39 @@ package UnitTest.Tests
     import org.flexunit.asserts.assertTrue;
 
     [TestCase(order=21)]
+    [RunWith("org.flexunit.runners.Parameterized")]
     public class WritingModeTest extends VellumTestCase
     {
+        [DataPoints(loader=arabicDirectionLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var arabicDirectionDp:Array;
+
+        public static var arabicDirectionLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "arabicDirection");
+
+        [DataPoints(loader=rtlJustificationLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var rtlJustificationDp:Array;
+
+        public static var rtlJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "rtlJustification");
+
+        [DataPoints(loader=romanJustificationLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var romanJustificationDp:Array;
+
+        public static var romanJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "romanJustification");
+
+        [DataPoints(loader=arabicJustificationLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var arabicJustificationDp:Array;
+
+        public static var arabicJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "arabicJustification");
+
+        [DataPoints(loader=japaneseJustificationLoader)]
+        [ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+        public static var japaneseJustificationDp:Array;
+
+        public static var japaneseJustificationLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/UndoRedoTest.xml", "japaneseJustification");
+
         public function WritingModeTest()
         {
             super("", "WritingModeTest", TestConfig.getInstance());
@@ -269,12 +302,14 @@ package UnitTest.Tests
             );
         }
 
-        [Test]
+        [Test(dataProvider=japaneseJustificationDp)]
         /**
          *  Test BlockProgression.RL + Direction.LTR
          */
-        public function japaneseJustification():void
+        public function japaneseJustification(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
             // Force the intended text positioning
             SelManager.textFlow.blockProgression = BlockProgression.RL;
             SelManager.textFlow.direction = Direction.LTR;
@@ -307,12 +342,14 @@ package UnitTest.Tests
                     yPos[0] == yPos[1] && yPos[1] == yPos[2]);
         }
 
-        [Test]
+        [Test(dataProvider=romanJustificationDp)]
         /**
          * Test BlockProgression.TB + Direction.LTR
          */
-        public function romanJustification():void
+        public function romanJustification(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
             // Force the intended text positioning
             SelManager.textFlow.blockProgression = BlockProgression.TB;
             SelManager.textFlow.direction = Direction.LTR;
@@ -345,12 +382,15 @@ package UnitTest.Tests
                     xPos[0] == xPos[1] && xPos[1] == xPos[2]);
         }
 
-        [Test]
+        [Test(dataProvider=rtlJustificationDp)]
         /**
          * Test BlockProgression.RL + Direction.RTL
          */
-        public function rtlJustification():void
+        public function rtlJustification(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             // Force the intended text positioning
             SelManager.textFlow.blockProgression = BlockProgression.RL;
             SelManager.textFlow.direction = Direction.RTL;
@@ -383,12 +423,15 @@ package UnitTest.Tests
                     yPos[0] > yPos[1] && yPos[1] > yPos[2]);
         }
 
-        [Test]
+        [Test(dataProvider=arabicJustificationDp)]
         /**
          * Test BlockProgression.TB + Direction.RTL
          */
-        public function arabicJustification():void
+        public function arabicJustification(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             // Force the intended text positioning
             SelManager.textFlow.blockProgression = BlockProgression.TB;
             SelManager.textFlow.direction = Direction.RTL;
@@ -421,12 +464,15 @@ package UnitTest.Tests
                     xPos[0] > xPos[1] && xPos[1] > xPos[2]);
         }
 
-        [Ignore][Test]
+        [Test(dataProvider=arabicDirectionDp)]
         /**
          * Make sure the right to left fonts are displayed right to left
          */
-        public function arabicDirection():void
+        public function arabicDirection(testCaseVo:TestCaseVo):void
         {
+            TestData.fileName = testCaseVo.fileName;
+            super.setUpTest();
+
             for (var l:int = 0; l < TestFrame.textFlow.flowComposer.numLines; l++)
             {
                 var testLine:TextLine = SelManager.textFlow.flowComposer.getLineAt(l).getTextLine();
