@@ -40,6 +40,7 @@ package
     import UnitTest.Tests.HorizontalScrollingTest;
     import UnitTest.Tests.ImpliedParagraphTest;
     import UnitTest.Tests.ImportAPITest;
+    import UnitTest.Tests.KeyboardGestureTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.TabTest;
@@ -78,6 +79,7 @@ package
         public var horizontalScrollingTest:HorizontalScrollingTest;
         public var impliedParagraphTest:ImpliedParagraphTest;
         public var importApiTest:ImportAPITest;
+        public var KeyboardGestureTest:KeyboardGestureTest;
     }
 
 }
