@@ -43,6 +43,7 @@ package
     import UnitTest.Tests.KeyboardGestureTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
+    import UnitTest.Tests.SpacingTest;
     import UnitTest.Tests.TabTest;
     import UnitTest.Tests.TextFlowEditTest;
     import UnitTest.Tests.UndoRedoTest;
@@ -80,6 +81,7 @@ package
         public var impliedParagraphTest:ImpliedParagraphTest;
         public var importApiTest:ImportAPITest;
         public var keyboardGestureTest:KeyboardGestureTest;
+        public var spacingTest:SpacingTest;
     }
 
 }

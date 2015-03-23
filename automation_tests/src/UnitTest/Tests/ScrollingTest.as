@@ -32,6 +32,7 @@ package UnitTest.Tests
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.TestCaseVo;
     import UnitTest.Fixtures.TestConfig;
+    import UnitTest.Helpers.SingleContainer;
 
     import flash.display.Shape;
     import flash.display.Sprite;
@@ -558,7 +559,7 @@ package UnitTest.Tests
             }
         }
 
-        private var singleCT:SingleContainerTest = new SingleContainerTest();
+        private var singleCT:SingleContainer = new SingleContainer();
 
         /**
          * mjzhang : Watson#2819924 Error #1009 in flashx.textLayout.container::ContainerController::updateGraphics()
