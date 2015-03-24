@@ -47,6 +47,7 @@ package
     import UnitTest.Tests.TabTest;
     import UnitTest.Tests.TextFlowEditTest;
     import UnitTest.Tests.UndoRedoTest;
+    import UnitTest.Tests.VerticalScrollingTest;
     import UnitTest.Tests.WritingModeTest;
 
     [Suite(order=1)]
@@ -82,6 +83,7 @@ package
         public var importApiTest:ImportAPITest;
         public var keyboardGestureTest:KeyboardGestureTest;
         public var spacingTest:SpacingTest;
+        public var verticalScrollingTest:VerticalScrollingTest;
     }
 
 }
