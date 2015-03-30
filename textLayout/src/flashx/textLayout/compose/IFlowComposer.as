@@ -431,7 +431,23 @@ package flashx.textLayout.compose
 	 	 */
 	 	 
 		function isDamaged(absolutePosition:int):Boolean;
-		
+
+		/**
+		 * Indicates whether any TextFlowLine objects between the beginning of the flow and the line containing the content at
+		 * the specified position are marked as damaged OR if there are other clues that the textFlow should be rebuilt.
+		 *
+		 * @param absolutePosition the last position in the area of interest
+		 * @return 	true if any of the TextFlowLine objects from the start of the flow up to the line containing the content at
+		 * <code>absolutePosition</code> are marked as damaged OR if there are other reasons to believe the textFlow is damaged.
+		 *
+         * @see flashx.textLayout.compose.IFlowComposer#isDamaged()
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+	 	 * @langversion 3.0
+	 	 */
+
+		function isPotentiallyDamaged(absolutePosition:int):Boolean;
+
 		
 		/** 
 		 * True, if the flow composer is currently performing a composition operation.

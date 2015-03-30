@@ -29,7 +29,7 @@ package flashx.textLayout.compose
 	import flashx.textLayout.elements.FlowLeafElement;
 	import flashx.textLayout.elements.TextFlow;
 	import flashx.textLayout.tlf_internal;
-	
+
 	use namespace tlf_internal;
 	
 	[Exclude(name="initializeLines",kind="method")]
@@ -310,7 +310,6 @@ package flashx.textLayout.compose
 				startPosition = 0;
 			}
 			
-			// find the line at damageStart
 			if (_lines.length == 0 || textFlow.textLength == 0)
 				return;
 				
@@ -319,10 +318,12 @@ package flashx.textLayout.compose
 				return;
 				
 			CONFIG::debug { assert(startPosition + damageLength <= textFlow.textLength, "Damaging past end of flow!"); }
-			
-			// Start damaging one line before the startPosition location in case some of the first "damaged" line will fit on the previous line.
-			var lineIndex:int = findLineIndexAtPosition(startPosition);
-			var leaf:FlowLeafElement = textFlow.findLeaf(startPosition);
+
+            // find the line at damageStart
+            var lineIndex:int = findLineIndexAtPosition(startPosition);
+
+            // Start damaging one line before the startPosition location in case some of the first "damaged" line will fit on the previous line.
+            var leaf:FlowLeafElement = textFlow.findLeaf(startPosition);
 			if (leaf && lineIndex > 0)
 				lineIndex--;
 
@@ -365,6 +366,20 @@ package flashx.textLayout.compose
 			CONFIG::debug { checkFirstDamaged(); }
 
 			return _damageAbsoluteStart <= absolutePosition && _damageAbsoluteStart != textFlow.textLength;
+		}
+
+
+		/**
+		 * @copy IFlowComposer#isPotentiallyDamaged()
+		 *
+		 * @playerversion Flash 10
+		 * @playerversion AIR 1.5
+	 	 * @langversion 3.0
+		 */
+
+		public function isPotentiallyDamaged(absolutePosition:int):Boolean
+		{
+			return isDamaged(absolutePosition);
 		}
 
 		/** @private */

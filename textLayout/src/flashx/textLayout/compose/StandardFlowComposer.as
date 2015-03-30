@@ -628,10 +628,10 @@ package flashx.textLayout.compose
 		//--------------------------------------------------------------------------
 		
 		/** @private Override required because we may be damaged if the last container has scrolling */
-		public override function isDamaged(absolutePosition:int):Boolean
+		public override function isPotentiallyDamaged(absolutePosition:int):Boolean
 		{
 			// Returns true if any text from _damageAbsoluteStart through absolutePosition needs to be recomposed
-			if (!super.isDamaged(absolutePosition))
+			if (!super.isPotentiallyDamaged(absolutePosition))
 			{	
 				if (absolutePosition == _textFlow.textLength)
 				{

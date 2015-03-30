@@ -47,6 +47,7 @@ package flashx.textLayout.container
     import flashx.textLayout.compose.FlowDamageType;
     import flashx.textLayout.compose.IFlowComposer;
     import flashx.textLayout.compose.TextFlowLine;
+    import flashx.textLayout.compose.TextFlowTableBlock;
     import flashx.textLayout.compose.TextLineRecycler;
     import flashx.textLayout.debug.Debugging;
     import flashx.textLayout.debug.assert;
@@ -55,6 +56,7 @@ package flashx.textLayout.container
     import flashx.textLayout.edit.ISelectionManager;
     import flashx.textLayout.edit.SelectionFormat;
     import flashx.textLayout.elements.BackgroundManager;
+    import flashx.textLayout.elements.CellCoordinates;
     import flashx.textLayout.elements.Configuration;
     import flashx.textLayout.elements.ContainerFormattedElement;
     import flashx.textLayout.elements.FlowElement;
@@ -63,6 +65,9 @@ package flashx.textLayout.container
     import flashx.textLayout.elements.InlineGraphicElement;
     import flashx.textLayout.elements.ParagraphElement;
     import flashx.textLayout.elements.TCYElement;
+    import flashx.textLayout.elements.TableBlockContainer;
+    import flashx.textLayout.elements.TableCellElement;
+    import flashx.textLayout.elements.TableRowElement;
     import flashx.textLayout.elements.TextFlow;
     import flashx.textLayout.events.FlowElementMouseEventManager;
     import flashx.textLayout.events.ModelChange;
@@ -79,55 +84,8 @@ package flashx.textLayout.container
     import flashx.textLayout.utils.Twips;
 
     use namespace tlf_internal;
-	
-	import flashx.textLayout.compose.FloatCompositionData;
-	import flashx.textLayout.compose.FlowComposerBase;
-	import flashx.textLayout.compose.FlowDamageType;
-	import flashx.textLayout.compose.IFlowComposer;
-	import flashx.textLayout.compose.TextFlowLine;
-	import flashx.textLayout.compose.TextFlowTableBlock;
-	import flashx.textLayout.compose.TextLineRecycler;
-	import flashx.textLayout.debug.Debugging;
-	import flashx.textLayout.debug.assert;
-	import flashx.textLayout.edit.EditingMode;
-	import flashx.textLayout.edit.IInteractionEventHandler;
-	import flashx.textLayout.edit.ISelectionManager;
-	import flashx.textLayout.edit.SelectionFormat;
-	import flashx.textLayout.elements.BackgroundManager;
-	import flashx.textLayout.elements.CellCoordinates;
-	import flashx.textLayout.elements.CellRange;
-	import flashx.textLayout.elements.Configuration;
-	import flashx.textLayout.elements.ContainerFormattedElement;
-	import flashx.textLayout.elements.FlowElement;
-	import flashx.textLayout.elements.FlowLeafElement;
-	import flashx.textLayout.elements.FlowValueHolder;
-	import flashx.textLayout.elements.InlineGraphicElement;
-	import flashx.textLayout.elements.LinkElement;
-	import flashx.textLayout.elements.ParagraphElement;
-	import flashx.textLayout.elements.TableBlockContainer;
-	import flashx.textLayout.elements.TableCellElement;
-	import flashx.textLayout.elements.TableElement;
-	import flashx.textLayout.elements.TableRowElement;
-	import flashx.textLayout.elements.TextFlow;
-	import flashx.textLayout.events.FlowElementMouseEvent;
-	import flashx.textLayout.events.FlowElementMouseEventManager;
-	import flashx.textLayout.events.ModelChange;
-	import flashx.textLayout.events.ScrollEvent;
-	import flashx.textLayout.events.ScrollEventDirection;
-	import flashx.textLayout.events.TextLayoutEvent;
-	import flashx.textLayout.events.UpdateCompleteEvent;
-	import flashx.textLayout.formats.BlockProgression;
-	import flashx.textLayout.formats.Float;
-	import flashx.textLayout.formats.FormatValue;
-	import flashx.textLayout.formats.ITextLayoutFormat;
-	import flashx.textLayout.formats.TextLayoutFormat;
-	import flashx.textLayout.property.Property;
-	import flashx.textLayout.tlf_internal;
-	import flashx.textLayout.utils.Twips;
-	
-	use namespace tlf_internal;
-	
-	/** 
+
+	/**
 	 * The ContainerController class defines the relationship between a TextFlow object and a container.
 	 * A TextFlow may have one or more rectangular areas that can hold text; the text is said to be flowing
 	 * through the containers. Each container is a Sprite that is the parent DisplayObject for the TextLines.
@@ -722,7 +680,7 @@ package flashx.textLayout.container
 		
 		public function isDamaged():Boolean
 		{
-			return flowComposer.isDamaged(absoluteStart + _textLength);
+			return flowComposer.isPotentiallyDamaged(absoluteStart + _textLength);
 		}
 		
 		/** called whenever the container attributes are changed.  Mark computed attributes and columnstate as out of date. 

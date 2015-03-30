@@ -475,7 +475,7 @@ package flashx.textLayout.container
 	 	 * @langversion 3.0
 	 	 */
 		public function isDamaged():Boolean
-		{ return _composeState == COMPOSE_FACTORY ? _damaged : _textFlow.flowComposer.isDamaged(_textFlow.textLength); }
+		{ return _composeState == COMPOSE_FACTORY ? _damaged : _textFlow.flowComposer.isPotentiallyDamaged(_textFlow.textLength); }
 		
 		/** Editing mode of this TextContainerManager. Modes are reading only, reading and selection permitted, 
 		 * and editing (reading, selection, and writing)  permitted. Use the constant values of the EditingMode

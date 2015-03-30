@@ -91,7 +91,7 @@ package flashx.textLayout.elements
 		}
 
 		public function isDamaged():Boolean {
-			return _damaged || (_textFlow && _textFlow.flowComposer.isDamaged(_textFlow.textLength));
+			return _damaged || (_textFlow && _textFlow.flowComposer.isPotentiallyDamaged(_textFlow.textLength));
 		}
 		
 		private var _savedPaddingTop:Number = 0;
