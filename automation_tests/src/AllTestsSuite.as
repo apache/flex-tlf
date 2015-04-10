@@ -58,7 +58,7 @@ package
         public var factoryImportTest:FactoryImportTest;
         public var accessibilityMethodsTest:AccessibilityMethodsTest;
         public var allChartAttributeTest:AllCharAttributeTest;
-        public var allContAttirbuteTest:AllContAttributeTest;
+        public var allContAttributeTest:AllContAttributeTest;
         public var allEventTest:AllEventTest;
         public var allParagraphAttributeTest:AllParaAttributeTest;
         public var attributeTest:AttributeTest;
