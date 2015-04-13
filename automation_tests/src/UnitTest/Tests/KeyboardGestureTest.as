@@ -34,7 +34,6 @@ package UnitTest.Tests
     import flashx.textLayout.elements.ListItemElement;
     import flashx.textLayout.elements.ParagraphElement;
     import flashx.textLayout.elements.SpanElement;
-    import flashx.textLayout.elements.TextFlow;
     import flashx.textLayout.formats.BlockProgression;
     import flashx.textLayout.formats.Direction;
 
@@ -2358,7 +2357,7 @@ package UnitTest.Tests
 
             SelManager.selectRange(608, 608);
             sendKeyboardGesture(END);
-            SelManager.textFlow.flowComposer.findLineAtPosition(SelManager.anchorPosition)
+            SelManager.textFlow.flowComposer.findLineAtPosition(SelManager.anchorPosition);
             assertTrue("End failed to move the correct line end from image sandwich",
                     SelManager.textFlow.flowComposer.findLineAtPosition(608) ==
                     SelManager.textFlow.flowComposer.findLineAtPosition(SelManager.activePosition));
@@ -2794,13 +2793,14 @@ package UnitTest.Tests
         /**
          * Test the basic functionality and undo/redo
          */
+        [Test]
         public function pgUpGeneralTest():void
         {
             // Test Generic Functionality
             loadTestFile("simple.xml");
             SelManager.selectRange(0, 2155);
             var plainTextExporter:ITextExporter = TextConverter.getExporter(TextConverter.PLAIN_TEXT_FORMAT);
-            var tempText:String; // = plainTextExporter.export( SelManager.createTextScrap().textFlow, ConversionType.STRING_TYPE ) as String;
+            var tempText:String = plainTextExporter.export(SelManager.textFlow, ConversionType.STRING_TYPE) as String;
             SelManager.selectRange(2155, 2155);
             SelManager.insertText(tempText);
             SelManager.insertText(tempText);
@@ -2809,8 +2809,8 @@ package UnitTest.Tests
             SelManager.selectRange(6067, 6067);
             sendKeyboardGesture(PG_UP);
             assertTrue("PgUp failed to select 7/8 page up",
-                    SelManager.activePosition == 3052 &&
-                    SelManager.anchorPosition == 3052);
+                    SelManager.activePosition == 3332 &&
+                    SelManager.anchorPosition == 3332);
 
             SelManager.selectRange(1314, 1314);
             sendKeyboardGesture(PG_UP);
@@ -2825,7 +2825,7 @@ package UnitTest.Tests
             loadTestFile("simple.xml");
             SelManager.selectRange(0, 2155);
             var plainTextExporter:ITextExporter = TextConverter.getExporter(TextConverter.PLAIN_TEXT_FORMAT);
-            var tempText:String; // = plainTextExporter.export( SelManager.createTextScrap().textFlow, ConversionType.STRING_TYPE ) as String;
+            var tempText:String = plainTextExporter.export(SelManager.textFlow, ConversionType.STRING_TYPE) as String;
             SelManager.selectRange(2155, 2155);
             SelManager.insertText(tempText);
             SelManager.insertText(tempText);
@@ -2845,18 +2845,18 @@ package UnitTest.Tests
             SelManager.selectRange(608, 608);
             sendKeyboardGesture(PG_UP);
             assertTrue("PageUp failed to move up from image sandwich",
-                    SelManager.activePosition == 36 &&
-                    SelManager.anchorPosition == 36);
+                    SelManager.activePosition == 460 &&
+                    SelManager.anchorPosition == 460);
 
             SelManager.selectRange(6183, 6183);
             sendKeyboardGesture(PG_UP);
             assertTrue("PageUp failed to move up from hyphenated word",
-                    SelManager.activePosition == 2724 &&
-                    SelManager.anchorPosition == 2724);
+                    SelManager.activePosition == 46 &&
+                    SelManager.anchorPosition == 46);
             sendKeyboardGesture(PG_UP);
             assertTrue("PageUp failed when executed twice",
-                    SelManager.activePosition == 1855 &&
-                    SelManager.anchorPosition == 1855);
+                    SelManager.activePosition == 46 &&
+                    SelManager.anchorPosition == 46);
 
             SelManager.selectRange(957, 957);
             sendKeyboardGesture(PG_UP);
@@ -2867,8 +2867,8 @@ package UnitTest.Tests
             SelManager.selectRange(4316, 1346);
             sendKeyboardGesture(PG_UP);
             assertTrue("PageUp failed to move up from line beginning",
-                    SelManager.activePosition == 835 &&
-                    SelManager.anchorPosition == 835);
+                    SelManager.activePosition == 41 &&
+                    SelManager.anchorPosition == 41);
         }
 
         [Test]
@@ -2898,8 +2898,8 @@ package UnitTest.Tests
             sendKeyboardGesture(PG_UP);
 
             assertTrue("PageUp changed movement behavior within right to left text",
-                    SelManager.activePosition == 51 &&
-                    SelManager.anchorPosition == 51);
+                    SelManager.activePosition == 12 &&
+                    SelManager.anchorPosition == 12);
 
             setUpTCYTest();
 
@@ -2929,7 +2929,7 @@ package UnitTest.Tests
             loadTestFile("simple.xml");
             SelManager.selectRange(0, 2155);
             var plainTextExporter:ITextExporter = TextConverter.getExporter(TextConverter.PLAIN_TEXT_FORMAT);
-            var tempText:String; // = plainTextExporter.export( SelManager.createTextScrap().textFlow, ConversionType.STRING_TYPE ) as String;
+            var tempText:String = plainTextExporter.export(SelManager.textFlow, ConversionType.STRING_TYPE) as String;
             SelManager.selectRange(2155, 2155);
             SelManager.insertText(tempText);
             SelManager.insertText(tempText);
@@ -2938,7 +2938,7 @@ package UnitTest.Tests
             SelManager.selectRange(6067, 6067);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed to select 7/8 page up",
-                    SelManager.activePosition == 3052 &&
+                    SelManager.activePosition == 3332 &&
                     SelManager.anchorPosition == 6067);
 
             SelManager.selectRange(1314, 1314);
@@ -2954,7 +2954,7 @@ package UnitTest.Tests
             loadTestFile("simple.xml");
             SelManager.selectRange(0, 2155);
             var plainTextExporter:ITextExporter = TextConverter.getExporter(TextConverter.PLAIN_TEXT_FORMAT);
-            var tempText:String; // = plainTextExporter.export( SelManager.createTextScrap().textFlow, ConversionType.STRING_TYPE ) as String;
+            var tempText:String = plainTextExporter.export(SelManager.textFlow, ConversionType.STRING_TYPE) as String;
             SelManager.selectRange(2155, 2155);
             SelManager.insertText(tempText);
             SelManager.insertText(tempText);
@@ -2974,30 +2974,30 @@ package UnitTest.Tests
             SelManager.selectRange(608, 608);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed to move up from image sandwich",
-                    SelManager.activePosition == 36 &&
+                    SelManager.activePosition == 460 &&
                     SelManager.anchorPosition == 608);
 
             SelManager.selectRange(6183, 6183);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed to move up from hyphenated word",
-                    SelManager.activePosition == 2724 &&
+                    SelManager.activePosition == 46 &&
                     SelManager.anchorPosition == 6183);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed when executed twice",
-                    SelManager.activePosition == 1855 &&
+                    SelManager.activePosition == 46 &&
                     SelManager.anchorPosition == 6183);
 
             SelManager.selectRange(957, 957);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed to move up from paragraph end",
-                    SelManager.activePosition == 122 &&
+                    SelManager.activePosition == 810 &&
                     SelManager.anchorPosition == 957);
 
             SelManager.selectRange(4316, 1346);
             sendKeyboardGesture(SHIFT_PG_UP);
             assertTrue("Shift-PageUp failed to move up from line beginning",
-                    SelManager.activePosition == 835 &&
-                    SelManager.anchorPosition == 4316);
+                    SelManager.activePosition == 41 &&
+                    SelManager.anchorPosition == 1346);
         }
 
         [Test]
@@ -3027,7 +3027,7 @@ package UnitTest.Tests
             sendKeyboardGesture(SHIFT_PG_UP);
 
             assertTrue("Shift-PageUp changed movement behavior within right to left text",
-                    SelManager.activePosition == 51 &&
+                    SelManager.activePosition == 12 &&
                     SelManager.anchorPosition == 261);
 
             setUpTCYTest();
@@ -3098,9 +3098,9 @@ package UnitTest.Tests
 
             try
             {
-                for (var type:int = 1; type <= 4; type++)
+                for (var i:int = 1; i <= 4; i++)
                 {
-                    switch (type)
+                    switch (i)
                     {
                         case 1:
                             key = UP;
@@ -3151,7 +3151,7 @@ package UnitTest.Tests
             SelManager.deleteText();
             SelManager.setFocus();
             SelManager.selectRange(0, 0);
-            var list:ListElement = new ListElement()
+            var list:ListElement = new ListElement();
             list.listStyleType = "decimal";
             list.listStylePosition = "inside";
             list.paddingLeft = "0";
@@ -3234,7 +3234,6 @@ package UnitTest.Tests
         [Test]
         public function CtrlBackspaceTest_Bug2821844():void
         {
-            var textFlow:TextFlow = SelManager.textFlow;
             SelManager.selectAll();
             SelManager.deleteText();
 
@@ -3256,9 +3255,9 @@ package UnitTest.Tests
         /**
          * Send a keyboard gesture using values listed above
          * Code folding extremely recommended here
-         * @param type
+         * @param gestureType
          */
-        private function sendKeyboardGesture(type:int):void
+        private function sendKeyboardGesture(gestureType:int):void
         {
             var charCode:int;
             var keyCode:int;
@@ -3291,7 +3290,7 @@ package UnitTest.Tests
                 downCode = 40;
             }
 
-            switch (type)
+            switch (gestureType)
             {
                 case CTRL_BACKSPACE:
                     charCode = 8;
@@ -3491,19 +3490,6 @@ package UnitTest.Tests
             var kEvent:KeyboardEvent = new KeyboardEvent(KeyboardEvent.KEY_DOWN,
                     true, false, charCode, keyCode, KeyLocation.STANDARD, ctrlDown, altDown, shiftDown);
             TestFrame.container["dispatchEvent"](kEvent);
-        }
-
-        // Returns the string from begIdx through and including endIdx
-        private function getText(begIdx:int, endIdx:int):String
-        {
-            var outString:String = "";
-
-            for (var x:int = begIdx; x < endIdx; x++)
-            {
-                outString += SelManager.textFlow.getCharAtPosition(x);
-            }
-
-            return outString;
         }
 
         // Returns the text contents of the entire textflow
