@@ -61,7 +61,7 @@
       </fileset>
     </classpath>
   </taskdef>
-  <target name="all" depends="main, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps, flexunnit_tests" description="Clean build of TLF component and associated applications"/>
+  <target name="all" depends="main, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps, test" description="Clean build of TLF component and associated applications"/>
   <target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
   <target name="clean" description="Cleans all SWCs and SWFs">
     <delete failonerror="false">
@@ -309,7 +309,13 @@
       </fileset>
     </copy>
   </target>
-  <target name="flexunnit_tests">
-    <flexunit swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf" player="flash" toDir="${output.dir}/apps/automation_apps" haltonfailure="true" verbose="true" />
+  <target name="test">
+    <flexunit
+            swf="${output.dir}/apps/automation_apps/bin/VellumUnit.swf"
+            player="flash"
+            toDir="${output.dir}/apps/automation_apps"
+            haltonfailure="true"
+            verbose="true"
+            />
   </target>
 </project>
