@@ -96,8 +96,6 @@ package UnitTest.ExtendedClasses
         public var runID:Number;
 
         public var fileName:String = null;
-        public var beforeData:BitmapData = null;
-        public var afterData:Bitmap = null;
 
         public var bitmapSnapshot:Bitmap = null;
         public var lineSnapshot:XML = null;
@@ -114,7 +112,6 @@ package UnitTest.ExtendedClasses
         public var htmlResult:Boolean = true;
 
         private var failString:String = "";
-        private var endOfSetupTime:Number;
 
         protected var addDefaultTestSettings:Boolean;
 

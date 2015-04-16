@@ -18,17 +18,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestDescriptor;
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
 	import UnitTest.ExtendedClasses.VellumTestCase;
 	import UnitTest.Fixtures.TestConfig;
-	
+
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
 	import flash.text.engine.TextLine;
-	import flash.ui.KeyLocation;
 	import flash.ui.Keyboard;
-	
+
 	import flashx.textLayout.compose.IFlowComposer;
 	import flashx.textLayout.compose.StandardFlowComposer;
 	import flashx.textLayout.compose.TextFlowLine;
@@ -39,8 +36,8 @@ package UnitTest.Tests
 	import flashx.textLayout.edit.EditManager;
 	import flashx.textLayout.elements.DivElement;
 	import flashx.textLayout.elements.FlowElement;
-	import flashx.textLayout.elements.FlowLeafElement;
 	import flashx.textLayout.elements.FlowGroupElement;
+	import flashx.textLayout.elements.FlowLeafElement;
 	import flashx.textLayout.elements.ListElement;
 	import flashx.textLayout.elements.ListItemElement;
 	import flashx.textLayout.elements.ParagraphElement;
@@ -52,60 +49,34 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.ListStyleType;
 	import flashx.textLayout.formats.TabStopFormat;
 	import flashx.textLayout.tlf_internal;
-	
+
 	import mx.containers.Canvas;
 
-    import org.flexunit.asserts.assertTrue;
+	import org.flexunit.asserts.assertTrue;
 
-    use namespace tlf_internal;
+	use namespace tlf_internal;
 
+	[TestCase(order=31)]
 	public class ListTest extends VellumTestCase
 	{
-		public function ListTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
+		public function ListTest()
 		{
-			super(methodName, testID, testConfig, testCaseXML);
+			super("", "ListTest", TestConfig.getInstance());
 
-			// Note: These must correspond to a Watson product area (case-sensitive)
+			metaData = {};
 			metaData.productArea = "Lists";
 		}
-		override public function setUpTest() : void
-		{
-			if (containerType == "custom")
-			{
-				cleanUpTestApp();
-			}
-			else
-			{
-				super.setUpTest();
-			}
-		}
-		public static function suite(testConfig:TestConfig, ts:TestSuiteExtended):void
-		{
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "addList", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "addNestedLists", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "removeNestedLists", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "addMultiListItem", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "checkMarkerRegeneration", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "removeListItem", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "tabsInMarkerFormat", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "addDivInList", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "SplitAndMergeCauseMarkerRegeneration", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "listItemGoOutOfList", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "splitElementOperationTest", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "enterSplitListItem", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "backspaceMergeListItem", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "listMarkerFormatTest", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "ListListMarkerFormatparagraphStartIndent", testConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "ListMarkerFormatTabStopTest", testConfig ) );
-			
-			var customTestConfig:TestConfig = testConfig.copyTestConfig();
-			customTestConfig.containerType = "custom";
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "scrollByLinesTest", customTestConfig ) );
-			ts.addTestDescriptor (new TestDescriptor (ListTest, "crossContainers", customTestConfig ) );
 
+		[After]
+		override public function tearDownTest():void
+		{
+			super.tearDownTest();
 		}
+
+		[Test]
 		public function addList():void
 		{
+			super.setUpTest();
 			// See VellumTextCase.setup() for where SelManager comes from.
 			// This creates a list with the default selection from setup()
 			var listElementCreated:ListElement = SelManager.createList();
@@ -159,9 +130,11 @@ package UnitTest.Tests
 			assertTrue("Did not find a TextLine for the bullet", bulletLine !=null);
 			assertTrue("text length for the bullet line should be " + markerLength + ", but was " + bulletLine.rawTextLength, bulletLine.rawTextLength == markerLength);
 		}
-		
+
+		[Test]
 		public function addNestedLists():void
 		{
+			super.setUpTest();
 			//this test case will check up to three level nested lists
 			//create three lists
 			SelManager.createList();
@@ -230,7 +203,7 @@ package UnitTest.Tests
 			var listFlowLine:TextFlowLine;
 			var listLine:TextLine;
 			var bulletLine:TextLine;
-			for (i=0; i<listsFound; i++)
+			for (i=0; i < listsFound; i++)
 			{
 				listElement = allListElement[i] as ListElement;
 				listItem = listElement.getChildAt(0) as ListItemElement;
@@ -246,9 +219,11 @@ package UnitTest.Tests
 			}
 
 		}
-		
+
+		[Test]
 		public function removeNestedLists():void
 		{
+			super.setUpTest();
 			//create three lists
 			SelManager.createList();
 			SelManager.createList();
@@ -307,9 +282,12 @@ package UnitTest.Tests
 			//check 0 list found after removal
 			assertTrue("Expected 0 list element found: " + listsFound, listsFound == 0);
 		}
-		
+
+		[Test]
 		public function addDivInList():void
 		{
+			super.setUpTest();
+
 			var tf:TextFlow = SelManager.textFlow;
 			SelManager.selectAll();
 			SelManager.deleteText();
@@ -342,9 +320,12 @@ package UnitTest.Tests
 				elem = elem.getNextLeaf();
 			}
 		}
-		
+
+		[Test]
 		public function addMultiListItem():void
 		{
+			super.setUpTest();
+
 			SelManager.selectRange(0,0);
 			var tf:TextFlow = SelManager.textFlow;
 			
@@ -368,7 +349,7 @@ package UnitTest.Tests
 				{
 					// save this for display check below
 					var listElement:ListElement = elem as ListElement;
-					var elem2:FlowElement = listElement.getChildAt(0)
+					var elem2:FlowElement = listElement.getChildAt(0);
 					// look for ListItemElement
 					while (elem2)
 					{
@@ -417,9 +398,12 @@ package UnitTest.Tests
 				assertTrue("text length for the bullet line should be " + markerLength + ", but was " + bulletLine.rawTextLength, bulletLine.rawTextLength == markerLength);
 			}
 		}
-		
+
+		[Test]
 		public function checkMarkerRegeneration():void
 		{
+			super.setUpTest();
+
 			SelManager.selectRange(0,0);
 			var tf:TextFlow = SelManager.textFlow;
 			
@@ -478,9 +462,12 @@ package UnitTest.Tests
 			bulletText = listElement.computeListItemText(listItem, listItem.computedListMarkerFormat());
 			assertTrue("Marker regeneration is incorrect after changing listStyleType ", bulletText == "γ.");
 		}
-		
+
+		[Test]
 		public function removeListItem():void
 		{
+			super.setUpTest();
+
 			SelManager.selectRange(0,0);
 			var tf:TextFlow = SelManager.textFlow;
 			
@@ -507,7 +494,7 @@ package UnitTest.Tests
 				{
 					// save this for display check below
 					var listElement:ListElement = elem as ListElement;
-					var elem2:FlowElement = listElement.getChildAt(0)
+					var elem2:FlowElement = listElement.getChildAt(0);
 					while (elem2)
 					{
 						if (elem2 as ListItemElement)
@@ -555,8 +542,13 @@ package UnitTest.Tests
 				assertTrue("text length for the bullet line should be " + markerLength + ", but was " + bulletLine.rawTextLength, bulletLine.rawTextLength == markerLength);
 			}
 		}
+
+		[Test]
 		public function crossContainers():void
-		{	
+		{
+			containerType = "custom";
+			super.cleanUpTestApp();
+
 			var TestCanvas:Canvas;
 			TestDisplayObject = testApp.getDisplayObject();
 			if (TestDisplayObject)
@@ -628,8 +620,13 @@ package UnitTest.Tests
 				assertTrue("Marker generation is incorrect after crossing the containers ",bulletText == ((j+1)+"."));
 			}			
 		}
+
+		[Test]
 		public function scrollByLinesTest():void
 		{
+			containerType = "custom";
+			super.cleanUpTestApp();
+
 			var TestCanvas:Canvas;
 			TestDisplayObject = testApp.getDisplayObject();
 			if (TestDisplayObject)
@@ -758,8 +755,11 @@ package UnitTest.Tests
 			return [firstVisibleLine, lastVisibleLine];
 		}
 
+		[Test]
 		public function SplitAndMergeCauseMarkerRegeneration():void
 		{
+			super.setUpTest();
+
 			SelManager.selectAll();
 			SelManager.deleteText();
 			SelManager.selectRange(0,0);
@@ -805,9 +805,12 @@ package UnitTest.Tests
 			assertTrue("Marker regeneration is incorrect after spliting a new list item",
 				bulletText1 == "1." && bulletText2 == "2." &&  bulletText3 == "3.");
 		}
-		
+
+		[Test]
 		public function listItemGoOutOfList():void
 		{
+			super.setUpTest();
+
 			SelManager.selectAll();
 			SelManager.deleteText();
 			SelManager.selectRange(0,0);
@@ -869,18 +872,21 @@ package UnitTest.Tests
 			assertTrue("The first item is incorrect backspace from the beginning of first item", span2.text == "cd");
 			assertTrue("Number of Items is incorrect after backspace from the beginning of first item", list.numChildren == 1);
 		}
+
+		[Test]
 		public function splitElementOperationTest():void
 		{
+			super.setUpTest();
+
 			var tf:TextFlow = SelManager.textFlow;
 			var listItemMarkup:String = "<TextFlow xmlns='http://ns.adobe.com/textLayout/2008'>"
 				+"<list><li><div><p><span>が全然分からへん。</span><tcy>12</tcy></p></div></li></list>"
 				+"</TextFlow>";
 			var listFlow:TextFlow = TextConverter.importToFlow(listItemMarkup,TextConverter.TEXT_LAYOUT_FORMAT);
 			var list:ListElement = listFlow.getChildAt(0) as ListElement;
-			var listCopy:ListElement;
 
 			// splitElementOperation on List at the beginnning
-			listCopy = list.deepCopy(0,list.textLength) as ListElement;
+			var listCopy:ListElement = list.deepCopy(0,list.textLength) as ListElement;
 			tf.replaceChildren(0,tf.numChildren,listCopy);
 			tf.flowComposer.updateAllControllers();
 			var xmlOut:XML = TextConverter.export(tf,TextConverter.TEXT_LAYOUT_FORMAT, ConversionType.XML_TYPE) as XML;
@@ -1079,9 +1085,12 @@ package UnitTest.Tests
 			assertTrue("The number of TCY is incorrect after splitElementOperation on TCY", para.numChildren == 3 ); 
 			*/
 		}
-		
+
+		[Test]
 		public function enterSplitListItem():void
 		{
+			super.setUpTest();
+
 			var tf:TextFlow = SelManager.textFlow;
 			var listItemMarkup:String = "<TextFlow xmlns='http://ns.adobe.com/textLayout/2008'>"
 				+"<list><li><div><p><span>abc</span></p></div></li></list>"
@@ -1097,7 +1106,7 @@ package UnitTest.Tests
 			// enter at the beginning of a list item
 			var kEnter:KeyboardEvent = new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, Keyboard.ENTER);
 			SelManager.selectRange(0,0);
-			TestFrame.container["dispatchEvent"](kEnter);
+			TestFrame.container.dispatchEvent(kEnter);
 			SelManager.flushPendingOperations();			
 			tf.flowComposer.updateAllControllers();
 			var xmlOut:XML = TextConverter.export(tf,TextConverter.TEXT_LAYOUT_FORMAT, ConversionType.XML_TYPE) as XML;
@@ -1126,7 +1135,7 @@ package UnitTest.Tests
 			tf.flowComposer.updateAllControllers();
 			// enter in the middle of a list item
 			SelManager.selectRange(2,2);
-			TestFrame.container["dispatchEvent"](kEnter);
+			TestFrame.container.dispatchEvent(kEnter);
 			SelManager.flushPendingOperations();			
 			tf.flowComposer.updateAllControllers();
 			list = tf.getChildAt(0) as ListElement;
@@ -1177,9 +1186,12 @@ package UnitTest.Tests
 			span2 = para2.getChildAt(0) as SpanElement;
 			assertTrue("The text of the second item created after enter at the end is incorrect", span2.text == "");
 		}
-		
+
+		[Test]
 		public function backspaceMergeListItem():void
 		{
+			super.setUpTest();
+
 			var tf:TextFlow = SelManager.textFlow;
 			var listItemMarkup:String = "<TextFlow xmlns='http://ns.adobe.com/textLayout/2008'>"
 				+"<list>"
@@ -1194,9 +1206,8 @@ package UnitTest.Tests
 				+"</TextFlow>";
 			var listFlow:TextFlow = TextConverter.importToFlow(listItemMarkup,TextConverter.TEXT_LAYOUT_FORMAT);
 			var list:ListElement = listFlow.getChildAt(0) as ListElement;
-			var listCopy:ListElement;
 
-			listCopy = list.deepCopy(0,list.textLength) as ListElement;
+			var listCopy:ListElement = list.deepCopy(0,list.textLength) as ListElement;
 			tf.replaceChildren(0,tf.numChildren,listCopy);
 			tf.flowComposer.updateAllControllers();
 			//merge two list items that have only paragraph element
@@ -1299,20 +1310,23 @@ package UnitTest.Tests
 			assertTrue("The text of the item created after merging two list items that have tcy nested in paragraph is incorrect", 
 				span.text == "abcd");
 		}
-		
+
+		[Test]
 		public function tabsInMarkerFormat():void
 		{
+			super.setUpTest();
+
 			var textFlow:TextFlow = SelManager.textFlow;
 			SelManager.selectRange(0,0);
 			textFlow.replaceChildren(0,textFlow.numChildren);
 			
-			var list:ListElement = new ListElement()
+			var list:ListElement = new ListElement();
 			list.listStyleType = "decimal"; 
 			list.listStylePosition = "inside";
 			list.paddingLeft = "0";
 			
 			var listMarkerFormat:ListMarkerFormat = new ListMarkerFormat();
-			var tabStops:Array = new Array();
+			var tabStops:Array = [];
 			var tabstop:TabStopFormat = new TabStopFormat();
 			tabstop.position = 50;
 			var tabstop2:TabStopFormat = new TabStopFormat();
@@ -1336,9 +1350,12 @@ package UnitTest.Tests
 			
 			textFlow.flowComposer.updateAllControllers();
 		}
-		
+
+		[Test]
 		public function listMarkerFormatTest():void
 		{
+			super.setUpTest();
+
 			var textFlow:TextFlow = SelManager.textFlow;
 			SelManager.selectRange(0,0);
 			//textFlow.format = null;
@@ -1346,7 +1363,7 @@ package UnitTest.Tests
 			
 			var p:ParagraphElement = new ParagraphElement();
 			var span:SpanElement = new SpanElement();
-			var listElement:ListElement = new ListElement()
+			var listElement:ListElement = new ListElement();
 			listElement.listStyleType = "decimal"; 
 			listElement.listStylePosition = "inside";
 			listElement.paddingLeft = "0";
@@ -1400,7 +1417,7 @@ package UnitTest.Tests
 				listMarkerFormat.fontSize == 16 &&
 				listMarkerFormat.fontFamily == "Times Roman");
 			
-			span.text += "concatInheritOnly() test successful. "
+			span.text += "concatInheritOnly() test successful. ";
 				
 			//apply() test
 			listMarkerFormat = new ListMarkerFormat();
@@ -1453,7 +1470,7 @@ package UnitTest.Tests
 				listMarkerFormat.fontFamily == undefined);
 			
 			// add text to the span, the span to the paragraph, and the paragraph to the text flow.
-			span.text += "removeMatching() test successful. " 
+			span.text += "removeMatching() test successful. ";
 				
 			//removeClashing() test
 			listMarkerFormat = new ListMarkerFormat();
@@ -1479,7 +1496,7 @@ package UnitTest.Tests
 				listMarkerFormat.fontFamily == "Arial, Helvetica, _sans");
 			
 			// add text to the span, the span to the paragraph, and the paragraph to the text flow.
-			span.text += "removeClashing() test successful. " 
+			span.text += "removeClashing() test successful. ";
 			
 			p.addChild(span);
 			listItemElement.addChild(p);
@@ -1492,14 +1509,17 @@ package UnitTest.Tests
 		/**
 		 * The attribute listMarkerFormat.paragraphStartIndent should push all of the list content to the right. 
 		 */
+		[Test]
 		public function ListListMarkerFormatparagraphStartIndent():void
 		{
+			super.setUpTest();
+
 			var textFlow:TextFlow = SelManager.textFlow;
 			SelManager.selectRange(0,0);
 		
 			textFlow.replaceChildren(0,textFlow.numChildren);
 			
-			var list:ListElement = new ListElement()
+			var list:ListElement = new ListElement();
 			list.listStyleType = "decimal"; 
 			list.listStylePosition = "inside";
 			list.paddingLeft = "50";
@@ -1523,26 +1543,28 @@ package UnitTest.Tests
 			textFlow.addChild(list);	
 			
 			textFlow.flowComposer.updateAllControllers();
-			var flowComposer:IFlowComposer = textFlow.flowComposer;
 			var line:TextFlowLine = textFlow.flowComposer.getLineAt(0);
 			assertTrue("Expected list to indent to paragraphStartIndent and Padding",line.lineOffset== 90);
 		}
 		
-		//yongtian : Fix bug related Bug#2800975, the custom tabStop of ListMarkerFormat are not correct displayed   
+		//yongtian : Fix bug related Bug#2800975, the custom tabStop of ListMarkerFormat are not correct displayed
+		[Test]
 		public function ListMarkerFormatTabStopTest():void
 		{
+			super.setUpTest();
+
 			var textFlow:TextFlow = SelManager.textFlow;
 			SelManager.selectRange(0,0);
 			textFlow.replaceChildren(0,textFlow.numChildren);
 	
-			var list:ListElement = new ListElement()
+			var list:ListElement = new ListElement();
 			list.listStyleType = "decimal";
 			list.listStylePosition = "inside";
 			list.paddingLeft = 0;
 			
 			var listMarkerFormat:ListMarkerFormat = new ListMarkerFormat();
 			
-			var tabStops:Array = new Array();
+			var tabStops:Array = [];
 			var tabstop:TabStopFormat = new TabStopFormat();
 			tabstop.position = 70;
 			tabStops.push(tabstop);
