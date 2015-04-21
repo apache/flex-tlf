@@ -41,6 +41,7 @@ package
     import UnitTest.Tests.ImpliedParagraphTest;
     import UnitTest.Tests.ImportAPITest;
     import UnitTest.Tests.KeyboardGestureTest;
+    import UnitTest.Tests.LinkTest;
     import UnitTest.Tests.ListTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
@@ -86,6 +87,7 @@ package
         public var spacingTest:SpacingTest;
         public var verticalScrollingTest:VerticalScrollingTest;
         public var listTest:ListTest;
+        public var linkTest:LinkTest;
     }
 
 }
