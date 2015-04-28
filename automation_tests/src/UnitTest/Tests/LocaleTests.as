@@ -18,7 +18,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
 	import UnitTest.ExtendedClasses.VellumTestCase;
 	import UnitTest.Fixtures.TestConfig;
 
@@ -34,24 +33,33 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.tlf_internal;
 
-    import org.flexunit.asserts.assertTrue;
+	import org.flexunit.asserts.assertTrue;
 
-    use namespace tlf_internal;
+	use namespace tlf_internal;
 
+	[TestCase(order=33)]
 	public class LocaleTests extends VellumTestCase
 	{
-		public function LocaleTests(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
+		public function LocaleTests()
 		{
-			super(methodName, testID, testConfig, testCaseXML);
+			super("", "LocaleTests", TestConfig.getInstance());
+			metaData = {};
 			metaData.productArea = "Text Attributes";
 		}
 
-		public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
- 		{
- 			var testCaseClass:Class = LocaleTests;
- 			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
- 		}
+		[Before]
+		override public function setUpTest():void
+		{
+			super.setUpTest();
+		}
 
+		[After]
+		override public function tearDownTest():void
+		{
+			super.tearDownTest();
+		}
+
+		[Test]
 		public function textFlowLocale():void  //KJT  test selection range and change event
 		{
 			SelManager.selectRange(0,0);
@@ -68,6 +76,7 @@ package UnitTest.Tests
 			assertTrue("TextFlow locale set failed on the paragraph",para.computedFormat.locale == tf.computedFormat.locale);
 		}
 
+		[Test]
 		public function validateEnLocaleSettings():void
 		{
 			setupLocaleAndAutoValues("en_US");
@@ -85,6 +94,7 @@ package UnitTest.Tests
 				para.getEffectiveLeadingModel() == LeadingModel.ROMAN_UP);
 		}
 
+		[Test]
 		public function validateZhLocaleSettings():void
 		{
 			setupLocaleAndAutoValues("zh_TW");
@@ -102,6 +112,7 @@ package UnitTest.Tests
 				para.getEffectiveLeadingModel() == LeadingModel.IDEOGRAPHIC_TOP_DOWN);
 		}
 
+		[Test]
 		public function validateJaLocaleSettings():void
 		{
 			setupLocaleAndAutoValues("ja_JP");
@@ -119,6 +130,7 @@ package UnitTest.Tests
 				para.getEffectiveLeadingModel() == LeadingModel.IDEOGRAPHIC_TOP_DOWN);
 		}
 
+		[Test]
 		public function validateDefaultLocaleSettings():void
 		{
 			setupLocaleAndAutoValues("es_MX");
@@ -136,6 +148,7 @@ package UnitTest.Tests
 				para.getEffectiveLeadingModel() == LeadingModel.ROMAN_UP);
 		}
 
+		[Test]
 		public function overrideLocaleWithEastAsian():void
 		{
 			//first set the locale to a non-East Asian value
@@ -164,6 +177,7 @@ package UnitTest.Tests
 				para.getEffectiveLeadingModel() == LeadingModel.IDEOGRAPHIC_TOP_DOWN);
 		}
 
+		[Test]
 		public function overrideLocaleWithEnOrDefault():void
 		{
 			//first set the locale to an East Asian value
@@ -197,24 +211,24 @@ package UnitTest.Tests
 			var tf:TextFlow = SelManager.textFlow;
 			var ca:TextLayoutFormat = new TextLayoutFormat();
 			ca["locale"] = locale;
-			if(tf.computedFormat.dominantBaseline != flashx.textLayout.formats.FormatValue.AUTO)
+			if(tf.computedFormat.dominantBaseline != FormatValue.AUTO)
 			{
-				ca["dominantBaseline"] = flashx.textLayout.formats.FormatValue.AUTO;
+				ca["dominantBaseline"] = FormatValue.AUTO;
 			}
 
-			if(tf.computedFormat.justificationRule != flashx.textLayout.formats.FormatValue.AUTO)
+			if(tf.computedFormat.justificationRule != FormatValue.AUTO)
 			{
-				ca["justificationRule"] = flashx.textLayout.formats.FormatValue.AUTO;
+				ca["justificationRule"] = FormatValue.AUTO;
 			}
 
-			if(tf.computedFormat.justificationStyle != flashx.textLayout.formats.FormatValue.AUTO)
+			if(tf.computedFormat.justificationStyle != FormatValue.AUTO)
 			{
-				ca["justificationStyle"] = flashx.textLayout.formats.FormatValue.AUTO
+				ca["justificationStyle"] = FormatValue.AUTO
 			}
 
-			if(tf.computedFormat.leadingModel != flashx.textLayout.formats.LeadingModel.AUTO)
+			if(tf.computedFormat.leadingModel != LeadingModel.AUTO)
 			{
-				ca["leadingModel"] = flashx.textLayout.formats.LeadingModel.AUTO;
+				ca["leadingModel"] = LeadingModel.AUTO;
 			}
 			SelManager.applyFormatToElement(tf, ca);
 		}

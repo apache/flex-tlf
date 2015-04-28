@@ -43,6 +43,7 @@ package
     import UnitTest.Tests.KeyboardGestureTest;
     import UnitTest.Tests.LinkTest;
     import UnitTest.Tests.ListTest;
+    import UnitTest.Tests.LocaleTests;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SpacingTest;
@@ -88,6 +89,7 @@ package
         public var verticalScrollingTest:VerticalScrollingTest;
         public var listTest:ListTest;
         public var linkTest:LinkTest;
+        public var localeTest:LocaleTests;
     }
 
 }
