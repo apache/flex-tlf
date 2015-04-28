@@ -26,8 +26,6 @@
 
 package UnitTest.Tests
 {
-
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
     import UnitTest.ExtendedClasses.VellumTestCase;
     import UnitTest.Fixtures.FileRepository;
     import UnitTest.Fixtures.TestConfig;
@@ -102,13 +100,6 @@ package UnitTest.Tests
             // Note: These must correspond to a Watson product area (case-sensitive)
             metaData = {};
             metaData.productArea = "Editing";
-        }
-
-        public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
-        {
-            FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/severalPages.xml");
-            var testCaseClass:Class = OperationTest;
-            VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
         }
 
         [BeforeClass]
@@ -745,7 +736,6 @@ package UnitTest.Tests
 
             if (!callback)
             {
-                callback = true;
                 const cutStart:int = 10;
                 const cutEnd:int = 20;
                 // Paste into a point selection
@@ -1339,9 +1329,6 @@ package UnitTest.Tests
                 leafFormat.fontSize = 60;
                 editManager.applyLeafFormat(leafFormat);
                 textFlow.flowComposer = null;
-
-                var delay:Boolean = true;
-
                 var delayUpdateNoFlowComposerHandler:Function = Async.asyncHandler(this, delayUpdateNoFlowComposer, 2500, {timeOut: "Timeout reached checkMouseClickEvent"}, operationTestTimeout);
                 TestFrame.container.addEventListener(Event.ENTER_FRAME, delayUpdateNoFlowComposerHandler, false, 0, true);
             }
@@ -1938,7 +1925,7 @@ package UnitTest.Tests
             SelManager.selectAll();
             SelManager.deleteText();
             var p1:ParagraphElement = new ParagraphElement();
-            var s1:SpanElement = new SpanElement()
+            var s1:SpanElement = new SpanElement();
             var f1:TextLayoutFormat = new TextLayoutFormat();
             f1.fontSize = 24;
             s1.text = "one";
