@@ -49,6 +49,7 @@ package
     import UnitTest.Tests.SpacingTest;
     import UnitTest.Tests.TabTest;
     import UnitTest.Tests.TextFlowEditTest;
+    import UnitTest.Tests.TextLineFilterTest;
     import UnitTest.Tests.UndoRedoTest;
     import UnitTest.Tests.VerticalScrollingTest;
     import UnitTest.Tests.WritingModeTest;
@@ -90,6 +91,7 @@ package
         public var listTest:ListTest;
         public var linkTest:LinkTest;
         public var localeTest:LocaleTests;
+        public var textLineFilterTest:TextLineFilterTest;
     }
 
 }
