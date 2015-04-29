@@ -18,8 +18,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
 	import UnitTest.ExtendedClasses.VellumTestCase;
+	import UnitTest.Fixtures.FileRepository;
 	import UnitTest.Fixtures.TestConfig;
 
 	import flash.geom.Rectangle;
@@ -32,42 +32,55 @@ package UnitTest.Tests
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.conversion.TextConverter;
+	import flashx.textLayout.edit.EditManager;
 	import flashx.textLayout.elements.*;
 	import flashx.textLayout.events.CompositionCompleteEvent;
 	import flashx.textLayout.factory.StringTextLineFactory;
+	import flashx.textLayout.factory.TextFlowTextLineFactory;
 	import flashx.textLayout.factory.TruncationOptions;
 	import flashx.textLayout.formats.LineBreak;
 	import flashx.textLayout.formats.TextLayoutFormat;
-	import flashx.textLayout.formats.VerticalAlign;
-
-    import org.flexunit.asserts.assertTrue;
-    import org.flexunit.asserts.fail;
-
-    use namespace tlf_internal;
 
 	import mx.utils.UIDUtil;
-	import flashx.textLayout.edit.EditManager;
 
-	import flashx.textLayout.factory.StringTextLineFactory;
-	import flashx.textLayout.factory.TextFlowTextLineFactory;
+	import org.flexunit.asserts.assertTrue;
+	import org.flexunit.asserts.fail;
 
- 	public class TextFlowTextLineFactoryTest extends VellumTestCase
+	use namespace tlf_internal;
+
+	[TestCase(order=35)]
+	public class TextFlowTextLineFactoryTest extends VellumTestCase
 	{
 
-		public function TextFlowTextLineFactoryTest(methodName:String, testID:String, testConfig:TestConfig,  testCaseXML:XML=null)
+		public function TextFlowTextLineFactoryTest()
 		{
-			super(methodName, testID, testConfig, testCaseXML);
+			super("", "TextFlowTextLineFactoryTest", TestConfig.getInstance());
 			TestData.fileName = "asknot.xml";
 
+			metaData = {};
 			// Note: These must correspond to a Watson product area (case-sensitive)
 			metaData.productArea = "Text Composition";
 		}
 
-		public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
- 		{
- 			var testCaseClass:Class = TextFlowTextLineFactoryTest;
- 			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
- 		}
+		[BeforeClass]
+		public static function setUpClass():void
+		{
+			var testConfig:TestConfig = TestConfig.getInstance();
+			FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/asknot.xml");
+			FileRepository.readFile(testConfig.baseURL, "../../test/testFiles/markup/tlf/aliceExcerpt.xml");
+		}
+
+		[Before]
+		override public function setUpTest():void
+		{
+			super.setUpTest();
+		}
+
+		[After]
+		override public function tearDownTest():void
+		{
+			super.tearDownTest();
+		}
 
 		/**
 		 * First, find two back to back paragraphs. Second, record the first line of the
@@ -79,10 +92,9 @@ package UnitTest.Tests
 		 * second paragraph again and see if it is the same as the line you recorded in step
 		 * (using "===").
 		 */
+		[Test]
 		public function checkParagraphShufflingTest():void
 		{
-			var startLength:int = TestFrame.rootElement.textLength;
-
 			var flow1:FlowElement;
 			var flow2:FlowElement;
 
@@ -140,6 +152,8 @@ package UnitTest.Tests
 		 * will need to recompose). It then checks to see if only those that should
 		 * be effected by the change have been changed.
 		 */
+		[Test]
+		[Ignore]
 		public function partialCompositionTest():void
 		{
 			var lines:Array = StandardFlowComposer(SelManager.textFlow.flowComposer).lines;
@@ -177,7 +191,7 @@ package UnitTest.Tests
 			}
 
 			//Register all the lines that shouldn't be damaged.
-			var undamagedUIDs:Array = new Array();
+			var undamagedUIDs:Array = [];
 			for(var k:int = 0; k < linenum; k++){
 				undamagedUIDs[k] = UIDUtil.getUID(lines[k]);
 			}
@@ -191,7 +205,7 @@ package UnitTest.Tests
 			}
 
 			//Register all the lines that should be damaged.
-			var damagedUIDs:Array = new Array();
+			var damagedUIDs:Array = [];
 			for(var n:int = linenum;
 				 n < lines.length &&
 				(lines[n] as TextFlowLine).paragraph != null &&
@@ -259,7 +273,7 @@ package UnitTest.Tests
 				lineIndex++;
 			}
 			
-			var result:Object = new Object();
+			var result:Object = {};
 			result["releasedLineCount"] = releasedLineCount;
 			result["invalidLineCount"] = invalidLineCount;
 			result["validLineCount"] = validLineCount;
@@ -268,13 +282,19 @@ package UnitTest.Tests
 			return result;
 		}
 
-		// For benchmark: read in Alice and display one screenfull
+		/**
+		 * For benchmark: read in Alice and display one screenfull
+		 */
+		[Test]
 		public function composeOneScreen():void
 		{
 			loadTestFile("aliceExcerpt.xml");
 		}
 
-		// Tests that lines that aren't in view are released, and that composition didn't run to the end
+		/**
+		 * Tests that lines that aren't in view are released, and that composition didn't run to the end
+		 */
+		[Test]
 		public function releasedLineTest():void
 		{
 			loadTestFile("aliceExcerpt.xml");
@@ -339,9 +359,7 @@ package UnitTest.Tests
 
 		private function truncatedCallback(tf:TextFlow):void
 		{
-
 			_truncatedTextLen = tf.textLength;
-
 		}
 
 		private function initTextFlow(text:String, format:TextLayoutFormat):void
@@ -355,7 +373,7 @@ package UnitTest.Tests
 
 		}
 
-
+		[Test]
 		public function truncationTest():void
 		{
 			var bounds:Rectangle = new Rectangle();
@@ -379,7 +397,7 @@ package UnitTest.Tests
 			formatForRtlTest.fontFamily = 'Adobe Arabic';
 
 			// Get stats used later
-			_lines = new Array(); _textLen = 0;
+			_lines = []; _textLen = 0;
 			bounds.width = 200;	bounds.height = NaN;
 			//var factory:StringTextLineFactory = new StringTextLineFactory();
 			var factory:TextFlowTextLineFactory = new TextFlowTextLineFactory();
@@ -397,7 +415,6 @@ package UnitTest.Tests
 			var line2:TextLine = _lines[2] as TextLine;
 			var line2Extent:Number = tf.configuration.overflowPolicy == OverflowPolicy.FIT_ANY ? line2.y - line2.ascent : line2.y + line2.descent;
 			var contentHeight:Number = bounds.height;
-			var contentTextLength:int = _textLen;
 
 			_lines.splice(0); _textLen = 0; // reset
 			bounds.width = 200;	bounds.height = NaN;
@@ -413,7 +430,6 @@ package UnitTest.Tests
 			initTextFlow(accentedText,null);
 			factory.createTextLines(createLineCallback,tf);
 			assertTrue("[Not a code bug] Fix test case so that accented text occupies at least two lines when composed in specified bounds.", _lines.length >= 2);
-
 
             var line:TextLine;
 			var lineExtent:Number;
@@ -528,7 +544,7 @@ package UnitTest.Tests
 			bounds.left = 0; bounds.top = 0;
 			bounds.width = 200; bounds.height = NaN;
 			customFactory.compositionBounds = bounds;
-			initTextFlow(text,null)
+			initTextFlow(text,null);
 			customFactory.truncationOptions = new TruncationOptions(null, 2);
 			customFactory.createTextLines(createLineCallback, tf);
 			truncationIndicatorIndex = customFactory.truncationOptions.truncationIndicator.lastIndexOf(TruncationOptions.HORIZONTAL_ELLIPSIS);
@@ -623,7 +639,6 @@ package UnitTest.Tests
 			customFactory.truncatedTextFlowCallback = truncatedCallback;
 			customFactory.truncationOptions = new TruncationOptions(customTruncationIndicator, 1);
 			customFactory.createTextLines(createLineCallback,tf);
-			var indicatorLen:int = customTruncationIndicator.length;
 			// TextFlow.textLength includes the length of the paragraph terminator string, so _truncatedTextLen
 			// in the textflow factory case is not a direct substitute for truncatedText.length in the string factory case.
 			assertTrue("Replacing more original content than is neccessary", this._truncatedTextLen == line0TextLen+customTruncationIndicator.length+1 && customFactory.isTruncated);
@@ -641,6 +656,7 @@ package UnitTest.Tests
 
 		}
 
+		[Test]
 		public function compositionCompletionEventTest():void
 		{
 			var gotEvent:Boolean = false;
