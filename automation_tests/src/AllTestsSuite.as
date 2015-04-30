@@ -48,6 +48,7 @@ package
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SpacingTest;
     import UnitTest.Tests.TabTest;
+    import UnitTest.Tests.TextContainerManagerTest;
     import UnitTest.Tests.TextFlowEditTest;
     import UnitTest.Tests.TextFlowTextLineFactoryTest;
     import UnitTest.Tests.TextLineFilterTest;
@@ -94,6 +95,7 @@ package
         public var localeTest:LocaleTests;
         public var textLineFilterTest:TextLineFilterTest;
         public var textFlowTextLineFactoryTest:TextFlowTextLineFactoryTest;
+        public var textContainerManagerTest:TextContainerManagerTest;
     }
 
 }
