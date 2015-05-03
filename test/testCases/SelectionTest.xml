@@ -232,7 +232,7 @@
 	<TestData name="inputString">This is a test</TestData>
 	<TestData name="posOfSelection">7</TestData>	
 </TestCase>
-<TestCase functionName="SelectLineBreakOnLastEmptyLine">
+<TestCase functionName="selectLineBreakOnLastEmptyLine">
 	<TestData name="fileName">empty.xml</TestData>
 </TestCase>
 <TestCase functionName="clickSelectionOnColumn">	

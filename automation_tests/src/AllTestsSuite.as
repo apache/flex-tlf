@@ -46,6 +46,7 @@ package
     import UnitTest.Tests.LocaleTests;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
+    import UnitTest.Tests.SelectionTest;
     import UnitTest.Tests.SpacingTest;
     import UnitTest.Tests.StyleTest;
     import UnitTest.Tests.TCYTest;
@@ -100,6 +101,7 @@ package
         public var textContainerManagerTest:TextContainerManagerTest;
         public var tcyTest:TCYTest;
         public var styleTest:StyleTest;
+        public var selectionTest:SelectionTest;
     }
 
 }
