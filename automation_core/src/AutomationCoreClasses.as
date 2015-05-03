@@ -18,23 +18,41 @@
 ////////////////////////////////////////////////////////////////////////////////
 package
 {
- 	internal class AutomationCoreClasses
+        import UnitTest.ExtendedClasses.LoadingFileRule;
+        import UnitTest.ExtendedClasses.TestConfigurationLoader;
+        import UnitTest.ExtendedClasses.VellumTestCase;
+        import UnitTest.Fixtures.MeasureConstants;
+        import UnitTest.Fixtures.TestCaseVo;
+        import UnitTest.Fixtures.TestEditManager;
+        import UnitTest.Validation.BoundsChecker;
+        import UnitTest.Validation.CompositionCompleteEventValidator;
+        import UnitTest.Validation.CompositionResults;
+        import UnitTest.Validation.DamageEventValidator;
+        import UnitTest.Validation.EventValidator;
+        import UnitTest.Validation.FlowElementMouseEventValidator;
+        import UnitTest.Validation.FlowOperationEventValidator;
+        import UnitTest.Validation.SelectionEventValidator;
+        import UnitTest.Validation.StatusChangeEventValidator;
+        import UnitTest.Validation.UpdateCompleteEventValidator;
+
+        internal class AutomationCoreClasses
 	{
-        import UnitTest.ExtendedClasses.TestConfigurationLoader; TestConfigurationLoader;
-        import UnitTest.ExtendedClasses.VellumTestCase; VellumTestCase;
-        import UnitTest.Validation.BoundsChecker; BoundsChecker;
-        import UnitTest.Validation.CompositionResults; CompositionResults;
-        import UnitTest.Validation.SelectionEventValidator; SelectionEventValidator;
-        import UnitTest.Validation.DamageEventValidator; DamageEventValidator;
-        import UnitTest.Validation.StatusChangeEventValidator; StatusChangeEventValidator;
-        import UnitTest.Validation.FlowOperationEventValidator; FlowOperationEventValidator;
-        import UnitTest.Validation.CompositionCompleteEventValidator; CompositionCompleteEventValidator;
-        import UnitTest.Validation.FlowElementMouseEventValidator; FlowElementMouseEventValidator;
-        import UnitTest.Validation.EventValidator; EventValidator;
-        import UnitTest.Validation.UpdateCompleteEventValidator; UpdateCompleteEventValidator;
-        import UnitTest.Fixtures.TestEditManager; TestEditManager;
-        import UnitTest.Fixtures.MeasureConstants; MeasureConstants;
-        import UnitTest.Fixtures.TestCaseVo; TestCaseVo;
+            TestConfigurationLoader;
+            VellumTestCase;
+            LoadingFileRule;
+            BoundsChecker;
+            CompositionResults;
+            SelectionEventValidator;
+            DamageEventValidator;
+            StatusChangeEventValidator;
+            FlowOperationEventValidator;
+            CompositionCompleteEventValidator;
+            FlowElementMouseEventValidator;
+            EventValidator;
+            UpdateCompleteEventValidator;
+            TestEditManager;
+            MeasureConstants;
+            TestCaseVo;
 	}
 }
 
