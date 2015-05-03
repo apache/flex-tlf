@@ -47,6 +47,7 @@ package
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SpacingTest;
+    import UnitTest.Tests.TCYTest;
     import UnitTest.Tests.TabTest;
     import UnitTest.Tests.TextContainerManagerTest;
     import UnitTest.Tests.TextFlowEditTest;
@@ -96,6 +97,7 @@ package
         public var textLineFilterTest:TextLineFilterTest;
         public var textFlowTextLineFactoryTest:TextFlowTextLineFactoryTest;
         public var textContainerManagerTest:TextContainerManagerTest;
+        public var tcyTest:TCYTest;
     }
 
 }

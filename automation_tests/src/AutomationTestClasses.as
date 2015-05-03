@@ -33,8 +33,8 @@ package
 		import UnitTest.PerformanceTests.VellumParaTests; VellumParaTests;
 		import UnitTest.PerformanceTests.VellumWordTests; VellumWordTests;
                                                             */
-		import AllTestsSuite; AllTestsSuite;
-        import MinimalTestsSuite; MinimalTestsSuite;
+		AllTestsSuite;
+		MinimalTestsSuite;
        // import UnitTest.Tests.AccessibilityMethodsTest; AccessibilityMethodsTest;
 		/*import UnitTest.Tests.AllAttributeTest; AllAttributeTest;
 		import UnitTest.Tests.AllCharAttributeTest; AllCharAttributeTest;
@@ -72,7 +72,7 @@ package
 		import UnitTest.Tests.SelectionTest; SelectionTest;
 		import UnitTest.Tests.SpacingTest; SpacingTest;
 		import UnitTest.Tests.StyleTest; StyleTest;
-		import UnitTest.Tests.TCYTests; TCYTests;
+		import UnitTest.Tests.TCYTest; TCYTest;
 		import UnitTest.Tests.TextContainerManagerTest; TextContainerManagerTest;
 		import UnitTest.Tests.TableBackgroundTest; TableBackgroundTest;		
         import UnitTest.Tests.TableTests; TableTests;
