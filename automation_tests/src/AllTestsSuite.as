@@ -45,6 +45,7 @@ package
     import UnitTest.Tests.ListTest;
     import UnitTest.Tests.LocaleTests;
     import UnitTest.Tests.OperationTest;
+    import UnitTest.Tests.ParagraphTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SelectionTest;
     import UnitTest.Tests.SpacingTest;
@@ -102,6 +103,7 @@ package
         public var tcyTest:TCYTest;
         public var styleTest:StyleTest;
         public var selectionTest:SelectionTest;
+        public var paragraphTest:ParagraphTest;
     }
 
 }

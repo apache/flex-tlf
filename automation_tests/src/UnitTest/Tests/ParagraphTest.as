@@ -18,96 +18,62 @@
 ////////////////////////////////////////////////////////////////////////////////
 package UnitTest.Tests
 {
+	import UnitTest.ExtendedClasses.TestConfigurationLoader;
+	import UnitTest.ExtendedClasses.VellumTestCase;
+	import UnitTest.Fixtures.TestCaseVo;
+	import UnitTest.Fixtures.TestConfig;
 
-    import UnitTest.ExtendedClasses.TestSuiteExtended;
-    import UnitTest.ExtendedClasses.VellumTestCase;
-    import UnitTest.Fixtures.TestConfig;
-    
-    import flash.display.Bitmap;
-    import flash.display.BitmapData;
-    import flash.display.IBitmapDrawable;
-    import flash.events.*;
-    import flash.geom.Matrix;
-    import flash.geom.Rectangle;
-    import flash.text.engine.TabAlignment;
-    import flash.text.engine.TextLine;
-    import flash.utils.ByteArray;
-    
-    import flashx.textLayout.compose.TextFlowLine;
-    import flashx.textLayout.elements.*;
-    import flashx.textLayout.formats.*;
-    import flashx.textLayout.property.NumberPropertyHandler;
-    import flashx.textLayout.property.Property;
-    import flashx.textLayout.tlf_internal;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.IBitmapDrawable;
+	import flash.events.*;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	import flash.text.engine.TabAlignment;
+	import flash.text.engine.TextLine;
+	import flash.utils.ByteArray;
 
-    import org.flexunit.asserts.assertTrue;
+	import flashx.textLayout.compose.TextFlowLine;
+	import flashx.textLayout.elements.*;
+	import flashx.textLayout.formats.*;
+	import flashx.textLayout.property.NumberPropertyHandler;
+	import flashx.textLayout.property.Property;
+	import flashx.textLayout.tlf_internal;
 
-    use namespace tlf_internal;
+	import org.flexunit.asserts.assertTrue;
 
+	use namespace tlf_internal;
+
+	[TestCase(order=40)]
+	[RunWith("org.flexunit.runners.Parameterized")]
  	public class ParagraphTest extends VellumTestCase
 	{
+		[DataPoints(loader=backgroundcolorchangeTestLoader)]
+		[ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+		public static var backgroundcolorchangeTestDp:Array;
 
-		public function ParagraphTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
+		public static var backgroundcolorchangeTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ParagraphTest.xml", "backgroundcolorchangeTest");
+
+		public function ParagraphTest()
 		{
-			super(methodName, testID, testConfig, testCaseXML);
+			super("", "ParagraphTest", TestConfig.getInstance());
 
+			metaData = {};
 			// Note: These must correspond to a Watson product area (case-sensitive)
 			metaData.productArea = "Text Container";
 		}
 
-		public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
- 		{
- 			var testCaseClass:Class = ParagraphTest;
- 			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
- 		}
-
-		/* Unused private functions
-		private function getParaCount():uint  // return the number of paragraphs KJT
+		[Before]
+		override public function setUpTest():void
 		{
-
-			SelManager.selectAll();
-			var startOfPara:int = SelManager.anchorPosition;
-
-			var endOfPara:int = SelManager.activePosition;
-			var curCount:uint = 0;
-			var i:int;
-
-			for (i = startOfPara; i <= endOfPara; i++)
-			{
-				var para:Object = SelManager.textFlow.findAbsoluteParagraph(i);
-
-				if(i == ParagraphElement(para).parentRelativeStart){
-					curCount++;
-				}
-			}
-
-			return curCount;
+			super.setUpTest();
 		}
 
-		private function getAparaGraph(index:uint):ParagraphElement  // return a p by index KJT
+		[After]
+		override public function tearDownTest():void
 		{
-
-			SelManager.selectAll();
-			var arrayOfP:Array = new Array();
-			var startOfPara:int = SelManager.anchorPosition;
-
-			var endOfPara:int = SelManager.activePosition;
-			var curCount:uint = 0;
-			var i:int;
-
-			for (i = startOfPara; i <= endOfPara; i++)
-			{
-				var para:ParagraphElement = SelManager.textFlow.findAbsoluteParagraph(i);
-
-				if(i == para.parentRelativeStart){
-					arrayOfP.push(para);
-					curCount++;
-				}
-			}
-
-			return ParagraphElement(arrayOfP[index]);
+			super.tearDownTest();
 		}
-		*/
 
 		/* ************************************************************** */
 		/* Alignment Tests */
@@ -117,6 +83,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to left align and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignLeftTest():void
 		{
 			// Set the selection.
@@ -133,6 +100,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to right align and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignRightTest():void
 		{
 			// Set the selection.
@@ -149,6 +117,7 @@ package UnitTest.Tests
 		 * Set the alignment to right align for all of the text and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignAllRightTest():void
 		{
 			// Set the selection /
@@ -165,6 +134,7 @@ package UnitTest.Tests
 		 * Set the alignment to START align for all of the text and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignStartTest():void
 		{
 			// Set the selection.
@@ -181,6 +151,7 @@ package UnitTest.Tests
 		 * Set the alignment to END align for all of the text and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignEndTest():void
 		{
 			// Set the selection.
@@ -198,6 +169,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to center align and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignCenterTest():void
 		{
 			// Set the selection.
@@ -215,6 +187,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to justify "all including last" and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignJustifyAllTest():void
 		{
 			// Set the selection.
@@ -233,6 +206,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to justify "all but last" and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function alignJustifyAllButLastTest():void
 		{
 			// Set the selection.
@@ -249,6 +223,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the alignment to justify with last line start, end, left, center, right and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function justifyWithLastLineStart():void
 		{
 			// Set the selection.
@@ -265,6 +240,7 @@ package UnitTest.Tests
 				getAlignmentLast() == TextAlign.START);
 		}
 
+		[Test]
 		public function justifyWithLastlineEnd():void
 		{
 			var startIndx:int = 10;
@@ -280,6 +256,7 @@ package UnitTest.Tests
 				getAlignmentLast() == TextAlign.END);
 		}
 
+		[Test]
 		public function justifyWithLastlineLeft():void
 		{
 
@@ -296,6 +273,7 @@ package UnitTest.Tests
 				getAlignmentLast() == TextAlign.LEFT);
 		}
 
+		[Test]
 		public function justifyWithLastlineCenter():void
 		{
 			var startIndx:int = 10;
@@ -311,6 +289,7 @@ package UnitTest.Tests
 				getAlignmentLast() == TextAlign.CENTER);
 		}
 
+		[Test]
 		public function justifyWithLastlineRight():void
 		{
 			var startIndx:int = 10;
@@ -326,7 +305,8 @@ package UnitTest.Tests
 				getAlignmentLast() == TextAlign.RIGHT);
 		}
 
-		public function OnlyLastlineSet():void
+		[Test]
+		public function onlyLastlineSet():void
 		{
 			var startIndx:int = 10;
 			var endIndx:int = 20;
@@ -344,6 +324,7 @@ package UnitTest.Tests
 		 * Get a short selection and set the textJustify to INTER_WORD and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function justifyInterWordTest():void
 		{
 			// Set the selection.
@@ -363,25 +344,30 @@ package UnitTest.Tests
 		 *
 		 * Test with both last line set to JUSTIFY and to LEFT.
 		 */
+		[Test]
 		public function justifyLetterSpacingFirstLine():void
 		{
 			justifyInterWordVsDistributeCore(false, false);
 			justifyInterWordVsDistributeCore(false, true);
 		}
+
 		/**
 		 * Set textJustify to INTER_WORD and DISTRIBUTE and verify
 		 * that the spacing between glyphs is different on last line
 		 * with last line set to JUSTIFY
 		 */
+		[Test]
 		public function justifyLetterSpacingLastLineJustify():void
 		{
 			justifyInterWordVsDistributeCore(true, true);
 		}
+
 		/**
 		 * Set textJustify to INTER_WORD and DISTRIBUTE and verify
 		 * that the spacing between glyphs is not different on last line
 		 * with last line justification set to LEFT
 		 */
+		[Test]
 		public function justifyLetterSpacingLastLineNoJustify():void
 		{
 			justifyInterWordVsDistributeCore(true, false);
@@ -422,7 +408,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 			}
 
 
-			var xPosInterWord:Array = new Array();
+			var xPosInterWord:Array = [];
 
 			// Collect the x coordinates for each glyph
 			for ( var i:int = 0; i < line.atomCount; i++)
@@ -442,7 +428,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 				line = SelManager.textFlow.flowComposer.getLineAt(0).getTextLine(true);
 			}
 
-			var xPosDistribute:Array = new Array();
+			var xPosDistribute:Array = [];
 
 			// Collect the x coordinates for each glyph
 			for ( i = 0; i < line.atomCount; i++)
@@ -481,6 +467,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Get a short selection and set the textJustify to DISTRIBUTE and
 		 * check that it is set correctly.
 		 */
+		[Test]
 		public function justifyDistributeTest():void
 		{
 			// Set the selection.
@@ -589,6 +576,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set an indent of ten and check that it is set correctly.
 		 */
+		[Test]
 		public function setIndentPositiveTest():void
 		{
 			setIndent(10);
@@ -598,6 +586,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set an indent of negative ten and check that it is set correctly.
 		 */
+		[Test]
 		public function setIndentNegativeTest():void
 		{
 			setIndent(-10);
@@ -643,6 +632,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set a left margin of ten and check that it is set correctly.
 		 */
+		[Test]
 		public function setLeftMarginPositiveTest():void
 		{
 			setLeftMargin(10);
@@ -653,6 +643,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Set a left margin of negative ten and check that it is set to zero
 		 * (i.e. no negative left margins).
 		 */
+		[Test]
 		public function setLeftMarginNegativeTest():void
 		{
 			setLeftMargin(-10,true);
@@ -717,6 +708,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set a right margin of ten and check that it is set correctly.
 		 */
+		[Test]
 		public function setRightMarginPositiveTest():void
 		{
 			setRightMargin(10);
@@ -727,6 +719,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Set a right margin of negative ten and check that it is set to zero
 		 * (i.e. no negative right margins).
 		 */
+		[Test]
 		public function setRightMarginNegativeTest():void
 		{
 			setRightMargin(-10,true);
@@ -786,6 +779,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set space before value to twenty-five and check that it is set correctly.
 		 */
+		[Test]
 		public function setSpaceBeforePositiveTest():void
 		{
 			setSpaceBefore(25);
@@ -796,6 +790,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Set space before value to negative fifty and check that it is zero
 		 * (i.e. no negative space before values).
 		 */
+		[Test]
 		public function setSpaceBeforeNegativeTest():void
 		{
 			setSpaceBefore(-50,true);
@@ -853,6 +848,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Set space after value to twenty-five and check that it is set correctly.
 		 */
+		[Test]
 		public function setSpaceAfterPositiveTest():void
 		{
 			setSpaceAfter(25);
@@ -863,6 +859,8 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Set space after value to negative fifty and check that it is zero
 		 * (i.e. no negative space after values).
 		 */
+		[Test]
+		[Ignore]
 		public function setSpaceAfterNegativeTest():void
 		{
 			setSpaceAfter(-50);
@@ -902,6 +900,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 			return success;
 		}
 
+		[Test]
 		public function joinParagraphsTest():void
 		{
 			var flow1:FlowElement;
@@ -995,6 +994,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Set the size of the text and autoleading, then change them and make sure that the
 		 * leading is the correct value.
 		 */
+		[Test]
 		public function autoLeadingTest():void
 		{
 			const acceptableErrorAmt:Number = .02;
@@ -1082,6 +1082,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Create an empty paragraph and set its attributes. Then insert text and see if
 		 * the paragraph still has its attributes.
 		 */
+		[Test]
 		public function paragraphAttributeRetentionTest():void
 		{
 			SelManager.selectRange(0,0);
@@ -1117,6 +1118,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * property left is the one you set to a different value, and ensure no other
 		 * values remain.
 		 */
+		[Test]
 		public function paragraphAttributeRemovalTest():void
 		{
 			var desc:Object = TextLayoutFormat.description;
@@ -1124,9 +1126,9 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 			var pa:TextLayoutFormat = new TextLayoutFormat();
 			var handler:NumberPropertyHandler;
 
-			var good:Array = new Array();
+			var good:Array = [];
 			for each (var prop:Property in desc){
-				handler = prop.findHandler(NumberPropertyHandler) as NumberPropertyHandler
+				handler = prop.findHandler(NumberPropertyHandler) as NumberPropertyHandler;
 				if (handler)
 				{
 					var name:String = prop.name;
@@ -1172,6 +1174,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		 * Create an empty paragraph at the end of a text flow and see if the
 		 * character attributes from the previous paragraph have been applied to it.
 		 */
+		[Test]
 		public function characterAttributeRetentionTest():void
 		{
 			var length:int = SelManager.textFlow.textLength - 1;
@@ -1206,6 +1209,7 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		/**
 		 * Validate parsing of string-based tabStops syntax
 		 */
+		[Test]
 		public function tabStopsStringFormTest():void
 		{
 			var pa:TextLayoutFormat = new TextLayoutFormat();
@@ -1235,9 +1239,12 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 		   deselect the text and note how light it is. Click in the first paragraph and start typing.  Note that with each keystroke
 		   the background color appears darker.
 		*/
-
-		public function backgroundcolorchangeTest():void
+		[Test(dataProvider=backgroundcolorchangeTestDp)]
+		public function backgroundcolorchangeTest(testCaseVo:TestCaseVo):void
 		{
+			TestData.fileName = testCaseVo.fileName;
+			setUpTest();
+
 			var insertPoint:int = 14;
     		var tlf:TextLayoutFormat = new TextLayoutFormat();
    			tlf.backgroundColor = 0xFF00FF;
@@ -1309,15 +1316,16 @@ LonglonglonglonglonglongLong longlonglonglonglong Longlonglonglonglonglong.";
 
 		/* this is for testing the bug 2371905.  Final Empty Paragraph Shows No Selection When Block Selected
 		*/
-
-		public function FinalEmptyParaTest():void
+		[Test(dataProvider=backgroundcolorchangeTestDp)]
+		public function FinalEmptyParaTest(testCaseVo:TestCaseVo):void
 		{
+			TestData.fileName = testCaseVo.fileName;
+			setUpTest();
+
 			var insertPoint:int = 14;
-    		var tlf:TextLayoutFormat = new TextLayoutFormat();
 
     		SelManager.selectRange(0,0);
-   			SelManager.insertText("This is a test" +
-               "            ");
+   			SelManager.insertText("This is a test" + "            ");
    		    SelManager.selectRange(insertPoint, insertPoint);
     		SelManager.splitParagraph();
   		    var tf:TextFlow = SelManager.textFlow;
