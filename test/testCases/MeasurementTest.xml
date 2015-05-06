@@ -30,7 +30,7 @@
 	<TestData name="fileName">listMarkerAlignmentZeroPad.xml</TestData>
 	<TestData name="testFile">listMarkerAlignmentZeroPad.xml</TestData>
 </TestCase>
-<TestCase functionName="listNegativeMarkersMeasure">
+<TestCase functionName="listNegativeMarkers">
 	<TestData name="flash">false</TestData>
 	<TestData name="measure">true</TestData>
 	<TestData name="fileName">listMarkerAlignmentZeroPad.xml</TestData>

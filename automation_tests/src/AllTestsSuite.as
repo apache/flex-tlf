@@ -41,6 +41,7 @@ package
     import UnitTest.Tests.ImpliedParagraphTest;
     import UnitTest.Tests.ImportAPITest;
     import UnitTest.Tests.KeyboardGestureTest;
+    import UnitTest.Tests.LeadingTest;
     import UnitTest.Tests.LinkTest;
     import UnitTest.Tests.ListTest;
     import UnitTest.Tests.LocaleTests;
@@ -106,6 +107,7 @@ package
         public var selectionTest:SelectionTest;
         public var paragraphTest:ParagraphTest;
         public var measurementTest:MeasurementTest;
+        public var leadingTest:LeadingTest;
     }
 
 }
