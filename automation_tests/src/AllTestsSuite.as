@@ -44,6 +44,7 @@ package
     import UnitTest.Tests.LinkTest;
     import UnitTest.Tests.ListTest;
     import UnitTest.Tests.LocaleTests;
+    import UnitTest.Tests.MeasurementTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ParagraphTest;
     import UnitTest.Tests.ScrollingTest;
@@ -104,6 +105,7 @@ package
         public var styleTest:StyleTest;
         public var selectionTest:SelectionTest;
         public var paragraphTest:ParagraphTest;
+        public var measurementTest:MeasurementTest;
     }
 
 }
