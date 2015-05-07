@@ -700,7 +700,7 @@ package flashx.textLayout.elements
             _measuredHeight = g.height;
             
 			//bug #2931005 TLF cannot show Flex SWF after loading it as an ILG
-			if(graphic is Loader && Loader(graphic).content != null && Loader(graphic).content.hasOwnProperty("setActualSize") && (!widthIsComputed() || !heightIsComputed()) )
+			if(graphic is Loader && Loader(graphic).contentLoaderInfo.contentType == "application/x-shockwave-flash" && Loader(graphic).content != null && Loader(graphic).content.hasOwnProperty("setActualSize") && (!widthIsComputed() || !heightIsComputed()) )
 				Object(Loader(graphic).content).setActualSize(elementWidth, elementHeight);
 			else
 			{
