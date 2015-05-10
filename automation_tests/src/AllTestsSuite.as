@@ -48,6 +48,7 @@ package
     import UnitTest.Tests.MeasurementTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ParagraphTest;
+    import UnitTest.Tests.ScrollToRangeTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SelectionTest;
     import UnitTest.Tests.SpacingTest;
@@ -108,6 +109,7 @@ package
         public var paragraphTest:ParagraphTest;
         public var measurementTest:MeasurementTest;
         public var leadingTest:LeadingTest;
+        public var scrollToRangeTest:ScrollToRangeTest;
     }
 
 }

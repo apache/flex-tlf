@@ -26,15 +26,16 @@
 
 package UnitTest.Tests
 {
-	import UnitTest.ExtendedClasses.TestSuiteExtended;
+	import UnitTest.ExtendedClasses.TestConfigurationLoader;
 	import UnitTest.ExtendedClasses.VellumTestCase;
+	import UnitTest.Fixtures.TestCaseVo;
 	import UnitTest.Fixtures.TestConfig;
-	
+
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Rectangle;
 	import flash.text.engine.TextLine;
-	
+
 	import flashx.textLayout.compose.TextFlowLine;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.conversion.TextConverter;
@@ -45,20 +46,35 @@ package UnitTest.Tests
 	import flashx.textLayout.formats.LineBreak;
 	import flashx.textLayout.formats.TextLayoutFormat;
 	import flashx.textLayout.utils.GeometryUtil;
-	
+
 	import mx.containers.Canvas;
 
-    import org.flexunit.asserts.assertTrue;
-    import org.flexunit.asserts.fail;
+	import org.flexunit.asserts.assertTrue;
+	import org.flexunit.asserts.fail;
 
+	[TestCase(order=43)]
+	[RunWith("org.flexunit.runners.Parameterized")]
     public class ScrollToRangeTest extends VellumTestCase
 	{
+		[DataPoints(loader=multiLineTestLoader)]
+		[ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+		public static var multiLineTestDp:Array;
+
+		public static var multiLineTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollToRangeTest.xml", "multiLineTest");
+
+		[DataPoints(loader=singleLineTestLoader)]
+		[ArrayElementType("UnitTest.Fixtures.TestCaseVo")]
+		public static var singleLineTestDp:Array;
+
+		public static var singleLineTestLoader:TestConfigurationLoader = new TestConfigurationLoader("../../test/testCases/ScrollToRangeTest.xml", "singleLineTest");
+
 		private var testCanvas:Canvas;
 		private var testCaseXML:XML;
-		
-		public function ScrollToRangeTest(methodName:String, testID:String, testConfig:TestConfig, testCaseXML:XML=null)
+
+		public function ScrollToRangeTest()
 		{
-			super(methodName, testID, testConfig, testCaseXML);
+			super("", "ScrollToRangeTest", TestConfig.getInstance());
+			metaData = {};
 			//reset containerType and ID
 			containerType = "custom";
 		/*	TestID = containerType + ":" + writingDirection + ":";
@@ -75,13 +91,8 @@ package UnitTest.Tests
 			metaData.productArea = "Text Container";
 			this.testCaseXML = testCaseXML;
 		}
-		
-		public static function suiteFromXML(testListXML:XML, testConfig:TestConfig, ts:TestSuiteExtended):void
-		{
-			var testCaseClass:Class = ScrollToRangeTest;
-			VellumTestCase.suiteFromXML(testCaseClass, testListXML, testConfig, ts);
-		}
-		
+
+		[Before]
 		override public function setUpTest() : void
 		{
 			cleanUpTestApp();
@@ -95,7 +106,13 @@ package UnitTest.Tests
 				fail("Did not get a blank canvas to work with");
 			}
 		}
-		
+
+		[After]
+		override public function tearDownTest():void
+		{
+			super.tearDownTest();
+		}
+
 		private function addChild(s:Sprite):void
 		{
 			testCanvas.rawChildren.addChild(s);
@@ -209,7 +226,7 @@ package UnitTest.Tests
 			// Japanese text, vertical  - scroll backward to the right, red text should appear on top
 			[ "singleLineJapaneseBackwardLong", japaneseTextLong, BlockProgression.RL, Direction.LTR, 0, 16000, true /* expect it to need to scroll */, checkTop ],
 			// Japanese text, vertical  - scroll backward to the right, red text should appear on top
-			[ "singleLineTCYJapaneseBackwardLong", japaneseTCYTextLong, BlockProgression.RL, Direction.LTR, 0, 16000, true /* expect it to need to scroll */, checkTop ],
+			[ "singleLineTCYJapaneseBackwardLong", japaneseTCYTextLong, BlockProgression.RL, Direction.LTR, 0, 16000, true /* expect it to need to scroll */, checkTop ]
 		];
 		
 		private static var aliceExcerptText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008" styleName="scrollToThis" textAlign="start" fontFamily="Minion Pro" fontSize="16">I. Down the Rabbit-Hole<p textAlign="center" fontSize="24">Chapter I</p>
@@ -301,7 +318,7 @@ private static var japaneseParagraphText:XML = <TextFlow xmlns="http://ns.adobe.
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
-	</TextFlow>
+	</TextFlow>;
 // FIXME needs to be replaced
 private static var japaneseSpanText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
@@ -314,7 +331,7 @@ private static var japaneseSpanText:XML = <TextFlow xmlns="http://ns.adobe.com/t
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
-	</TextFlow>
+	</TextFlow>;
 	//this listElement is similar to aliceScrollToParagraphText
 private static var aliceScrollToListElementText:XML =  <TextFlow xmlns="http://ns.adobe.com/textLayout/2008" textAlign="start" fontFamily="Minion Pro" fontSize="16">
 	<list listStylePosition="inside" listStyleType="upperRoman"><li>Down the Rabbit-Hole</li></list>
@@ -372,7 +389,7 @@ private static var japaneseListElementText:XML = <TextFlow xmlns="http://ns.adob
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
-	</TextFlow>
+	</TextFlow>;
 	//this listItemElement is similar to japaneseSpanText
 	// FIXME needs to be replaced
 private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.adobe.com/textLayout/2008">
@@ -388,7 +405,7 @@ private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
 	<p>文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。文字コードが割り当てられていないグリフの大半は既に文字コードが割り当てられているグリフの異体字です。次のセクションでは、このようなグリフにアクセスする方法について解説します。</p>
-	</TextFlow>
+	</TextFlow>;
 
 		// The following tests all test scrolling to a range that is on multiple lines. The basic philosphy is to read in a TextFow markup which has text in red, 
 		// with styleName "scrollToThis", find the range, and call scrollToThis to force the red text to be in view. We pass an initial scroll position, and
@@ -414,48 +431,35 @@ private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.
 				[ "japaneseListElementForwardTest", japaneseListElementText, BlockProgression.RL, Direction.LTR, 0, 0, true /* expect it to need to scroll */, checkLeft ],
 				[ "japaneseListElementBackwardTest", japaneseListElementText, BlockProgression.RL, Direction.LTR, -16000, 0, true /* expect it to need to scroll */, checkRight ],
 				[ "japaneseListItemElementForwardTest", japaneseListItemElementText, BlockProgression.RL, Direction.LTR, 0, 0, true /* expect it to need to scroll */, checkLeft ],
-				[ "japaneseListItemElementBackwardTest", japaneseListItemElementText, BlockProgression.RL, Direction.LTR, -16000, 0, true /* expect it to need to scroll */, checkRight ],
+				[ "japaneseListItemElementBackwardTest", japaneseListItemElementText, BlockProgression.RL, Direction.LTR, -16000, 0, true /* expect it to need to scroll */, checkRight ]
 				
 			];
-		
-		public function multiLineTest():TextRange
+
+		[Test(dataProvider=multiLineTestDp)]
+		public function singleLineTest(testCaseVo:TestCaseVo):void
 		{
-			// get id and run the right test
-			for each (var testData:Array in multiLineTestData)
-			{
-				if (testData[0] == TestData.id)
-				{
-					return scrollMultiLine(testData[1], testData[2], testData[3], testData[4], testData[5], testData[6], testData[7]);
-				}
-			}
-			assertTrue("XML test case didn't match XML test data", false);
-			return null;
-		}
-		
-		public function singleLineTest():TextRange
-		{
-		
-			var r:TextRange;
-			
 			// get id and run the right test
 			for each (var testData:Array in singleLineTestData)
 			{
-				if (testData[0] == TestData.id)
+				if (testData[0] == testCaseVo.id)
 				{
-					return scrollSingleLine(testData[1], testData[2], testData[3], testData[4], testData[5], testData[6], testData[7]);
+					scrollSingleLine(testData[1], testData[2], testData[3], testData[4], testData[5], testData[6], testData[7]);
 				}
 			}
-			assertTrue("XML test case didn't match XML test data", false);
-			return null;
 		}
-		
-		// Check that we don't force composition to end of range
-		public function aliceTest():void
+
+		/**
+		 * Check that we don't force composition to end of range
+		 */
+		[Test(dataProvider=multiLineTestDp)]
+		[Ignore]
+		public function aliceTest(testCaseVo:TestCaseVo):void
 		{
-			var r:TextRange = multiLineTest();
+			var r:TextRange = multiLineTest(testCaseVo);
 			assertTrue("Scroll to range shouldn't force composition to end of range", r.textFlow.flowComposer.damageAbsoluteStart < r.textFlow.textLength - 100);
 		}
-		
+
+		[Test]
 		public function aboveAndBelow():void
 		{
 			var markup:String = '<TextFlow fontSize ="60" whiteSpaceCollapse="preserve" version="2.0.0" xmlns="http://ns.adobe.com/textLayout/2008"><p><span>one two three four</span></p><p><span>five six</span></p><p><span>seven eight</span></p><p><span>nine ten </span></p><p><span>eleven twelve</span></p><p><span>thirteen fourteen</span></p><p><span>fifteen sixteen</span></p><p><span>seventeen eighteen</span></p><p><span>nineteen twenty</span></p><p><span>twenty-one twenty-two</span></p><p><span>twenty-three twenty-four twenty-five twenty-six twenty-seven</span></p></TextFlow>';
@@ -561,7 +565,6 @@ private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.
 			// bounding box should be within 10% of the container right edge
 			assertTrue(bbox.left > controller.horizontalScrollPosition - 2 &&
 				bbox.right < (controller.compositionWidth - controller.horizontalScrollPosition) + 2, "Expected bounding box to be in view");
-			var distanceFromLeftEdge:Number = bbox.left - controller.horizontalScrollPosition;
 		}
 		
 		static private function getController(r:TextRange):ContainerController
@@ -736,7 +739,21 @@ private static var japaneseListItemElementText:XML = <TextFlow xmlns="http://ns.
 			
 			(textFlow.interactionManager as EditManager).applyFormat(characterFormat, null, null, selectionState);
 		}
-		
+
+		private function multiLineTest(testCaseVo:TestCaseVo):TextRange
+		{
+			// get id and run the right test
+			for each (var testData:Array in multiLineTestData)
+			{
+				if (testData[0] == testCaseVo.id)
+				{
+					return scrollMultiLine(testData[1], testData[2], testData[3], testData[4], testData[5], testData[6], testData[7]);
+				}
+			}
+			assertTrue("XML test case didn't match XML test data", false);
+			return null;
+		}
+
 	}
 }
 	
