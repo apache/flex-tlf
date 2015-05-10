@@ -22,8 +22,6 @@ package UnitTest.Tests
 
     import flash.display.Sprite;
 
-    import flashx.textLayout.elements.FlowLeafElement;
-    import flashx.textLayout.elements.TextFlow;
     import flashx.textLayout.formats.Category;
     import flashx.textLayout.formats.FormatValue;
     import flashx.textLayout.formats.TextLayoutFormat;
@@ -32,7 +30,6 @@ package UnitTest.Tests
     import flashx.textLayout.property.IntPropertyHandler;
     import flashx.textLayout.property.NumberPropertyHandler;
     import flashx.textLayout.property.PercentPropertyHandler;
-    import flashx.textLayout.property.Property;
     import flashx.textLayout.tlf_internal;
 
     import org.flexunit.asserts.assertTrue;
@@ -92,7 +89,7 @@ package UnitTest.Tests
                         expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value);
                         testValue = value;
                         // include in the minmalTest values below the range, min value, max value and values above the range
-                        includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
+                        includeInMinimalTestSuite = (value <= minVal || value >= maxVal);
 
                         runOneCharacterAttributeTest();
 
@@ -131,7 +128,7 @@ package UnitTest.Tests
                             expectedValue = value < minVal ? undefined : (value > maxVal ? undefined : value);
                             testValue = value;
                             // include in the minmalTest values below the range, min value, max value and values above the range
-                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
+                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal);
 
                             runOneCharacterAttributeTest();
 
@@ -172,7 +169,7 @@ package UnitTest.Tests
                             testValue = value;
 
                             // include in the minmalTest values below the range, min value, max value and values above the range
-                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal)
+                            includeInMinimalTestSuite = (value <= minVal || value >= maxVal);
 
                             runOneCharacterAttributeTest();
                             //ts.addTestDescriptor( new TestDescriptor (testClass, methodName, testConfig, null, prop, value, expectedValue, includeInMinimalTestSuite) );
@@ -292,74 +289,6 @@ package UnitTest.Tests
                     clearFormatTest();
                 }
             }
-        }
-
-        /**
-         * Generic function to run one character attribute test.  Uses the selection manager to set the attributes on the entire flow at the span level
-         * to value and then validates that the value is expectedValue.
-         */
-        private function runOneCharacterAttributeTest():void
-        {
-            if (testProp == null)
-                return;	// must be set
-
-            SelManager.selectAll();
-
-            // Test direct change on single leaf
-            var leaf:FlowLeafElement = SelManager.textFlow.findLeaf(SelManager.absoluteStart);
-            var originalValue:* = leaf[testProp.name];
-
-            assignmentHelper(leaf);
-
-            var expectedResult:*;
-            if (expectedValue === undefined)
-                expectedResult = testValue === undefined || testValue === null ? undefined : originalValue;
-            else
-                expectedResult = expectedValue;
-
-            assertTrue("FlowLeafElement does not have the expected value after direct change", leaf[testProp.name] == expectedResult);
-            leaf[testProp.name] = originalValue;
-
-            var ca:TextLayoutFormat = new TextLayoutFormat();
-            assignmentHelper(ca);
-            SelManager.applyLeafFormat(ca);
-
-            // expect that all FlowLeafElements have expectedValue as the properties value
-            if (expectedValue !== undefined)
-                assertTrue("not all FlowLeafElements have the expected value", validateCharacterPropertyOnEntireFlow(SelManager.textFlow, testProp, expectedValue));
-        }
-
-
-        // support function to walk all FlowLeafElements and verify that prop is val
-        private function validateCharacterPropertyOnEntireFlow(textFlow:TextFlow, prop:Property, val:*):Boolean
-        {
-            var idx:int = 0;
-            var elem:FlowLeafElement = textFlow.getFirstLeaf();
-            assertTrue("either the first FlowLeafElement is null or the textFlow length is zero", elem != null || textFlow.textLength == 0);
-            while (elem)
-            {
-                // error if elements have zero length
-                assertTrue("The FlowLeafElement has zero length", elem.textLength != 0);
-
-                // expect all values of prop to be supplied val
-                if (elem.format[prop.name] !== val || elem[prop.name] !== val)
-                    return false;
-
-                // inherit is never computed
-                if ((val == FormatValue.INHERIT && elem.computedFormat[prop.name] == val) || elem.computedFormat[prop.name] === undefined)
-                    return false;
-
-                // skip to the next element
-                var nextElem:FlowLeafElement = elem.getNextLeaf();
-                var absoluteEnd:int = elem.getAbsoluteStart() + elem.textLength;
-                if (nextElem == null)
-                    assertTrue("absoluteEnd of the last FlowLeafElement is not the end of the textFlow", absoluteEnd == textFlow.textLength);
-                else
-                    assertTrue("the end of this FlowLeafElement does not equal the start of the next", absoluteEnd == nextElem.getAbsoluteStart());
-
-                elem = nextElem;
-            }
-            return true;
         }
     }
 }

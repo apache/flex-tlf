@@ -30,13 +30,17 @@ package UnitTest.Tests
 
     import org.flexunit.asserts.assertTrue;
 
-    /** Base class for All*AttributeTest */
+    /**
+     * Base class for All*AttributeTest
+     */
     public class AllAttributeTest extends VellumTestCase
     {
         // test specific configuration
         protected var testProp:Property;
         protected var testValue:*;
         protected var expectedValue:*;
+
+        private var errorHandlerCount:int = 0;
 
         public function AllAttributeTest(methodName:String, testID:String, testConfig:TestConfig)
         {
@@ -79,13 +83,6 @@ package UnitTest.Tests
             }
         }
 
-        private var errorHandlerCount:int = 0;
-
-        public function errorHandler(p:Property, value:Object):void
-        {
-            errorHandlerCount++;
-        }
-
         protected function assignmentHelper(target:Object):void
         {
             Property.errorHandler = errorHandler;
@@ -119,7 +116,7 @@ package UnitTest.Tests
          * Generic function to run one character attribute test.  Uses the selection manager to set the attributes on the entire flow at the span level
          * to value and then validates that the value is expectedValue.
          */
-        private function runOneCharacterAttributeTest():void
+        protected function runOneCharacterAttributeTest():void
         {
             if (testProp == null)
                 return;	// must be set
@@ -151,10 +148,14 @@ package UnitTest.Tests
         }
 
 
+        private function errorHandler(p:Property, value:Object):void
+        {
+            errorHandlerCount++;
+        }
+
         // support function to walk all FlowLeafElements and verify that prop is val
         private function validateCharacterPropertyOnEntireFlow(textFlow:TextFlow, prop:Property, val:*):Boolean
         {
-            var idx:int = 0;
             var elem:FlowLeafElement = textFlow.getFirstLeaf();
             assertTrue("either the first FlowLeafElement is null or the textFlow length is zero", elem != null || textFlow.textLength == 0);
             while (elem)
