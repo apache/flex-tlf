@@ -102,7 +102,10 @@ package flashx.textLayout.edit
 				var descriptor:FormatDescriptor = TextConverter.getFormatDescriptorAt(i);
 				textOnClipboard = importFunctor(descriptor.clipboardFormat);
 				if (textOnClipboard && (textOnClipboard != ""))
+				{
+					textOnClipboard = textOnClipboard.replace(/\u000B/g,"\u2028");
 					textScrap = importToScrap(textOnClipboard, descriptor.format);
+				}
 			}
 			return textScrap;
 		}
