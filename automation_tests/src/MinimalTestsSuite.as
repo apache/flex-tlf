@@ -18,13 +18,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package
 {
-    import UnitTest.Tests.ContainerAttributeTest;
+    import UnitTest.Tests.PasteWithMutliParagraph_FLEX_34876_Test;
 
     [Suite]
     [RunWith("org.flexunit.runners.Suite")]
     public dynamic class MinimalTestsSuite
     {
-        public var containerAttributeTest:ContainerAttributeTest;
+        public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
     }
 
 }
