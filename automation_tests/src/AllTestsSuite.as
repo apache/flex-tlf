@@ -48,6 +48,7 @@ package
     import UnitTest.Tests.MeasurementTest;
     import UnitTest.Tests.OperationTest;
     import UnitTest.Tests.ParagraphTest;
+    import UnitTest.Tests.PasteWithMutliParagraph_FLEX_34876_Test;
     import UnitTest.Tests.ScrollToRangeTest;
     import UnitTest.Tests.ScrollingTest;
     import UnitTest.Tests.SelectionTest;
@@ -110,6 +111,7 @@ package
         public var measurementTest:MeasurementTest;
         public var leadingTest:LeadingTest;
         public var scrollToRangeTest:ScrollToRangeTest;
+        public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
     }
 
 }
