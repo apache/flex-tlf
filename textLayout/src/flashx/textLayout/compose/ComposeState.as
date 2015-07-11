@@ -208,8 +208,14 @@ package flashx.textLayout.compose
 			super.applyVerticalAlignmentToColumn(controller, vjType, lines, beginIndex, numLines, beginFloatIndex, endFloatIndex);
 			
 			// Reposition lines in case they got aligned after being added to _linesInView
-			for each (var textLine:TextLine in controller.composedLines)
+			for each (var composedLine:Object in controller.composedLines)
 			{
+				if( !(composedLine is TextLine) )
+				{
+					//only deal with TextLines. Not TableBlocks
+					continue;
+				}
+				var textLine:TextLine = composedLine as TextLine;
 				var line:TextFlowLine = textLine.userData as TextFlowLine;
 				CONFIG::debug
 				{
