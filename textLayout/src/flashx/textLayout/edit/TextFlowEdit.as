@@ -241,7 +241,7 @@ package flashx.textLayout.edit
 				var scrapElement:FlowElement = scrapLeaf;		// highest level complete element in the scrap
 
 				// On the first paragraph, it always merges in to the destination paragraph if the destination paragraph has content
-				var destinationParagraph:ParagraphElement = destinationLeaf.getParagraph();
+				var destinationParagraph:ParagraphElement = destinationLeaf ? destinationLeaf.getParagraph() : destinationParagraph;
 				if (firstParagraph && (destinationParagraph.textLength > 1 || applyFormat))
 				{
 					var scrapParagraph:ParagraphElement = scrapLeaf.getParagraph();
@@ -253,7 +253,7 @@ package flashx.textLayout.edit
 				{
 					if (applyFormat && firstParagraph)
 					{
-						destinationElement = findLowestPossibleParent(destinationLeaf.parent, scrapElement);
+						destinationElement = destinationLeaf ? findLowestPossibleParent(destinationLeaf.parent, scrapElement) : findLowestPossibleParent(destinationElement, scrapElement);
 						var currentIndex:int = destinationElement.findChildIndexAtPosition(insertPosition - destinationElement.getAbsoluteStart());
 						applyFormatToElement(destinationElement, currentIndex, scrapElement);
 					}
@@ -265,7 +265,7 @@ package flashx.textLayout.edit
 
 				// Find the lowest level parent in the TextFlow that can accept the scrapElement as a child. 
 				// If necessary, copy higher up the scrapElement hierarchy to find a match.
-				var destinationElement:FlowGroupElement = findLowestPossibleParent(destinationLeaf.parent, scrapElement);
+				var destinationElement:FlowGroupElement = destinationLeaf ? findLowestPossibleParent(destinationLeaf.parent, scrapElement) : findLowestPossibleParent(destinationElement, scrapElement);
 				while (!destinationElement)
 				{
 					// Nothing in the TextFlow element hierarchy can accept the incoming scrap element.
