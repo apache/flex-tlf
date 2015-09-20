@@ -239,12 +239,12 @@ package flashx.textLayout.edit
 			{
 				removePasteAttributes(scrapLeaf);
 				var scrapElement:FlowElement = scrapLeaf;		// highest level complete element in the scrap
+				var scrapParagraph:ParagraphElement = scrapLeaf.getParagraph();
 
 				// On the first paragraph, it always merges in to the destination paragraph if the destination paragraph has content
 				var destinationParagraph:ParagraphElement = destinationLeaf ? destinationLeaf.getParagraph() : destinationParagraph;
 				if (firstParagraph && (destinationParagraph.textLength > 1 || applyFormat))
 				{
-					var scrapParagraph:ParagraphElement = scrapLeaf.getParagraph();
 					if (!scrapParagraph.format || scrapParagraph.format.getStyle(ConverterBase.MERGE_TO_NEXT_ON_PASTE) === undefined)
 						doSplit = true;
 					scrapElement = scrapParagraph.getChildAt(0);
@@ -323,7 +323,19 @@ package flashx.textLayout.edit
 				insertPosition = destinationLeaf ? destinationLeaf.getAbsoluteStart() : textFlow.textLength - 1;
 				
 				scrapLeaf = scrapFlow.getFirstLeaf();
+				// check to make sure we're inserting into the right paragraph
+				if(destinationLeaf && scrapLeaf && scrapLeaf.getParagraph() == scrapParagraph)
+				{
+					if(destinationLeaf.getParagraph() != destinationParagraph)
+					{
+						insertPosition--;
+						destinationLeaf = null;
+					}
+				}
 			}
+			// keep the cursor in the same paragraph unless a whole paragraph was inserted 
+			if(scrapParagraph.getStyle(ConverterBase.MERGE_TO_NEXT_ON_PASTE) == "true" && insertPosition == destinationParagraph.getAbsoluteStart() + destinationParagraph.textLength)
+				insertPosition--;
 			
 			return insertPosition;
 		}
