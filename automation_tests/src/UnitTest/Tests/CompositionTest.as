@@ -111,8 +111,6 @@ package UnitTest.Tests
         [Test]
         public function checkParagraphShufflingTest():void
         {
-            var startLength:int = TestFrame.rootElement.textLength;
-
             var flow1:FlowElement;
             var flow2:FlowElement;
 
@@ -220,7 +218,7 @@ package UnitTest.Tests
             }
 
             //Register all the lines that shouldn't be damaged.
-            var undamagedUIDs:Array = new Array();
+            var undamagedUIDs:Array = [];
             for (var k:int = 0; k < linenum; k++)
             {
                 undamagedUIDs[k] = UIDUtil.getUID(lines[k]);
@@ -235,7 +233,7 @@ package UnitTest.Tests
             }
 
             //Register all the lines that should be damaged.
-            var damagedUIDs:Array = new Array();
+            var damagedUIDs:Array = [];
             for (var n:int = linenum;
                  n < lines.length &&
                          (lines[n] as TextFlowLine).paragraph != null &&
@@ -292,7 +290,6 @@ package UnitTest.Tests
             assertTrue("Composed to the end, should leave text that is not in view uncomposed", flowComposer.damageAbsoluteStart < SelManager.textFlow.textLength);
 
             var controller:ContainerController = flowComposer.getControllerAt(0);
-            var originalEstimatedHeight:Number = controller.contentHeight;
             controller.verticalScrollPosition += 500;		// scroll ahead so we have some lines generated that can be released
 
             var lineSummary:Object = createLineSummary(flowComposer);
@@ -359,7 +356,7 @@ package UnitTest.Tests
             formatForRtlTest.fontFamily = 'Adobe Arabic';
 
             // Get stats used later
-            _lines = new Array();
+            _lines = [];
             _textLen = 0;
             bounds.width = 200;
             bounds.height = NaN;
@@ -375,7 +372,6 @@ package UnitTest.Tests
             var line1:TextLine = _lines[1] as TextLine;
             var line1Extent:Number = StringTextLineFactory.defaultConfiguration.overflowPolicy == OverflowPolicy.FIT_ANY ? line1.y - line1.ascent : line1.y + line1.descent;
             var line2:TextLine = _lines[2] as TextLine;
-            var line2Extent:Number = StringTextLineFactory.defaultConfiguration.overflowPolicy == OverflowPolicy.FIT_ANY ? line2.y - line2.ascent : line2.y + line2.descent;
             var contentHeight:Number = bounds.height;
             var contentTextLength:int = _textLen;
 
@@ -850,13 +846,13 @@ package UnitTest.Tests
             SelManager.pasteTextScrap(scrap);
             SelManager.pasteTextScrap(scrap);
             textFlow.flowComposer.updateAllControllers();
-            controller.setCompositionSize(825, 471)
+            controller.setCompositionSize(825, 471);
             SelManager.updateAllControllers();
-            controller.setCompositionSize(808, 464)
+            controller.setCompositionSize(808, 464);
             SelManager.updateAllControllers();
-            controller.setCompositionSize(791, 462)
+            controller.setCompositionSize(791, 462);
             SelManager.updateAllControllers();
-            controller.setCompositionSize(768, 461)
+            controller.setCompositionSize(768, 461);
             SelManager.updateAllControllers();
         }
 
@@ -910,7 +906,6 @@ package UnitTest.Tests
 
             var textFlow:TextFlow = SelManager.textFlow;
             var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
-            var composeSpace:Rectangle = new Rectangle(0, 0, controller.compositionWidth, controller.compositionHeight);
 
             var lastLine:TextFlowLine = controller.getLastVisibleLine();
             var lastVisiblePosition:int = lastLine.absoluteStart + lastLine.textLength - 1;
@@ -988,7 +983,7 @@ package UnitTest.Tests
                 lineIndex++;
             }
 
-            var result:Object = new Object();
+            var result:Object = {};
             result["releasedLineCount"] = releasedLineCount;
             result["invalidLineCount"] = invalidLineCount;
             result["validLineCount"] = validLineCount;

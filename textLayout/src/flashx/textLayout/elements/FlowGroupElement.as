@@ -778,7 +778,7 @@ package flashx.textLayout.elements
 						
 						// manage as an array or a single child
 						if (childrenToAdd == 0)
-							newChildToAdd = newChild
+							newChildToAdd = newChild;
 						else if (childrenToAdd == 1)
 							flatNewChildList = [ newChildToAdd, newChild ];
 						else
