@@ -217,11 +217,11 @@ package flashx.textLayout.edit
 		 * <p>The new element will be inserted before the specified index.</p>
 		 * <p>To append the TextFlow, pass <code>theFlow.length</code> for <code>startPos</code> and <code>endPos</code>.</p>
 		 * 
-		 * @param textFlow The TextFlow that is being inserted into.
+		 * @param destinationFlow The TextFlow that is being inserted into.
 		 * @param absoluteStart The index value of the first position of the replacement range in the TextFlow.
 		 * @param textScrap The TextScrap to be pasted into theFlow.
 		 */				
-		public static function insertTextScrap(textFlow:TextFlow, absoluteStart:int, textScrap:TextScrap, applyFormat:Boolean):int
+		public static function insertTextScrap(destinationFlow:TextFlow, absoluteStart:int, textScrap:TextScrap, applyFormat:Boolean):int
 		{
 			if (!textScrap)
 				return absoluteStart;
@@ -229,7 +229,7 @@ package flashx.textLayout.edit
 			var scrapFlow:TextFlow = textScrap.textFlow.deepCopy() as TextFlow;
 			var scrapLeaf:FlowLeafElement = scrapFlow.getFirstLeaf();
 
-			var destinationLeaf:FlowLeafElement = textFlow.findLeaf(absoluteStart);		
+			var destinationLeaf:FlowLeafElement = destinationFlow.findLeaf(absoluteStart);
 			var insertPosition:int = absoluteStart;
 			
 			var firstParagraph:Boolean = true;
@@ -283,7 +283,7 @@ package flashx.textLayout.edit
 				{
 					// Split the paragraph, and merge the scrap paragraph to the end of the first paragraph of the destination
 					CONFIG::debug { assert(destinationElement is ParagraphElement, "We should be splitting a paragraph"); }
-					ModelEdit.splitElement(textFlow, destinationElement, insertPosition - destinationStart);
+					ModelEdit.splitElement(destinationFlow, destinationElement, insertPosition - destinationStart);
 					var scrapParent:FlowGroupElement = scrapElement.parent;
 					var scrapChildren:Array = scrapParent.mxmlChildren;
 					scrapParent.replaceChildren(0, scrapParent.numChildren);
@@ -309,7 +309,7 @@ package flashx.textLayout.edit
 						if (child is FlowLeafElement)
 							child.splitAtPosition(insertPosition - childStart);
 						else
-							ModelEdit.splitElement(textFlow, child as FlowGroupElement, insertPosition - childStart);
+							ModelEdit.splitElement(destinationFlow, child as FlowGroupElement, insertPosition - childStart);
 						++childIndex;
 					}
 					if (applyFormat)
@@ -319,8 +319,8 @@ package flashx.textLayout.edit
 
 				
 				// Advance to the next destination leaf
-				destinationLeaf = (scrapElement is FlowLeafElement) ? FlowLeafElement(scrapElement).getNextLeaf() : FlowGroupElement(scrapElement).getLastLeaf().getNextLeaf();
-				insertPosition = destinationLeaf ? destinationLeaf.getAbsoluteStart() : textFlow.textLength - 1;
+				destinationLeaf = scrapElement is FlowLeafElement ? FlowLeafElement(scrapElement).getNextLeaf() : FlowGroupElement(scrapElement).getLastLeaf().getNextLeaf();
+				insertPosition = destinationLeaf ? destinationLeaf.getAbsoluteStart() : destinationFlow.textLength - 1;
 				
 				scrapLeaf = scrapFlow.getFirstLeaf();
 				// check to make sure we're inserting into the right paragraph
