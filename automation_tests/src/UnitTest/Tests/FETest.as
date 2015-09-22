@@ -426,9 +426,7 @@ package UnitTest.Tests
 	  			var endIndx:int = startIndx + 5;		// replace existing text
 	  			var flowLength:int = SelManager.textFlow.textLength;
 
-				var sprite:Sprite = createFilledSprite(100, 100, 0xff0000);
-
-	  			var src:Object = sprite;
+	  			var src:Object = createFilledSprite(100, 100, 0xff0000);
 	  			var width:int = 100;
 	  			var height:int = 100;
 

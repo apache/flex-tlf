@@ -134,11 +134,11 @@
             testApp.getTextFlow = function ():TextFlow
             {
                 return SystemManager(loadedSWF.content).application["activeFlow"];
-            }
+            };
             testApp.getDisplayObject = function ():DisplayObject
             {
                 return SystemManager(loadedSWF.content).application["rootPanel"];
-            }
+            };
             testApp.setInteractionManager = SystemManager(loadedSWF.content).application["setInteractionManager"];
             testApp.contentChange = SystemManager(loadedSWF.content).application["changeContent"];
             testApp.detachActiveFlow = SystemManager(loadedSWF.content).application["detachActiveFlow"];
@@ -359,12 +359,12 @@
 
         private function onXmlFileListError(event:IOErrorEvent):void
         {
-            //TODO: Error handlig for xml config filex
+            //TODO: Error handlig for xml config files
         }
 
         private function onXmlFileListSecurityError(event:SecurityErrorEvent):void
         {
-            //TODO: Error handlig for xml config filex
+            //TODO: Error handlig for xml config files
         }
         ]]>
     </Script>

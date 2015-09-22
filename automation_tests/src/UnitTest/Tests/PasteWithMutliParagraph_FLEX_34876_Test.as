@@ -107,7 +107,6 @@ package UnitTest.Tests
             var multiLineScrap:TextScrap = TextClipboard.importToScrap(inputString, TextConverter.PLAIN_TEXT_FORMAT);
 
             (SelManager.textFlow.interactionManager as EditManager).pasteTextScrap(multiLineScrap);
-
         }
     }
 }
