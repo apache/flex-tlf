@@ -34,8 +34,13 @@ package UnitTest.Tests
     import flashx.textLayout.conversion.ConversionType;
     import flashx.textLayout.conversion.TextConverter;
     import flashx.textLayout.edit.TextScrap;
+    import flashx.textLayout.elements.FlowElement;
+    import flashx.textLayout.formats.ITextLayoutFormat;
+    import flashx.textLayout.formats.TextLayoutFormat;
 
     import org.flexunit.asserts.assertEquals;
+    import org.flexunit.asserts.assertNotNull;
+    import org.flexunit.asserts.assertTrue;
 
     public class FLEX_34807_Test extends VellumTestCase
     {
@@ -44,6 +49,10 @@ package UnitTest.Tests
         private const PASTE:TextScrap = new TextScrap(TextConverter.importToFlow(PASTED_HTML, TextConverter.TEXT_FIELD_HTML_FORMAT));
 
         private var sourceAsPlainText:String;
+        private var leftBefore:ITextLayoutFormat;
+        private var rightBefore:ITextLayoutFormat;
+        private var leftAfter:ITextLayoutFormat;
+        private var rightAfter:ITextLayoutFormat;
 
         public function FLEX_34807_Test()
         {
@@ -79,29 +88,15 @@ package UnitTest.Tests
         public function paste_in_beginning():void
         {
             //given
+            recordTextFormatsBeforeOperation(0);
+
+            //when
             SelManager.selectFirstPosition();
-
-            //when
             SelManager.pasteTextScrap(PASTE);
 
             //then
-            const result:String = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
-            assertAllTextHasBeenPasted(result, 0);
-        }
-
-        [Test]
-        public function paste_in_first_paragraph():void
-        {
-            //given
-            const PASTE_POSITION:int = 5; //after "That"
-            SelManager.selectRange(PASTE_POSITION, PASTE_POSITION);
-
-            //when
-            SelManager.pasteTextScrap(PASTE);
-
-            //then
-            const result:String = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
-            assertAllTextHasBeenPasted(result, PASTE_POSITION);
+            assertAdjacentTextFormatsNotAltered(0);
+            assertTextPastedCorrectlyAndExistingTextNotChanged(0);
         }
 
         [Test]
@@ -109,18 +104,77 @@ package UnitTest.Tests
         {
             //given
             const PASTE_POSITION:int = 16;
-            SelManager.selectRange(PASTE_POSITION, PASTE_POSITION);
+            recordTextFormatsBeforeOperation(PASTE_POSITION);
 
             //when
+            SelManager.selectRange(PASTE_POSITION, PASTE_POSITION);
             SelManager.pasteTextScrap(PASTE);
 
             //then
-            const result:String = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
-            assertAllTextHasBeenPasted(result, PASTE_POSITION);
+            assertAdjacentTextFormatsNotAltered(PASTE_POSITION);
+            assertTextPastedCorrectlyAndExistingTextNotChanged(PASTE_POSITION);
         }
 
-        private function assertAllTextHasBeenPasted(currentSourceAsPlainText:String, pastePosition:int):void
+        [Test]
+        public function paste_in_first_paragraph():void
         {
+            //given
+            const PASTE_POSITION:int = 5; //after "There"
+            recordTextFormatsBeforeOperation(PASTE_POSITION);
+
+            //when
+            SelManager.selectRange(PASTE_POSITION, PASTE_POSITION);
+            SelManager.pasteTextScrap(PASTE);
+
+            //then
+            assertAdjacentTextFormatsNotAltered(PASTE_POSITION);
+            assertTextPastedCorrectlyAndExistingTextNotChanged(PASTE_POSITION);
+        }
+
+        private function assertAdjacentTextFormatsNotAltered(pastePosition:int):void
+        {
+            recordTextFormatsAfterOperation(pastePosition);
+            assertAdjacentTextFormatsArePreserved(pastePosition);
+        }
+
+        private function assertAdjacentTextFormatsArePreserved(pastePosition:int):void
+        {
+            if(pastePosition)
+            {
+                assertNotNull(leftBefore);
+                assertNotNull(leftAfter);
+                assertTrue(TextLayoutFormat.isEqual(leftBefore, leftAfter));
+            }
+
+            if(pastePosition < SelManager.textFlow.textLength - 1)
+            {
+                assertNotNull(rightBefore);
+                assertNotNull(rightAfter);
+                assertTrue(TextLayoutFormat.isEqual(rightBefore, rightAfter));
+            }
+        }
+
+        private function recordTextFormatsBeforeOperation(pastePosition:int):void
+        {
+            leftBefore = pastePosition ? getFormatOfCharAt(pastePosition - 1) : null;
+            rightBefore = pastePosition < SelManager.textFlow.textLength - 1 ?  getFormatOfCharAt(pastePosition + 1) : null;
+        }
+
+        private function recordTextFormatsAfterOperation(pastePosition:int):void
+        {
+            leftAfter = pastePosition ? getFormatOfCharAt(pastePosition - 1) : null;
+            rightAfter = pastePosition < SelManager.textFlow.textLength - PASTED_TEXT.length - 1 ? getFormatOfCharAt(pastePosition + 1 + PASTED_TEXT.length) : null;
+        }
+
+        private function getFormatOfCharAt(pastePosition:int):ITextLayoutFormat
+        {
+            const charLeftOfPasteBeforeOperation:FlowElement = SelManager.textFlow.findLeaf(pastePosition);
+            return charLeftOfPasteBeforeOperation ? charLeftOfPasteBeforeOperation.format : null;
+        }
+
+        private function assertTextPastedCorrectlyAndExistingTextNotChanged(pastePosition:int):void
+        {
+            const currentSourceAsPlainText:String = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
             assertEquals("Not all the pasted content appears in the new TextFlow!", sourceAsPlainText.substr(0, pastePosition) + PASTED_TEXT + sourceAsPlainText.substr(pastePosition), currentSourceAsPlainText);
         }
     }
