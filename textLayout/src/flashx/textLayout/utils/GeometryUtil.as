@@ -70,6 +70,9 @@ package flashx.textLayout.utils
 		 */
 		public static function getHighlightBounds(range:TextRange):Array
 		{
+			if(!range)
+				return null;
+		
 			var flowComposer:IFlowComposer = range.textFlow.flowComposer;
 			if (!flowComposer)
 				return null;
