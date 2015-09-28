@@ -517,6 +517,9 @@ package flashx.textLayout.compose
 		
 		public function get spaceBefore():Number
 		{ 
+			if(!_para || !_para.computedFormat)
+				return 0;
+				
 		 	return (this.location & TextFlowLineLocation.FIRST)? _para.computedFormat.paragraphSpaceBefore : 0;
 		}
 		
@@ -536,7 +539,10 @@ package flashx.textLayout.compose
 		 */
 		
 		public function get spaceAfter():Number
-		{ 
+		{
+			if(!_para || !_para.computedFormat)
+				return 0;
+				
 			return ((this.location & TextFlowLineLocation.LAST) ? _para.computedFormat.paragraphSpaceAfter : 0); 			
 		}
 		
@@ -569,7 +575,7 @@ package flashx.textLayout.compose
 		public function getBounds():Rectangle
 		{	
 			var textLine:TextLine = getTextLine(true);
-			if (!textLine)
+			if (!textLine || !paragraph)
 				return new Rectangle();
 			
 			// TODO: just use the textLine.x and textLine.y - after all getTextLine now sets them.
