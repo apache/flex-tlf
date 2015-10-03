@@ -111,7 +111,7 @@ package
         public var measurementTest:MeasurementTest;
         public var leadingTest:LeadingTest;
         public var scrollToRangeTest:ScrollToRangeTest;
-        public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
+        //public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
     }
 
 }
