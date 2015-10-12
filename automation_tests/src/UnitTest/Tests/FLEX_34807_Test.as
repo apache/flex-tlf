@@ -243,7 +243,7 @@ package UnitTest.Tests
         private function assertTextPastedCorrectlyAndExistingTextNotChanged(pastePosition:int):void
         {
             const currentSourceAsPlainText:String = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
-            assertEquals("Not all the pasted content appears in the new TextFlow!", sourceAsPlainText.substr(0, pastePosition) + PASTED_TEXT + sourceAsPlainText.substr(pastePosition), currentSourceAsPlainText);
+            assertEquals("Not all the pasted content appears in the new TextFlow!", sourceAsPlainText.substr(0, pastePosition) + PASTED_TEXT + "\n" + sourceAsPlainText.substr(pastePosition), currentSourceAsPlainText);
         }
     }
 }

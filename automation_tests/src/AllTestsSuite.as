@@ -33,6 +33,7 @@ package
     import UnitTest.Tests.CrossContainerTest;
     import UnitTest.Tests.ElementOperationTest;
     import UnitTest.Tests.EventOverrideTest;
+    import UnitTest.Tests.FLEX_34807_Test;
     import UnitTest.Tests.FactoryImportTest;
     import UnitTest.Tests.FloatTest;
     import UnitTest.Tests.FlowModelTest;
@@ -111,7 +112,8 @@ package
         public var measurementTest:MeasurementTest;
         public var leadingTest:LeadingTest;
         public var scrollToRangeTest:ScrollToRangeTest;
-        //public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
+        public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
+		public var flex_34807:FLEX_34807_Test;
     }
 
 }

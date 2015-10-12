@@ -251,7 +251,7 @@ package flashx.textLayout.edit
 				}
 				else
 				{
-					if (applyFormat && firstParagraph)
+					if (applyFormat)
 					{
 						destinationElement = destinationLeaf ? findLowestPossibleParent(destinationLeaf.parent, scrapElement) : findLowestPossibleParent(destinationElement, scrapElement);
 						var currentIndex:int = destinationElement.findChildIndexAtPosition(insertPosition - destinationElement.getAbsoluteStart());
