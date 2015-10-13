@@ -106,7 +106,8 @@
             "asknot.xml",
             "empty.xml",
             "sampleArabic.xml",
-            "aliceExcerpt.xml"
+            "aliceExcerpt.xml",
+            "HtmlTest.xml"
         ];
 
         public var reportXMLResults:Boolean = false;

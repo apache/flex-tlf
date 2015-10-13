@@ -28,7 +28,6 @@ package UnitTest.Tests
 {
 
     import UnitTest.ExtendedClasses.VellumTestCase;
-    import UnitTest.Fixtures.FileRepository;
     import UnitTest.Fixtures.TestConfig;
 
     import flashx.textLayout.conversion.ConversionType;
@@ -60,7 +59,6 @@ package UnitTest.Tests
 
         public function FLEX_34807_Test()
         {
-            //	super(methodName, testID, testConfig, testCaseXML);
             super("", "FLEX_34807_Test", TestConfig.getInstance());
 
             metaData = {};
@@ -71,13 +69,12 @@ package UnitTest.Tests
         [BeforeClass]
         public static function setUpClass():void
         {
-            FileRepository.readFile(TestConfig.getInstance().baseURL, "../../test/testFiles/markup/tlf/HtmlTest.xml");
             analyseStylesOfPastedText();
         }
 
         private static function analyseStylesOfPastedText():void
         {
-            for(var i:int = 0; i < PASTED_TEXT.length; i++)
+            for (var i:int = 0; i < PASTED_TEXT.length; i++)
             {
                 PASTE_CHAR_STYLES.push(getFormatOfCharFromFlow(i, PASTE.textFlow));
             }
@@ -88,10 +85,10 @@ package UnitTest.Tests
         {
             super.setUpTest();
 
-            if(!sourceAsPlainText)
+            if (!sourceAsPlainText)
                 sourceAsPlainText = TextConverter.export(testApp.getTextFlow(), TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String;
 
-            if(isNaN(initialTextLength))
+            if (isNaN(initialTextLength))
                 initialTextLength = SelManager.textFlow.textLength;
         }
 
@@ -187,7 +184,7 @@ package UnitTest.Tests
 
         private function assertFormattingOfPastedTextNotAltered(pastePosition:int):void
         {
-            for(var i:int = 0; i < PASTED_TEXT.length; i++)
+            for (var i:int = 0; i < PASTED_TEXT.length; i++)
             {
                 var formatOfPastedChar:ITextLayoutFormat = getFormatOfCharAt(pastePosition + i);
                 assertTrue("The style of the pasted text has been altered!", TextLayoutFormat.isEqual(PASTE_CHAR_STYLES[i], formatOfPastedChar));
@@ -202,14 +199,14 @@ package UnitTest.Tests
 
         private function assertAdjacentTextFormatsArePreserved(pastePosition:int):void
         {
-            if(pastePosition)
+            if (pastePosition)
             {
                 assertNotNull("Couldn't manage to find the format of the character to the left of the pasted text, before the paste operation!", leftBefore);
                 assertNotNull("Couldn't manage to find the format of the character to the left of the pasted text, after the paste operation!", leftAfter);
                 assertTrue("The style of the original text has been altered! (left)", TextLayoutFormat.isEqual(leftBefore, leftAfter));
             }
 
-            if(pastePosition < initialTextLength - 1)
+            if (pastePosition < initialTextLength - 1)
             {
                 assertNotNull("Couldn't manage to find the format of the character to the right of the pasted text, before the paste operation!", rightBefore);
                 assertNotNull("Couldn't manage to find the format of the character to the right of the pasted text, after the paste operation!", rightAfter);
@@ -220,7 +217,7 @@ package UnitTest.Tests
         private function recordTextFormatsBeforeOperation(pastePosition:int):void
         {
             leftBefore = pastePosition ? getFormatOfCharAt(pastePosition - 1) : null;
-            rightBefore = pastePosition < initialTextLength - 1 ?  getFormatOfCharAt(pastePosition + 1) : null;
+            rightBefore = pastePosition < initialTextLength - 1 ? getFormatOfCharAt(pastePosition + 1) : null;
         }
 
         private function recordTextFormatsAfterOperation(pastePosition:int):void
