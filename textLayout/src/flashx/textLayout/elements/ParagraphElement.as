@@ -642,7 +642,7 @@ package flashx.textLayout.elements
 					_terminatorSpan.removeParaTerminator();
 				if (newLastLeaf && _terminatorSpan)
 				{
-					if(_terminatorSpan.textLength == 0)
+					if(_terminatorSpan.textLength == 0 && !_terminatorSpan.id)
 					{
 						var termIdx:int = getChildIndex(_terminatorSpan);
 						super.replaceChildren(termIdx, termIdx+1);
