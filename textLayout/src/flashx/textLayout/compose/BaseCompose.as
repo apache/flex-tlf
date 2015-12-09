@@ -722,9 +722,6 @@ package flashx.textLayout.compose
 			
 			resetControllerBounds();
 			
-			// Bug, needs to remove 
-			_startComposePosition = _startController.absoluteStart;
-			
 			// This is where we will start composing from
 			_curElement = _textFlow.findLeaf(_startComposePosition);
 			_curElementStart = _curElement.getAbsoluteStart();
@@ -813,7 +810,7 @@ package flashx.textLayout.compose
 			var curLine:TextFlowLine = _flowComposer.getLineAt(startLineIndex);
 			
 			// cannot start in the middle if we are measuring AND there are floats
-			if (curLine.controller.numFloats)
+			if (curLine.controller && curLine.controller.numFloats)
 			{
 				CONFIG::debug { assert((_blockProgression == BlockProgression.TB && curLine.controller.measureWidth 
 					|| _blockProgression == BlockProgression.RL && curLine.controller.measureHeight) == _measuring,"Bad _measuring intialization"); }
@@ -1021,7 +1018,11 @@ package flashx.textLayout.compose
 			// We could examine the earlier part of the paragraph to see if its visible, but for now just assume it
 			// might be.
 			_paragraphContainsVisibleLines = (_curElementStart + _curElementOffset != _curParaStart) ;
-			
+			if(_paragraphContainsVisibleLines)
+			{
+				//we're composing in midddle of a paragraph. Update the line start to match up with our current location
+				_curLineStart = _curElementStart + _curElementOffset;
+			}
 			var success:Boolean = composeParagraphElementIntoLines();
 			
 			var okToRelease:Boolean = true;
@@ -1087,7 +1088,9 @@ package flashx.textLayout.compose
 		protected function composeParagraphElementIntoLines():Boolean
 		{
 			// make sure TextBlocks are normalized
-			_curParaElement.createContentElement();
+			if(_curParaElement.getTextBlock().content == null)
+				_curParaElement.createContentElement();
+			
 			var result:Boolean = true;
 			var textLine:TextLine;
 			
