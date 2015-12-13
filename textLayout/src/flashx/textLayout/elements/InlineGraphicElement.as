@@ -378,7 +378,14 @@ package flashx.textLayout.elements
             CONFIG::debug { assert(_graphicStatus is ErrorEvent,"unexpected _graphicStatus"); }
             return InlineGraphicElementStatus.ERROR; 
         }
-        
+
+		/** @private
+		 */
+		public override function getText(relativeStart:int=0, relativeEnd:int=-1, paragraphSeparator:String="\n"):String
+		{
+			return String.fromCharCode(0xFDEF);
+		}
+
         private function changeGraphicStatus(stat:Object):void
         {
             var oldStatus:String = status;
