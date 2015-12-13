@@ -69,7 +69,7 @@ package flashx.textLayout.elements
 		/** @private */
 		public override function get text():String
 		{
-			return "\u0016";
+			return String.fromCharCode(0x16);
 		}
 		
 		/** @private */
