@@ -383,7 +383,12 @@ package flashx.textLayout.elements
 		 */
 		public override function getText(relativeStart:int=0, relativeEnd:int=-1, paragraphSeparator:String="\n"):String
 		{
-			return String.fromCharCode(0xFDEF);
+			if(relativeEnd == -1)
+				relativeEnd = textLength;
+			
+			// We could probably just return _text (U+FDEF), but this allows clients to change _text to some other value
+			// and getText() will still work. (Of course, I cannot think of a reason you'd want to do that...)
+			return _text ? _text.substring(relativeStart, relativeEnd) : "";
 		}
 
         private function changeGraphicStatus(stat:Object):void
