@@ -35,7 +35,6 @@ package flashx.textLayout.edit
 	import flash.ui.Keyboard;
 	import flash.utils.getQualifiedClassName;
 	
-	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.compose.IFlowComposer;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.debug.Debugging;
@@ -87,6 +86,7 @@ package flashx.textLayout.edit
 	import flashx.textLayout.operations.SplitElementOperation;
 	import flashx.textLayout.operations.SplitParagraphOperation;
 	import flashx.textLayout.operations.UndoOperation;
+	import flashx.textLayout.tlf_internal;
 	import flashx.textLayout.utils.CharacterUtil;
 	import flashx.textLayout.utils.GeometryUtil;
 	import flashx.textLayout.utils.NavigationUtil;
@@ -1278,7 +1278,12 @@ package flashx.textLayout.edit
 		 */
 		public function deleteText(operationState:SelectionState = null):void
 		{
-
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).deleteText(operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1296,6 +1301,12 @@ package flashx.textLayout.edit
 		 */
 		public function deleteNextCharacter(operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).deleteNextCharacter(operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1332,6 +1343,12 @@ package flashx.textLayout.edit
 		 */		
 		public function deleteNextWord(operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).deleteNextWord(operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if ((!operationState) || ((operationState.anchorPosition == operationState.activePosition) && (operationState.anchorPosition >= textFlow.textLength - 1)))
 				return;
@@ -1389,6 +1406,12 @@ package flashx.textLayout.edit
 		 */		
 		public function deletePreviousCharacter(operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).deletePreviousCharacter(operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1476,6 +1499,12 @@ package flashx.textLayout.edit
 		 */		
 		public function deletePreviousWord(operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).deletePreviousWord(operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1546,6 +1575,12 @@ package flashx.textLayout.edit
 
 		public function insertTableElement(table:TableElement, operationState:SelectionState = null):void
 		{
+			// handle insertions when a table cells is active. (nested tables probably do not work now though...)
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).insertTableElement(table, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1564,6 +1599,12 @@ package flashx.textLayout.edit
 		 */	
 		public function insertText(text:String, origOperationState:SelectionState = null):void
 		{
+			// handle insertions when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).insertText(text, origOperationState);
+				return;
+			}
 			// if there's another insert operation waiting to be executed, 
 			// just add to it, if possible
 			if (origOperationState == null && pendingInsert)
@@ -1603,6 +1644,12 @@ package flashx.textLayout.edit
 		 */	
 		public function overwriteText(text:String, operationState:SelectionState = null):void
 		{
+			// handle overwrites when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).overwriteText(text, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1623,6 +1670,10 @@ package flashx.textLayout.edit
 		 */			
 		public function insertInlineGraphic(source:Object, width:Object, height:Object, options:Object = null, operationState:SelectionState = null):InlineGraphicElement
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				return (subManager as IEditManager).insertInlineGraphic(source, width, height, options, operationState);
+
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return null;
@@ -1642,6 +1693,12 @@ package flashx.textLayout.edit
 		 */			
 		public function modifyInlineGraphic(source:Object, width:Object, height:Object, options:Object = null, operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).modifyInlineGraphic(source, width, height, options, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1659,6 +1716,12 @@ package flashx.textLayout.edit
 		 */		
 		public function applyFormat(leafFormat:ITextLayoutFormat, paragraphFormat:ITextLayoutFormat, containerFormat:ITextLayoutFormat, operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).applyFormat(leafFormat, paragraphFormat, containerFormat, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1677,6 +1740,12 @@ package flashx.textLayout.edit
 		 */
 		public function clearFormat(leafFormat:ITextLayoutFormat, paragraphFormat:ITextLayoutFormat, containerFormat:ITextLayoutFormat, operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).clearFormat(leafFormat, paragraphFormat, containerFormat, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1695,7 +1764,11 @@ package flashx.textLayout.edit
 		 */		
 		public function applyLeafFormat(characterFormat:ITextLayoutFormat, operationState:SelectionState = null):void
 		{
-			applyFormat(characterFormat, null, null, operationState);
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				(subManager as IEditManager).applyLeafFormat(characterFormat, operationState);
+			else 
+				applyFormat(characterFormat, null, null, operationState);
 		}
 
 		/** 
@@ -1709,7 +1782,11 @@ package flashx.textLayout.edit
  		 */		
 		public function applyParagraphFormat(paragraphFormat:ITextLayoutFormat, operationState:SelectionState = null):void
 		{
-			applyFormat(null, paragraphFormat, null, operationState);
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				(subManager as IEditManager).applyParagraphFormat(paragraphFormat, operationState);
+			else
+				applyFormat(null, paragraphFormat, null, operationState);
 		}
 
 		/** 
@@ -1723,7 +1800,11 @@ package flashx.textLayout.edit
 		 */		
 		public function applyContainerFormat(containerFormat:ITextLayoutFormat, operationState:SelectionState = null):void
 		{
-			applyFormat(null, null, containerFormat, operationState);
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				(subManager as IEditManager).applyContainerFormat(containerFormat, operationState);
+			else
+				applyFormat(null, null, containerFormat, operationState);
 		}
 		
 		/** 
@@ -1770,6 +1851,10 @@ package flashx.textLayout.edit
 		 */
 		public function cutTextScrap(operationState:SelectionState = null):TextScrap
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				return (subManager as IEditManager).cutTextScrap(operationState);
+			
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return null;
@@ -1799,6 +1884,12 @@ package flashx.textLayout.edit
 		 */
 		public function pasteTextScrap(scrapToPaste:TextScrap, operationState:SelectionState = null):void
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+			{
+				(subManager as IEditManager).pasteTextScrap(scrapToPaste, operationState);
+				return;
+			}
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return;
@@ -1817,6 +1908,10 @@ package flashx.textLayout.edit
 		 */			
 		public function applyTCY(tcyOn:Boolean, operationState:SelectionState = null):TCYElement
 		{
+			// handle when a table cells is active.
+			if(subManager && subManager is IEditManager)
+				return (subManager as IEditManager).applyTCY(tcyOn, operationState);
+
 			operationState = defaultOperationState(operationState);
 			if (!operationState)
 				return null;
@@ -1926,6 +2021,7 @@ package flashx.textLayout.edit
 		 */
 		public function beginCompositeOperation():void
 		{
+			// not sure if there's issues with composite operations and tables
 			flushPendingOperations();
 			
 			if (!parentStack)
@@ -1958,6 +2054,7 @@ package flashx.textLayout.edit
 		 */
 		public function endCompositeOperation():void
 		{
+			// not sure if there's issues with composite operations and tables
 			CONFIG::debug { assert( parentStack.length > 0 || captureLevel <= 0, "EditManager.endOperation - no composite operation in progress"); }
 			
 			--captureLevel;
