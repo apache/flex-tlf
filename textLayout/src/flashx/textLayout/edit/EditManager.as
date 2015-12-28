@@ -480,6 +480,7 @@ package flashx.textLayout.edit
 							// select next cell in table
 							if (cell && cell.textFlow && cell.textFlow.interactionManager is EditManager) {
 								//cell.textFlow.interactionManager.selectLastPosition();
+								deselect();
 								cell.textFlow.interactionManager.selectAll();
 								cell.textFlow.interactionManager.setFocus();
 							}
@@ -533,6 +534,10 @@ package flashx.textLayout.edit
 					overwriteMode ? overwriteText(event.text) : insertText(event.text);
 			}
 			ignoreNextTextEvent = false;
+			// if the manager is nested inside another one, do not handle it again in the outer one
+			if(superManager)
+				event.preventDefault();
+				
 		}
 		
 		/** @private */

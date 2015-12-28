@@ -1065,8 +1065,22 @@ package flashx.textLayout.edit
         {
             flushPendingOperations();
 			
-			if(subManager)
+			if(subManager && (anchorPosition != -1 || activePosition != -1))
+			{
 				subManager.selectRange(-1,-1);
+				subManager = null;
+			}
+			if(textFlow.nestedInTable())
+			{
+				var cell:TableCellElement = textFlow.parentElement as TableCellElement;
+				superManager = cell.getTextFlow().interactionManager;
+				superManager.currentTable = cell.getTable();
+				superManager.deselect();
+				superManager.anchorCellPosition.column = cell.colIndex;
+				superManager.anchorCellPosition.row = cell.rowIndex;
+				superManager.subManager = this;
+			}
+
             
             // anchor and active can be in any order
             // TODO: range check and clamp anchor,active
@@ -1145,7 +1159,10 @@ package flashx.textLayout.edit
                 activePosition = -1;
             }
 			else if(subManager)
+			{
+				subManager.flushPendingOperations();
 				subManager = null;
+			}
             
             var lastSelectablePos:int = (_textFlow.textLength > 0) ? _textFlow.textLength - 1 : 0;
             
@@ -1966,6 +1983,8 @@ package flashx.textLayout.edit
 				superManager = cell.getTextFlow().interactionManager;
 				if(event.shiftKey && cell.getTable() == superManager.currentTable)
 				{
+					flushPendingOperations();
+
 					// expand cell selection if applicable
 					coords = new CellCoordinates(cell.rowIndex,cell.colIndex);
 					if(
@@ -2906,6 +2925,8 @@ package flashx.textLayout.edit
 		}
 		public function set subManager(value:ISelectionManager):void
 		{
+			if(value == _subManager)
+				return;
 			if(_subManager)
 				_subManager.selectRange(-1,-1);
 			_subManager = value;
