@@ -852,19 +852,8 @@ package flashx.textLayout.edit
 				redrawListener = null;
 			}
 
-			var cellHeight:Number = 0;
 			if (textFlow.flowComposer)
 			{
-				if(superManager && superManager is IEditManager)
-				{
-					var controller:ContainerController = textFlow.flowComposer.getControllerAt(0);
-					if (controller)
-					{
-						cellHeight = controller.container.height;
-					}
-				}
-
-
 				 textFlow.flowComposer.updateAllControllers(); 
 
 				// Scroll to selection
@@ -873,18 +862,6 @@ package flashx.textLayout.edit
 					var controllerIndex:int = textFlow.flowComposer.findControllerIndexAtPosition(activePosition);
 					if (controllerIndex >= 0)
 						textFlow.flowComposer.getControllerAt(controllerIndex).scrollToRange(activePosition,anchorPosition);	
-				}
-				if(superManager && superManager is IEditManager)
-				{
-					if(controller.container.height != cellHeight)
-					{
-						var setFormat:String = selectionFormatState;
-						var table:TableElement = (textFlow.parentElement as TableCellElement).getTable();
-						table.modelChanged(ModelChange.ELEMENT_MODIFIED, table, 0, table.textLength);
-						(superManager as IEditManager).updateAllControllers();
-						if(setFormat == SelectionFormatState.FOCUSED)
-							setFocus();
-					}
 				}
 			}
 

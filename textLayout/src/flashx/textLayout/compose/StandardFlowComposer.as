@@ -20,7 +20,7 @@ package flashx.textLayout.compose
 {
     import flash.display.Sprite;
     import flash.system.Capabilities;
-
+    
     import flashx.textLayout.accessibility.TextAccImpl;
     import flashx.textLayout.container.ContainerController;
     import flashx.textLayout.container.ScrollPolicy;
@@ -28,8 +28,11 @@ package flashx.textLayout.compose
     import flashx.textLayout.edit.ISelectionManager;
     import flashx.textLayout.elements.BackgroundManager;
     import flashx.textLayout.elements.ContainerFormattedElement;
+    import flashx.textLayout.elements.TableCellElement;
+    import flashx.textLayout.elements.TableElement;
     import flashx.textLayout.elements.TextFlow;
     import flashx.textLayout.events.CompositionCompleteEvent;
+    import flashx.textLayout.events.ModelChange;
     import flashx.textLayout.formats.BlockProgression;
     import flashx.textLayout.tlf_internal;
 
@@ -550,7 +553,15 @@ package flashx.textLayout.compose
 			//CONFIG::debug { assert(!_composing,"updateToController: compose in process"); }
 			if (_composing)
 				return false;
-				
+			
+			var cellHeight:Number = 0;
+			if(textFlow.nestedInTable())
+			{
+				var controller:ContainerController = getControllerAt(0);
+				if (controller)
+					cellHeight = controller.container.height;
+
+			}
 			//note that this will always update the display AND update the
 			//selection.  So, even if nothing has changed that would cause
 			//a recompose, the selection would still be redrawn.
@@ -562,6 +573,17 @@ package flashx.textLayout.compose
 			var shapesDamaged:Boolean = areShapesDamaged();
 			if (shapesDamaged)
 				updateCompositionShapes();
+
+			// recompose the containing table if the cell height changed.
+			// This should be ok because updateAllControllers() should be ignored if the parent textFlow is in middle of a compose.
+			if(cellHeight && controller.container.height != cellHeight)
+			{
+				var table:TableElement = (textFlow.parentElement as TableCellElement).getTable();
+				table.modelChanged(ModelChange.ELEMENT_MODIFIED, table, 0, table.textLength);
+				table.getTextFlow().flowComposer.updateAllControllers();
+				if(sm && sm.focused)
+					controller.setFocus();
+			}
 
 			if (sm)
 				sm.refreshSelection();
