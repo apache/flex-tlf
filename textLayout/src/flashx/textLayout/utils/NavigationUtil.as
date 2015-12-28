@@ -25,6 +25,7 @@ package flashx.textLayout.utils
 	
 	import flashx.textLayout.compose.IFlowComposer;
 	import flashx.textLayout.compose.TextFlowLine;
+	import flashx.textLayout.compose.TextFlowTableBlock;
 	import flashx.textLayout.container.ContainerController;
 	import flashx.textLayout.container.ScrollPolicy;
 	import flashx.textLayout.elements.FlowLeafElement;
@@ -337,6 +338,7 @@ package flashx.textLayout.utils
 		{
 			var endIdx:int;
 			var targetTextLine:TextLine = targetFlowLine.getTextLine(true);
+			var blockOffset:int = targetFlowLine.paragraph.getTextBlockAbsoluteStart(targetTextLine.textBlock);
 			var currentTextLine:TextLine = curTextFlowLine.getTextLine(true);
 			var bidiRightToLeft:Boolean = ((currentTextLine.getAtomBidiLevel(atomIndex) % 2) != 0); 				
 			
@@ -412,7 +414,7 @@ package flashx.textLayout.utils
 						paraSelectionIdx = leanRight ? targetTextLine.getAtomTextBlockEndIndex(atomIndex) : targetTextLine.getAtomTextBlockBeginIndex(atomIndex);							
 					}
 				}
-				endIdx = targetFlowLine.paragraph.getAbsoluteStart() + paraSelectionIdx;
+				endIdx = blockOffset + paraSelectionIdx;
 			}
 			return endIdx;
 		}
@@ -447,8 +449,8 @@ package flashx.textLayout.utils
 				var lineStart:int = curTextFlowLine.absoluteStart;
 				var lineDelta:int = endIdx - lineStart;
 				var currentTextLine:TextLine = curTextFlowLine.getTextLine(true);
-				var para:ParagraphElement = curTextFlowLine.paragraph;
-				var atomIndex:int = currentTextLine.getAtomIndexAtCharIndex(endIdx - para.getAbsoluteStart());
+				var blockOffset:int = curTextFlowLine.paragraph.getTextBlockAbsoluteStart(currentTextLine.textBlock);
+				var atomIndex:int = currentTextLine.getAtomIndexAtCharIndex(endIdx - blockOffset);
 				var bidiRightToLeft:Boolean = ((currentTextLine.getAtomBidiLevel(atomIndex) % 2) != 0); 
 				var curPosRect:Rectangle = currentTextLine.getAtomBounds(atomIndex);
 				var currentTextLineX:Number = currentTextLine.x;
@@ -483,8 +485,11 @@ package flashx.textLayout.utils
 				
 				//at this point, we have the global point of our current position.  Now adjust x or y to the
 				//baseline of the next line.
-				var nextFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine + 1);
-				if (nextFlowLine.absoluteStart >= limitIdx)
+				var lineInc:int = 1;
+				var nextFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine + lineInc);
+				while(nextFlowLine is TextFlowTableBlock)
+					nextFlowLine = textFlow.flowComposer.getLineAt(++lineInc + curLine);
+				if (!nextFlowLine || nextFlowLine.absoluteStart >= limitIdx)
 				{
 					if (!extendSelection)
 						range.activePosition = range.anchorPosition = textFlow.textLength - 1;
@@ -567,8 +572,8 @@ package flashx.textLayout.utils
 				var lineStart:int = curTextFlowLine.absoluteStart;
 				var lineDelta:int = endIdx - lineStart;
 				var currentTextLine:TextLine = curTextFlowLine.getTextLine(true);
-				var para:ParagraphElement = curTextFlowLine.paragraph;
-				var atomIndex:int = currentTextLine.getAtomIndexAtCharIndex(endIdx - para.getAbsoluteStart());
+				var blockOffset:int = curTextFlowLine.paragraph.getTextBlockAbsoluteStart(currentTextLine.textBlock);
+				var atomIndex:int = currentTextLine.getAtomIndexAtCharIndex(endIdx - blockOffset);
 				var curPosRect:Rectangle = currentTextLine.getAtomBounds(atomIndex);
 				var currentTextLineX:Number = currentTextLine.x;
 				var curPosRectLeft:Number = curPosRect.left;
@@ -602,7 +607,19 @@ package flashx.textLayout.utils
 				
 				//at this point, we have the global point of our current position.  Now adjust x or y to the
 				//baseline of the next line.
-				var prevFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine - 1);
+				var lineInc:int = 1;
+				var prevFlowLine:TextFlowLine = textFlow.flowComposer.getLineAt(curLine - lineInc);
+				while(prevFlowLine is TextFlowTableBlock)
+					prevFlowLine = textFlow.flowComposer.getLineAt(curLine - (++lineInc));
+				if (!prevFlowLine)
+				{
+					if (!extendSelection)
+						range.activePosition = range.anchorPosition = 0;
+					else
+						range.activePosition = 0;
+					return true;
+				}
+
 				// get the last container so that we can make sure the previous line is in view.
 				var controller:ContainerController = textFlow.flowComposer.getControllerAt(textFlow.flowComposer.numControllers-1);
 				var firstPosInContainer:int = controller.absoluteStart;

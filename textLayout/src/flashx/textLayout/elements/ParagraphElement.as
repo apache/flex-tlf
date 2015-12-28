@@ -805,6 +805,9 @@ package flashx.textLayout.elements
 		public function findPreviousAtomBoundary(relativePosition:int):int
 		{
 			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
+			if(!tb || !tb.content)
+				return relativePosition-1;
+			
 			var tbStart:int = getTextBlockStart(tb);
 			var textBlockPos:int = relativePosition - tbStart;
             var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
@@ -852,7 +855,11 @@ package flashx.textLayout.elements
     				{
     					tl = tl.previousLine;
     					if (!tl)
-    						return -1;
+						{
+							if(tb != _textBlocks[0])
+								return relativePosition-1;
+							return -1;
+						}
     					// need this when 0x2028 line separator in use
     					if (tl.textBlockBeginIndex + tl.rawTextLength == textBlockPos)
     						return tl.textBlockBeginIndex + tl.rawTextLength - 1 + tbStart;
@@ -899,6 +906,8 @@ package flashx.textLayout.elements
 		public function findNextAtomBoundary(relativePosition:int):int
 		{
 			var tb:TextBlock = getTextBlockAtPosition(relativePosition);
+			if(!tb || !tb.content)
+				return relativePosition+1;
 			var tbStart:int = getTextBlockStart(tb);
 			var textBlockPos:int = relativePosition - tbStart;
             var tl:TextLine = tb.getTextLineAtCharIndex(textBlockPos);
@@ -941,7 +950,11 @@ package flashx.textLayout.elements
     				{
     					tl = tl.nextLine;
     					if (!tl)
-    						return -1;
+						{
+							if(tb != _textBlocks[_textBlocks.length-1])
+								return relativePosition+1;
+							return -1;
+						}
     					return tl.textBlockBeginIndex + tbStart;
     				}
     				while (++textBlockPos)
