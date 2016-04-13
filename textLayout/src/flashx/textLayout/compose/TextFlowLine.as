@@ -1455,11 +1455,11 @@ package flashx.textLayout.compose
 			var curIdx:int = begIdx;
 			//the current FlowLeafElement as determined by curIdx
 			var curElem:FlowLeafElement = null;
-			//the hightest glyph.  Needed to normalize the rectangles we'll be building
+			//the highest glyph. Needed to normalize the rectangles we'll be building
 			var largestRise:Number = 0;
 			
 			//blockRectArray holds each leaf's blocks which could be 1 or more
-			var blockRectArray:Array = new Array();
+			var blockRectArray:Array = [];
 			//floatRectArray holds the selection rects for any floats in the range.
 			var floatRectArray:Array = null;
 			//tcyDrawRects:Array
@@ -1478,10 +1478,9 @@ package flashx.textLayout.compose
 				else if(curElem is InlineGraphicElement && (curElem as InlineGraphicElement).computedFloat != Float.NONE)
 				{
 					if(floatRectArray == null)
-						floatRectArray = new Array();
+						floatRectArray = [];
 					
-				//	var blockRect:Rectangle = (curElem as InlineGraphicElement).graphic.getBounds(textLine);
-					var ilg:InlineGraphicElement = (curElem as InlineGraphicElement);
+					var ilg:InlineGraphicElement = curElem as InlineGraphicElement;
 					var floatInfo:FloatCompositionData = controller.getFloatAtPosition(paraAbsStart + curIdx);
 					if (floatInfo)
 					{
@@ -1491,7 +1490,7 @@ package flashx.textLayout.compose
 					++curIdx;
 					continue;
 				}
-				//the number of potential glyphs to hilite.  Could larger than needs be if we are only selecting part of it.
+				//the number of potential glyphs to highlight. Could be larger than needed if we are only selecting part of it.
 				var numCharsSelecting:int = curElem.textLength + curElem.getElementRelativeStart(_para) - curIdx;
 				// special handling for TableLeafElements (do nothing)
 				if(curElem is TableLeafElement)
@@ -1505,7 +1504,7 @@ package flashx.textLayout.compose
 					++curIdx;
 					continue;
 				}
-				//the index of the last glyph to hilite.  If a partial selection, use endIdx
+				//the index of the last glyph to highlight. If a partial selection, use endIdx
 				var endPos:int = (numCharsSelecting + curIdx) > endIdx ? endIdx : (numCharsSelecting + curIdx);
 				
 				//if this is not a TCY in vertical, the blocks should all be running in the same direction
@@ -1792,7 +1791,7 @@ package flashx.textLayout.compose
 		{
 			CONFIG::debug{ assert(begIdx <= endIdx, "Selection indexes are reversed!  How can this happen?!"); }
 			
-			var blockArray:Array = new Array();
+			var blockArray:Array = [];
 			var blockRect:Rectangle = new Rectangle();
 			var startElem:FlowLeafElement = _para.findLeaf(begIdx);
 			var startMetrics:Rectangle = startElem.getComputedFontMetrics().emBox;
@@ -1839,9 +1838,6 @@ package flashx.textLayout.compose
 			var begIsBidi:Boolean = begAtomIndex != -1 ? isAtomBidi(textLine, begAtomIndex, direction) : false;
 			var endIsBidi:Boolean = endAtomIndex != -1 ? isAtomBidi(textLine, endAtomIndex, direction) : false;
 			
-			//trace("begAtomIndex is bidi = " + begIsBidi.toString());
-			//trace("endAtomIndex is bidi = " + endIsBidi.toString());	
-			
 			if(begIsBidi || endIsBidi)
 			{	
 				//this code needs to iterate over the glyphs starting at the begAtomIndex and going forward.
@@ -1862,7 +1858,7 @@ package flashx.textLayout.compose
 				//a line getting selected when the text was bidi.   Instead, we're going to use the begIdx and endIdx and 
 				//recalculate the element indexes each time.  This is expensive, but I don't see an alternative. - gak 09.05.08
 				var curIdx:int = begIdx;
-				var incrementor:int = (begIdx != endIdx ? 1 : 0);
+				var incrementor:int = begIdx != endIdx ? 1 : 0;
 				
 				//the indexes used to draw the seleciton.  activeStart/End represent the
 				//beginning of the selection shape atoms, while cur is the one we are testing.
@@ -2497,8 +2493,8 @@ package flashx.textLayout.compose
 						
 			if(endIdx != begIdx)
 			{
-				if(((direction == Direction.LTR && textLine.getAtomBidiLevel(begAtomIndex)%2 != 0)
-					|| (direction == Direction.RTL && textLine.getAtomBidiLevel(begAtomIndex)%2 == 0))
+				if(((direction == Direction.LTR && textLine.getAtomBidiLevel(begAtomIndex) % 2 != 0)
+					|| (direction == Direction.RTL && textLine.getAtomBidiLevel(begAtomIndex) % 2 == 0))
 					&& textLine.getAtomTextRotation(begAtomIndex) != TextRotation.ROTATE_0)
 					endAtomIndex = textLine.getAtomIndexAtCharIndex(endIdx);
 				else

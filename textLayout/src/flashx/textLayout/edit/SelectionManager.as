@@ -1226,8 +1226,8 @@ package flashx.textLayout.edit
         {
             if (_textFlow.flowComposer)
             {
-                // selection may need to be constrainted due to model changes that weren't done with the EditManager
-                internalSetSelection(_textFlow,anchorMark.position,activeMark.position,_pointFormat);
+                // selection may need to be constrained due to model changes that weren't done with the EditManager
+                internalSetSelection(_textFlow, anchorMark.position, activeMark.position, _pointFormat);
                 
                 // zero alpha means nothing is drawn so skip it
                 if (currentSelectionFormat && 
