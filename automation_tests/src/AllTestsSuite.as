@@ -57,6 +57,7 @@ package
     import UnitTest.Tests.StyleTest;
     import UnitTest.Tests.TCYTest;
     import UnitTest.Tests.TabTest;
+    import UnitTest.Tests.TextBlock_FLEX_35100_Test;
     import UnitTest.Tests.TextContainerManagerTest;
     import UnitTest.Tests.TextFlowEditTest;
     import UnitTest.Tests.TextFlowTextLineFactoryTest;
@@ -114,6 +115,7 @@ package
         public var scrollToRangeTest:ScrollToRangeTest;
         public var pasteWithMultiParagraph:PasteWithMutliParagraph_FLEX_34876_Test;
 		public var flex_34807:FLEX_34807_Test;
+        public var flex_35100:TextBlock_FLEX_35100_Test;
     }
 
 }
