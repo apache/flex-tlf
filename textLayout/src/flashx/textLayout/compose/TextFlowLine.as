@@ -933,7 +933,10 @@ package flashx.textLayout.compose
 			}
 			else
 				textLine = swfContext.callInContext(textBlock.createTextLine, textBlock, [ previousLine, _targetWidth, effLineOffset, true ]);
-			
+
+			if(textLine == null)
+				return null;
+
 			textLine.x = this.x;
 			CONFIG::debug { Debugging.traceFTEAssign(textLine,"x", this.x);  }
 			textLine.y = createShapeY(bp);
