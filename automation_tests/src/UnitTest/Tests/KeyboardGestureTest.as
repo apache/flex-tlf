@@ -2808,13 +2808,13 @@ package UnitTest.Tests
 
             SelManager.selectRange(6067, 6067);
             sendKeyboardGesture(PG_UP);
-            assertTrue("PgUp failed to select 7/8 page up",
+            assertTrue("PgUp failed to select 7/8 page up. Expected 3332,3332 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 3332 &&
                     SelManager.anchorPosition == 3332);
 
             SelManager.selectRange(1314, 1314);
             sendKeyboardGesture(PG_UP);
-            assertTrue("PgUp failed to select to top line",
+            assertTrue("PgUp failed to select to top line Expected 72,72 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 72 &&
                     SelManager.anchorPosition == 72);
         }
@@ -2844,7 +2844,7 @@ package UnitTest.Tests
 
             SelManager.selectRange(608, 608);
             sendKeyboardGesture(PG_UP);
-            assertTrue("PageUp failed to move up from image sandwich",
+            assertTrue("PageUp failed to move up from image sandwich. Expected 460,460 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 460 &&
                     SelManager.anchorPosition == 460);
 
@@ -2897,7 +2897,7 @@ package UnitTest.Tests
             SelManager.selectRange(261, 261);
             sendKeyboardGesture(PG_UP);
 
-            assertTrue("PageUp changed movement behavior within right to left text",
+            assertTrue("PageUp changed movement behavior within right to left text. Expected 12,12 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 12 &&
                     SelManager.anchorPosition == 12);
 
@@ -2937,7 +2937,7 @@ package UnitTest.Tests
 
             SelManager.selectRange(6067, 6067);
             sendKeyboardGesture(SHIFT_PG_UP);
-            assertTrue("Shift-PageUp failed to select 7/8 page up",
+            assertTrue("Shift-PageUp failed to select 7/8 page up. Expected 3332,6067 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 3332 &&
                     SelManager.anchorPosition == 6067);
 
@@ -2973,7 +2973,7 @@ package UnitTest.Tests
 
             SelManager.selectRange(608, 608);
             sendKeyboardGesture(SHIFT_PG_UP);
-            assertTrue("Shift-PageUp failed to move up from image sandwich",
+            assertTrue("Shift-PageUp failed to move up from image sandwich. Expected 460,608 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 460 &&
                     SelManager.anchorPosition == 608);
 
@@ -3026,7 +3026,7 @@ package UnitTest.Tests
             SelManager.selectRange(261, 261);
             sendKeyboardGesture(SHIFT_PG_UP);
 
-            assertTrue("Shift-PageUp changed movement behavior within right to left text",
+            assertTrue("Shift-PageUp changed movement behavior within right to left text. Expected 12,261 but got " + SelManager.activePosition + "," + SelManager.anchorPosition + " instead.",
                     SelManager.activePosition == 12 &&
                     SelManager.anchorPosition == 261);
 

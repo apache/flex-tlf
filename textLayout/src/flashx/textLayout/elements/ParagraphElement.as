@@ -81,7 +81,6 @@ package flashx.textLayout.elements
 	public final class ParagraphElement extends ParagraphFormattedElement
 	{
 		//private var _textBlock:TextBlock;
-		private var _textBlockChildren:Dictionary;
 		private var _terminatorSpan:SpanElement;
 		
 		private var _interactiveChildrenCount:int;
@@ -97,7 +96,6 @@ package flashx.textLayout.elements
 			super();
 			_terminatorSpan = null;
 			_interactiveChildrenCount = 0 ;
-			_textBlockChildren = new Dictionary();
 		}
 		tlf_internal function get interactiveChildrenCount():int
 		{
@@ -142,7 +140,7 @@ package flashx.textLayout.elements
 				updateTextBlock(tb);
 			}
 		}
-		private function updateTextBlockDict():void
+		private function updateTextBlockRefs():void
 		{
 			var tbs:Vector.<TextBlock> = getTextBlocks();
 			if(tbs.length == 0)
@@ -156,14 +154,22 @@ package flashx.textLayout.elements
 				child = getChildAt(i);
 				if(child is TableElement)
 				{
-					_textBlockChildren[tb] = items;
-					tb = tbs[++tbIdx];
+					tb.userData = items;
+					if(++tbIdx == tbs.length)
+						return;
+					tb = tbs[tbIdx];
+					tb.userData = null;
+
+					//Advance to the next one.
+					if(++tbIdx == tbs.length)
+						return;
+					tb = tbs[tbIdx];
 					items = [];
 					continue;
 				}
 				items.push(child);
 			}
-			_textBlockChildren[tb] = items;
+			tb.userData = items;
 		}
 		private function removeTextBlock(tb:TextBlock):void
 		{
@@ -174,7 +180,6 @@ package flashx.textLayout.elements
 				if(idx > -1)
 				{
 					tbs.splice(idx,1);
-					delete _textBlockChildren[tb];
 				}
 			}
 		}
@@ -201,21 +206,24 @@ package flashx.textLayout.elements
 				CONFIG::debug { Debugging.traceFTECall(null,tb,"releaseLines",tb.firstLine, tb.lastLine); }				
 				tb.releaseLines(tb.firstLine, tb.lastLine);	
 			}	
-			var items:Array = _textBlockChildren[tb];
-			var len:int = items.length;
-			for (var i:int = 0; i < len; i++)
+			var items:Array = tb.userData;
+			if(items)
 			{
-				var child:FlowElement = items[i];
-				child.releaseContentElement();
+				var len:int = items.length;
+				for (var i:int = 0; i < len; i++)
+				{
+					var child:FlowElement = items[i];
+					child.releaseContentElement();
+				}
+				items.length = 0;
 			}
-			items.length = 0;
 			tb.content = null;
 			removeTextBlock(tb);
 		}
 		/** @private */
 		tlf_internal function releaseTextBlock(tb:TextBlock=null):void
 		{
-			updateTextBlockDict();
+			updateTextBlockRefs();
 			if(tb)
 			{
 				releaseTextBlockInternal(tb);
