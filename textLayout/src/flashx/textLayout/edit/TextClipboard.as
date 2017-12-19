@@ -120,7 +120,7 @@ package flashx.textLayout.edit
 		 * calling <code>setContents()</code>. In AIR, this restriction only applies to content outside of 
 		 * the application security sandbox. </p>
 		 * 
-		 * @param scrap The TextScrap to paste into the clipboard.
+		 * @param textScrap The TextScrap to paste into the clipboard.
 		 * 
 		 * @see flash.events.Event#COPY
 		 * @see flash.events.Event#CUT
@@ -211,8 +211,7 @@ package flashx.textLayout.edit
 				var xmlTree:XML = new XML(textOnClipboard);
 				if (xmlTree.localName() == "TextScrap")
 				{		// read the old clipboard format
-					var beginArrayChild:XML = xmlTree..*::BeginMissingElements[0];
-					var endArrayChild:XML = xmlTree..*::EndMissingElements[0];
+                    var endArrayChild:XML = xmlTree..*::EndMissingElements[0];
 					var textLayoutMarkup:XML = xmlTree..*::TextFlow[0];
 					var textFlow:TextFlow = TextConverter.importToFlow(textLayoutMarkup, TextConverter.TEXT_LAYOUT_FORMAT);
 					if (textFlow)
@@ -246,48 +245,10 @@ package flashx.textLayout.edit
 			}
 			return null;
 		}
-		
-		private static function getBeginArray(beginArrayChild:XML, textFlow:TextFlow):Array
-		{
-			var beginArray:Array = new Array();
-			var curFlElement:FlowElement = textFlow;
-			if (beginArrayChild != null)
-			{
-				var value:String = (beginArrayChild.@value != undefined) ? String(beginArrayChild.@value) : "";
-				beginArray.push(textFlow);
-				var posOfComma:int = value.indexOf(",");
-				var startPos:int;
-				var endPos:int;
-				var curStr:String;
-				var indexIntoFlowElement:int;
-				while (posOfComma >= 0)
-				{
-					startPos = posOfComma + 1;
-					posOfComma = value.indexOf(",", startPos);
-					if (posOfComma >= 0)
-					{
-						endPos = posOfComma;
-					} else {
-						endPos = value.length;
-					}
-					curStr = value.substring(startPos, endPos);
-					if (curStr.length > 0)
-					{
-						indexIntoFlowElement = parseInt(curStr);
-						if (curFlElement is FlowGroupElement)
-						{
-							curFlElement = (curFlElement as FlowGroupElement).getChildAt(indexIntoFlowElement);
-							beginArray.push(curFlElement);
-						}
-					}
-				}				
-			}
-			return beginArray.reverse();
-		}
-		
+
 		private static function getEndArray(endArrayChild:XML, textFlow:TextFlow):Array
 		{
-			var endArray:Array = new Array();
+			var endArray:Array = [];
 			var curFlElement:FlowElement = textFlow;
 			if (endArrayChild != null)
 			{
@@ -326,5 +287,3 @@ package flashx.textLayout.edit
 		
 	} // end TextClipboard class
 }
-
-class TextClipboardSingletonEnforcer {}
