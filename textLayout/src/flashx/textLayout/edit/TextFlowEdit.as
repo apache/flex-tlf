@@ -93,6 +93,10 @@ package flashx.textLayout.edit
 		
 		private static function deleteRangeInternal(element:FlowGroupElement, relativeStart:int, numToDelete:int):void
 		{
+			if(!element)
+				return;
+			
+			
 			var pendingDeleteStart:int = -1;
 			var pendingDeleteCount:int = 0;
 			
@@ -164,6 +168,9 @@ package flashx.textLayout.edit
 		// insert the element(s) and we want it to adopt the formatting of its context.
 		private static function applyFormatToElement(destinationElement:FlowGroupElement, childIndex:int, insertThis:Object):void
 		{
+			if(!destinationElement)
+				return;
+				
 			var formatSourceSibling:FlowElement;
 			
 			// find the previous sibling and use its formats for the new siblings
@@ -223,7 +230,7 @@ package flashx.textLayout.edit
 		 */				
 		public static function insertTextScrap(destinationFlow:TextFlow, absoluteStart:int, textScrap:TextScrap, applyFormat:Boolean):int
 		{
-			if (!textScrap)
+			if (!textScrap || !destinationFlow)
 				return absoluteStart;
 			
 			var scrapFlow:TextFlow = textScrap.textFlow.deepCopy() as TextFlow;
@@ -348,6 +355,9 @@ package flashx.textLayout.edit
 		 */	
 		public static function makeTCY(theFlow:TextFlow, startPos:int, endPos:int):Boolean
 		{
+			if(!theFlow)
+				return false;
+		
 			var madeTCY:Boolean = true;
 			var curPara:ParagraphElement = theFlow.findAbsoluteParagraph(startPos);
 			if(!curPara)
@@ -391,6 +401,9 @@ package flashx.textLayout.edit
 		 */			
 		public static function makeLink(theFlow:TextFlow, startPos:int, endPos:int, urlString:String, target:String):Boolean
 		{
+			if(!theFlow)
+				return false;
+		
 			var madeLink:Boolean = true;
 			var curPara:ParagraphElement = theFlow.findAbsoluteParagraph(startPos);
 			if(!curPara)
@@ -437,10 +450,8 @@ package flashx.textLayout.edit
 		 */			
 		public static function removeTCY(theFlow:TextFlow, startPos:int, endPos:int):Boolean
 		{
-			if (endPos <= startPos)
-			{
+			if(endPos <= startPos || !theFlow)
 				return false;
-			}
 			
 			return findAndRemoveFlowGroupElement(theFlow, startPos, endPos, TCYElement);
 		}
@@ -454,10 +465,8 @@ package flashx.textLayout.edit
 		 */			
 		public static function removeLink(theFlow:TextFlow, startPos:int, endPos:int):Boolean
 		{
-			if (endPos <= startPos)
-			{
+			if (endPos <= startPos || !theFlow)
 				return false;
-			}
 			
 			return findAndRemoveFlowGroupElement(theFlow, startPos, endPos, LinkElement);
 		}
@@ -484,6 +493,9 @@ package flashx.textLayout.edit
 		 */
 		tlf_internal static function insertNewSPBlock(theFlow:TextFlow, startPos:int, endPos:int, newSPB:SubParagraphGroupElementBase, spgClass:Class):Boolean
 		{
+			if(!theFlow)
+				return false;
+		
 			var curPos:int = startPos;
 			var curFBE:FlowGroupElement = theFlow.findAbsoluteFlowGroupElement(curPos);
 			var elementIdx:int = 0;
@@ -645,6 +657,9 @@ package flashx.textLayout.edit
 		 */
 		tlf_internal static function findAndSplitElement(fbe:FlowGroupElement, elementIdx:int, startIdx:int, splitSubBlockContents:Boolean):int
 		{
+			if(!fbe)
+				return -1;
+		
 			var curFlowEl:FlowElement = null;
 			var curIndexInPar:int = startIdx - fbe.getAbsoluteStart();
 			
@@ -689,6 +704,9 @@ package flashx.textLayout.edit
 		 */
 		tlf_internal static function subsumeElementsToSPBlock(parentFBE:FlowGroupElement, elementIdx:int, curPos:int, endPos:int, newSPB:SubParagraphGroupElementBase, spgClass:Class):int
 		{
+			if(!parentFBE)
+				return -1;
+		
 			var curFlowEl:FlowElement = null;
 			
 			//if we have an invalid index, then skip out.  elementIdx will always point one
@@ -860,6 +878,9 @@ package flashx.textLayout.edit
 		 */ 
 		tlf_internal static function findAndRemoveFlowGroupElement(theFlow:TextFlow, startPos:int, endPos:int, fbeClass:Class):Boolean
 		{
+			if(!theFlow)
+				retrun false;
+		
 			var curPos:int = startPos;
 			var curEl:FlowElement;
 			
@@ -993,7 +1014,7 @@ package flashx.textLayout.edit
 		 */
 		tlf_internal static function canInsertSPBlock(theFlow:TextFlow, startPos:int, endPos:int, blockClass:Class):Boolean
 		{
-			if(endPos <= startPos)
+			if(endPos <= startPos || !theFlow)
 				return false;
 				
 			var anchorFBE:FlowGroupElement = theFlow.findAbsoluteFlowGroupElement(startPos);
@@ -1045,6 +1066,9 @@ package flashx.textLayout.edit
 		 */ 
 		tlf_internal static function flushSPBlock(subPB:SubParagraphGroupElementBase, spgClass:Class):void
 		{
+			if(!subPB)
+				return;
+		
 			var subParaIter:int = 0;
 	
 			//example, subPB has 2 elements, <span>bar</span> and <a><span>other</span></a>
@@ -1147,7 +1171,10 @@ package flashx.textLayout.edit
 		
 		/** Joins this paragraph's next sibling to this if it is a paragraph */
 		static public function joinNextParagraph(para:ParagraphElement, inSameParent:Boolean):IMemento
-		{		
+		{
+			if(!para)
+				return null;
+				
 			var nextPara:ParagraphElement = findNextParagraph(para);
 			if (nextPara && (!inSameParent || para.parent == nextPara.parent))
 				return joinToElement(para, nextPara);
@@ -1156,7 +1183,10 @@ package flashx.textLayout.edit
 
 		/** Joins this paragraph's next sibling to this if it is a paragraph */
 		static public function joinToNextParagraph(para:ParagraphElement, inSameParent:Boolean):MementoList
-		{		
+		{
+			if(!para)
+				return null;
+		
 			var sibParagraph:ParagraphElement = findNextParagraph(para);
 			if (sibParagraph && (!inSameParent || para.parent == sibParagraph.parent))
 				return joinToNextElement(para, sibParagraph);
