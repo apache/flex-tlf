@@ -55,6 +55,7 @@
   <!-- for Flex tags suchs as mxmlc and compc -->
   <path id="flexTasks.path">
     <fileset dir="${FLEX_HOME}">
+      <include name="ant/lib/flexTasks.jar"/>
       <include name="lib/flexTasks.jar"/>
     </fileset>
   </path>
