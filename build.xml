@@ -70,7 +70,6 @@
 	<taskdef resource="flexTasks.tasks" classpathref="flexTasks.path"/>
 
 	<target name="all" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps, automation_core, automation_tests, automation_apps" description="Clean build of TLF component and associated applications"/>
-	<target name="noautomation" depends="clean,textLayout, asTestApps,textLayout_editBar, textLayout_ui, testApps" description="Clean build of TLF component and non-automation associated applications"/>
 	<target name="main" depends="clean,textLayout" description="Clean build of textLayout.swc"/>
 
 	<target name="clean" description="Cleans all SWCs and SWFs">
