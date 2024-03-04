@@ -22,7 +22,12 @@
          Override on cmd line with -D=FLEX_HOME=path. -->
   <!--<property file="${basedir}/local.properties"/>-->
   <!-- Default Flex SDK is the trunk.  Override on cmd line with -D=FLEX_HOME=path. -->
-  <property name="FLEX_HOME" value="${basedir}/../flex-sdk"/>
+  <condition property="FLEX_HOME" value="${env.FLEX_HOME}">
+    <available file="${env.FLEX_HOME}/lib/compc.jar" type="file" />
+  </condition>
+  <condition property="FLEX_HOME" value="${basedir}/../flex-sdk">
+    <available file="${basedir}/../flex-sdk/lib/compc.jar" type="file" />
+  </condition>
   <echo>FLEX_HOME is ${FLEX_HOME}</echo>
   <echo>Minimal test is set ${minimalTests}</echo>
   <property name="flex.sdk.frameworks" value="${FLEX_HOME}/frameworks"/>
